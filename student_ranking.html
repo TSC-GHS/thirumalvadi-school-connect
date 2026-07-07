@@ -1,1 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student Ranking</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4f6f9;
+}
+
+.header{
+background:#FF9800;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+.header h1{
+font-size:28px;
+}
+
+.container{
+padding:20px;
+}
+
+.search{
+width:100%;
+padding:12px;
+margin-bottom:20px;
+font-size:16px;
+border:1px solid #ccc;
+border-radius:8px;
+}
+
+.table-box{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+overflow-x:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#FF9800;
+color:white;
+padding:12px;
+}
+
+td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+.actions{
+text-align:center;
+margin-top:20px;
+}
+
+button{
+padding:12px 18px;
+margin:5px;
+border:none;
+border-radius:8px;
+background:#1565C0;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0D47A1;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h1>🏆 Top Student Ranking</h1>
+
+</div>
+
+<div class="container">
+<input
+type="text"
+id="search"
+class="search"
+placeholder="🔍 Search by Student Name or EMIS"
+onkeyup="searchStudent()">
+
+<div class="table-box">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Rank</th>
+<th>Name</th>
+<th>EMIS</th>
+<th>Class</th>
+<th>Total</th>
+<th>%</th>
+<th>Grade</th>
+
+</tr>
+
+</thead>
+
+<tbody id="rankingTable">
+
+<tr>
+
+<td colspan="7">
+
+Loading Ranking...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="actions">
+
+<button onclick="window.print()">
+
+🖨️ Print Ranking
+
+</button>
+
+<button onclick="location.href='admin_dashboard_v2.html'">
+
+🏠 Admin Dashboard
+
+</button>
+
+</div>
+
+<script type="module">
+  import { db } from "./firebase.js";
+
+import {
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+async function loadRanking(){
+
+  try{
+
+    const snapshot = await getDocs(collection(db,"report_cards"));
+
+    let students = [];
+
+    snapshot.forEach((doc)=>{
+
+      students.push(doc.data());
+
+    });
+
+    students.sort((a,b)=>(b.percentage||0)-(a.percentage||0));
+
+    let html="";
+
+    students.forEach((student,index)=>{
+
+      let rank=index+1;
+
+      let medal=rank;
+
+      if(rank===1) medal="🥇";
+      else if(rank===2) medal="🥈";
+      else if(rank===3) medal="🥉";
+
+      html+=`
+      <tr>
+        <td>${medal}</td>
+        <td>${student.name||""}</td>
+        <td>${student.emis||""}</td>
+        <td>${student.class||""}</td>
+        <td>${student.total||0}</td>
+        <td>${student.percentage||0}%</td>
+        <td>${student.grade||"-"}</td>
+      </tr>
+      `;
+
+    });
+
+    if(html===""){
+      html=`
+      <tr>
+      <td colspan="7">No Report Cards Found</td>
+      </tr>`;
+    }
+
+    document.getElementById("rankingTable").innerHTML=html;
+
+  }catch(error){
+
+    alert(error.message);
+    console.log(error);
+
+  }
+
+}
+
+window.searchStudent=function(){
+
+const value=document.getElementById("search").value.toLowerCase();
+
+document.querySelectorAll("#rankingTable tr").forEach(row=>{
+
+row.style.display=
+row.innerText.toLowerCase().includes(value)
+? ""
+: "none";
+
+});
+
+}
+
+loadRanking();
+  </script>
+
+</body>
+</html>
