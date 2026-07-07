@@ -1,1 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Homework History</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#6A1B9A;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+label{
+font-weight:bold;
+display:block;
+margin-bottom:8px;
+}
+
+input{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+background:#6A1B9A;
+color:white;
+font-size:17px;
+cursor:pointer;
+}
+
+.home{
+background:#2E7D32;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#6A1B9A;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📝 Homework History
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<label>Enter EMIS Number</label>
+
+<input
+id="emis"
+placeholder="Enter EMIS Number">
+
+<button onclick="loadHomework()">
+
+🔍 Search Homework
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Homework Details</h3>
+
+<table>
+
+<tr>
+
+<th>Date</th>
+
+<th>Subject</th>
+
+<th>Homework</th>
+
+</tr>
+
+<tbody id="homeworkTable">
+
+<tr>
+
+<td colspan="3">
+
+No Homework Available
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<button
+class="home"
+onclick="location.href='student_profile.html'">
+
+🏠 Back
+
+</button>
+
+<script type="module">
+import { db } from "./firebase.js";
+
+import {
+collection,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.loadHomework = async function(){
+
+const emis =
+document.getElementById("emis").value.trim();
+
+if(emis==""){
+
+alert("Enter EMIS Number");
+
+return;
+
+}
+
+const tbody =
+document.getElementById("homeworkTable");
+
+tbody.innerHTML="";
+
+const snap =
+await getDocs(collection(db,"homework"));
+
+let found=false;
+
+snap.forEach((d)=>{
+
+const hw=d.data();
+
+if(hw.emis==emis){
+
+found=true;
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${hw.date}</td>
+
+<td>${hw.subject}</td>
+
+<td>${hw.homework}</td>
+
+</tr>
+
+`;
+
+}
+
+});
+
+if(!found){
+
+tbody.innerHTML=`
+
+<tr>
+
+<td colspan="3">
+
+No Homework Available
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+}
+  </script>
+
+</body>
+</html>
