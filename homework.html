@@ -6,6 +6,7 @@
 <title>Homework Management</title>
 
 <style>
+
 body{
 font-family:Arial,sans-serif;
 background:#f4f6f9;
@@ -27,47 +28,66 @@ padding:20px;
 
 .card{
 background:white;
-padding:15px;
-margin-bottom:15px;
+padding:20px;
 border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
+box-shadow:0 2px 8px rgba(0,0,0,.2);
+margin-bottom:20px;
 }
 
 label{
 font-weight:bold;
 display:block;
-margin-top:10px;
+margin-top:12px;
 }
 
-input,select,textarea{
+select,input,textarea{
 width:100%;
-padding:10px;
-margin-top:5px;
-border-radius:6px;
+padding:12px;
+margin-top:6px;
 border:1px solid #ccc;
+border-radius:8px;
 box-sizing:border-box;
+font-size:16px;
 }
 
 textarea{
 height:120px;
-resize:vertical;
+resize:none;
 }
 
 button{
 width:100%;
 padding:15px;
 margin-top:15px;
+background:#1565C0;
+color:white;
 border:none;
 border-radius:8px;
 font-size:17px;
 cursor:pointer;
-background:#1565C0;
-color:white;
 }
 
 .home{
 background:#2E7D32;
 }
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#1565C0;
+color:white;
+}
+
 </style>
 
 </head>
@@ -75,62 +95,123 @@ background:#2E7D32;
 <body>
 
 <div class="header">
+
 📝 Homework Management
+
 </div>
 
 <div class="container">
 
-<label>Class</label>
+<div class="card">
+
+<label>Select Class</label>
+
 <select id="class">
-<option>6</option>
-<option>7</option>
-<option>8</option>
-<option>9</option>
-<option>10</option>
+
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+
 </select>
 
 <label>Subject</label>
-<input type="text" id="subject" placeholder="Enter Subject">
+
+<input
+id="subject"
+placeholder="Enter Subject">
 
 <label>Homework</label>
-<textarea id="homework" placeholder="Enter Homework"></textarea>
+
+<textarea
+id="homework"
+placeholder="Enter Homework"></textarea>
 
 <button onclick="saveHomework()">
-💾 Save Homework
-</button>
 
-<button class="home"
-onclick="location.href='headmaster.html'">
-🏠 Back
+💾 Save Homework
+
 </button>
 
 </div>
+
+<div class="card">
+
+<h3>Homework History</h3>
+
+<table>
+
+<tr>
+
+<th>Date</th>
+
+<th>Class</th>
+
+<th>Subject</th>
+
+<th>Homework</th>
+
+</tr>
+
+<tbody id="history">
+
+<tr>
+
+<td colspan="4">
+
+No Homework Available
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<button
+class="home"
+onclick="location.href='headmaster.html'">
+
+🏠 Back
+
+</button>
 
 <script type="module">
 import { db } from "./firebase.js";
 
 import {
+collection,
 doc,
-setDoc
+setDoc,
+getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 window.saveHomework = async function(){
 
 const className = document.getElementById("class").value;
-const subject = document.getElementById("subject").value;
-const homework = document.getElementById("homework").value;
+const subject = document.getElementById("subject").value.trim();
+const homework = document.getElementById("homework").value.trim();
 
-if(subject.trim()==="" || homework.trim()===""){
+if(subject=="" || homework==""){
+
 alert("Please enter Subject and Homework");
+
 return;
+
 }
 
-await setDoc(doc(db,"homework",className),{
+const id = Date.now().toString();
 
-class: className,
-subject: subject,
-homework: homework,
-date: new Date().toISOString().split("T")[0]
+await setDoc(doc(db,"homework",id),{
+
+class:className,
+subject:subject,
+homework:homework,
+date:new Date().toLocaleDateString("en-GB")
 
 });
 
@@ -139,7 +220,55 @@ alert("Homework Saved Successfully ✅");
 document.getElementById("subject").value="";
 document.getElementById("homework").value="";
 
+loadHomeworkHistory();
+
 }
+
+async function loadHomeworkHistory(){
+
+const tbody=document.getElementById("history");
+
+tbody.innerHTML="";
+
+const snap=await getDocs(collection(db,"homework"));
+
+if(snap.empty){
+
+tbody.innerHTML=`
+<tr>
+<td colspan="4">No Homework Available</td>
+</tr>
+`;
+
+return;
+
+}
+
+snap.forEach((d)=>{
+
+const hw=d.data();
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${hw.date}</td>
+
+<td>${hw.class}</td>
+
+<td>${hw.subject}</td>
+
+<td>${hw.homework}</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+loadHomeworkHistory();
   </script>
 
 </body>
