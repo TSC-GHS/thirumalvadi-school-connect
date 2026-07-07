@@ -14,7 +14,7 @@ margin:0;
 }
 
 .header{
-background:#1565C0;
+background:#2E7D32;
 color:white;
 padding:18px;
 text-align:center;
@@ -29,41 +29,46 @@ padding:20px;
 .card{
 background:white;
 padding:15px;
-margin-bottom:15px;
+margin-bottom:20px;
 border-radius:10px;
 box-shadow:0 2px 6px rgba(0,0,0,.2);
 }
 
-.card h3{
-margin:0;
-color:#1565C0;
+table{
+width:100%;
+border-collapse:collapse;
 }
 
-.card p{
-margin:5px 0;
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#2E7D32;
+color:white;
 }
 
 select{
-width:100%;
-padding:10px;
-margin-top:10px;
+padding:8px;
 border-radius:6px;
 }
 
 button{
 width:100%;
 padding:15px;
-margin-top:15px;
+margin-top:20px;
 border:none;
 border-radius:8px;
+background:#2E7D32;
+color:white;
 font-size:17px;
 cursor:pointer;
-background:#1565C0;
-color:white;
 }
 
 .home{
-background:#2E7D32;
+background:#1565C0;
 }
 
 </style>
@@ -73,23 +78,62 @@ background:#2E7D32;
 <body>
 
 <div class="header">
+
 📅 Attendance Management
+
 </div>
 
 <div class="container">
 
-<div id="studentList"></div>
+<div class="card">
 
-<button onclick="saveAttendance()">
-💾 Save Attendance
-</button>
+<table>
 
-<button class="home"
-onclick="location.href='headmaster.html'">
-🏠 Back
-</button>
+<thead>
+
+<tr>
+
+<th>Name</th>
+
+<th>Class</th>
+
+<th>Attendance</th>
+
+</tr>
+
+</thead>
+
+<tbody id="studentTable">
+
+<tr>
+
+<td colspan="3">
+
+Loading...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 </div>
+
+<button onclick="saveAttendance()">
+
+💾 Save Attendance
+
+</button>
+
+<button
+class="home"
+onclick="location.href='headmaster.html'">
+
+🏠 Back
+
+</button>
 
 <script type="module">
   import { db } from "./firebase.js";
@@ -98,44 +142,50 @@ import {
 collection,
 getDocs,
 doc,
-setDoc
+updateDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const studentList = document.getElementById("studentList");
+const studentTable = document.getElementById("studentTable");
 
 let students = [];
 
 async function loadStudents(){
 
-studentList.innerHTML="";
+studentTable.innerHTML = "";
 
-const querySnapshot = await getDocs(collection(db,"students"));
+students = [];
 
-querySnapshot.forEach((d)=>{
+const snap = await getDocs(collection(db,"students"));
+
+snap.forEach((d)=>{
 
 const student = d.data();
 
-if(!student.name || !student.emis) return;
-
 students.push(student);
 
-studentList.innerHTML += `
+studentTable.innerHTML += `
 
-<div class="card">
+<tr>
 
-<h3>${student.name}</h3>
+<td>${student.name}</td>
 
-<p>EMIS : ${student.emis}</p>
+<td>${student.class}-${student.section}</td>
 
-<p>Class : ${student.class}-${student.section}</p>
+<td>
 
 <select id="${student.emis}">
-<option value="Present">✅ Present</option>
-<option value="Absent">❌ Absent</option>
-<option value="Leave">🏖 Leave</option>
+
+<option value="100%">Present</option>
+
+<option value="0%">Absent</option>
+
+<option value="Leave">Leave</option>
+
 </select>
 
-</div>
+</td>
+
+</tr>
 
 `;
 
@@ -145,29 +195,17 @@ studentList.innerHTML += `
 
 window.saveAttendance = async function(){
 
-const today = new Date().toISOString().split("T")[0];
-
 for(const student of students){
 
-const status = document.getElementById(student.emis).value;
+const attendance = document.getElementById(student.emis).value;
 
-await setDoc(
+await updateDoc(
 
-doc(db,"attendance",today,"students",student.emis),
+doc(db,"students",student.emis),
 
 {
 
-name:student.name,
-
-emis:student.emis,
-
-class:student.class,
-
-section:student.section,
-
-status:status,
-
-date:today
+attendance: attendance
 
 }
 
@@ -180,7 +218,7 @@ alert("Attendance Saved Successfully ✅");
 }
 
 loadStudents();
-</script>
+  </script>
 
 </body>
 </html>
