@@ -1,1 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Dashboard</title>
 
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#2E7D32;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+button{
+width:100%;
+padding:16px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+background:#2E7D32;
+color:white;
+font-size:18px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1B5E20;
+}
+
+.logout{
+background:#D32F2F;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+👨‍🏫 Teacher Dashboard
+</div>
+
+<div class="container">
+
+<h2>Welcome Teacher 👋</h2>
+
+<button onclick="location.href='students.html'">
+👨‍🎓 View Students
+</button>
+
+<button onclick="location.href='attendance.html'">
+📅 Take Attendance
+</button>
+
+<button onclick="location.href='marks.html'">
+📚 Enter Marks
+</button>
+
+<button onclick="location.href='homework.html'">
+📝 Homework
+</button>
+
+<button onclick="location.href='dashboard.html'">
+🏠 Home
+</button>
+
+<button class="logout"
+onclick="location.href='login.html'">
+🚪 Logout
+</button>
+
+</div>
+
+</body>
+</html>
