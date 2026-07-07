@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Parent Dashboard</title>
 
 <style>
@@ -39,6 +37,7 @@ box-shadow:0 2px 6px rgba(0,0,0,.2);
 input{
 width:100%;
 padding:12px;
+margin-top:10px;
 border:1px solid #ccc;
 border-radius:8px;
 box-sizing:border-box;
@@ -64,7 +63,7 @@ background:#2E7D32;
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:15px;
+margin-top:10px;
 }
 
 th,td{
@@ -133,23 +132,14 @@ placeholder="Enter Student EMIS Number">
 <table>
 
 <tr>
-
 <th>Exam</th>
-
 <th>Marks</th>
-
 </tr>
 
 <tbody id="marksTable">
 
 <tr>
-
-<td colspan="2">
-
-No Marks Available
-
-</td>
-
+<td colspan="2">No Marks Available</td>
 </tr>
 
 </tbody>
@@ -165,25 +155,15 @@ No Marks Available
 <table>
 
 <tr>
-
 <th>Date</th>
-
 <th>Subject</th>
-
 <th>Homework</th>
-
 </tr>
 
 <tbody id="homeworkTable">
 
 <tr>
-
-<td colspan="3">
-
-No Homework Available
-
-</td>
-
+<td colspan="3">No Homework Available</td>
 </tr>
 
 </tbody>
@@ -192,8 +172,7 @@ No Homework Available
 
 </div>
 
-<button
-class="home"
+<button class="home"
 onclick="location.href='dashboard.html'">
 
 🏠 Back
@@ -204,136 +183,121 @@ onclick="location.href='dashboard.html'">
    import { db } from "./firebase.js";
 
 import {
-doc,
-getDoc,
-collection,
-getDocs
+  doc,
+  getDoc,
+  collection,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-window.loadStudent = async function(){
+window.loadStudent = async function () {
 
-const emis=document.getElementById("emis").value.trim();
+  const emis = document.getElementById("emis").value.trim();
 
-if(emis===""){
-alert("Enter EMIS Number");
-return;
-}
+  if (emis === "") {
+    alert("Enter EMIS Number");
+    return;
+  }
 
-const studentRef=doc(db,"students",emis);
+  // STUDENT DETAILS
 
-const studentSnap=await getDoc(studentRef);
+  const studentSnap = await getDoc(doc(db, "students", emis));
 
-if(!studentSnap.exists()){
-alert("Student Not Found");
-return;
-}
+  if (!studentSnap.exists()) {
+    alert("Student Not Found");
+    return;
+  }
 
-const student=studentSnap.data();
+  const student = studentSnap.data();
 
-document.getElementById("name").textContent=student.name;
-document.getElementById("class").textContent=student.class;
-document.getElementById("section").textContent=student.section;
-document.getElementById("father").textContent=student.father;
-document.getElementById("mother").textContent=student.mother;
-document.getElementById("mobile").textContent=student.mobile;
-document.getElementById("attendance").textContent=student.attendance || "-";
+  document.getElementById("name").textContent = student.name || "-";
+  document.getElementById("class").textContent = student.class || "-";
+  document.getElementById("section").textContent = student.section || "-";
+  document.getElementById("father").textContent = student.father || "-";
+  document.getElementById("mother").textContent = student.mother || "-";
+  document.getElementById("mobile").textContent = student.mobile || "-";
+  document.getElementById("attendance").textContent = student.attendance || "-";
 
-/* MARKS */
+  // MARKS
 
-const marksTable=document.getElementById("marksTable");
+  const marksTable = document.getElementById("marksTable");
+  marksTable.innerHTML = "";
 
-marksTable.innerHTML="";
+  const marksSnap = await getDocs(
+    collection(db, "marks", "Unit Test 1", "students")
+  );
 
-const exams=[
-"Unit Test 1",
-"Unit Test 2",
-"Quarterly",
-"Half Yearly",
-"Annual"
-];
+  let markFound = false;
 
-let markFound=false;
+  marksSnap.forEach((d) => {
 
-for(const exam of exams){
+    const mark = d.data();
 
-const markRef=doc(db,"marks",exam,"students",emis);
+    if (mark.emis === emis) {
 
-const markSnap=await getDoc(markRef);
+      markFound = true;
 
-if(markSnap.exists()){
+      marksTable.innerHTML += `
+      <tr>
+        <td>${mark.exam}</td>
+        <td>${mark.marks}</td>
+      </tr>
+      `;
 
-const m=markSnap.data();
+    }
 
-markFound=true;
+  });
 
-marksTable.innerHTML+=`
-<tr>
-<td>${exam}</td>
-<td>${m.marks}</td>
-</tr>
-`;
+  if (!markFound) {
 
-}
+    marksTable.innerHTML = `
+    <tr>
+      <td colspan="2">No Marks Available</td>
+    </tr>
+    `;
 
-}
+  }
 
-if(!markFound){
+  // HOMEWORK
 
-marksTable.innerHTML=`
-<tr>
-<td colspan="2">
-No Marks Available
-</td>
-</tr>
-`;
+  const homeworkTable = document.getElementById("homeworkTable");
+  homeworkTable.innerHTML = "";
 
-}
+  const homeworkSnap = await getDocs(collection(db, "homework"));
 
-/* HOMEWORK */
+  let homeworkFound = false;
 
-const homeworkTable=document.getElementById("homeworkTable");
+  homeworkSnap.forEach((d) => {
 
-homeworkTable.innerHTML="";
+    const hw = d.data();
 
-const homeworkSnap=await getDocs(collection(db,"homework"));
+    if (hw.class == student.class) {
 
-let homeworkFound=false;
+      homeworkFound = true;
 
-homeworkSnap.forEach((d)=>{
+      homeworkTable.innerHTML += `
+      <tr>
+        <td>${hw.date}</td>
+        <td>${hw.subject}</td>
+        <td>${hw.homework}</td>
+      </tr>
+      `;
 
-const hw=d.data();
+    }
 
-if(hw.class==student.class){
+  });
 
-homeworkFound=true;
+  if (!homeworkFound) {
 
-homeworkTable.innerHTML+=`
-<tr>
-<td>${hw.date}</td>
-<td>${hw.subject}</td>
-<td>${hw.homework}</td>
-</tr>
-`;
+    homeworkTable.innerHTML = `
+    <tr>
+      <td colspan="3">No Homework Available</td>
+    </tr>
+    `;
 
-}
-
-});
-
-if(!homeworkFound){
-
-homeworkTable.innerHTML=`
-<tr>
-<td colspan="3">
-No Homework Available
-</td>
-</tr>
-`;
-
-}
+  }
 
 }
    </script>
 
 </body>
-
 </html>
