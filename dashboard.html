@@ -15,7 +15,7 @@ body{
 header{
     background:#1565C0;
     color:white;
-    padding:18px;
+    padding:20px;
     text-align:center;
 }
 
@@ -25,34 +25,38 @@ header{
 
 .card{
     background:white;
-    border-radius:10px;
     padding:20px;
-    margin-bottom:15px;
+    border-radius:10px;
     box-shadow:0 2px 8px rgba(0,0,0,.15);
+    margin-bottom:20px;
 }
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
     gap:15px;
 }
 
-.btn{
+button{
+    padding:18px;
+    border:none;
+    border-radius:10px;
     background:#1565C0;
     color:white;
-    border:none;
-    padding:18px;
-    border-radius:10px;
-    font-size:16px;
+    font-size:17px;
     cursor:pointer;
 }
 
-.btn:hover{
+button:hover{
     background:#0D47A1;
 }
 
 .logout{
     background:#d32f2f;
+}
+
+.logout:hover{
+    background:#b71c1c;
 }
 </style>
 
@@ -74,39 +78,51 @@ header{
 
 <h2>Welcome 👋</h2>
 
-<p>Digital School Management System</p>
+<p>Select your module below.</p>
 
 </div>
 
 <div class="grid">
 
-<button class="btn">👨‍🏫 Teacher</button>
+<button onclick="location.href='teacher.html'">
+👨‍🏫 Teacher
+</button>
 
-<button class="btn">👨‍🎓 Student</button>
+<button onclick="location.href='student.html'">
+👨‍🎓 Student
+</button>
 
-<button class="btn">👨‍👩‍👧 Parent</button>
+<button onclick="location.href='parent.html'">
+👨‍👩‍👧 Parent
+</button>
 
-<button class="btn">👨‍💼 Headmaster</button>
+<button onclick="location.href='headmaster.html'">
+👨‍💼 Headmaster
+</button>
 
-<button class="btn">📅 Attendance</button>
+<button onclick="alert('Attendance Module - Coming Soon')">
+📅 Attendance
+</button>
 
-<button class="btn">📝 Homework</button>
+<button onclick="alert('Homework Module - Coming Soon')">
+📝 Homework
+</button>
 
-<button class="btn">📊 Marks</button>
+<button onclick="alert('Marks Module - Coming Soon')">
+📊 Marks
+</button>
 
-<button class="btn">📢 Notice Board</button>
+<button onclick="alert('Notice Board - Coming Soon')">
+📢 Notice Board
+</button>
 
-<button class="btn logout" onclick="logout()">🚪 Logout</button>
+<button class="logout" onclick="location.href='login.html'">
+🚪 Logout
+</button>
 
 </div>
 
 </div>
-
-<script>
-function logout(){
-    window.location.href="login.html";
-}
-</script>
 
 </body>
 </html>
