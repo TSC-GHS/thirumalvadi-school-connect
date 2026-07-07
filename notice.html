@@ -1,1 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notice Management</title>
 
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#D32F2F;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+label{
+font-weight:bold;
+display:block;
+margin-top:10px;
+}
+
+input,textarea{
+width:100%;
+padding:12px;
+margin-top:5px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+font-size:16px;
+}
+
+textarea{
+height:150px;
+resize:vertical;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+font-size:17px;
+cursor:pointer;
+}
+
+.save{
+background:#1565C0;
+color:white;
+}
+
+.home{
+background:#2E7D32;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📢 Notice Management
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<label>Notice Title</label>
+
+<input
+id="title"
+placeholder="Enter Notice Title">
+
+<label>Notice Message</label>
+
+<textarea
+id="message"
+placeholder="Enter Notice Message"></textarea>
+
+<button
+class="save"
+onclick="saveNotice()">
+
+💾 Save Notice
+
+</button>
+
+<button
+class="home"
+onclick="location.href='headmaster.html'">
+
+🏠 Back
+
+</button>
+
+</div>
+
+<script type="module">
+import { db } from "./firebase.js";
+
+import {
+collection,
+addDoc,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.saveNotice = async function(){
+
+const title = document.getElementById("title").value.trim();
+const message = document.getElementById("message").value.trim();
+
+if(title=="" || message==""){
+
+alert("Please enter Title and Notice");
+
+return;
+
+}
+
+await addDoc(collection(db,"notice"),{
+
+title:title,
+message:message,
+date:new Date().toLocaleDateString("en-GB")
+
+});
+
+alert("Notice Saved Successfully ✅");
+
+document.getElementById("title").value="";
+document.getElementById("message").value="";
+
+loadNotices();
+
+}
+
+async function loadNotices(){
+
+const container=document.getElementById("noticeHistory");
+
+if(!container) return;
+
+container.innerHTML="";
+
+const snap=await getDocs(collection(db,"notice"));
+
+if(snap.empty){
+
+container.innerHTML="<p>No Notices Available</p>";
+
+return;
+
+}
+
+snap.forEach((d)=>{
+
+const n=d.data();
+
+container.innerHTML+=`
+
+<div class="card">
+
+<b>${n.title}</b><br><br>
+
+${n.message}<br><br>
+
+<small>${n.date}</small>
+
+</div>
+
+`;
+
+});
+
+}
+
+loadNotices();
+  </script>
+
+<div class="container">
+
+<h2>📋 Notice History</h2>
+
+<div id="noticeHistory">
+
+<p>No Notices Available</p>
+
+</div>
+
+</div>
+
+</body>
+</html>
