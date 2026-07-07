@@ -1,1 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marks Entry</title>
 
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.card h3{
+margin:0;
+color:#1565C0;
+}
+
+.card p{
+margin:5px 0;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:6px;
+border:1px solid #ccc;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+font-size:17px;
+cursor:pointer;
+background:#1565C0;
+color:white;
+}
+
+.home{
+background:#2E7D32;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+📚 Marks Entry
+</div>
+
+<div class="container">
+
+<div id="studentList"></div>
+
+<button onclick="saveMarks()">
+💾 Save Marks
+</button>
+
+<button class="home"
+onclick="location.href='headmaster.html'">
+🏠 Back
+</button>
+
+</div>
+
+<script type="module">
+import { db } from "./firebase.js";
+
+import {
+collection,
+getDocs,
+doc,
+setDoc
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+const studentList = document.getElementById("studentList");
+
+let students = [];
+
+async function loadStudents(){
+
+studentList.innerHTML = "";
+students = [];
+
+const querySnapshot = await getDocs(collection(db,"students"));
+
+querySnapshot.forEach((d)=>{
+
+const student = d.data();
+
+if(!student.name || !student.emis) return;
+
+students.push(student);
+
+studentList.innerHTML += `
+
+<div class="card">
+
+<h3>${student.name}</h3>
+
+<p>EMIS : ${student.emis}</p>
+
+<p>Class : ${student.class}-${student.section}</p>
+
+<input
+type="number"
+id="${student.emis}"
+placeholder="Enter Marks (0-100)">
+
+</div>
+
+`;
+
+});
+
+}
+
+window.saveMarks = async function(){
+
+const exam = "Unit Test 1";
+
+for(const student of students){
+
+const marks = document.getElementById(student.emis).value;
+
+await setDoc(
+
+doc(db,"marks",exam,"students",student.emis),
+
+{
+
+name: student.name,
+
+emis: student.emis,
+
+class: student.class,
+
+section: student.section,
+
+marks: marks,
+
+exam: exam
+
+}
+
+);
+
+}
+
+alert("Marks Saved Successfully ✅");
+
+}
+
+loadStudents();
+  </script>
+
+</body>
+</html>
