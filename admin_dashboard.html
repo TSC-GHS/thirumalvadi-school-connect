@@ -1,1 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#6A1B9A;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.stat{
+background:#F3E5F5;
+padding:20px;
+border-radius:10px;
+text-align:center;
+}
+
+.stat h2{
+margin:0;
+font-size:32px;
+color:#6A1B9A;
+}
+
+.stat p{
+margin-top:10px;
+font-weight:bold;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:12px;
+border:none;
+border-radius:8px;
+font-size:17px;
+cursor:pointer;
+background:#6A1B9A;
+color:white;
+}
+
+.home{
+background:#1565C0;
+}
+
+.logout{
+background:#D32F2F;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+👨‍💼 Admin Dashboard
+
+</div>
+
+<div class="container">
+
+<div class="grid">
+
+<div class="stat">
+<h2 id="studentCount">0</h2>
+<p>Students</p>
+</div>
+
+<div class="stat">
+<h2 id="teacherCount">0</h2>
+<p>Teachers</p>
+</div>
+
+<div class="stat">
+<h2 id="noticeCount">0</h2>
+<p>Notices</p>
+</div>
+
+<div class="stat">
+<h2 id="homeworkCount">0</h2>
+<p>Homework</p>
+</div>
+
+</div>
+
+<div class="card">
+
+<button onclick="location.href='students.html'">
+👨‍🎓 Student Management
+</button>
+
+<button onclick="location.href='manage_teachers.html'">
+👨‍🏫 Teacher Management
+</button>
+
+<button onclick="location.href='notice.html'">
+📢 Notice Management
+</button>
+
+<button onclick="location.href='report_card.html'">
+📄 Report Card
+</button>
+
+<button class="home"
+onclick="location.href='dashboard.html'">
+🏠 Home
+</button>
+
+<button class="logout"
+onclick="location.href='login.html'">
+🚪 Logout
+</button>
+
+</div>
+
+<script type="module">
+  import { db } from "./firebase.js";
+
+import {
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+async function loadDashboard() {
+
+  // Students
+  const students = await getDocs(collection(db, "students"));
+  document.getElementById("studentCount").textContent = students.size;
+
+  // Teachers
+  const teachers = await getDocs(collection(db, "teachers"));
+  document.getElementById("teacherCount").textContent = teachers.size;
+
+  // Homework
+  const homework = await getDocs(collection(db, "homework"));
+  document.getElementById("homeworkCount").textContent = homework.size;
+
+  // Notices
+  const notices = await getDocs(collection(db, "notices"));
+  document.getElementById("noticeCount").textContent = notices.size;
+
+}
+
+loadDashboard();
+  </script>
+
+</body>
+</html>
