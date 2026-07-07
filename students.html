@@ -1,1 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Students List</title>
 
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f4f4;
+margin:0;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-bottom:20px;
+font-size:16px;
+box-sizing:border-box;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.card h3{
+margin:0;
+color:#1565C0;
+}
+
+.card p{
+margin:6px 0;
+}
+
+button{
+padding:10px 15px;
+margin-top:10px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+color:white;
+}
+
+.delete{
+background:#E53935;
+}
+
+.home{
+background:#1565C0;
+width:100%;
+margin-top:20px;
+padding:15px;
+font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+👨‍🎓 Students List
+</div>
+
+<div class="container">
+
+<input
+type="text"
+id="search"
+placeholder="Search by Name or EMIS"
+onkeyup="searchStudent()">
+
+<div id="studentList"></div>
+
+<button
+class="home"
+onclick="location.href='headmaster.html'">
+🏠 Back to Headmaster
+</button>
+
+</div>
+
+<script type="module">
+  import { db } from "./firebase.js";
+
+import {
+collection,
+getDocs,
+deleteDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+const studentList = document.getElementById("studentList");
+
+let students = [];
+
+async function loadStudents(){
+
+const querySnapshot = await getDocs(collection(db,"students"));
+
+students = [];
+
+studentList.innerHTML = "";
+
+querySnapshot.forEach((document)=>{
+
+const student = document.data();
+
+students.push(student);
+
+studentList.innerHTML += `
+<div class="card">
+
+<h3>${student.name}</h3>
+
+<p><b>EMIS :</b> ${student.emis}</p>
+
+<p><b>Class :</b> ${student.class}-${student.section}</p>
+
+<p><b>Father :</b> ${student.father}</p>
+
+<p><b>Mobile :</b> ${student.mobile}</p>
+
+<button class="delete"
+onclick="deleteStudent('${student.emis}')">
+🗑 Delete
+</button>
+
+</div>
+`;
+
+});
+
+}
+
+window.deleteStudent = async function(emis){
+
+if(confirm("Delete Student?")){
+
+await deleteDoc(doc(db,"students",emis));
+
+alert("Student Deleted");
+
+loadStudents();
+
+}
+
+}
+
+window.searchStudent = function(){
+
+const text =
+document.getElementById("search").value.toLowerCase();
+
+const cards =
+document.querySelectorAll(".card");
+
+cards.forEach(card=>{
+
+if(card.innerText.toLowerCase().includes(text))
+
+card.style.display="block";
+
+else
+
+card.style.display="none";
+
+});
+
+}
+
+loadStudents();
+  </script>
+
+</body>
+</html>
