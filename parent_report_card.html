@@ -1,1 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Parent Report Card</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#2E7D32;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+max-width:700px;
+margin:auto;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+
+input{
+width:100%;
+padding:12px;
+margin:12px 0;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:16px;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+font-size:18px;
+cursor:pointer;
+background:#2E7D32;
+color:white;
+}
+
+.home{
+background:#1565C0;
+}
+
+.result{
+margin-top:20px;
+padding:15px;
+border-radius:10px;
+background:#f8f8f8;
+display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📄 Parent Report Card
+
+</div>
+
+<div class="container">
+
+<div class="card">
+<label>EMIS Number</label>
+
+<input
+id="emis"
+placeholder="Enter EMIS Number">
+
+<button onclick="loadReportCard()">
+
+🔍 View Report Card
+
+</button>
+
+<div id="report" class="result">
+
+<h2>Student Report Card</h2>
+
+<p><b>Name :</b> <span id="name"></span></p>
+
+<p><b>Class :</b> <span id="class"></span></p>
+
+<hr>
+
+<p><b>Tamil :</b> <span id="tamil"></span></p>
+
+<p><b>English :</b> <span id="english"></span></p>
+
+<p><b>Mathematics :</b> <span id="maths"></span></p>
+
+<p><b>Science :</b> <span id="science"></span></p>
+
+<p><b>Social Science :</b> <span id="social"></span></p>
+
+<hr>
+
+<p><b>Total :</b> <span id="total"></span></p>
+
+<p><b>Percentage :</b> <span id="percentage"></span>%</p>
+
+<p><b>Grade :</b> <span id="grade"></span></p>
+
+<p><b>Result :</b> <span id="result"></span></p>
+
+</div>
+
+<button class="home"
+onclick="location.href='parent_dashboard.html'">
+
+🏠 Parent Dashboard
+
+</button>
+
+</div>
+
+</div>
+
+<script type="module">
+  import { db } from "./firebase.js";
+
+import {
+doc,
+getDoc
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.loadReportCard = async function(){
+
+const emis = document.getElementById("emis").value.trim();
+
+if(emis===""){
+    alert("Please enter EMIS Number");
+    return;
+}
+
+try{
+
+const reportRef = doc(db,"report_cards",emis);
+const reportSnap = await getDoc(reportRef);
+
+if(!reportSnap.exists()){
+    alert("Report Card Not Found");
+    return;
+}
+
+const data = reportSnap.data();
+
+document.getElementById("report").style.display="block";
+
+document.getElementById("name").innerText=data.name || "";
+document.getElementById("class").innerText=data.class || "";
+document.getElementById("tamil").innerText=data.tamil || 0;
+document.getElementById("english").innerText=data.english || 0;
+document.getElementById("maths").innerText=data.maths || 0;
+document.getElementById("science").innerText=data.science || 0;
+document.getElementById("social").innerText=data.social || 0;
+document.getElementById("total").innerText=data.total || 0;
+document.getElementById("percentage").innerText=data.percentage || 0;
+document.getElementById("grade").innerText=data.grade || "-";
+document.getElementById("result").innerText=data.result || "-";
+
+}catch(error){
+
+alert(error.message);
+
+}
+
+}
+ </script>
+
+</body>
+</html> 
