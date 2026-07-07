@@ -77,7 +77,9 @@ font-size:18px;
 </head>
 <body>
 
-<div class="header">👨‍🎓 Students List</div>
+<div class="header">
+👨‍🎓 Students List
+</div>
 
 <div class="container">
 
@@ -107,25 +109,23 @@ deleteDoc,
 doc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const studentList=document.getElementById("studentList");
+const studentList = document.getElementById("studentList");
 
 async function loadStudents(){
 
 studentList.innerHTML="";
 
-const querySnapshot=await getDocs(collection(db,"students"));
+try{
+
+const querySnapshot = await getDocs(collection(db,"students"));
 
 querySnapshot.forEach((d)=>{
 
-const student=d.data();
+const student = d.data();
 
-// Skip invalid records
-if(!student.name || !student.emis){
-return;
-}
+if(!student.name || !student.emis) return;
 
-studentList.innerHTML+=`
-
+studentList.innerHTML += `
 <div class="card">
 
 <h3>${student.name}</h3>
@@ -138,20 +138,25 @@ studentList.innerHTML+=`
 
 <p><b>Mobile :</b> ${student.mobile}</p>
 
-<button class="delete"
-onclick="deleteStudent('${d.id}')">
+<button class="delete" onclick="deleteStudent('${d.id}')">
 🗑 Delete
 </button>
 
 </div>
-
 `;
 
 });
 
+}catch(error){
+
+alert(error.message);
+console.log(error);
+
 }
 
-window.deleteStudent=async(id)=>{
+}
+
+window.deleteStudent = async function(id){
 
 if(confirm("Delete Student?")){
 
@@ -165,13 +170,13 @@ loadStudents();
 
 }
 
-window.searchStudent=()=>{
+window.searchStudent = function(){
 
-let value=document.getElementById("search").value.toLowerCase();
+let value = document.getElementById("search").value.toLowerCase();
 
 document.querySelectorAll(".card").forEach(card=>{
 
-card.style.display=
+card.style.display =
 card.innerText.toLowerCase().includes(value)
 ? "block"
 : "none";
