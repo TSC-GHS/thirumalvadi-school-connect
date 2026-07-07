@@ -57,16 +57,22 @@ margin:6px 0;
 display:flex;
 gap:10px;
 margin-top:10px;
+flex-wrap:wrap;
 }
 
-button{
+.actions button{
 flex:1;
+min-width:90px;
 padding:10px;
 border:none;
 border-radius:8px;
 color:white;
 font-size:15px;
 cursor:pointer;
+}
+
+.profile{
+background:#1976D2;
 }
 
 .edit{
@@ -83,6 +89,10 @@ margin-top:20px;
 padding:15px;
 background:#2E7D32;
 font-size:18px;
+border:none;
+border-radius:8px;
+color:white;
+cursor:pointer;
 }
 
 </style>
@@ -105,7 +115,6 @@ placeholder="Search by Name or EMIS"
 onkeyup="searchStudent()">
 
 <div id="studentList"></div>
-
 <button
 class="home"
 onclick="location.href='student_management.html'">
@@ -116,14 +125,15 @@ onclick="location.href='student_management.html'">
 
 <button
 class="home"
-onclick="location.href='dashboard.html'">
+onclick="location.href='admin_dashboard_v2.html'">
 
-🏠 Home
+🏠 Admin Dashboard
 
 </button>
 
 <script type="module">
- import { db } from "./firebase.js";
+
+import { db } from "./firebase.js";
 
 import {
 collection,
@@ -146,8 +156,7 @@ snap.forEach((studentDoc)=>{
 
 const student = studentDoc.data();
 const emis = studentDoc.id;
-
-studentList.innerHTML += `
+ studentList.innerHTML += `
 
 <div class="card">
 
@@ -161,18 +170,28 @@ studentList.innerHTML += `
 
 <p><b>Mobile :</b> ${student.mobile || "-"}</p>
 
-<p><b>Blood :</b> ${student.blood || "-"}</p>
+<p><b>Blood Group :</b> ${student.blood || "-"}</p>
 
 <div class="actions">
 
-<button class="edit"
+<button
+class="profile"
+onclick="location.href='student_profile_v2.html?emis=${emis}'">
+
+👁 Profile
+
+</button>
+
+<button
+class="edit"
 onclick="location.href='student_management.html?emis=${emis}'">
 
 ✏ Edit
 
 </button>
 
-<button class="delete"
+<button
+class="delete"
 onclick="deleteStudent('${emis}')">
 
 🗑 Delete
@@ -186,10 +205,10 @@ onclick="deleteStudent('${emis}')">
 `;
 
 });
-
-}catch(error){
+ }catch(error){
 
 alert(error.message);
+console.log(error);
 
 }
 
@@ -199,11 +218,19 @@ window.deleteStudent = async function(emis){
 
 if(confirm("Delete this student?")){
 
+try{
+
 await deleteDoc(doc(db,"students",emis));
 
-alert("Student Deleted Successfully");
+alert("✅ Student Deleted Successfully");
 
 loadStudents();
+
+}catch(error){
+
+alert(error.message);
+
+}
 
 }
 
@@ -225,8 +252,11 @@ card.innerText.toLowerCase().includes(value)
 
 }
 
-loadStudents(); 
-  </script>
+loadStudents();
+
+</script>
+
+</div>
 
 </body>
 </html>
