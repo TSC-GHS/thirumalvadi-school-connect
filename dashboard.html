@@ -3,118 +3,149 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>School Connect TN - Dashboard</title>
+
+<title>School Connect TN</title>
 
 <style>
+
 body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f4f6f9;
+margin:0;
+font-family:Arial,sans-serif;
+background:#EEF3F8;
 }
 
-header{
-    background:#1565C0;
-    color:white;
-    padding:20px;
-    text-align:center;
+.header{
+background:linear-gradient(135deg,#1565C0,#0D47A1);
+color:white;
+padding:25px;
+text-align:center;
+}
+
+.header h1{
+margin:0;
+font-size:28px;
+}
+
+.header p{
+margin-top:8px;
+font-size:16px;
 }
 
 .container{
-    padding:20px;
-}
-
-.card{
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,.15);
-    margin-bottom:20px;
+padding:20px;
 }
 
 .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-    gap:15px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:15px;
 }
 
-button{
-    padding:18px;
-    border:none;
-    border-radius:10px;
-    background:#1565C0;
-    color:white;
-    font-size:17px;
-    cursor:pointer;
+.card{
+background:white;
+border-radius:12px;
+padding:20px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+cursor:pointer;
+transition:.2s;
 }
 
-button:hover{
-    background:#0D47A1;
+.card:hover{
+transform:scale(1.03);
+}
+
+.icon{
+font-size:42px;
+margin-bottom:10px;
+}
+
+.title{
+font-size:18px;
+font-weight:bold;
+color:#1565C0;
 }
 
 .logout{
-    background:#d32f2f;
+margin-top:25px;
+width:100%;
+padding:16px;
+background:#D32F2F;
+border:none;
+border-radius:10px;
+font-size:18px;
+color:white;
+cursor:pointer;
 }
 
-.logout:hover{
-    background:#b71c1c;
-}
 </style>
 
 </head>
 
 <body>
 
-<header>
+<div class="header">
 
 <h1>🏫 School Connect TN</h1>
 
 <p>Thirumalvadi Government High School</p>
 
-</header>
+</div>
 
 <div class="container">
 
-<div class="card">
-
-<h2>Welcome 👋</h2>
-
-<p>Select your module below.</p>
-
+<div class="grid">
+    <div class="card" onclick="location.href='teacher.html'">
+<div class="icon">👨‍🏫</div>
+<div class="title">Teacher</div>
 </div>
 
-<div class="grid">
+<div class="card" onclick="location.href='student.html'">
+<div class="icon">👨‍🎓</div>
+<div class="title">Student</div>
+</div>
 
-<button onclick="location.href='teacher.html'">
-👨‍🏫 Teacher
-</button>
+<div class="card" onclick="location.href='parent.html'">
+<div class="icon">👨‍👩‍👧</div>
+<div class="title">Parent</div>
+</div>
 
-<button onclick="location.href='student.html'">
-👨‍🎓 Student
-</button>
+<div class="card" onclick="location.href='headmaster.html'">
+<div class="icon">👨‍💼</div>
+<div class="title">Headmaster</div>
+</div>
 
-<button onclick="location.href='parent.html'">
-👨‍👩‍👧 Parent
-</button>
+<div class="card" onclick="location.href='admin_dashboard.html'">
+<div class="icon">⚙️</div>
+<div class="title">Admin</div>
+</div>
 
-<button onclick="location.href='headmaster.html'">
-👨‍💼 Headmaster
-</button>
+<div class="card" onclick="location.href='calendar.html'">
+<div class="icon">📅</div>
+<div class="title">Calendar</div>
+</div>
 
-<button onclick="alert('Attendance Module - Coming Soon')">
-📅 Attendance
-</button>
+<div class="card" onclick="location.href='gallery.html'">
+<div class="icon">📷</div>
+<div class="title">Gallery</div>
+</div>
 
-<button onclick="alert('Homework Module - Coming Soon')">
-📝 Homework
-</button>
+<div class="card" onclick="location.href='news.html'">
+<div class="icon">📰</div>
+<div class="title">News</div>
+</div>
 
-<button onclick="alert('Marks Module - Coming Soon')">
-📊 Marks
-</button>
+<div class="card" onclick="location.href='notice_board.html'">
+<div class="icon">📢</div>
+<div class="title">Notice Board</div>
+</div>
 
-<button onclick="alert('Notice Board - Coming Soon')">
-📢 Notice Board
-</button>
+<div class="card" onclick="location.href='report_card.html'">
+<div class="icon">📄</div>
+<div class="title">Report Card</div>
+</div>
+
+</div>
 
 <button class="logout" onclick="location.href='login.html'">
 🚪 Logout
@@ -122,7 +153,8 @@ button:hover{
 
 </div>
 
-</div>
-
+<script>
+console.log("School Connect TN v2.0 Loaded");
+</script>
 </body>
 </html>
