@@ -1,1 +1,23 @@
-
+{
+  "name": "School Connect TN",
+  "short_name": "TSC",
+  "description": "Thirumalvadi Government Higher Secondary School Management System",
+  "start_url": "/thirumalvadi-school-connect/index.html",
+  "scope": "/thirumalvadi-school-connect/",
+  "display": "standalone",
+  "background_color": "#1565C0",
+  "theme_color": "#1565C0",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
