@@ -1,1 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard Statistics</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+gap:15px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.2);
+text-align:center;
+}
+
+.card h2{
+margin:0;
+font-size:36px;
+color:#1565C0;
+}
+
+.card p{
+margin-top:10px;
+font-size:18px;
+font-weight:bold;
+}
+
+.home{
+width:90%;
+max-width:400px;
+display:block;
+margin:20px auto;
+padding:15px;
+border:none;
+border-radius:10px;
+background:#2E7D32;
+color:white;
+font-size:18px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📊 School Dashboard Statistics
+
+</div>
+
+<div class="container">
+<div class="card">
+<h2 id="students">0</h2>
+<p>👨‍🎓 Students</p>
+</div>
+
+<div class="card">
+<h2 id="teachers">0</h2>
+<p>👨‍🏫 Teachers</p>
+</div>
+
+<div class="card">
+<h2 id="reports">0</h2>
+<p>📄 Report Cards</p>
+</div>
+
+<div class="card">
+<h2 id="news">0</h2>
+<p>📰 News</p>
+</div>
+
+<div class="card">
+<h2 id="notice">0</h2>
+<p>📢 Notices</p>
+</div>
+
+<div class="card">
+<h2 id="calendar">0</h2>
+<p>📅 Events</p>
+</div>
+
+</div>
+
+<button class="home"
+onclick="location.href='admin_dashboard.html'">
+🏠 Back to Admin Dashboard
+</button>
+
+<script type="module">
+  import { db } from "./firebase.js";
+
+import {
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+async function loadStatistics(){
+
+  try{
+
+    const students = await getDocs(collection(db,"students"));
+    document.getElementById("students").innerText = students.size;
+
+    const teachers = await getDocs(collection(db,"users"));
+    let teacherCount = 0;
+
+    teachers.forEach((doc)=>{
+      if(doc.data().role === "Teacher"){
+        teacherCount++;
+      }
+    });
+
+    document.getElementById("teachers").innerText = teacherCount;
+
+    const reports = await getDocs(collection(db,"report_cards"));
+    document.getElementById("reports").innerText = reports.size;
+
+    const news = await getDocs(collection(db,"news"));
+    document.getElementById("news").innerText = news.size;
+
+    const notice = await getDocs(collection(db,"notice"));
+    document.getElementById("notice").innerText = notice.size;
+
+    const calendar = await getDocs(collection(db,"calendar"));
+    document.getElementById("calendar").innerText = calendar.size;
+
+  }catch(error){
+
+    console.log(error);
+    alert(error.message);
+
+  }
+
+}
+
+loadStatistics();
+  </script>
+
+</body>
+</html>
