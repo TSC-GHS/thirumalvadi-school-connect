@@ -1,1 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Attendance History</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#2E7D32;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+input{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+background:#2E7D32;
+color:white;
+font-size:17px;
+cursor:pointer;
+}
+
+.home{
+background:#1565C0;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#2E7D32;
+color:white;
+}
+
+.summary{
+background:#E8F5E9;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📅 Attendance History
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<input
+id="emis"
+placeholder="Enter Student EMIS Number">
+
+<button onclick="loadAttendance()">
+
+🔍 Search Attendance
+
+</button>
+
+</div>
+
+<div class="card">
+
+<table>
+
+<tr>
+<th>Details</th>
+<th>Value</th>
+</tr>
+
+<tbody id="attendanceTable">
+
+<tr>
+<td colspan="2">
+No Attendance Available
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<button
+class="home"
+onclick="location.href='parent.html'">
+
+🏠 Back
+
+</button>
+
+<script type="module">
+import { db } from "./firebase.js";
+
+import {
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.loadAttendance = async function () {
+
+  const emis = document.getElementById("emis").value.trim();
+
+  if (emis === "") {
+    alert("Enter EMIS Number");
+    return;
+  }
+
+  const table = document.getElementById("attendanceTable");
+  table.innerHTML = "";
+
+  const snap = await getDoc(doc(db, "students", emis));
+
+  if (!snap.exists()) {
+
+    table.innerHTML = `
+    <tr>
+      <td colspan="2">Student Not Found</td>
+    </tr>
+    `;
+    return;
+  }
+
+  const student = snap.data();
+
+  const attendance = student.attendance || "0";
+
+  table.innerHTML = `
+  <tr>
+    <td>Student Name</td>
+    <td>${student.name}</td>
+  </tr>
+
+  <tr>
+    <td>Class</td>
+    <td>${student.class}</td>
+  </tr>
+
+  <tr>
+    <td>Attendance</td>
+    <td>${attendance}</td>
+  </tr>
+
+  <tr class="summary">
+    <td>Status</td>
+    <td>${attendance}</td>
+  </tr>
+  `;
+
+}
+  </script>
+
+</body>
+</html>
