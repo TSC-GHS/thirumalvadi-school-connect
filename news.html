@@ -1,1 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>School News</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#1976D2;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.newsTitle{
+font-size:20px;
+font-weight:bold;
+color:#1565C0;
+}
+
+.newsDate{
+margin-top:10px;
+color:#D32F2F;
+font-weight:bold;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+background:#2E7D32;
+color:white;
+font-size:17px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📰 School News
+
+</div>
+
+<div class="container">
+
+<div id="newsList">
+
+Loading News...
+
+</div>
+
+<button onclick="location.href='dashboard.html'">
+
+🏠 Home
+
+</button>
+
+<script type="module">
+import { db } from "./firebase.js";
+
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+async function loadNews(){
+
+const newsList = document.getElementById("newsList");
+
+newsList.innerHTML = "";
+
+try{
+
+const q = query(
+collection(db,"news"),
+orderBy("date","desc")
+);
+
+const snap = await getDocs(q);
+
+if(snap.empty){
+
+newsList.innerHTML = `
+<div class="card">
+<h3>No News Available</h3>
+<p>Latest school news will appear here.</p>
+</div>
+`;
+
+return;
+
+}
+
+snap.forEach((doc)=>{
+
+const news = doc.data();
+
+newsList.innerHTML += `
+<div class="card">
+
+<div class="newsTitle">
+${news.title}
+</div>
+
+<p>
+${news.description || ""}
+</p>
+
+<div class="newsDate">
+📅 ${news.date}
+</div>
+
+</div>
+`;
+
+});
+
+}catch(error){
+
+newsList.innerHTML = `
+<div class="card">
+<h3>Error Loading News</h3>
+<p>${error.message}</p>
+</div>
+`;
+
+}
+
+}
+
+loadNews();
+  </script>
+
+</body>
+</html>
