@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Connect TN - Dashboard</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+}
+
+header{
+    background:#1565C0;
+    color:white;
+    padding:18px;
+    text-align:center;
+}
+
+.container{
+    padding:20px;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    padding:20px;
+    margin-bottom:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:15px;
+}
+
+.btn{
+    background:#1565C0;
+    color:white;
+    border:none;
+    padding:18px;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.btn:hover{
+    background:#0D47A1;
+}
+
+.logout{
+    background:#d32f2f;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>🏫 School Connect TN</h1>
+
+<p>Thirumalvadi Government High School</p>
+
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Welcome 👋</h2>
+
+<p>Digital School Management System</p>
+
+</div>
+
+<div class="grid">
+
+<button class="btn">👨‍🏫 Teacher</button>
+
+<button class="btn">👨‍🎓 Student</button>
+
+<button class="btn">👨‍👩‍👧 Parent</button>
+
+<button class="btn">👨‍💼 Headmaster</button>
+
+<button class="btn">📅 Attendance</button>
+
+<button class="btn">📝 Homework</button>
+
+<button class="btn">📊 Marks</button>
+
+<button class="btn">📢 Notice Board</button>
+
+<button class="btn logout" onclick="logout()">🚪 Logout</button>
+
+</div>
+
+</div>
+
+<script>
+function logout(){
+    window.location.href="login.html";
+}
+</script>
+
+</body>
+</html>
