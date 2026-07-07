@@ -1,1 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Profile</title>
 
+<style>
+
+body{
+font-family:Arial,sans-serif;
+margin:0;
+background:#f4f6f9;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+margin-bottom:20px;
+}
+
+label{
+font-weight:bold;
+display:block;
+margin-top:10px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:5px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+background:#1565C0;
+color:white;
+border:none;
+border-radius:8px;
+font-size:17px;
+cursor:pointer;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#1565C0;
+color:white;
+}
+
+.home{
+background:#2E7D32;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+🎓 Student Profile
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<label>Enter EMIS Number</label>
+
+<input
+type="text"
+id="emis"
+placeholder="Enter EMIS Number">
+
+<button onclick="loadStudent()">
+🔍 Search Student
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Student Details</h3>
+
+<p><b>Name :</b> <span id="name">-</span></p>
+
+<p><b>Class :</b> <span id="class">-</span></p>
+
+<p><b>Section :</b> <span id="section">-</span></p>
+
+</div>
+
+<div class="card">
+
+<h3>Marks</h3>
+
+<table>
+
+<tr>
+
+<th>Exam</th>
+
+<th>Marks</th>
+
+</tr>
+
+<tbody id="marksTable">
+
+<tr>
+
+<td colspan="2">
+No Marks Available
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<button class="home"
+onclick="location.href='student.html'">
+🏠 Back
+</button>
+
+<script type="module">
+import { db } from "./firebase.js";
+
+import {
+doc,
+getDoc,
+collection,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.loadStudent = async function(){
+
+const emis =
+document.getElementById("emis").value.trim();
+
+if(emis==""){
+alert("Enter EMIS Number");
+return;
+}
+
+// Student Details
+
+const studentRef =
+doc(db,"students",emis);
+
+const studentSnap =
+await getDoc(studentRef);
+
+if(!studentSnap.exists()){
+
+alert("Student Not Found");
+
+return;
+
+}
+
+const student =
+studentSnap.data();
+
+document.getElementById("name").innerHTML =
+student.name;
+
+document.getElementById("class").innerHTML =
+student.class;
+
+document.getElementById("section").innerHTML =
+student.section;
+
+
+// Marks
+
+const tbody =
+document.getElementById("marksTable");
+
+tbody.innerHTML="";
+
+const marksSnap =
+await getDocs(
+collection(
+db,
+"marks",
+"Unit Test 1",
+"students"
+)
+);
+
+let found=false;
+
+marksSnap.forEach((d)=>{
+
+const m=d.data();
+
+if(m.emis==emis){
+
+found=true;
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${m.exam}</td>
+
+<td>${m.marks}</td>
+
+</tr>
+
+`;
+
+}
+
+});
+
+if(!found){
+
+tbody.innerHTML=`
+
+<tr>
+
+<td colspan="2">
+
+No Marks Available
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+}
+  </script>
+
+</body>
+</html>
