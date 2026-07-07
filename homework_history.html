@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Homework History</title>
 
@@ -34,7 +32,7 @@ padding:20px;
 .card{
 background:white;
 padding:15px;
-margin-bottom:15px;
+margin-bottom:20px;
 border-radius:10px;
 box-shadow:0 2px 6px rgba(0,0,0,.2);
 }
@@ -126,6 +124,8 @@ placeholder="Enter EMIS Number">
 
 <th>Date</th>
 
+<th>Class</th>
+
 <th>Subject</th>
 
 <th>Homework</th>
@@ -136,7 +136,7 @@ placeholder="Enter EMIS Number">
 
 <tr>
 
-<td colspan="3">
+<td colspan="4">
 
 No Homework Available
 
@@ -159,17 +159,18 @@ onclick="location.href='student_profile.html'">
 </button>
 
 <script type="module">
-import { db } from "./firebase.js";
+  import { db } from "./firebase.js";
 
 import {
+doc,
+getDoc,
 collection,
 getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 window.loadHomework = async function(){
 
-const emis =
-document.getElementById("emis").value.trim();
+const emis = document.getElementById("emis").value.trim();
 
 if(emis==""){
 
@@ -179,29 +180,45 @@ return;
 
 }
 
-const tbody =
-document.getElementById("homeworkTable");
+// Find Student
 
-tbody.innerHTML="";
+const studentSnap = await getDoc(doc(db,"students",emis));
 
-const snap =
-await getDocs(collection(db,"homework"));
+if(!studentSnap.exists()){
 
-let found=false;
+alert("Student Not Found");
+
+return;
+
+}
+
+const student = studentSnap.data();
+
+const studentClass = student.class;
+
+const tbody = document.getElementById("homeworkTable");
+
+tbody.innerHTML = "";
+
+const snap = await getDocs(collection(db,"homework"));
+
+let found = false;
 
 snap.forEach((d)=>{
 
-const hw=d.data();
+const hw = d.data();
 
-if(hw.emis==emis){
+if(hw.class == studentClass){
 
-found=true;
+found = true;
 
-tbody.innerHTML+=`
+tbody.innerHTML += `
 
 <tr>
 
 <td>${hw.date}</td>
+
+<td>${hw.class}</td>
 
 <td>${hw.subject}</td>
 
@@ -217,11 +234,11 @@ tbody.innerHTML+=`
 
 if(!found){
 
-tbody.innerHTML=`
+tbody.innerHTML = `
 
 <tr>
 
-<td colspan="3">
+<td colspan="4">
 
 No Homework Available
 
