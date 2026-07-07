@@ -1,31 +1,27 @@
 import { auth } from "./firebase.js";
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-window.addEventListener("DOMContentLoaded", () => {
+const loginBtn = document.getElementById("loginBtn");
+const msg = document.getElementById("msg");
 
-  const loginBtn = document.getElementById("loginBtn");
-
-  if (!loginBtn) return;
-
-  loginBtn.addEventListener("click", async () => {
+loginBtn.addEventListener("click", async () => {
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
+    msg.innerHTML = "";
+
     try {
 
-      await signInWithEmailAndPassword(auth, email, password);
+        await signInWithEmailAndPassword(auth, email, password);
 
-      alert("Login Successful");
+        alert("Login Successful");
 
-      window.location.href = "dashboard.html";
+        window.location.href = "dashboard.html";
 
     } catch (error) {
 
-      alert(error.message);
-
+        msg.innerHTML = error.message;
     }
-
-  });
 
 });
