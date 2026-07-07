@@ -33,6 +33,7 @@ background:white;
 padding:20px;
 border-radius:10px;
 box-shadow:0 2px 6px rgba(0,0,0,.2);
+margin-bottom:20px;
 }
 
 label{
@@ -41,10 +42,10 @@ margin-top:12px;
 font-weight:bold;
 }
 
-input,select,textarea{
+input,textarea{
 width:100%;
 padding:12px;
-margin-top:5px;
+margin-top:6px;
 border:1px solid #ccc;
 border-radius:8px;
 box-sizing:border-box;
@@ -62,10 +63,10 @@ padding:15px;
 margin-top:15px;
 border:none;
 border-radius:8px;
-font-size:17px;
-cursor:pointer;
 background:#6A1B9A;
 color:white;
+font-size:17px;
+cursor:pointer;
 }
 
 .home{
@@ -89,49 +90,60 @@ background:#2E7D32;
 <div class="card">
 
 <label>Student Name</label>
-<input id="name" placeholder="Enter Student Name">
+<input id="name">
 
 <label>EMIS Number</label>
-<input id="emis" placeholder="Enter EMIS Number">
+<input id="emis">
 
 <label>Class</label>
-<input id="class" placeholder="Enter Class">
+<input id="class">
 
 <label>Section</label>
-<input id="section" placeholder="Enter Section">
+<input id="section">
 
 <label>Father Name</label>
-<input id="father" placeholder="Enter Father Name">
+<input id="father">
 
 <label>Mother Name</label>
-<input id="mother" placeholder="Enter Mother Name">
+<input id="mother">
 
 <label>Parent Mobile</label>
-<input id="mobile" placeholder="Enter Mobile Number">
+<input id="mobile">
 
 <label>Blood Group</label>
-<input id="blood" placeholder="Enter Blood Group">
+<input id="blood">
 
 <label>Address</label>
-<textarea id="address" placeholder="Enter Address"></textarea>
+<textarea id="address"></textarea>
 
 <button onclick="saveStudent()">
-💾 Save Student
+
+💾 Save / Update Student
+
+</button>
+
+<button class="home"
+onclick="location.href='students.html'">
+
+👨‍🎓 Students List
+
 </button>
 
 <button class="home"
 onclick="location.href='dashboard.html'">
+
 🏠 Home
+
 </button>
 
 </div>
 
 <script type="module">
-  import { db } from "./firebase.js";
+import { db } from "./firebase.js";
 
 import {
-  collection,
-  addDoc
+doc,
+setDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 window.saveStudent = async function(){
@@ -156,7 +168,7 @@ return;
 
 try{
 
-await addDoc(collection(db,"students"),{
+await setDoc(doc(db,"students",emis),{
 
 name:name,
 emis:emis,
@@ -167,6 +179,7 @@ mother:mother,
 mobile:mobile,
 blood:blood,
 address:address,
+attendance:"0%",
 createdAt:new Date().toISOString()
 
 });
