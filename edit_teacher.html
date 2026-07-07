@@ -1,1 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Teacher</title>
 
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f5f5f5;
+margin:0;
+}
+
+.header{
+background:#2E7D32;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-bottom:12px;
+font-size:16px;
+box-sizing:border-box;
+border:1px solid #ccc;
+border-radius:8px;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:10px;
+font-size:17px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+color:white;
+}
+
+.update{
+background:#1565C0;
+}
+
+.home{
+background:#2E7D32;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+✏️ Edit Teacher
+</div>
+
+<div class="container">
+
+<input id="teacherDocId" placeholder="Document ID">
+
+<input id="teacherName" placeholder="Teacher Name">
+
+<input id="teacherId" placeholder="Teacher ID">
+
+<input id="teacherMobile" placeholder="Mobile Number">
+
+<button class="update" onclick="updateTeacher()">
+💾 Update Teacher
+</button>
+
+<button class="home" onclick="location.href='manage_teachers.html'">
+🏠 Back
+</button>
+
+</div>
+
+<script type="module">
+
+import { db } from "./firebase.js";
+
+import {
+doc,
+updateDoc
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.updateTeacher = async function(){
+
+const docId=document.getElementById("teacherDocId").value.trim();
+const name=document.getElementById("teacherName").value.trim();
+const id=document.getElementById("teacherId").value.trim();
+const mobile=document.getElementById("teacherMobile").value.trim();
+
+if(docId==""||name==""){
+alert("Please fill all required fields");
+return;
+}
+
+await updateDoc(doc(db,"teachers",docId),{
+name:name,
+id:id,
+mobile:mobile
+});
+
+alert("Teacher Updated Successfully");
+
+location.href="manage_teachers.html";
+
+}
+
+</script>
+
+</body>
+</html>
