@@ -1,1 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Teachers</title>
 
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f4f4f4;
+margin:0;
+}
+
+.header{
+background:#2E7D32;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-bottom:12px;
+font-size:16px;
+box-sizing:border-box;
+border:1px solid #ccc;
+border-radius:8px;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:10px;
+font-size:17px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+color:white;
+}
+
+.add{
+background:#2E7D32;
+}
+
+.home{
+background:#1565C0;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-top:15px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+👨‍🏫 Manage Teachers
+</div>
+
+<div class="container">
+
+<input id="teacherName" placeholder="Teacher Name">
+
+<input id="teacherId" placeholder="Teacher ID">
+
+<input id="teacherMobile" placeholder="Mobile Number">
+
+<button class="add" onclick="saveTeacher()">
+➕ Save Teacher
+</button>
+
+<hr>
+
+<div id="teacherList"></div>
+
+<button class="home"
+onclick="location.href='headmaster.html'">
+🏠 Back
+</button>
+
+</div>
+
+<script type="module">
+
+import { db } from "./firebase.js";
+
+import {
+collection,
+addDoc,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+const teacherList=document.getElementById("teacherList");
+
+window.saveTeacher=async()=>{
+
+const name=document.getElementById("teacherName").value;
+const id=document.getElementById("teacherId").value;
+const mobile=document.getElementById("teacherMobile").value;
+
+if(name==""||id==""){
+alert("Fill all details");
+return;
+}
+
+await addDoc(collection(db,"teachers"),{
+name,
+id,
+mobile
+});
+
+alert("Teacher Saved Successfully");
+
+location.reload();
+
+}
+
+async function loadTeachers(){
+
+teacherList.innerHTML="";
+
+const snap=await getDocs(collection(db,"teachers"));
+
+snap.forEach((d)=>{
+
+const t=d.data();
+
+teacherList.innerHTML+=`
+<div class="card">
+<b>${t.name}</b><br>
+Teacher ID : ${t.id}<br>
+Mobile : ${t.mobile}
+</div>
+`;
+
+});
+
+}
+
+loadTeachers();
+
+</script>
+
+</body>
+</html>
