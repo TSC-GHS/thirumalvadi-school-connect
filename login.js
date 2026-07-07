@@ -48,35 +48,34 @@ try {
         return;
 
     }
-      switch (user.role) {
+  switch (user.role) {
 
-        case "Admin":
-            window.location.href = "admin.html";
-            break;
+    case "Admin":
+        window.location.href = "admin_dashboard.html";
+        break;
 
-        case "Headmaster":
-            window.location.href = "headmaster.html";
-            break;
+    case "Headmaster":
+        window.location.href = "headmaster.html";
+        break;
 
-        case "Teacher":
-            window.location.href = "teacher_dashboard.html";
-            break;
+    case "Teacher":
+        window.location.href = "teacher_dashboard.html";
+        break;
 
-        case "Parent":
-            window.location.href = "parent_dashboard.html";
-            break;
+    case "Parent":
+        window.location.href = "parent_dashboard.html";
+        break;
 
-        case "Student":
-            window.location.href = "student.html";
-            break;
+    case "Student":
+        window.location.href = "student.html";
+        break;
 
-        default:
-            alert("Invalid User Role");
-            await signOut(auth);
-            return;
-    }
-
-} catch (error) {
+    default:
+        alert("Invalid User Role");
+        await signOut(auth);
+        return;
+  }
+  } catch (error) {
 
     alert("Login Failed\n\n" + error.message);
 
