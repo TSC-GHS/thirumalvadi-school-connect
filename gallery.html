@@ -1,1 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>School Gallery</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#009688;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.galleryItem{
+background:white;
+margin-bottom:20px;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.galleryItem img{
+width:100%;
+height:220px;
+object-fit:cover;
+}
+
+.content{
+padding:15px;
+}
+
+.title{
+font-size:20px;
+font-weight:bold;
+color:#1565C0;
+}
+
+.date{
+margin-top:8px;
+color:#D32F2F;
+font-weight:bold;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+background:#2E7D32;
+color:white;
+font-size:17px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📷 School Gallery
+
+</div>
+
+<div class="container">
+
+<div id="galleryList">
+
+Loading Gallery...
+
+</div>
+
+<button onclick="location.href='dashboard.html'">
+
+🏠 Home
+
+</button>
+
+<script type="module">
+import { db } from "./firebase.js";
+
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+async function loadGallery(){
+
+const galleryList = document.getElementById("galleryList");
+
+galleryList.innerHTML = "";
+
+try{
+
+const q = query(
+collection(db,"gallery"),
+orderBy("date","desc")
+);
+
+const snap = await getDocs(q);
+
+if(snap.empty){
+
+galleryList.innerHTML = `
+<div class="card">
+<h3>No Photos Available</h3>
+<p>Gallery images will appear here.</p>
+</div>
+`;
+
+return;
+
+}
+
+snap.forEach((doc)=>{
+
+const g = doc.data();
+
+galleryList.innerHTML += `
+<div class="galleryItem">
+
+<img src="${g.image}" alt="${g.title}">
+
+<div class="content">
+
+<div class="title">
+${g.title}
+</div>
+
+<p>
+${g.description || ""}
+</p>
+
+<div class="date">
+📅 ${g.date}
+</div>
+
+</div>
+
+</div>
+`;
+
+});
+
+}catch(error){
+
+galleryList.innerHTML = `
+<div class="card">
+<h3>Error Loading Gallery</h3>
+<p>${error.message}</p>
+</div>
+`;
+
+}
+
+}
+
+loadGallery();
+  </script>
+
+</body>
+</html>
