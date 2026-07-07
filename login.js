@@ -1,34 +1,48 @@
 import { auth } from "./firebase.js";
-import {
-signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 window.loginUser = async function () {
 
-const email = document.getElementById("email").value.trim();
-const password = document.getElementById("password").value.trim();
-const role = document.getElementById("role").value;
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const role = document.getElementById("role").value;
 
-try {
+  if(email === "" || password === ""){
+    alert("Please enter Email and Password");
+    return;
+  }
 
-await signInWithEmailAndPassword(auth, email, password);
+  try {
 
-if(role === "Headmaster"){
-location.href = "headmaster.html";
-}
-else if(role === "Teacher"){
-location.href = "teacher_dashboard.html";
-}
-else if(role === "Parent"){
-location.href = "parent_dashboard.html";
-}
-else if(role === "Student"){
-location.href = "student.html";
-}
+    await signInWithEmailAndPassword(auth, email, password);
 
-}
-catch(error){
-alert("Login Failed\n\n" + error.message);
-}
+    switch(role){
+
+      case "Headmaster":
+        window.location.href = "headmaster.html";
+        break;
+
+      case "Teacher":
+        window.location.href = "teacher_dashboard.html";
+        break;
+
+      case "Parent":
+        window.location.href = "parent_dashboard.html";
+        break;
+
+      case "Student":
+        window.location.href = "student.html";
+        break;
+
+      default:
+        alert("Invalid Role");
+
+    }
+
+  } catch(error){
+
+    alert("Login Failed\n\n" + error.message);
+
+  }
 
 }
