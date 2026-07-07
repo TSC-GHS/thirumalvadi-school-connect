@@ -26,6 +26,13 @@ font-weight:bold;
 padding:20px;
 }
 
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
 button{
 width:100%;
 padding:16px;
@@ -40,6 +47,10 @@ cursor:pointer;
 
 button:hover{
 background:#1B5E20;
+}
+
+.home{
+background:#1565C0;
 }
 
 .logout{
@@ -57,6 +68,8 @@ background:#D32F2F;
 </div>
 
 <div class="container">
+
+<div class="card">
 
 <h2>Welcome Teacher 👋</h2>
 
@@ -76,7 +89,20 @@ background:#D32F2F;
 📝 Homework
 </button>
 
-<button onclick="location.href='dashboard.html'">
+<button onclick="location.href='notice.html'">
+📢 Notice Management
+</button>
+
+<button onclick="location.href='notice_board.html'">
+📋 Notice Board
+</button>
+
+<button onclick="location.href='report_card.html'">
+📄 Report Card
+</button>
+
+<button class="home"
+onclick="location.href='dashboard.html'">
 🏠 Home
 </button>
 
@@ -84,6 +110,8 @@ background:#D32F2F;
 onclick="location.href='login.html'">
 🚪 Logout
 </button>
+
+</div>
 
 </div>
 
