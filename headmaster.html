@@ -7,23 +7,26 @@
 
 <style>
 body{
-font-family:Arial,sans-serif;
-background:#f5f5f5;
 margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
 }
 
 .header{
 background:#0D47A1;
 color:white;
-padding:20px;
+padding:18px;
 text-align:center;
 font-size:24px;
 font-weight:bold;
 }
 
+.container{
+padding:20px;
+}
+
 .card{
 background:white;
-margin:20px;
 padding:20px;
 border-radius:10px;
 box-shadow:0 2px 8px rgba(0,0,0,.2);
@@ -32,25 +35,17 @@ box-shadow:0 2px 8px rgba(0,0,0,.2);
 button{
 width:100%;
 padding:15px;
-margin-top:12px;
-font-size:18px;
-background:#1565C0;
-color:white;
+margin-top:10px;
 border:none;
 border-radius:8px;
+font-size:17px;
 cursor:pointer;
-}
-
-button:hover{
-background:#0D47A1;
+background:#1565C0;
+color:white;
 }
 
 .home{
 background:#2E7D32;
-}
-
-.home:hover{
-background:#1B5E20;
 }
 </style>
 
@@ -61,6 +56,8 @@ background:#1B5E20;
 <div class="header">
 🏫 Headmaster Dashboard
 </div>
+
+<div class="container">
 
 <div class="card">
 
@@ -74,11 +71,11 @@ background:#1B5E20;
 🎓 Manage Students
 </button>
 
-<button onclick="alert('Manage Teachers - Coming Soon')">
-👨‍🏫 Manage Teachers
 <button onclick="location.href='manage_teachers.html'">
 👨‍🏫 Manage Teachers
 </button>
+
+<button onclick="location.href='attendance.html'">
 📅 Attendance
 </button>
 
@@ -86,21 +83,24 @@ background:#1B5E20;
 📚 Marks Entry
 </button>
 
-<button onclick="alert('Homework - Coming Soon')">
+<button onclick="location.href='homework.html'">
 📝 Homework
 </button>
 
-<button onclick="alert('School Notices - Coming Soon')">
+<button onclick="alert('School Notices Module - Coming Soon')">
 📢 School Notices
 </button>
 
-<button onclick="alert('Reports - Coming Soon')">
+<button onclick="alert('Reports Module - Coming Soon')">
 📊 Reports
 </button>
 
-<button class="home" onclick="location.href='dashboard.html'">
+<button class="home"
+onclick="location.href='dashboard.html'">
 🏠 Home
 </button>
+
+</div>
 
 </div>
 
