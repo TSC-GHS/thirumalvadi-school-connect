@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>School Connect TN - Login</title>
 
 <style>
+
 body{
 margin:0;
 font-family:Arial,sans-serif;
@@ -44,7 +47,7 @@ margin-top:20px;
 border:none;
 border-radius:6px;
 background:#1565C0;
-color:#fff;
+color:white;
 font-size:18px;
 cursor:pointer;
 }
@@ -58,6 +61,7 @@ color:red;
 text-align:center;
 margin-top:15px;
 }
+
 </style>
 
 </head>
@@ -66,20 +70,37 @@ margin-top:15px;
 
 <div class="login-box">
 
-<h2>School Connect TN</h2>
+<h2>🏫 School Connect TN</h2>
 
 <select id="role">
-<option value="Student">Student</option>
-<option value="Teacher">Teacher</option>
-<option value="Headmaster">Headmaster</option>
-<option value="Parent">Parent</option>
+
+<option value="Student">👨‍🎓 Student</option>
+
+<option value="Teacher">👨‍🏫 Teacher</option>
+
+<option value="Parent">👨‍👩‍👧 Parent</option>
+
+<option value="Headmaster">👨‍💼 Headmaster</option>
+
+<option value="Admin">⚙️ Admin</option>
+
 </select>
 
-<input type="email" id="email" placeholder="Email">
+<input
+type="email"
+id="email"
+placeholder="Email">
 
-<input type="password" id="password" placeholder="Password">
+<input
+type="password"
+id="password"
+placeholder="Password">
 
-<button onclick="loginUser()">Login</button>
+<button onclick="loginUser()">
+
+Login
+
+</button>
 
 <p id="msg"></p>
 
