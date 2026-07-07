@@ -50,10 +50,10 @@ button{
 width:100%;
 padding:15px;
 margin-top:15px;
-background:#1565C0;
-color:white;
 border:none;
 border-radius:8px;
+background:#1565C0;
+color:white;
 font-size:17px;
 cursor:pointer;
 }
@@ -109,7 +109,7 @@ placeholder="Enter Student EMIS Number">
 
 <div class="card">
 
-<h3>Student Details</h3>
+<h3>👤 Student Details</h3>
 
 <p><b>Name :</b> <span id="name">-</span></p>
 
@@ -123,7 +123,7 @@ placeholder="Enter Student EMIS Number">
 
 <div class="card">
 
-<h3>Marks</h3>
+<h3>📚 Marks</h3>
 
 <table>
 
@@ -141,7 +141,7 @@ placeholder="Enter Student EMIS Number">
 
 <td colspan="2">
 
-No Marks
+No Marks Available
 
 </td>
 
@@ -155,7 +155,7 @@ No Marks
 
 <div class="card">
 
-<h3>Homework</h3>
+<h3>📝 Homework</h3>
 
 <table>
 
@@ -175,7 +175,7 @@ No Marks
 
 <td colspan="3">
 
-No Homework
+No Homework Available
 
 </td>
 
@@ -209,110 +209,98 @@ window.loadStudent = async function(){
 
 const emis = document.getElementById("emis").value.trim();
 
-if(emis==""){
-
+if(emis===""){
 alert("Enter EMIS Number");
-
 return;
-
 }
 
 const studentSnap = await getDoc(doc(db,"students",emis));
 
 if(!studentSnap.exists()){
-
 alert("Student Not Found");
-
 return;
-
 }
 
 const student = studentSnap.data();
 
 document.getElementById("name").textContent = student.name;
-
 document.getElementById("class").textContent = student.class;
-
 document.getElementById("section").textContent = student.section;
+document.getElementById("attendance").textContent = student.attendance || "-";
 
-document.getElementById("attendance").textContent = student.attendance;
+/* ===========================
+   MARKS
+=========================== */
 
-// MARKS
+const marksTable=document.getElementById("marksTable");
 
-const marksTable = document.getElementById("marksTable");
+marksTable.innerHTML="";
 
-marksTable.innerHTML = "";
+const examSnap=await getDocs(collection(db,"marks"));
 
-const marksSnap = await getDocs(collection(db,"marks"));
+let marksFound=false;
 
-let marksFound = false;
+for(const examDoc of examSnap.docs){
 
-marksSnap.forEach((examDoc)=>{
+const markDoc=await getDoc(
+doc(db,"marks",examDoc.id,"students",emis)
+);
 
-marksFound = true;
+if(markDoc.exists()){
 
-marksTable.innerHTML += `
+const m=markDoc.data();
 
+marksFound=true;
+
+marksTable.innerHTML+=`
 <tr>
-
 <td>${examDoc.id}</td>
-
-<td>View Saved Marks</td>
-
+<td>${m.marks}</td>
 </tr>
-
-`;
-
-});
-
-if(!marksFound){
-
-marksTable.innerHTML = `
-
-<tr>
-
-<td colspan="2">
-
-No Marks Available
-
-</td>
-
-</tr>
-
 `;
 
 }
 
-// HOMEWORK
+}
 
-const homeworkTable = document.getElementById("homeworkTable");
+if(!marksFound){
 
-homeworkTable.innerHTML = "";
-
-const homeworkSnap = await getDocs(collection(db,"homework"));
-
-let homeworkFound = false;
-
-homeworkSnap.forEach((d)=>{
-
-const hw = d.data();
-
-if(hw.class == student.class){
-
-homeworkFound = true;
-
-homeworkTable.innerHTML += `
-
+marksTable.innerHTML=`
 <tr>
-
-<td>${hw.date}</td>
-
-<td>${hw.subject}</td>
-
-<td>${hw.homework}</td>
-
+<td colspan="2">
+No Marks Available
+</td>
 </tr>
+`;
 
+}
+
+/* ===========================
+   HOMEWORK
+=========================== */
+
+const homeworkTable=document.getElementById("homeworkTable");
+
+homeworkTable.innerHTML="";
+
+const hwSnap=await getDocs(collection(db,"homework"));
+
+let homeworkFound=false;
+
+hwSnap.forEach((d)=>{
+
+const hw=d.data();
+
+if(hw.class==student.class){
+
+homeworkFound=true;
+
+homeworkTable.innerHTML+=`
+<tr>
+<td>${hw.date}</td>
+<td>${hw.subject}</td>
+<td>${hw.homework}</td>
+</tr>
 `;
 
 }
@@ -321,18 +309,12 @@ homeworkTable.innerHTML += `
 
 if(!homeworkFound){
 
-homeworkTable.innerHTML = `
-
+homeworkTable.innerHTML=`
 <tr>
-
 <td colspan="3">
-
 No Homework Available
-
 </td>
-
 </tr>
-
 `;
 
 }
@@ -341,4 +323,5 @@ No Homework Available
   </script>
 
 </body>
+
 </html>
