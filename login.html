@@ -1,52 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - School Connect TN</title>
-<style>
-body{
-font-family:Arial;
-background:#f2f2f2;
-text-align:center;
-padding:30px;
-}
-.box{
-background:white;
-padding:20px;
-border-radius:10px;
-max-width:350px;
-margin:auto;
-box-shadow:0 0 10px #ccc;
-}
-input{
-width:90%;
-padding:12px;
-margin:10px;
-}
-button{
-width:95%;
-padding:12px;
-background:#1565c0;
-color:white;
-border:none;
-border-radius:6px;
-font-size:18px;
-}
-</style>
-</head>
-<body>
+<p id="msg" style="color:red;text-align:center;"></p>
 
-<div class="box">
-<h2>School Connect TN</h2>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-<input type="email" placeholder="Email">
+const firebaseConfig = {
+  apiKey: "AIzaSyAXgMgL1QprcJekpmb1EhFAPaCS_VTmx3c",
+  authDomain: "thirumalvadi-school-connect.firebaseapp.com",
+  projectId: "thirumalvadi-school-connect",
+  storageBucket: "thirumalvadi-school-connect.firebasestorage.app",
+  messagingSenderId: "349192871905",
+  appId: "1:349192871905:web:b3f68263f48becfa813ca0"
+};
 
-<input type="password" placeholder="Password">
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-<button>Login</button>
+document.querySelector("button").addEventListener("click", () => {
 
-</div>
+  const email = document.querySelector("input[type=email]").value;
+  const password = document.querySelector("input[type=password]").value;
 
-</body>
-</html>
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      window.location.href = "dashboard.html";
+    })
+    .catch((error) => {
+      document.getElementById("msg").innerHTML = error.message;
+    });
+
+});
+</script>
