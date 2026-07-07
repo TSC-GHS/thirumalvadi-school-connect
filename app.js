@@ -1,0 +1,1 @@
+console.log("School Connect TN Loaded Successfully");
