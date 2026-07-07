@@ -1,36 +1,76 @@
-<p id="msg" style="color:red;text-align:center;"></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Connect TN</title>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-import {
-  getAuth,
-  signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f2f2f2;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAXgMgL1QprcJekpmb1EhFAPaCS_VTmx3c",
-  authDomain: "thirumalvadi-school-connect.firebaseapp.com",
-  projectId: "thirumalvadi-school-connect",
-  storageBucket: "thirumalvadi-school-connect.firebasestorage.app",
-  messagingSenderId: "349192871905",
-  appId: "1:349192871905:web:b3f68263f48becfa813ca0"
-};
+.box{
+background:#fff;
+padding:30px;
+border-radius:10px;
+width:320px;
+box-shadow:0 0 10px rgba(0,0,0,.2);
+}
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+h2{
+text-align:center;
+}
 
-document.querySelector("button").addEventListener("click", () => {
+input{
+width:100%;
+padding:12px;
+margin:10px 0;
+box-sizing:border-box;
+}
 
-  const email = document.querySelector("input[type=email]").value;
-  const password = document.querySelector("input[type=password]").value;
+button{
+width:100%;
+padding:12px;
+background:#1565c0;
+color:white;
+border:none;
+font-size:18px;
+cursor:pointer;
+}
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      window.location.href = "dashboard.html";
-    })
-    .catch((error) => {
-      document.getElementById("msg").innerHTML = error.message;
-    });
+button:hover{
+background:#0d47a1;
+}
 
-});
-</script>
+#msg{
+color:red;
+text-align:center;
+margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>School Connect TN</h2>
+
+<input type="email" id="email" placeholder="Email">
+
+<input type="password" id="password" placeholder="Password">
+
+<button id="loginBtn">Login</button>
+
+<p id="msg"></p>
+
+</div>
+
+</body>
+</html>
