@@ -1,1 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student Management</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#6A1B9A;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+label{
+display:block;
+margin-top:12px;
+font-weight:bold;
+}
+
+input,select,textarea{
+width:100%;
+padding:12px;
+margin-top:5px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+font-size:16px;
+}
+
+textarea{
+height:80px;
+resize:none;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+font-size:17px;
+cursor:pointer;
+background:#6A1B9A;
+color:white;
+}
+
+.home{
+background:#2E7D32;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+👨‍🎓 Student Management
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<label>Student Name</label>
+<input id="name" placeholder="Enter Student Name">
+
+<label>EMIS Number</label>
+<input id="emis" placeholder="Enter EMIS Number">
+
+<label>Class</label>
+<input id="class" placeholder="Enter Class">
+
+<label>Section</label>
+<input id="section" placeholder="Enter Section">
+
+<label>Father Name</label>
+<input id="father" placeholder="Enter Father Name">
+
+<label>Mother Name</label>
+<input id="mother" placeholder="Enter Mother Name">
+
+<label>Parent Mobile</label>
+<input id="mobile" placeholder="Enter Mobile Number">
+
+<label>Blood Group</label>
+<input id="blood" placeholder="Enter Blood Group">
+
+<label>Address</label>
+<textarea id="address" placeholder="Enter Address"></textarea>
+
+<button onclick="saveStudent()">
+💾 Save Student
+</button>
+
+<button class="home"
+onclick="location.href='dashboard.html'">
+🏠 Home
+</button>
+
+</div>
+
+<script type="module">
+  import { db } from "./firebase.js";
+
+import {
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.saveStudent = async function(){
+
+const name = document.getElementById("name").value.trim();
+const emis = document.getElementById("emis").value.trim();
+const studentClass = document.getElementById("class").value.trim();
+const section = document.getElementById("section").value.trim();
+const father = document.getElementById("father").value.trim();
+const mother = document.getElementById("mother").value.trim();
+const mobile = document.getElementById("mobile").value.trim();
+const blood = document.getElementById("blood").value.trim();
+const address = document.getElementById("address").value.trim();
+
+if(name=="" || emis=="" || studentClass==""){
+
+alert("Please fill all required fields");
+
+return;
+
+}
+
+try{
+
+await addDoc(collection(db,"students"),{
+
+name:name,
+emis:emis,
+class:studentClass,
+section:section,
+father:father,
+mother:mother,
+mobile:mobile,
+blood:blood,
+address:address,
+createdAt:new Date().toISOString()
+
+});
+
+alert("✅ Student Saved Successfully");
+
+document.getElementById("name").value="";
+document.getElementById("emis").value="";
+document.getElementById("class").value="";
+document.getElementById("section").value="";
+document.getElementById("father").value="";
+document.getElementById("mother").value="";
+document.getElementById("mobile").value="";
+document.getElementById("blood").value="";
+document.getElementById("address").value="";
+
+}catch(error){
+
+alert(error.message);
+
+}
+
+}
+  </script>
+
+</body>
+</html>
