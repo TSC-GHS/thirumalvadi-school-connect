@@ -1,1 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student Profile</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4f6f9;
+}
+
+.header{
+background:#1976D2;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+.header h1{
+font-size:28px;
+}
+
+.container{
+max-width:900px;
+margin:20px auto;
+padding:15px;
+}
+
+.card{
+background:white;
+border-radius:12px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.card h2{
+color:#1976D2;
+margin-bottom:15px;
+}
+
+.profile-row{
+display:flex;
+justify-content:space-between;
+padding:10px 0;
+border-bottom:1px solid #eee;
+}
+
+.profile-row span:first-child{
+font-weight:bold;
+}
+
+.button-area{
+text-align:center;
+margin-top:20px;
+}
+
+.button-area button{
+padding:12px 18px;
+margin:8px;
+border:none;
+border-radius:8px;
+background:#1976D2;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+.button-area button:hover{
+background:#0D47A1;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h1>👨‍🎓 Student Profile</h1>
+
+<p>School Connect TN</p>
+
+</div>
+
+<div class="container">
+<div class="card">
+
+<h2>👤 Student Information</h2>
+
+<div class="profile-row">
+<span>Name</span>
+<span id="name">Loading...</span>
+</div>
+
+<div class="profile-row">
+<span>EMIS</span>
+<span id="emis">Loading...</span>
+</div>
+
+<div class="profile-row">
+<span>Class</span>
+<span id="class">Loading...</span>
+</div>
+
+<div class="profile-row">
+<span>Section</span>
+<span id="section">Loading...</span>
+</div>
+
+<div class="profile-row">
+<span>Father</span>
+<span id="father">Loading...</span>
+</div>
+
+<div class="profile-row">
+<span>Mother</span>
+<span id="mother">Loading...</span>
+</div>
+
+<div class="profile-row">
+<span>Mobile</span>
+<span id="mobile">Loading...</span>
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>📚 Academic Details</h2>
+
+<div class="profile-row">
+<span>Total Marks</span>
+<span id="total">0</span>
+</div>
+
+<div class="profile-row">
+<span>Percentage</span>
+<span id="percentage">0%</span>
+</div>
+
+<div class="profile-row">
+<span>Grade</span>
+<span id="grade">-</span>
+</div>
+
+<div class="profile-row">
+<span>Rank</span>
+<span id="rank">-</span>
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>📅 Attendance Summary</h2>
+
+<div class="profile-row">
+<span>Present Days</span>
+<span id="present">0</span>
+</div>
+
+<div class="profile-row">
+<span>Absent Days</span>
+<span id="absent">0</span>
+</div>
+
+<div class="profile-row">
+<span>Attendance %</span>
+<span id="attendance">0%</span>
+</div>
+
+</div>
+
+<div class="button-area">
+
+<button onclick="window.print()">
+🖨️ Print Profile
+</button>
+
+<button onclick="location.href='students.html'">
+🏠 Back to Students
+</button>
+
+</div>
+
+<script type="module">
+  import { db } from "./firebase.js";
+
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+const params = new URLSearchParams(window.location.search);
+const emis = params.get("emis");
+
+async function loadProfile(){
+
+  if(!emis){
+    alert("EMIS Number not found");
+    return;
+  }
+
+  try{
+
+    // Student Details
+    const studentRef = doc(db,"students",emis);
+    const studentSnap = await getDoc(studentRef);
+
+    if(studentSnap.exists()){
+
+      const s = studentSnap.data();
+
+      document.getElementById("name").innerText = s.name || "-";
+      document.getElementById("emis").innerText = s.emis || "-";
+      document.getElementById("class").innerText = s.class || "-";
+      document.getElementById("section").innerText = s.section || "-";
+      document.getElementById("father").innerText = s.father || "-";
+      document.getElementById("mother").innerText = s.mother || "-";
+      document.getElementById("mobile").innerText = s.mobile || "-";
+
+    }
+
+    // Report Card
+    const reportRef = doc(db,"report_cards",emis);
+    const reportSnap = await getDoc(reportRef);
+
+    if(reportSnap.exists()){
+
+      const r = reportSnap.data();
+
+      document.getElementById("total").innerText = r.total || 0;
+      document.getElementById("percentage").innerText = (r.percentage || 0) + "%";
+      document.getElementById("grade").innerText = r.grade || "-";
+
+    }
+
+    // Attendance
+    const attendanceSnapshot = await getDocs(collection(db,"attendance"));
+
+    let present = 0;
+    let absent = 0;
+
+    attendanceSnapshot.forEach((d)=>{
+
+      const a = d.data();
+
+      if(a.emis === emis){
+
+        if(a.status === "Present"){
+          present++;
+        }else{
+          absent++;
+        }
+
+      }
+
+    });
+
+    document.getElementById("present").innerText = present;
+    document.getElementById("absent").innerText = absent;
+
+    const total = present + absent;
+
+    const percent =
+      total > 0 ? ((present / total) * 100).toFixed(1) : 0;
+
+    document.getElementById("attendance").innerText =
+      percent + "%";
+
+    // Rank
+    const reportSnapshot = await getDocs(collection(db,"report_cards"));
+
+    let ranking = [];
+
+    reportSnapshot.forEach((d)=>{
+      ranking.push(d.data());
+    });
+
+    ranking.sort((a,b)=>(b.percentage||0)-(a.percentage||0));
+
+    const index = ranking.findIndex(r=>r.emis===emis);
+
+    if(index >= 0){
+      document.getElementById("rank").innerText =
+      "#" + (index + 1);
+    }
+
+  }catch(error){
+
+    alert(error.message);
+    console.log(error);
+
+  }
+
+}
+
+loadProfile();
+  </script>
+
+</div>
+
+</body>
+</html>
