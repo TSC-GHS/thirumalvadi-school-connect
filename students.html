@@ -6,7 +6,6 @@
 <title>Students List</title>
 
 <style>
-
 body{
 font-family:Arial,sans-serif;
 background:#f4f4f4;
@@ -73,16 +72,12 @@ margin-top:20px;
 padding:15px;
 font-size:18px;
 }
-
 </style>
 
 </head>
-
 <body>
 
-<div class="header">
-👨‍🎓 Students List
-</div>
+<div class="header">👨‍🎓 Students List</div>
 
 <div class="container">
 
@@ -94,8 +89,7 @@ onkeyup="searchStudent()">
 
 <div id="studentList"></div>
 
-<button
-class="home"
+<button class="home"
 onclick="location.href='headmaster.html'">
 🏠 Back to Headmaster
 </button>
@@ -103,7 +97,8 @@ onclick="location.href='headmaster.html'">
 </div>
 
 <script type="module">
-  import { db } from "./firebase.js";
+
+import { db } from "./firebase.js";
 
 import {
 collection,
@@ -112,25 +107,25 @@ deleteDoc,
 doc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const studentList = document.getElementById("studentList");
-
-let students = [];
+const studentList=document.getElementById("studentList");
 
 async function loadStudents(){
 
-const querySnapshot = await getDocs(collection(db,"students"));
+studentList.innerHTML="";
 
-students = [];
+const querySnapshot=await getDocs(collection(db,"students"));
 
-studentList.innerHTML = "";
+querySnapshot.forEach((d)=>{
 
-querySnapshot.forEach((document)=>{
+const student=d.data();
 
-const student = document.data();
+// Skip invalid records
+if(!student.name || !student.emis){
+return;
+}
 
-students.push(student);
+studentList.innerHTML+=`
 
-studentList.innerHTML += `
 <div class="card">
 
 <h3>${student.name}</h3>
@@ -144,24 +139,25 @@ studentList.innerHTML += `
 <p><b>Mobile :</b> ${student.mobile}</p>
 
 <button class="delete"
-onclick="deleteStudent('${student.emis}')">
+onclick="deleteStudent('${d.id}')">
 🗑 Delete
 </button>
 
 </div>
+
 `;
 
 });
 
 }
 
-window.deleteStudent = async function(emis){
+window.deleteStudent=async(id)=>{
 
 if(confirm("Delete Student?")){
 
-await deleteDoc(doc(db,"students",emis));
+await deleteDoc(doc(db,"students",id));
 
-alert("Student Deleted");
+alert("Student Deleted Successfully");
 
 loadStudents();
 
@@ -169,30 +165,24 @@ loadStudents();
 
 }
 
-window.searchStudent = function(){
+window.searchStudent=()=>{
 
-const text =
-document.getElementById("search").value.toLowerCase();
+let value=document.getElementById("search").value.toLowerCase();
 
-const cards =
-document.querySelectorAll(".card");
+document.querySelectorAll(".card").forEach(card=>{
 
-cards.forEach(card=>{
-
-if(card.innerText.toLowerCase().includes(text))
-
-card.style.display="block";
-
-else
-
-card.style.display="none";
+card.style.display=
+card.innerText.toLowerCase().includes(value)
+? "block"
+: "none";
 
 });
 
 }
 
 loadStudents();
-  </script>
+
+</script>
 
 </body>
 </html>
