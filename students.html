@@ -6,16 +6,17 @@
 <title>Students List</title>
 
 <style>
+
 body{
 font-family:Arial,sans-serif;
-background:#f4f4f4;
+background:#f4f6f9;
 margin:0;
 }
 
 .header{
 background:#1565C0;
 color:white;
-padding:18px;
+padding:20px;
 text-align:center;
 font-size:24px;
 font-weight:bold;
@@ -29,10 +30,10 @@ input{
 width:100%;
 padding:12px;
 margin-bottom:20px;
+border:1px solid #ccc;
+border-radius:8px;
 font-size:16px;
 box-sizing:border-box;
-border-radius:8px;
-border:1px solid #ccc;
 }
 
 .card{
@@ -52,55 +53,77 @@ color:#1565C0;
 margin:6px 0;
 }
 
-button{
-padding:10px 15px;
+.actions{
+display:flex;
+gap:10px;
 margin-top:10px;
+}
+
+button{
+flex:1;
+padding:10px;
 border:none;
-border-radius:6px;
-cursor:pointer;
+border-radius:8px;
 color:white;
+font-size:15px;
+cursor:pointer;
+}
+
+.edit{
+background:#FB8C00;
 }
 
 .delete{
-background:#E53935;
+background:#D32F2F;
 }
 
 .home{
-background:#1565C0;
 width:100%;
 margin-top:20px;
 padding:15px;
+background:#2E7D32;
 font-size:18px;
 }
+
 </style>
 
 </head>
+
 <body>
 
 <div class="header">
+
 👨‍🎓 Students List
+
 </div>
 
 <div class="container">
 
 <input
-type="text"
 id="search"
 placeholder="Search by Name or EMIS"
 onkeyup="searchStudent()">
 
 <div id="studentList"></div>
 
-<button class="home"
-onclick="location.href='headmaster.html'">
-🏠 Back to Headmaster
+<button
+class="home"
+onclick="location.href='student_management.html'">
+
+➕ Add Student
+
 </button>
 
-</div>
+<button
+class="home"
+onclick="location.href='dashboard.html'">
+
+🏠 Home
+
+</button>
 
 <script type="module">
-
-import { db } from "./firebase.js";
+ import { db } from "./firebase.js";
 
 import {
 collection,
@@ -117,32 +140,49 @@ studentList.innerHTML="";
 
 try{
 
-const querySnapshot = await getDocs(collection(db,"students"));
+const snap = await getDocs(collection(db,"students"));
 
-querySnapshot.forEach((d)=>{
+snap.forEach((studentDoc)=>{
 
-const student = d.data();
-
-if(!student.name || !student.emis) return;
+const student = studentDoc.data();
+const emis = studentDoc.id;
 
 studentList.innerHTML += `
+
 <div class="card">
 
-<h3>${student.name}</h3>
+<h3>${student.name || "-"}</h3>
 
-<p><b>EMIS :</b> ${student.emis}</p>
+<p><b>EMIS :</b> ${emis}</p>
 
-<p><b>Class :</b> ${student.class}-${student.section}</p>
+<p><b>Class :</b> ${student.class || "-"} - ${student.section || "-"}</p>
 
-<p><b>Father :</b> ${student.father}</p>
+<p><b>Father :</b> ${student.father || "-"}</p>
 
-<p><b>Mobile :</b> ${student.mobile}</p>
+<p><b>Mobile :</b> ${student.mobile || "-"}</p>
 
-<button class="delete" onclick="deleteStudent('${d.id}')">
+<p><b>Blood :</b> ${student.blood || "-"}</p>
+
+<div class="actions">
+
+<button class="edit"
+onclick="location.href='student_management.html?emis=${emis}'">
+
+✏ Edit
+
+</button>
+
+<button class="delete"
+onclick="deleteStudent('${emis}')">
+
 🗑 Delete
+
 </button>
 
 </div>
+
+</div>
+
 `;
 
 });
@@ -150,17 +190,16 @@ studentList.innerHTML += `
 }catch(error){
 
 alert(error.message);
-console.log(error);
 
 }
 
 }
 
-window.deleteStudent = async function(id){
+window.deleteStudent = async function(emis){
 
-if(confirm("Delete Student?")){
+if(confirm("Delete this student?")){
 
-await deleteDoc(doc(db,"students",id));
+await deleteDoc(doc(db,"students",emis));
 
 alert("Student Deleted Successfully");
 
@@ -172,7 +211,8 @@ loadStudents();
 
 window.searchStudent = function(){
 
-let value = document.getElementById("search").value.toLowerCase();
+const value =
+document.getElementById("search").value.toLowerCase();
 
 document.querySelectorAll(".card").forEach(card=>{
 
@@ -185,9 +225,8 @@ card.innerText.toLowerCase().includes(value)
 
 }
 
-loadStudents();
-
-</script>
+loadStudents(); 
+  </script>
 
 </body>
 </html>
