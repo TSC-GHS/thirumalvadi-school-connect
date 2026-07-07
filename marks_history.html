@@ -1,1 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Marks History</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+input{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+background:#1565C0;
+color:white;
+font-size:17px;
+cursor:pointer;
+}
+
+.home{
+background:#2E7D32;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#1565C0;
+color:white;
+}
+
+.total{
+font-weight:bold;
+background:#E3F2FD;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📚 Marks History
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<input
+id="emis"
+placeholder="Enter Student EMIS Number">
+
+<button onclick="loadMarks()">
+
+🔍 Search Marks
+
+</button>
+
+</div>
+
+<div class="card">
+
+<table>
+
+<tr>
+<th>Exam</th>
+<th>Marks</th>
+</tr>
+
+<tbody id="marksTable">
+
+<tr>
+<td colspan="2">
+No Marks Available
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<button
+class="home"
+onclick="location.href='parent.html'">
+
+🏠 Back
+
+</button>
+
+<script type="module">
+import { db } from "./firebase.js";
+
+import {
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.loadMarks = async function () {
+
+  const emis = document.getElementById("emis").value.trim();
+
+  if (emis === "") {
+    alert("Enter EMIS Number");
+    return;
+  }
+
+  const exams = [
+    "Unit Test 1",
+    "Unit Test 2",
+    "Quarterly",
+    "Half Yearly",
+    "Annual"
+  ];
+
+  const tbody = document.getElementById("marksTable");
+  tbody.innerHTML = "";
+
+  let total = 0;
+  let found = 0;
+
+  for (const exam of exams) {
+
+    const snap = await getDoc(
+      doc(db, "marks", exam, "students", emis)
+    );
+
+    if (snap.exists()) {
+
+      const m = snap.data();
+
+      const mark = Number(m.marks) || 0;
+
+      total += mark;
+      found++;
+
+      tbody.innerHTML += `
+      <tr>
+        <td>${exam}</td>
+        <td>${mark}</td>
+      </tr>
+      `;
+
+    }
+
+  }
+
+  if (found === 0) {
+
+    tbody.innerHTML = `
+    <tr>
+      <td colspan="2">No Marks Available</td>
+    </tr>
+    `;
+
+    return;
+  }
+
+  const percentage = (total / (found * 100) * 100).toFixed(1);
+
+  let grade = "D";
+
+  if (percentage >= 90) grade = "A+";
+  else if (percentage >= 80) grade = "A";
+  else if (percentage >= 70) grade = "B";
+  else if (percentage >= 60) grade = "C";
+
+  tbody.innerHTML += `
+  <tr class="total">
+    <td>Total</td>
+    <td>${total}</td>
+  </tr>
+
+  <tr class="total">
+    <td>Percentage</td>
+    <td>${percentage}%</td>
+  </tr>
+
+  <tr class="total">
+    <td>Grade</td>
+    <td>${grade}</td>
+  </tr>
+  `;
+
+}
+  </script>
+
+</body>
+</html>
