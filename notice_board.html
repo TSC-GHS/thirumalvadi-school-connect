@@ -1,1 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notice Board</title>
 
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#6A1B9A;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.noticeTitle{
+font-size:20px;
+font-weight:bold;
+color:#1565C0;
+margin-bottom:10px;
+}
+
+.noticeDate{
+color:#666;
+font-size:14px;
+margin-top:10px;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:20px;
+border:none;
+border-radius:8px;
+background:#2E7D32;
+color:white;
+font-size:17px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📢 Notice Board
+
+</div>
+
+<div class="container">
+
+<div id="noticeList">
+
+<p style="text-align:center;">
+Loading Notices...
+</p>
+
+</div>
+
+<button onclick="history.back()">
+
+🏠 Back
+
+</button>
+
+<script type="module">
+import { db } from "./firebase.js";
+
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+async function loadNotices() {
+
+  const noticeList = document.getElementById("noticeList");
+  noticeList.innerHTML = "";
+
+  const q = query(
+    collection(db, "notice"),
+    orderBy("date", "desc")
+  );
+
+  const snap = await getDocs(q);
+
+  if (snap.empty) {
+
+    noticeList.innerHTML = `
+      <div class="card">
+        <h3>No Notices Available</h3>
+      </div>
+    `;
+
+    return;
+  }
+
+  snap.forEach((doc) => {
+
+    const n = doc.data();
+
+    noticeList.innerHTML += `
+      <div class="card">
+
+        <div class="noticeTitle">
+          ${n.title}
+        </div>
+
+        <div>
+          ${n.message}
+        </div>
+
+        <div class="noticeDate">
+          📅 ${n.date}
+        </div>
+
+      </div>
+    `;
+
+  });
+
+}
+
+loadNotices();
+  </script>
+
+</body>
+</html>
