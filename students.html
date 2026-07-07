@@ -1,98 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Students List</title>
 
 <style>
 
 body{
-font-family:Arial,sans-serif;
-background:#f4f6f9;
+
 margin:0;
+
+font-family:Arial,sans-serif;
+
+background:#f4f6f9;
+
 }
 
 .header{
+
 background:#1565C0;
+
 color:white;
-padding:20px;
+
+padding:18px;
+
 text-align:center;
-font-size:24px;
+
+font-size:26px;
+
 font-weight:bold;
+
 }
 
 .container{
-padding:20px;
+
+padding:15px;
+
 }
 
-input{
+#search{
+
 width:100%;
+
 padding:12px;
-margin-bottom:20px;
-border:1px solid #ccc;
-border-radius:8px;
+
 font-size:16px;
+
+border-radius:8px;
+
+border:1px solid #ccc;
+
+margin-bottom:20px;
+
 box-sizing:border-box;
+
 }
 
 .card{
+
 background:white;
+
+border-radius:12px;
+
 padding:15px;
+
 margin-bottom:15px;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
+
+box-shadow:0 3px 8px rgba(0,0,0,.15);
+
 }
 
 .card h3{
+
 margin:0;
+
 color:#1565C0;
+
 }
 
 .card p{
+
 margin:6px 0;
+
 }
 
 .actions{
+
 display:flex;
+
 gap:10px;
-margin-top:10px;
+
 flex-wrap:wrap;
+
+margin-top:15px;
+
 }
 
 .actions button{
+
 flex:1;
+
 min-width:90px;
+
 padding:10px;
+
 border:none;
+
 border-radius:8px;
+
 color:white;
-font-size:15px;
+
 cursor:pointer;
+
+font-size:15px;
+
 }
 
 .profile{
+
 background:#1976D2;
+
 }
 
 .edit{
+
 background:#FB8C00;
+
 }
 
 .delete{
+
 background:#D32F2F;
+
 }
 
 .home{
+
 width:100%;
-margin-top:20px;
-padding:15px;
+
+padding:14px;
+
+margin-top:15px;
+
 background:#2E7D32;
-font-size:18px;
-border:none;
-border-radius:8px;
+
 color:white;
+
+font-size:17px;
+
+border:none;
+
+border-radius:8px;
+
 cursor:pointer;
+
 }
 
 </style>
@@ -110,11 +176,15 @@ cursor:pointer;
 <div class="container">
 
 <input
+
 id="search"
+
 placeholder="Search by Name or EMIS"
+
 onkeyup="searchStudent()">
 
 <div id="studentList"></div>
+ 
 <button
 class="home"
 onclick="location.href='student_management.html'">
@@ -155,7 +225,9 @@ const snap = await getDocs(collection(db,"students"));
 snap.forEach((studentDoc)=>{
 
 const student = studentDoc.data();
-const emis = studentDoc.id;
+
+/* ✅ EMIS Fix */
+const emis = student.emis || studentDoc.id;
  studentList.innerHTML += `
 
 <div class="card">
@@ -192,7 +264,7 @@ onclick="location.href='student_management.html?emis=${emis}'">
 
 <button
 class="delete"
-onclick="deleteStudent('${emis}')">
+onclick="deleteStudent('${studentDoc.id}')">
 
 🗑 Delete
 
@@ -205,7 +277,8 @@ onclick="deleteStudent('${emis}')">
 `;
 
 });
- }catch(error){
+
+}catch(error){
 
 alert(error.message);
 console.log(error);
@@ -213,14 +286,13 @@ console.log(error);
 }
 
 }
-
-window.deleteStudent = async function(emis){
+ window.deleteStudent = async function(documentId){
 
 if(confirm("Delete this student?")){
 
 try{
 
-await deleteDoc(doc(db,"students",emis));
+await deleteDoc(doc(db,"students",documentId));
 
 alert("✅ Student Deleted Successfully");
 
@@ -229,6 +301,7 @@ loadStudents();
 }catch(error){
 
 alert(error.message);
+console.log(error);
 
 }
 
@@ -238,8 +311,7 @@ alert(error.message);
 
 window.searchStudent = function(){
 
-const value =
-document.getElementById("search").value.toLowerCase();
+const value = document.getElementById("search").value.toLowerCase();
 
 document.querySelectorAll(".card").forEach(card=>{
 
@@ -259,4 +331,5 @@ loadStudents();
 </div>
 
 </body>
+
 </html>
