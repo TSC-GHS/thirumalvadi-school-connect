@@ -1,1 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery Management</title>
 
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#009688;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+label{
+display:block;
+margin-top:12px;
+font-weight:bold;
+}
+
+input,textarea{
+width:100%;
+padding:12px;
+margin-top:6px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+font-size:16px;
+}
+
+textarea{
+height:120px;
+resize:none;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+font-size:17px;
+cursor:pointer;
+background:#009688;
+color:white;
+}
+
+.home{
+background:#2E7D32;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📷 Gallery Management
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<label>Image URL</label>
+<input id="image" placeholder="Paste Image URL">
+
+<label>Photo Title</label>
+<input id="title" placeholder="Enter Title">
+
+<label>Date</label>
+<input type="date" id="date">
+
+<label>Description</label>
+<textarea id="description" placeholder="Enter Description"></textarea>
+
+<button onclick="saveGallery()">
+
+💾 Save Photo
+
+</button>
+
+<button class="home"
+onclick="location.href='dashboard.html'">
+
+🏠 Home
+
+</button>
+
+</div>
+
+<script type="module">
+import { db } from "./firebase.js";
+
+import {
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.saveGallery = async function(){
+
+const image = document.getElementById("image").value.trim();
+const title = document.getElementById("title").value.trim();
+const date = document.getElementById("date").value;
+const description = document.getElementById("description").value.trim();
+
+if(image=="" || title=="" || date==""){
+
+alert("Please fill all required fields");
+
+return;
+
+}
+
+try{
+
+await addDoc(collection(db,"gallery"),{
+
+image:image,
+title:title,
+date:date,
+description:description
+
+});
+
+alert("✅ Photo Saved Successfully");
+
+document.getElementById("image").value="";
+document.getElementById("title").value="";
+document.getElementById("date").value="";
+document.getElementById("description").value="";
+
+}catch(error){
+
+alert(error.message);
+
+}
+</script>
+
+</body>
+</html>
+}
