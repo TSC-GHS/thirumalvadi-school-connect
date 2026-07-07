@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Parent Dashboard</title>
@@ -44,6 +42,7 @@ padding:12px;
 border:1px solid #ccc;
 border-radius:8px;
 box-sizing:border-box;
+font-size:16px;
 }
 
 button{
@@ -65,7 +64,7 @@ background:#2E7D32;
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:10px;
+margin-top:15px;
 }
 
 th,td{
@@ -116,6 +115,12 @@ placeholder="Enter Student EMIS Number">
 <p><b>Class :</b> <span id="class">-</span></p>
 
 <p><b>Section :</b> <span id="section">-</span></p>
+
+<p><b>Father :</b> <span id="father">-</span></p>
+
+<p><b>Mother :</b> <span id="mother">-</span></p>
+
+<p><b>Mobile :</b> <span id="mobile">-</span></p>
 
 <p><b>Attendance :</b> <span id="attendance">-</span></p>
 
@@ -196,7 +201,7 @@ onclick="location.href='dashboard.html'">
 </button>
 
 <script type="module">
-import { db } from "./firebase.js";
+   import { db } from "./firebase.js";
 
 import {
 doc,
@@ -207,54 +212,63 @@ getDocs
 
 window.loadStudent = async function(){
 
-const emis = document.getElementById("emis").value.trim();
+const emis=document.getElementById("emis").value.trim();
 
 if(emis===""){
 alert("Enter EMIS Number");
 return;
 }
 
-const studentSnap = await getDoc(doc(db,"students",emis));
+const studentRef=doc(db,"students",emis);
+
+const studentSnap=await getDoc(studentRef);
 
 if(!studentSnap.exists()){
 alert("Student Not Found");
 return;
 }
 
-const student = studentSnap.data();
+const student=studentSnap.data();
 
-document.getElementById("name").textContent = student.name;
-document.getElementById("class").textContent = student.class;
-document.getElementById("section").textContent = student.section;
-document.getElementById("attendance").textContent = student.attendance || "-";
+document.getElementById("name").textContent=student.name;
+document.getElementById("class").textContent=student.class;
+document.getElementById("section").textContent=student.section;
+document.getElementById("father").textContent=student.father;
+document.getElementById("mother").textContent=student.mother;
+document.getElementById("mobile").textContent=student.mobile;
+document.getElementById("attendance").textContent=student.attendance || "-";
 
-/* ===========================
-   MARKS
-=========================== */
+/* MARKS */
 
 const marksTable=document.getElementById("marksTable");
 
 marksTable.innerHTML="";
 
-const examSnap=await getDocs(collection(db,"marks"));
+const exams=[
+"Unit Test 1",
+"Unit Test 2",
+"Quarterly",
+"Half Yearly",
+"Annual"
+];
 
-let marksFound=false;
+let markFound=false;
 
-for(const examDoc of examSnap.docs){
+for(const exam of exams){
 
-const markDoc=await getDoc(
-doc(db,"marks",examDoc.id,"students",emis)
-);
+const markRef=doc(db,"marks",exam,"students",emis);
 
-if(markDoc.exists()){
+const markSnap=await getDoc(markRef);
 
-const m=markDoc.data();
+if(markSnap.exists()){
 
-marksFound=true;
+const m=markSnap.data();
+
+markFound=true;
 
 marksTable.innerHTML+=`
 <tr>
-<td>${examDoc.id}</td>
+<td>${exam}</td>
 <td>${m.marks}</td>
 </tr>
 `;
@@ -263,7 +277,7 @@ marksTable.innerHTML+=`
 
 }
 
-if(!marksFound){
+if(!markFound){
 
 marksTable.innerHTML=`
 <tr>
@@ -275,19 +289,17 @@ No Marks Available
 
 }
 
-/* ===========================
-   HOMEWORK
-=========================== */
+/* HOMEWORK */
 
 const homeworkTable=document.getElementById("homeworkTable");
 
 homeworkTable.innerHTML="";
 
-const hwSnap=await getDocs(collection(db,"homework"));
+const homeworkSnap=await getDocs(collection(db,"homework"));
 
 let homeworkFound=false;
 
-hwSnap.forEach((d)=>{
+homeworkSnap.forEach((d)=>{
 
 const hw=d.data();
 
@@ -320,7 +332,7 @@ No Homework Available
 }
 
 }
-  </script>
+   </script>
 
 </body>
 
