@@ -1,1 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Student</title>
 
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+header{
+background:#1565C0;
+color:white;
+padding:18px;
+text-align:center;
+}
+
+.container{
+max-width:500px;
+margin:20px auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:12px;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:15px;
+background:#1565C0;
+color:white;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0D47A1;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h2>➕ Add Student</h2>
+</header>
+
+<div class="container">
+
+<input id="studentName" placeholder="Student Name">
+
+<input id="emis" placeholder="EMIS Number">
+
+<select id="studentClass">
+<option>6</option>
+<option>7</option>
+<option>8</option>
+<option>9</option>
+<option>10</option>
+</select>
+
+<input id="section" placeholder="Section">
+
+<input id="father" placeholder="Father Name">
+
+<input id="mother" placeholder="Mother Name">
+
+<input id="mobile" placeholder="Mobile Number">
+
+<button onclick="saveStudent()">Save Student</button>
+
+<button onclick="location.href='headmaster.html'">
+⬅ Back
+</button>
+
+</div>
+
+<script>
+
+function saveStudent(){
+
+const student={
+
+name:document.getElementById("studentName").value,
+
+emis:document.getElementById("emis").value,
+
+class:document.getElementById("studentClass").value,
+
+section:document.getElementById("section").value,
+
+father:document.getElementById("father").value,
+
+mother:document.getElementById("mother").value,
+
+mobile:document.getElementById("mobile").value
+
+};
+
+localStorage.setItem(
+student.emis,
+JSON.stringify(student)
+);
+
+alert("Student Saved Successfully");
+
+}
+
+</script>
+
+</body>
+</html>
