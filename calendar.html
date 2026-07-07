@@ -1,1 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>School Calendar</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+}
+
+.header{
+background:#FF9800;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.eventTitle{
+font-size:20px;
+font-weight:bold;
+color:#1565C0;
+}
+
+.eventDate{
+color:#D32F2F;
+font-weight:bold;
+margin-top:8px;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+font-size:17px;
+cursor:pointer;
+background:#1565C0;
+color:white;
+}
+
+.home{
+background:#2E7D32;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📅 School Calendar & Events
+
+</div>
+
+<div class="container">
+
+<div id="calendarList">
+
+Loading Events...
+
+</div>
+
+<button
+class="home"
+onclick="location.href='dashboard.html'">
+
+🏠 Home
+
+</button>
+
+<script type="module">
+import { db } from "./firebase.js";
+
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+async function loadCalendar() {
+
+  const calendarList = document.getElementById("calendarList");
+  calendarList.innerHTML = "";
+
+  try {
+
+    const q = query(
+      collection(db, "calendar"),
+      orderBy("date", "asc")
+    );
+
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+
+      calendarList.innerHTML = `
+        <div class="card">
+          <h3>No Events Available</h3>
+          <p>Add events from the Admin Panel.</p>
+        </div>
+      `;
+
+      return;
+    }
+
+    snap.forEach((doc) => {
+
+      const event = doc.data();
+
+      calendarList.innerHTML += `
+        <div class="card">
+
+          <div class="eventTitle">
+            ${event.title}
+          </div>
+
+          <div>
+            ${event.description || ""}
+          </div>
+
+          <div class="eventDate">
+            📅 ${event.date}
+          </div>
+
+        </div>
+      `;
+
+    });
+
+  } catch (error) {
+
+    calendarList.innerHTML = `
+      <div class="card">
+        <h3>Error Loading Events</h3>
+        <p>${error.message}</p>
+      </div>
+    `;
+
+  }
+
+}
+
+loadCalendar();
+  </script>
+
+</body>
+</html>
