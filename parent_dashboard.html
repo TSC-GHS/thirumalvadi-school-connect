@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Parent Dashboard</title>
@@ -43,40 +45,6 @@ margin-top:0;
 color:#1565C0;
 }
 
-input{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:1px solid #ccc;
-border-radius:8px;
-font-size:16px;
-box-sizing:border-box;
-}
-
-button{
-width:100%;
-padding:14px;
-margin-top:15px;
-border:none;
-border-radius:8px;
-background:#1565C0;
-color:white;
-font-size:17px;
-cursor:pointer;
-}
-
-button:hover{
-background:#0D47A1;
-}
-
-.home{
-background:#2E7D32;
-}
-
-.home:hover{
-background:#1B5E20;
-}
-
 table{
 width:100%;
 border-collapse:collapse;
@@ -94,10 +62,32 @@ background:#1565C0;
 color:white;
 }
 
-.loading{
-text-align:center;
-font-weight:bold;
-color:#1565C0;
+.logout{
+
+width:100%;
+padding:14px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+background:#d32f2f;
+color:white;
+font-size:17px;
+cursor:pointer;
+
+}
+
+.home{
+
+width:100%;
+padding:14px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+background:#2E7D32;
+color:white;
+font-size:17px;
+cursor:pointer;
+
 }
 
 </style>
@@ -116,38 +106,23 @@ color:#1565C0;
 
 <div class="card">
 
-<input
-type="text"
-id="emis"
-placeholder="Enter Student EMIS Number">
-
-<button onclick="loadStudent()">
-
-🔍 Search Student
-
-</button>
-
-</div>
-
-<div class="card">
-
 <h3>👤 Student Details</h3>
 
-<p><b>Name :</b> <span id="name">-</span></p>
+<p><b>Name :</b> <span id="name">Loading...</span></p>
 
-<p><b>EMIS :</b> <span id="emisNo">-</span></p>
+<p><b>EMIS :</b> <span id="emisNo">Loading...</span></p>
 
-<p><b>Class :</b> <span id="class">-</span></p>
+<p><b>Class :</b> <span id="class">Loading...</span></p>
 
-<p><b>Section :</b> <span id="section">-</span></p>
+<p><b>Section :</b> <span id="section">Loading...</span></p>
 
-<p><b>Father :</b> <span id="father">-</span></p>
+<p><b>Father :</b> <span id="father">Loading...</span></p>
 
-<p><b>Mother :</b> <span id="mother">-</span></p>
+<p><b>Mother :</b> <span id="mother">Loading...</span></p>
 
-<p><b>Mobile :</b> <span id="mobile">-</span></p>
+<p><b>Mobile :</b> <span id="mobile">Loading...</span></p>
 
-<p><b>Attendance :</b> <span id="attendance">-</span></p>
+<p><b>Attendance :</b> <span id="attendance">Loading...</span></p>
 
 </div>
 
@@ -173,7 +148,11 @@ placeholder="Enter Student EMIS Number">
 
 <tr>
 
-<td colspan="2">No Marks Available</td>
+<td colspan="2">
+
+Loading...
+
+</td>
 
 </tr>
 
@@ -207,7 +186,11 @@ placeholder="Enter Student EMIS Number">
 
 <tr>
 
-<td colspan="3">No Homework Available</td>
+<td colspan="3">
+
+Loading...
+
+</td>
 
 </tr>
 
@@ -218,15 +201,27 @@ placeholder="Enter Student EMIS Number">
 </div>
 
 <button
-class="home"
-onclick="location.href='dashboard.html'">
+class="logout"
+onclick="logoutParent()">
 
-🏠 Back
+🚪 Logout
+
+</button>
+
+<button
+class="home"
+onclick="location.href='index.html'">
+
+🏠 Home
 
 </button>
 <script type="module">
 
-import { db } from "./firebase.js";
+import { auth, db } from "./firebase.js";
+
+import {
+signOut
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
 doc,
@@ -235,17 +230,27 @@ collection,
 getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-window.loadStudent = async function(){
+window.logoutParent = async function(){
 
-const emis = document.getElementById("emis").value.trim();
+await signOut(auth);
 
-if(emis==""){
+localStorage.removeItem("parentEMIS");
 
-alert("Please Enter EMIS Number");
-
-return;
+window.location.href="login.html";
 
 }
+
+const emis = localStorage.getItem("parentEMIS");
+
+if(!emis){
+
+alert("Please Login Again");
+
+window.location.href="login.html";
+
+}
+
+async function loadStudent(){
 
 try{
 
@@ -281,16 +286,16 @@ document.getElementById("attendance").innerHTML = student.attendance || "0%";
 
 const marksTable = document.getElementById("marksTable");
 
-marksTable.innerHTML = "";
+marksTable.innerHTML="";
 
-let marksFound = false;
+let marksFound=false;
    const marksSnap = await getDocs(
 collection(db,"marks","Unit Test 1","students")
 );
 
 marksSnap.forEach((d)=>{
 
-const mark = d.data();
+const mark=d.data();
 
 if(mark.emis===emis){
 
@@ -383,6 +388,8 @@ alert(error.message);
 }
 
 }
+
+loadStudent();
 
 </script>
 
