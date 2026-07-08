@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>Attendance Management</title>
+
+<link rel="stylesheet" href="css/style.css">
 
 <style>
 
 body{
+margin:0;
 font-family:Arial,sans-serif;
 background:#f4f6f9;
-margin:0;
 }
 
 .header{
@@ -23,52 +28,101 @@ font-weight:bold;
 }
 
 .container{
+max-width:1100px;
+margin:auto;
 padding:20px;
 }
 
 .card{
 background:white;
-padding:15px;
-margin-bottom:20px;
+padding:20px;
 border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+margin-bottom:20px;
 }
 
-table{
+.filters{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+input,select{
+
 width:100%;
-border-collapse:collapse;
-}
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+font-size:16px;
 
-th,td{
-border:1px solid #ddd;
-padding:10px;
-text-align:center;
-}
-
-th{
-background:#2E7D32;
-color:white;
-}
-
-select{
-padding:8px;
-border-radius:6px;
 }
 
 button{
+
 width:100%;
-padding:15px;
-margin-top:20px;
+padding:14px;
+margin-top:10px;
 border:none;
 border-radius:8px;
 background:#2E7D32;
 color:white;
 font-size:17px;
 cursor:pointer;
+
 }
 
-.home{
-background:#1565C0;
+button:hover{
+
+background:#1B5E20;
+
+}
+
+table{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+th,td{
+
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+
+}
+
+th{
+
+background:#2E7D32;
+color:white;
+
+}
+
+.status{
+
+font-weight:bold;
+
+}
+
+.present{
+
+color:green;
+
+}
+
+.absent{
+
+color:red;
+
+}
+
+.leave{
+
+color:orange;
+
 }
 
 </style>
@@ -87,6 +141,52 @@ background:#1565C0;
 
 <div class="card">
 
+<div class="filters">
+
+<input
+type="date"
+id="attendanceDate">
+
+<select id="classFilter">
+
+<option value="">Select Class</option>
+
+<option>6</option>
+
+<option>7</option>
+
+<option>8</option>
+
+<option>9</option>
+
+<option>10</option>
+
+</select>
+
+<select id="sectionFilter">
+
+<option value="">Section</option>
+
+<option>A</option>
+
+<option>B</option>
+
+<option>C</option>
+
+</select>
+
+</div>
+
+<button onclick="loadStudents()">
+
+🔍 Load Students
+
+</button>
+
+</div>
+
+<div class="card">
+
 <table>
 
 <thead>
@@ -95,7 +195,7 @@ background:#1565C0;
 
 <th>Name</th>
 
-<th>Class</th>
+<th>EMIS</th>
 
 <th>Attendance</th>
 
@@ -109,7 +209,7 @@ background:#1565C0;
 
 <td colspan="3">
 
-Loading...
+Select Class & Date
 
 </td>
 
@@ -126,99 +226,20 @@ Loading...
 💾 Save Attendance
 
 </button>
+<button onclick="location.href='attendance_history.html'">
 
-<button
-class="home"
-onclick="location.href='headmaster.html'">
+📊 Attendance History
+
+</button>
+
+<button onclick="location.href='headmaster.html'">
 
 🏠 Back
 
 </button>
 
-<script type="module">
-  import { db } from "./firebase.js";
-
-import {
-collection,
-getDocs,
-doc,
-updateDoc
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
-const studentTable = document.getElementById("studentTable");
-
-let students = [];
-
-async function loadStudents(){
-
-studentTable.innerHTML = "";
-
-students = [];
-
-const snap = await getDocs(collection(db,"students"));
-
-snap.forEach((d)=>{
-
-const student = d.data();
-
-students.push(student);
-
-studentTable.innerHTML += `
-
-<tr>
-
-<td>${student.name}</td>
-
-<td>${student.class}-${student.section}</td>
-
-<td>
-
-<select id="${student.emis}">
-
-<option value="100%">Present</option>
-
-<option value="0%">Absent</option>
-
-<option value="Leave">Leave</option>
-
-</select>
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-}
-
-window.saveAttendance = async function(){
-
-for(const student of students){
-
-const attendance = document.getElementById(student.emis).value;
-
-await updateDoc(
-
-doc(db,"students",student.emis),
-
-{
-
-attendance: attendance
-
-}
-
-);
-
-}
-
-alert("Attendance Saved Successfully ✅");
-
-}
-
-loadStudents();
-  </script>
+<script type="module" src="js/attendance.js"></script>
 
 </body>
+
 </html>
