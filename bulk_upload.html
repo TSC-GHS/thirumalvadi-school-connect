@@ -1,1 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Bulk Upload</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+max-width:700px;
+margin:20px auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.2);
+margin-bottom:20px;
+}
+
+h3{
+color:#1565C0;
+margin-top:0;
+}
+
+select,
+input[type=file]{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+font-size:17px;
+cursor:pointer;
+background:#1565C0;
+color:white;
+}
+
+button:hover{
+background:#0D47A1;
+}
+
+.home{
+background:#2E7D32;
+}
+
+.status{
+margin-top:15px;
+font-weight:bold;
+text-align:center;
+color:#1565C0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📥 Bulk Upload
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h3>Select Upload Type</h3>
+
+<select id="uploadType">
+
+<option value="students">Students</option>
+
+<option value="attendance">Attendance</option>
+
+<option value="marks">Marks</option>
+
+<option value="teachers">Teachers</option>
+
+</select>
+
+<input
+type="file"
+id="csvFile"
+accept=".csv">
+
+<button id="uploadBtn">
+
+📤 Upload CSV
+
+</button>
+
+<p class="status" id="status">
+
+Waiting for upload...
+
+</p>
+
+</div>
+
+<button
+class="home"
+onclick="location.href='dashboard.html'">
+
+🏠 Back to Dashboard
+
+</button>
+<script type="module">
+
+import { db } from "./firebase.js";
+
+document.getElementById("uploadBtn").addEventListener("click", uploadCSV);
+
+async function uploadCSV(){
+
+const file=document.getElementById("csvFile").files[0];
+
+const type=document.getElementById("uploadType").value;
+
+if(!file){
+
+alert("Please Select CSV File");
+
+return;
+
+}
+
+document.getElementById("status").innerHTML="Reading CSV File...";
+
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+const csv=e.target.result;
+
+const rows=csv.split("\n");
+
+console.log(rows);
+
+document.getElementById("status").innerHTML=
+
+"CSV Loaded Successfully ("+(rows.length-1)+" Records)";
+
+};
+
+reader.readAsText(file);
+
+}
+  reader.onload=function(e){
+
+const csv=e.target.result.trim();
+
+const rows=csv.split("\n");
+
+if(rows.length<=1){
+
+document.getElementById("status").innerHTML="CSV File is Empty";
+
+return;
+
+}
+
+const headers=rows[0].split(",");
+
+console.log("Headers:",headers);
+
+console.log("Total Records:",rows.length-1);
+
+document.getElementById("status").innerHTML=
+
+"✅ Ready to Import : "+(rows.length-1)+" Records";
+
+alert("CSV Validation Completed Successfully");
+
+};
+
+reader.onerror=function(){
+
+document.getElementById("status").innerHTML=
+
+"❌ Error Reading CSV File";
+
+};
+
+}
+
+</script>
+
+</body>
+
+</html>
