@@ -137,6 +137,9 @@ background:#D32F2F;
 📄 Report Card
 </button>
 
+<button onclick="location.href='bulk_upload.html'">
+📥 Bulk Upload
+</button>
 <button class="home"
 onclick="location.href='dashboard.html'">
 🏠 Home
@@ -150,35 +153,43 @@ onclick="location.href='login.html'">
 </div>
 
 <script type="module">
-  import { db } from "./firebase.js";
+
+import { db } from "./firebase.js";
 
 import {
-  collection,
-  getDocs
+collection,
+getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-async function loadDashboard() {
+async function loadDashboard(){
 
-  // Students
-  const students = await getDocs(collection(db, "students"));
-  document.getElementById("studentCount").textContent = students.size;
+const students = await getDocs(collection(db,"students"));
+document.getElementById("studentCount").textContent = students.size;
 
-  // Teachers
-  const teachers = await getDocs(collection(db, "teachers"));
-  document.getElementById("teacherCount").textContent = teachers.size;
+const teachers = await getDocs(collection(db,"teachers"));
+document.getElementById("teacherCount").textContent = teachers.size;
 
-  // Homework
-  const homework = await getDocs(collection(db, "homework"));
-  document.getElementById("homeworkCount").textContent = homework.size;
+const homework = await getDocs(collection(db,"homework"));
+document.getElementById("homeworkCount").textContent = homework.size;
 
-  // Notices
-  const notices = await getDocs(collection(db, "notices"));
-  document.getElementById("noticeCount").textContent = notices.size;
+let noticeCollection = "notice";
+
+let notices;
+
+try{
+notices = await getDocs(collection(db, noticeCollection));
+}catch(e){
+noticeCollection = "notices";
+notices = await getDocs(collection(db, noticeCollection));
+}
+
+document.getElementById("noticeCount").textContent = notices.size;
 
 }
 
 loadDashboard();
-  </script>
+
+</script>
 
 </body>
 </html>
