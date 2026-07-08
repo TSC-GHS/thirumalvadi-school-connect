@@ -1,184 +1,163 @@
 import { db } from "../firebase.js";
 
 import {
-collection,
-query,
-where,
-getDocs
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  setDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 const marksTable = document.getElementById("marksTable");
 
 let students = [];
 
-window.loadStudents = async function(){
+window.loadStudents = async function () {
 
-marksTable.innerHTML = "";
+  marksTable.innerHTML = "";
+  students = [];
 
-students = [];
+  const selectedClass = document.getElementById("classFilter").value;
+  const selectedSection = document.getElementById("sectionFilter").value;
+  const examType = document.getElementById("examType").value;
 
-const selectedClass = document.getElementById("classFilter").value;
-const selectedSection = document.getElementById("sectionFilter").value;
-const examType = document.getElementById("examType").value;
+  if (!selectedClass || !selectedSection || !examType) {
+    alert("Please select Exam, Class and Section");
+    return;
+  }
 
-if(selectedClass=="" || selectedSection=="" || examType==""){
+  const q = query(
+    collection(db, "students"),
+    where("class", "==", selectedClass),
+    where("section", "==", selectedSection)
+  );
 
-alert("Please Select Exam, Class and Section");
+  const snap = await getDocs(q);
 
-return;
+  if (snap.empty) {
 
-}
+    marksTable.innerHTML = `
+      <tr>
+        <td colspan="6">No Students Found</td>
+      </tr>
+    `;
 
-const q = query(
+    return;
+  }
+    snap.forEach((docSnap) => {
 
-collection(db,"students"),
+    const student = docSnap.data();
 
-where("class","==",selectedClass),
+    students.push(student);
 
-where("section","==",selectedSection)
+    marksTable.innerHTML += `
+      <tr>
+        <td>${student.name}</td>
 
-);
+        <td>
+          <input type="number"
+          id="tam_${student.emis}"
+          min="0"
+          max="100"
+          value="0">
+        </td>
 
-const snap = await getDocs(q);
+        <td>
+          <input type="number"
+          id="eng_${student.emis}"
+          min="0"
+          max="100"
+          value="0">
+        </td>
 
-if(snap.empty){
+        <td>
+          <input type="number"
+          id="mat_${student.emis}"
+          min="0"
+          max="100"
+          value="0">
+        </td>
 
-marksTable.innerHTML = `
-<tr>
-<td colspan="6">
-No Students Found
-</td>
-</tr>
-`;
+        <td>
+          <input type="number"
+          id="sci_${student.emis}"
+          min="0"
+          max="100"
+          value="0">
+        </td>
 
-return;
+        <td>
+          <input type="number"
+          id="soc_${student.emis}"
+          min="0"
+          max="100"
+          value="0">
+        </td>
 
-}
-snap.forEach((docSnap)=>{
+      </tr>
+    `;
 
-const student = docSnap.data();
-
-students.push(student);
-
-marksTable.innerHTML += `
-
-<tr>
-
-<td>${student.name}</td>
-
-<td><input type="number" id="tam_${student.emis}" min="0" max="100" value="0"></td>
-
-<td><input type="number" id="eng_${student.emis}" min="0" max="100" value="0"></td>
-
-<td><input type="number" id="mat_${student.emis}" min="0" max="100" value="0"></td>
-
-<td><input type="number" id="sci_${student.emis}" min="0" max="100" value="0"></td>
-
-<td><input type="number" id="soc_${student.emis}" min="0" max="100" value="0"></td>
-
-</tr>
-
-`;
-
-});
-
-}
-
-window.saveMarks = function(){
-
-if(students.length===0){
-
-alert("Load Students First");
-
-return;
-
-}
-
-alert("✅ Marks Entry Ready\n\nPart 3-ல் Firebase Save சேர்க்கப்படும்.");
-
-}
-import {
-doc,
-setDoc
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
-window.saveMarks = async function(){
-
-if(students.length===0){
-
-alert("Load Students First");
-
-return;
+  });
 
 }
+window.saveMarks = async function () {
 
-const examType = document.getElementById("examType").value;
+  if (students.length === 0) {
+    alert("Load Students First");
+    return;
+  }
 
-let saved = 0;
+  const examType = document.getElementById("examType").value;
 
-for(const student of students){
+  let saved = 0;
 
-const tamil = Number(document.getElementById(`tam_${student.emis}`).value);
-const english = Number(document.getElementById(`eng_${student.emis}`).value);
-const maths = Number(document.getElementById(`mat_${student.emis}`).value);
-const science = Number(document.getElementById(`sci_${student.emis}`).value);
-const social = Number(document.getElementById(`soc_${student.emis}`).value);
+  for (const student of students) {
 
-const total = tamil + english + maths + science + social;
+    const tamil = Number(document.getElementById(`tam_${student.emis}`).value);
+    const english = Number(document.getElementById(`eng_${student.emis}`).value);
+    const maths = Number(document.getElementById(`mat_${student.emis}`).value);
+    const science = Number(document.getElementById(`sci_${student.emis}`).value);
+    const social = Number(document.getElementById(`soc_${student.emis}`).value);
 
-const percentage = (total/5).toFixed(2);
+    const total = tamil + english + maths + science + social;
 
-let grade="E";
+    const percentage = Number((total / 5).toFixed(2));
 
-if(percentage>=90) grade="A+";
-else if(percentage>=80) grade="A";
-else if(percentage>=70) grade="B+";
-else if(percentage>=60) grade="B";
-else if(percentage>=50) grade="C";
-else if(percentage>=35) grade="D";
+    let grade = "E";
 
-await setDoc(
+    if (percentage >= 90) grade = "A+";
+    else if (percentage >= 80) grade = "A";
+    else if (percentage >= 70) grade = "B+";
+    else if (percentage >= 60) grade = "B";
+    else if (percentage >= 50) grade = "C";
+    else if (percentage >= 35) grade = "D";
 
-doc(db,"marks",examType,"students",student.emis),
+    await setDoc(
+      doc(db, "marks", examType, "students", student.emis),
+      {
+        emis: student.emis,
+        name: student.name,
+        class: student.class,
+        section: student.section,
 
-{
+        tamil,
+        english,
+        maths,
+        science,
+        social,
 
-emis:student.emis,
+        total,
+        percentage,
+        grade,
 
-name:student.name,
+        updatedAt: new Date().toISOString()
+      }
+    );
 
-class:student.class,
+    saved++;
+  }
 
-section:student.section,
+  alert(`✅ Marks Saved Successfully\n\nRecords Saved : ${saved}`);
 
-exam:examType,
-
-tamil:tamil,
-
-english:english,
-
-maths:maths,
-
-science:science,
-
-social:social,
-
-total:total,
-
-percentage:Number(percentage),
-
-grade:grade,
-
-updatedAt:new Date().toISOString()
-
-}
-
-);
-
-saved++;
-
-}
-
-alert("✅ Marks Saved Successfully\n\nRecords : "+saved);
-
-}
+};
