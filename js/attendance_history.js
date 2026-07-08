@@ -5,19 +5,25 @@ collection,
 getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const table = document.getElementById("historyTable");
+const historyTable = document.getElementById("historyTable");
+
+const workingDays = document.getElementById("workingDays");
+const presentDays = document.getElementById("presentDays");
+const absentDays = document.getElementById("absentDays");
+const leaveDays = document.getElementById("leaveDays");
+const percentage = document.getElementById("percentage");
 
 window.loadAttendanceHistory = async function(){
 
-const emis = document.getElementById("emis").value.trim();
+const emis=document.getElementById("emis").value.trim();
 
-const fromDate = document.getElementById("fromDate").value;
+const fromDate=document.getElementById("fromDate").value;
 
-const toDate = document.getElementById("toDate").value;
+const toDate=document.getElementById("toDate").value;
 
 if(emis==""){
 
-alert("Enter Student EMIS Number");
+alert("Please Enter EMIS Number");
 
 return;
 
@@ -25,93 +31,82 @@ return;
 
 if(fromDate=="" || toDate==""){
 
-alert("Select From Date and To Date");
+alert("Please Select From Date and To Date");
 
 return;
 
 }
 
-table.innerHTML="";
-
-let present=0;
-
-let absent=0;
-
-let leave=0;
+historyTable.innerHTML="";
 
 let working=0;
-const start = new Date(fromDate);
-const end = new Date(toDate);
+let present=0;
+let absent=0;
+let leave=0;
 
-for(let d = new Date(start); d <= end; d.setDate(d.getDate()+1)){
+const start=new Date(fromDate);
+const end=new Date(toDate);
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
 
-const date = d.toISOString().split("T")[0];
+    const date = d.toISOString().split("T")[0];
 
-const snap = await getDocs(
-collection(db,"attendance",date,"students")
-);
+    const snap = await getDocs(
+        collection(db, "attendance", date, "students")
+    );
 
-snap.forEach((docSnap)=>{
+    snap.forEach((docSnap) => {
 
-const data = docSnap.data();
+        const data = docSnap.data();
 
-if(data.emis === emis){
+        if (data.emis === emis) {
 
-working++;
+            working++;
 
-table.innerHTML += `
+            let color = "#2E7D32";
 
-<tr>
+            if (data.status === "Absent") color = "#D32F2F";
+            if (data.status === "Leave") color = "#F57C00";
 
-<td>${data.date}</td>
+            historyTable.innerHTML += `
+            <tr>
+                <td>${data.date}</td>
+                <td style="color:${color};font-weight:bold;">
+                    ${data.status}
+                </td>
+            </tr>
+            `;
 
-<td>${data.status}</td>
+            if (data.status === "Present") present++;
+            if (data.status === "Absent") absent++;
+            if (data.status === "Leave") leave++;
+        }
 
-</tr>
-
-`;
-
-if(data.status==="Present") present++;
-
-if(data.status==="Absent") absent++;
-
-if(data.status==="Leave") leave++;
-
-}
-
-});
-
-}
-
-if(table.innerHTML===""){
-
-table.innerHTML=`
-
-<tr>
-
-<td colspan="2">
-
-No Attendance Records Found
-
-</td>
-
-</tr>
-
-`;
+    });
 
 }
 
-document.getElementById("workingDays").textContent = working;
-document.getElementById("presentDays").textContent = present;
-document.getElementById("absentDays").textContent = absent;
-document.getElementById("leaveDays").textContent = leave;
+if (historyTable.innerHTML === "") {
 
-const percentage =
+    historyTable.innerHTML = `
+    <tr>
+        <td colspan="2">No Attendance Records Found</td>
+    </tr>
+    `;
+}
+
+workingDays.textContent = working;
+presentDays.textContent = present;
+absentDays.textContent = absent;
+leaveDays.textContent = leave;
+
+// Leave is treated as approved attendance
+const effectivePresent = present + leave;
+
+const percent =
 working === 0
 ? 0
-: ((present / working) * 100).toFixed(1);
+: ((effectivePresent / working) * 100).toFixed(1);
 
-document.getElementById("percentage").textContent =
-percentage + "%";
+percentage.textContent = percent + "%";
 
 }
