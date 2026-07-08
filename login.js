@@ -1,13 +1,13 @@
 import { auth, db } from "./firebase.js";
 
 import {
-signInWithEmailAndPassword,
-signOut
+  signInWithEmailAndPassword,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
-doc,
-getDoc
+  doc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 window.loginUser = async function(){
@@ -38,7 +38,7 @@ loginId = loginId + "@schoolconnecttn.app";
 
 if(selectedRole==="Student"){
 
-loginId = loginId + "@schoolconnecttn.app";
+loginId = loginId + "@student.schoolconnecttn.app";
 
 }
 
@@ -75,31 +75,36 @@ switch(user.role){
 
 case "Admin":
 
-window.location.href="admin_dashboard.html";
+window.location.href = "admin_dashboard.html";
+
 break;
 
 case "Headmaster":
 
-window.location.href="headmaster.html";
+window.location.href = "headmaster.html";
+
 break;
 
 case "Teacher":
 
-window.location.href="teacher_dashboard.html";
+window.location.href = "teacher_dashboard.html";
+
 break;
 
 case "Parent":
 
 localStorage.setItem("parentEMIS", user.emis);
 
-window.location.href="parent_dashboard.html";
+window.location.href = "parent_dashboard.html";
+
 break;
 
 case "Student":
 
 localStorage.setItem("studentEMIS", user.emis);
 
-window.location.href="student.html";
+window.location.href = "student.html";
+
 break;
 
 default:
@@ -115,7 +120,8 @@ return;
 }catch(error){
 
 alert("Login Failed\n\n" + error.message);
-  await signOut(auth);
+
+await signOut(auth);
 
 }
 
