@@ -1,1 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Notice List</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#E65100;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+button{
+width:100%;
+padding:14px;
+background:#E65100;
+color:white;
+border:none;
+border-radius:8px;
+font-size:16px;
+margin-bottom:15px;
+cursor:pointer;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#E65100;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📢 Notice List
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<button onclick="loadNotices()">
+
+📋 Load Notices
+
+</button>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Title</th>
+<th>Priority</th>
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody id="noticeTable">
+
+<tr>
+
+<td colspan="3">
+
+No Notices Found
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+<button onclick="location.href='notice_management.html'">
+
+➕ Add Notice
+
+</button>
+
+<button onclick="location.href='headmaster.html'">
+
+🏠 Back
+
+</button>
+
+</div>
+
+</div>
+
+<script type="module" src="js/notice_list.js"></script>
+
+</body>
+
+</html>
