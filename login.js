@@ -11,73 +11,101 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 window.loginUser = async function () {
-  const email = document.getElementById("email").value.trim();
+
+let loginId = document.getElementById("email").value.trim();
+
 const password = document.getElementById("password").value.trim();
+
 const selectedRole = document.getElementById("role").value;
 
-if (email === "" || password === "") {
-    alert("Please enter Email and Password");
-    return;
+if(loginId=="" || password==""){
+
+alert("Please enter Login ID and Password");
+
+return;
+
 }
 
-try {
+// Parent Login → EMIS to Email
 
-    await signInWithEmailAndPassword(auth, email, password);
+if(selectedRole==="Parent"){
 
-    const userRef = doc(db, "users", email);
-    const userSnap = await getDoc(userRef);
+loginId = loginId + "@schoolconnecttn.app";
 
-    if (!userSnap.exists()) {
+}
 
-        alert("User role not found.");
+try{
 
-        await signOut(auth);
+await signInWithEmailAndPassword(auth,loginId,password);
 
-        return;
+const userRef = doc(db,"users",loginId);
 
-    }
+const userSnap = await getDoc(userRef);
 
-    const user = userSnap.data();
+if(!userSnap.exists()){
 
-    if (user.role !== selectedRole) {
+alert("User record not found");
 
-        alert("Selected role does not match your account.");
+await signOut(auth);
 
-        await signOut(auth);
+return;
 
-        return;
+}
 
-    }
-  switch (user.role) {
+const user = userSnap.data();
 
-    case "Admin":
-        window.location.href = "admin_dashboard.html";
-        break;
+if(user.role!==selectedRole){
 
-    case "Headmaster":
-        window.location.href = "headmaster.html";
-        break;
+alert("Invalid Role");
 
-    case "Teacher":
-        window.location.href = "teacher_dashboard.html";
-        break;
+await signOut(auth);
 
-    case "Parent":
-        window.location.href = "parent_dashboard.html";
-        break;
+return;
 
-    case "Student":
-        window.location.href = "student.html";
-        break;
+}
+switch(user.role){
 
-    default:
-        alert("Invalid User Role");
-        await signOut(auth);
-        return;
-  }
-  } catch (error) {
+case "Admin":
 
-    alert("Login Failed\n\n" + error.message);
+window.location.href="admin_dashboard.html";
+break;
+
+case "Headmaster":
+
+window.location.href="headmaster.html";
+break;
+
+case "Teacher":
+
+window.location.href="teacher_dashboard.html";
+break;
+
+case "Student":
+
+window.location.href="student.html";
+break;
+
+case "Parent":
+
+localStorage.setItem("parentEMIS",user.emis);
+
+window.location.href="parent_dashboard.html";
+break;
+
+default:
+
+alert("Invalid User Role");
+
+await signOut(auth);
+
+return;
+
+}
+
+}catch(error){
+
+alert("Login Failed\n\n"+error.message);
+  await signOut(auth);
 
 }
 
