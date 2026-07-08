@@ -1,28 +1,391 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
 <title>Student Dashboard</title>
+
 <style>
-body{font-family:Arial;background:#f5f5f5;margin:0;}
-.header{background:#ff9800;color:white;padding:15px;text-align:center;font-size:24px;}
-.card{background:white;margin:20px;padding:20px;border-radius:10px;box-shadow:0 2px 5px gray;}
-button{width:100%;padding:15px;margin-top:10px;font-size:18px;background:#ff9800;color:white;border:none;border-radius:8px;}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#FF9800;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+max-width:900px;
+margin:auto;
+}
+
+.card{
+background:white;
+padding:18px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.card h3{
+margin-top:0;
+color:#FF9800;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#FF9800;
+color:white;
+}
+
+.logout{
+width:100%;
+padding:14px;
+margin-top:15px;
+background:#D32F2F;
+color:white;
+border:none;
+border-radius:8px;
+font-size:17px;
+}
+
+.home{
+width:100%;
+padding:14px;
+margin-top:10px;
+background:#2E7D32;
+color:white;
+border:none;
+border-radius:8px;
+font-size:17px;
+}
+
 </style>
+
 </head>
+
 <body>
 
-<div class="header">🎓 Student Dashboard</div>
+<div class="header">
+
+🎓 Student Dashboard
+
+</div>
+
+<div class="container">
 
 <div class="card">
-<h2>Welcome Student</h2>
 
-<button onclick="alert('Attendance')">📅 My Attendance</button>
-<button onclick="alert('Marks')">📚 My Marks</button>
-<button onclick="alert('Homework')">📝 Homework</button>
-<button onclick="location.href='dashboard.html'">🏠 Home</button>
+<h3>👤 My Profile</h3>
+
+<p><b>Name :</b> <span id="name">Loading...</span></p>
+
+<p><b>EMIS :</b> <span id="emisNo">Loading...</span></p>
+
+<p><b>Class :</b> <span id="class">Loading...</span></p>
+
+<p><b>Section :</b> <span id="section">Loading...</span></p>
+
+<p><b>Father :</b> <span id="father">Loading...</span></p>
+
+<p><b>Mother :</b> <span id="mother">Loading...</span></p>
+
+<p><b>Attendance :</b> <span id="attendance">Loading...</span></p>
+
+</div>
+
+<div class="card">
+
+<h3>📚 My Marks</h3>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Exam</th>
+
+<th>Marks</th>
+
+</tr>
+
+</thead>
+
+<tbody id="marksTable">
+
+<tr>
+
+<td colspan="2">
+
+Loading...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<h3>📝 Homework</h3>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Subject</th>
+
+<th>Homework</th>
+
+</tr>
+
+</thead>
+
+<tbody id="homeworkTable">
+
+<tr>
+
+<td colspan="3">
+
+Loading...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<button
+class="logout"
+onclick="logoutStudent()">
+
+🚪 Logout
+
+</button>
+
+<button
+class="home"
+onclick="location.href='index.html'">
+
+🏠 Home
+
+</button>
+<script type="module">
+
+import { auth, db } from "./firebase.js";
+
+import {
+signOut
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+import {
+doc,
+getDoc,
+collection,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.logoutStudent = async function(){
+
+await signOut(auth);
+
+localStorage.removeItem("studentEMIS");
+
+window.location.href="login.html";
+
+}
+
+const emis = localStorage.getItem("studentEMIS");
+
+if(!emis){
+
+alert("Please Login Again");
+
+window.location.href="login.html";
+
+}
+
+async function loadStudent(){
+
+try{
+
+const studentRef = doc(db,"students",emis);
+
+const studentSnap = await getDoc(studentRef);
+
+if(!studentSnap.exists()){
+
+alert("Student Not Found");
+
+return;
+
+}
+
+const student = studentSnap.data();
+
+document.getElementById("name").innerHTML = student.name || "-";
+
+document.getElementById("emisNo").innerHTML = student.emis || emis;
+
+document.getElementById("class").innerHTML = student.class || "-";
+
+document.getElementById("section").innerHTML = student.section || "-";
+
+document.getElementById("father").innerHTML = student.father || "-";
+
+document.getElementById("mother").innerHTML = student.mother || "-";
+
+document.getElementById("attendance").innerHTML = student.attendance || "0%";
+
+const marksTable = document.getElementById("marksTable");
+
+marksTable.innerHTML="";
+
+let marksFound=false;
+  const marksSnap = await getDocs(
+collection(db,"marks","Unit Test 1","students")
+);
+
+marksSnap.forEach((d)=>{
+
+const mark=d.data();
+
+if(mark.emis===emis){
+
+marksFound=true;
+
+marksTable.innerHTML+=`
+
+<tr>
+
+<td>${mark.exam || "Unit Test 1"}</td>
+
+<td>${mark.marks || "-"}</td>
+
+</tr>
+
+`;
+
+}
+
+});
+
+if(!marksFound){
+
+marksTable.innerHTML=`
+
+<tr>
+
+<td colspan="2">No Marks Available</td>
+
+</tr>
+
+`;
+
+}
+
+const homeworkTable=document.getElementById("homeworkTable");
+
+homeworkTable.innerHTML="";
+
+let homeworkFound=false;
+
+const homeworkSnap=await getDocs(collection(db,"homework"));
+
+homeworkSnap.forEach((d)=>{
+
+const hw=d.data();
+
+if(hw.class===student.class){
+
+homeworkFound=true;
+
+homeworkTable.innerHTML+=`
+
+<tr>
+
+<td>${hw.date || "-"}</td>
+
+<td>${hw.subject || "-"}</td>
+
+<td>${hw.homework || "-"}</td>
+
+</tr>
+
+`;
+
+}
+
+});
+
+if(!homeworkFound){
+
+homeworkTable.innerHTML=`
+
+<tr>
+
+<td colspan="3">No Homework Available</td>
+
+</tr>
+
+`;
+
+}
+
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+}
+
+loadStudent();
+
+</script>
 
 </div>
 
 </body>
+
 </html>
