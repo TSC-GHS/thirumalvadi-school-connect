@@ -1,1 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Homework Management</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#6A1B9A;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+input,select,textarea{
+
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+font-size:16px;
+
+}
+
+textarea{
+height:120px;
+resize:vertical;
+}
+
+button{
+
+width:100%;
+padding:14px;
+margin-top:12px;
+background:#6A1B9A;
+color:white;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📚 Homework Management
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<div class="grid">
+
+<select id="classFilter">
+
+<option value="">Select Class</option>
+
+<option>6</option>
+<option>7</option>
+<option>8</option>
+<option>9</option>
+<option>10</option>
+
+</select>
+
+<select id="sectionFilter">
+
+<option value="">Select Section</option>
+
+<option>A</option>
+<option>B</option>
+<option>C</option>
+
+</select>
+
+<input
+type="date"
+id="dueDate">
+
+</div>
+
+<br>
+
+<textarea
+id="homeworkText"
+placeholder="Enter Homework">
+</textarea>
+<button onclick="saveHomework()">
+
+💾 Save Homework
+
+</button>
+
+<button onclick="location.href='homework_list.html'">
+
+📋 Homework List
+
+</button>
+
+<button onclick="location.href='teacher.html'">
+
+🏠 Back
+
+</button>
+
+</div>
+
+<script type="module" src="js/homework_management.js"></script>
+
+</body>
+
+</html>
