@@ -18,7 +18,7 @@ background:#f4f6f9;
 
 .header{
 background:#2E7D32;
-color:white;
+color:#fff;
 padding:18px;
 text-align:center;
 font-size:24px;
@@ -26,66 +26,96 @@ font-weight:bold;
 }
 
 .container{
-max-width:1000px;
+max-width:1100px;
 margin:auto;
 padding:20px;
 }
 
 .card{
-background:white;
+background:#fff;
 padding:20px;
+margin-bottom:20px;
 border-radius:10px;
 box-shadow:0 2px 8px rgba(0,0,0,.15);
-margin-bottom:20px;
 }
 
 .filters{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:15px;
 margin-bottom:20px;
 }
 
 input{
+
 width:100%;
 padding:12px;
 border:1px solid #ccc;
 border-radius:8px;
 box-sizing:border-box;
-font-size:16px;
+
 }
 
 button{
+
 width:100%;
 padding:14px;
-border:none;
-border-radius:8px;
 background:#2E7D32;
 color:white;
+border:none;
+border-radius:8px;
 font-size:17px;
 cursor:pointer;
 margin-top:10px;
-}
 
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-th,td{
-border:1px solid #ddd;
-padding:10px;
-text-align:center;
-}
-
-th{
-background:#2E7D32;
-color:white;
 }
 
 .summary{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+gap:15px;
+margin-top:20px;
+
+}
+
+.box{
+
 background:#E8F5E9;
-font-weight:bold;
+padding:15px;
+border-radius:10px;
+text-align:center;
+
+}
+
+.box h2{
+
+margin:0;
+color:#2E7D32;
+
+}
+
+table{
+
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+
+}
+
+th,td{
+
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+
+}
+
+th{
+
+background:#2E7D32;
+color:white;
+
 }
 
 </style>
@@ -108,11 +138,15 @@ font-weight:bold;
 
 <input
 id="emis"
-placeholder="Enter Student EMIS Number">
+placeholder="Enter EMIS Number">
 
 <input
 type="date"
-id="historyDate">
+id="fromDate">
+
+<input
+type="date"
+id="toDate">
 
 </div>
 
@@ -121,6 +155,50 @@ id="historyDate">
 🔍 Load Attendance
 
 </button>
+
+</div>
+
+<div class="summary">
+
+<div class="box">
+
+<h2 id="workingDays">0</h2>
+
+Working Days
+
+</div>
+
+<div class="box">
+
+<h2 id="presentDays">0</h2>
+
+Present
+
+</div>
+
+<div class="box">
+
+<h2 id="absentDays">0</h2>
+
+Absent
+
+</div>
+
+<div class="box">
+
+<h2 id="leaveDays">0</h2>
+
+Leave
+
+</div>
+
+<div class="box">
+
+<h2 id="percentage">0%</h2>
+
+Attendance %
+
+</div>
 
 </div>
 
@@ -146,7 +224,7 @@ id="historyDate">
 
 <td colspan="2">
 
-No Attendance Records
+Search Attendance
 
 </td>
 
@@ -165,143 +243,9 @@ No Attendance Records
 🏠 Back
 </button>
 
-<script type="module">
+<script type="module" src="js/attendance_history.js"></script>
 
-import { db } from "./firebase.js";
-
-import {
-collection,
-getDocs
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
-window.loadAttendanceHistory = async function(){
-
-const emis = document.getElementById("emis").value.trim();
-
-const historyDate = document.getElementById("historyDate").value;
-
-if(emis==""){
-
-alert("Enter Student EMIS Number");
-
-return;
-
-}
-
-const table=document.getElementById("historyTable");
-
-table.innerHTML="";
-
-let present=0;
-let absent=0;
-let leave=0;
-
-if(historyDate!=""){
-
-const snap=await getDocs(
-collection(db,"attendance",historyDate,"students")
-);
-
-snap.forEach((d)=>{
-
-const data=d.data();
-
-if(data.emis===emis){
-
-table.innerHTML+=`
-
-<tr>
-
-<td>${data.date}</td>
-
-<td>${data.status}</td>
-
-</tr>
-
-`;
-
-if(data.status==="Present") present++;
-
-if(data.status==="Absent") absent++;
-
-if(data.status==="Leave") leave++;
-
-}
-
-});
-
-}else{
-
-table.innerHTML=`
-
-<tr>
-
-<td colspan="2">
-
-Please Select Date
-
-</td>
-
-</tr>
-
-`;
-
-return;
-
-}
-
-if(table.innerHTML===""){
-
-table.innerHTML=`
-
-<tr>
-
-<td colspan="2">
-
-No Attendance Found
-
-</td>
-
-</tr>
-
-`;
-
-return;
-
-}
-
-table.innerHTML+=`
-
-<tr class="summary">
-
-<td>Total Present</td>
-
-<td>${present}</td>
-
-</tr>
-
-<tr class="summary">
-
-<td>Total Absent</td>
-
-<td>${absent}</td>
-
-</tr>
-
-<tr class="summary">
-
-<td>Total Leave</td>
-
-<td>${leave}</td>
-
-</tr>
-
-`;
-
-}
-
-</script>
+</div>
 
 </body>
-
 </html>
