@@ -1,16 +1,16 @@
 import { auth, db } from "./firebase.js";
 
 import {
-  signInWithEmailAndPassword,
-  signOut
+signInWithEmailAndPassword,
+signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
-  doc,
-  getDoc
+doc,
+getDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-window.loginUser = async function () {
+window.loginUser = async function(){
 
 let loginId = document.getElementById("email").value.trim();
 
@@ -26,9 +26,17 @@ return;
 
 }
 
-// Parent Login → EMIS to Email
+// Parent Login
 
 if(selectedRole==="Parent"){
+
+loginId = loginId + "@schoolconnecttn.app";
+
+}
+
+// Student Login
+
+if(selectedRole==="Student"){
 
 loginId = loginId + "@schoolconnecttn.app";
 
@@ -44,7 +52,7 @@ const userSnap = await getDoc(userRef);
 
 if(!userSnap.exists()){
 
-alert("User record not found");
+alert("User Record Not Found");
 
 await signOut(auth);
 
@@ -56,7 +64,7 @@ const user = userSnap.data();
 
 if(user.role!==selectedRole){
 
-alert("Invalid Role");
+alert("Selected Role is Incorrect");
 
 await signOut(auth);
 
@@ -80,16 +88,18 @@ case "Teacher":
 window.location.href="teacher_dashboard.html";
 break;
 
-case "Student":
-
-window.location.href="student.html";
-break;
-
 case "Parent":
 
-localStorage.setItem("parentEMIS",user.emis);
+localStorage.setItem("parentEMIS", user.emis);
 
 window.location.href="parent_dashboard.html";
+break;
+
+case "Student":
+
+localStorage.setItem("studentEMIS", user.emis);
+
+window.location.href="student.html";
 break;
 
 default:
@@ -104,7 +114,7 @@ return;
 
 }catch(error){
 
-alert("Login Failed\n\n"+error.message);
+alert("Login Failed\n\n" + error.message);
   await signOut(auth);
 
 }
