@@ -1,1 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Report Card</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+input,select{
+
+width:100%;
+padding:12px;
+margin:8px 0;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+
+}
+
+button{
+
+width:100%;
+padding:14px;
+margin-top:12px;
+background:#1565C0;
+color:white;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+
+}
+
+table{
+
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+
+}
+
+th,td{
+
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+
+}
+
+th{
+
+background:#1565C0;
+color:white;
+
+}
+
+.summary{
+
+font-weight:bold;
+background:#E3F2FD;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📄 Student Report Card
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<input
+type="text"
+id="emis"
+placeholder="Enter Student EMIS">
+
+<select id="examType">
+
+<option value="">Select Exam</option>
+
+<option>Unit Test</option>
+
+<option>Quarterly</option>
+
+<option>Half Yearly</option>
+
+<option>Annual</option>
+
+</select>
+
+<button onclick="loadReport()">
+
+📖 Load Report
+
+</button>
+
+</div>
+
+<div class="card">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Subject</th>
+
+<th>Mark</th>
+
+</tr>
+
+</thead>
+
+<tbody id="reportTable">
+
+<tr>
+
+<td colspan="2">
+
+No Report Loaded
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+<div class="card">
+
+<table>
+
+<tr class="summary">
+<td>Total</td>
+<td id="total">0</td>
+</tr>
+
+<tr class="summary">
+<td>Percentage</td>
+<td id="percentage">0%</td>
+</tr>
+
+<tr class="summary">
+<td>Grade</td>
+<td id="grade">-</td>
+</tr>
+
+</table>
+
+</div>
+
+<button onclick="window.print()">
+
+🖨️ Print Report Card
+
+</button>
+
+<button onclick="location.href='report_card.html'">
+
+📋 Report Card Menu
+
+</button>
+
+<button onclick="location.href='headmaster.html'">
+
+🏠 Back
+
+</button>
+
+</div>
+
+<script type="module" src="js/report_card_view.js"></script>
+
+</body>
+</html>
