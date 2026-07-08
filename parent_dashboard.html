@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Parent Dashboard</title>
 
 <style>
 
 body{
+margin:0;
 font-family:Arial,sans-serif;
 background:#f4f6f9;
-margin:0;
 }
 
 .header{
@@ -24,14 +26,21 @@ font-weight:bold;
 
 .container{
 padding:20px;
+max-width:900px;
+margin:auto;
 }
 
 .card{
 background:white;
-padding:15px;
+padding:18px;
 margin-bottom:20px;
 border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.card h3{
+margin-top:0;
+color:#1565C0;
 }
 
 input{
@@ -40,13 +49,13 @@ padding:12px;
 margin-top:10px;
 border:1px solid #ccc;
 border-radius:8px;
-box-sizing:border-box;
 font-size:16px;
+box-sizing:border-box;
 }
 
 button{
 width:100%;
-padding:15px;
+padding:14px;
 margin-top:15px;
 border:none;
 border-radius:8px;
@@ -56,8 +65,16 @@ font-size:17px;
 cursor:pointer;
 }
 
+button:hover{
+background:#0D47A1;
+}
+
 .home{
 background:#2E7D32;
+}
+
+.home:hover{
+background:#1B5E20;
 }
 
 table{
@@ -77,6 +94,12 @@ background:#1565C0;
 color:white;
 }
 
+.loading{
+text-align:center;
+font-weight:bold;
+color:#1565C0;
+}
+
 </style>
 
 </head>
@@ -94,6 +117,7 @@ color:white;
 <div class="card">
 
 <input
+type="text"
 id="emis"
 placeholder="Enter Student EMIS Number">
 
@@ -110,6 +134,8 @@ placeholder="Enter Student EMIS Number">
 <h3>👤 Student Details</h3>
 
 <p><b>Name :</b> <span id="name">-</span></p>
+
+<p><b>EMIS :</b> <span id="emisNo">-</span></p>
 
 <p><b>Class :</b> <span id="class">-</span></p>
 
@@ -131,15 +157,24 @@ placeholder="Enter Student EMIS Number">
 
 <table>
 
+<thead>
+
 <tr>
+
 <th>Exam</th>
+
 <th>Marks</th>
+
 </tr>
+
+</thead>
 
 <tbody id="marksTable">
 
 <tr>
+
 <td colspan="2">No Marks Available</td>
+
 </tr>
 
 </tbody>
@@ -154,16 +189,26 @@ placeholder="Enter Student EMIS Number">
 
 <table>
 
+<thead>
+
 <tr>
+
 <th>Date</th>
+
 <th>Subject</th>
+
 <th>Homework</th>
+
 </tr>
+
+</thead>
 
 <tbody id="homeworkTable">
 
 <tr>
+
 <td colspan="3">No Homework Available</td>
+
 </tr>
 
 </tbody>
@@ -172,132 +217,177 @@ placeholder="Enter Student EMIS Number">
 
 </div>
 
-<button class="home"
+<button
+class="home"
 onclick="location.href='dashboard.html'">
 
 🏠 Back
 
 </button>
-
 <script type="module">
-   import { db } from "./firebase.js";
+
+import { db } from "./firebase.js";
 
 import {
-  doc,
-  getDoc,
-  collection,
-  getDocs
+doc,
+getDoc,
+collection,
+getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-window.loadStudent = async function () {
+window.loadStudent = async function(){
 
-  const emis = document.getElementById("emis").value.trim();
+const emis = document.getElementById("emis").value.trim();
 
-  if (emis === "") {
-    alert("Enter EMIS Number");
-    return;
-  }
+if(emis==""){
 
-  // STUDENT DETAILS
+alert("Please Enter EMIS Number");
 
-  const studentSnap = await getDoc(doc(db, "students", emis));
-
-  if (!studentSnap.exists()) {
-    alert("Student Not Found");
-    return;
-  }
-
-  const student = studentSnap.data();
-
-  document.getElementById("name").textContent = student.name || "-";
-  document.getElementById("class").textContent = student.class || "-";
-  document.getElementById("section").textContent = student.section || "-";
-  document.getElementById("father").textContent = student.father || "-";
-  document.getElementById("mother").textContent = student.mother || "-";
-  document.getElementById("mobile").textContent = student.mobile || "-";
-  document.getElementById("attendance").textContent = student.attendance || "-";
-
-  // MARKS
-
-  const marksTable = document.getElementById("marksTable");
-  marksTable.innerHTML = "";
-
-  const marksSnap = await getDocs(
-    collection(db, "marks", "Unit Test 1", "students")
-  );
-
-  let markFound = false;
-
-  marksSnap.forEach((d) => {
-
-    const mark = d.data();
-
-    if (mark.emis === emis) {
-
-      markFound = true;
-
-      marksTable.innerHTML += `
-      <tr>
-        <td>${mark.exam}</td>
-        <td>${mark.marks}</td>
-      </tr>
-      `;
-
-    }
-
-  });
-
-  if (!markFound) {
-
-    marksTable.innerHTML = `
-    <tr>
-      <td colspan="2">No Marks Available</td>
-    </tr>
-    `;
-
-  }
-
-  // HOMEWORK
-
-  const homeworkTable = document.getElementById("homeworkTable");
-  homeworkTable.innerHTML = "";
-
-  const homeworkSnap = await getDocs(collection(db, "homework"));
-
-  let homeworkFound = false;
-
-  homeworkSnap.forEach((d) => {
-
-    const hw = d.data();
-
-    if (hw.class == student.class) {
-
-      homeworkFound = true;
-
-      homeworkTable.innerHTML += `
-      <tr>
-        <td>${hw.date}</td>
-        <td>${hw.subject}</td>
-        <td>${hw.homework}</td>
-      </tr>
-      `;
-
-    }
-
-  });
-
-  if (!homeworkFound) {
-
-    homeworkTable.innerHTML = `
-    <tr>
-      <td colspan="3">No Homework Available</td>
-    </tr>
-    `;
-
-  }
+return;
 
 }
-   </script>
+
+try{
+
+const studentRef = doc(db,"students",emis);
+
+const studentSnap = await getDoc(studentRef);
+
+if(!studentSnap.exists()){
+
+alert("Student Not Found");
+
+return;
+
+}
+
+const student = studentSnap.data();
+
+document.getElementById("name").innerHTML = student.name || "-";
+
+document.getElementById("emisNo").innerHTML = student.emis || emis;
+
+document.getElementById("class").innerHTML = student.class || "-";
+
+document.getElementById("section").innerHTML = student.section || "-";
+
+document.getElementById("father").innerHTML = student.father || "-";
+
+document.getElementById("mother").innerHTML = student.mother || "-";
+
+document.getElementById("mobile").innerHTML = student.mobile || "-";
+
+document.getElementById("attendance").innerHTML = student.attendance || "0%";
+
+const marksTable = document.getElementById("marksTable");
+
+marksTable.innerHTML = "";
+
+let marksFound = false;
+   const marksSnap = await getDocs(
+collection(db,"marks","Unit Test 1","students")
+);
+
+marksSnap.forEach((d)=>{
+
+const mark = d.data();
+
+if(mark.emis===emis){
+
+marksFound=true;
+
+marksTable.innerHTML+=`
+
+<tr>
+
+<td>${mark.exam || "Unit Test 1"}</td>
+
+<td>${mark.marks || "-"}</td>
+
+</tr>
+
+`;
+
+}
+
+});
+
+if(!marksFound){
+
+marksTable.innerHTML=`
+
+<tr>
+
+<td colspan="2">No Marks Available</td>
+
+</tr>
+
+`;
+
+}
+
+const homeworkTable=document.getElementById("homeworkTable");
+
+homeworkTable.innerHTML="";
+
+let homeworkFound=false;
+
+const homeworkSnap=await getDocs(collection(db,"homework"));
+
+homeworkSnap.forEach((d)=>{
+
+const hw=d.data();
+
+if(hw.class===student.class){
+
+homeworkFound=true;
+
+homeworkTable.innerHTML+=`
+
+<tr>
+
+<td>${hw.date || "-"}</td>
+
+<td>${hw.subject || "-"}</td>
+
+<td>${hw.homework || "-"}</td>
+
+</tr>
+
+`;
+
+}
+
+});
+
+if(!homeworkFound){
+
+homeworkTable.innerHTML=`
+
+<tr>
+
+<td colspan="3">No Homework Available</td>
+
+</tr>
+
+`;
+
+}
+
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+}
+
+</script>
+
+</div>
 
 </body>
+
 </html>
