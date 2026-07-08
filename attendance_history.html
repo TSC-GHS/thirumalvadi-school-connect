@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Attendance History</title>
 
 <style>
 
 body{
+margin:0;
 font-family:Arial,sans-serif;
 background:#f4f6f9;
-margin:0;
 }
 
 .header{
@@ -25,15 +26,24 @@ font-weight:bold;
 }
 
 .container{
+max-width:1000px;
+margin:auto;
 padding:20px;
 }
 
 .card{
 background:white;
-padding:15px;
-margin-bottom:20px;
+padding:20px;
 border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+margin-bottom:20px;
+}
+
+.filters{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-bottom:20px;
 }
 
 input{
@@ -47,24 +57,19 @@ font-size:16px;
 
 button{
 width:100%;
-padding:15px;
-margin-top:15px;
+padding:14px;
 border:none;
 border-radius:8px;
 background:#2E7D32;
 color:white;
 font-size:17px;
 cursor:pointer;
-}
-
-.home{
-background:#1565C0;
+margin-top:10px;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:15px;
 }
 
 th,td{
@@ -99,13 +104,21 @@ font-weight:bold;
 
 <div class="card">
 
+<div class="filters">
+
 <input
 id="emis"
 placeholder="Enter Student EMIS Number">
 
-<button onclick="loadAttendance()">
+<input
+type="date"
+id="historyDate">
 
-🔍 Search Attendance
+</div>
+
+<button onclick="loadAttendanceHistory()">
+
+🔍 Load Attendance
 
 </button>
 
@@ -115,17 +128,28 @@ placeholder="Enter Student EMIS Number">
 
 <table>
 
+<thead>
+
 <tr>
-<th>Details</th>
-<th>Value</th>
+
+<th>Date</th>
+
+<th>Status</th>
+
 </tr>
 
-<tbody id="attendanceTable">
+</thead>
+
+<tbody id="historyTable">
 
 <tr>
+
 <td colspan="2">
-No Attendance Available
+
+No Attendance Records
+
 </td>
+
 </tr>
 
 </tbody>
@@ -133,75 +157,151 @@ No Attendance Available
 </table>
 
 </div>
+<button onclick="location.href='attendance.html'">
+📅 Attendance Management
+</button>
 
-<button
-class="home"
-onclick="location.href='parent.html'">
-
+<button onclick="location.href='headmaster.html'">
 🏠 Back
-
 </button>
 
 <script type="module">
+
 import { db } from "./firebase.js";
 
 import {
-  doc,
-  getDoc
+collection,
+getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-window.loadAttendance = async function () {
+window.loadAttendanceHistory = async function(){
 
-  const emis = document.getElementById("emis").value.trim();
+const emis = document.getElementById("emis").value.trim();
 
-  if (emis === "") {
-    alert("Enter EMIS Number");
-    return;
-  }
+const historyDate = document.getElementById("historyDate").value;
 
-  const table = document.getElementById("attendanceTable");
-  table.innerHTML = "";
+if(emis==""){
 
-  const snap = await getDoc(doc(db, "students", emis));
+alert("Enter Student EMIS Number");
 
-  if (!snap.exists()) {
-
-    table.innerHTML = `
-    <tr>
-      <td colspan="2">Student Not Found</td>
-    </tr>
-    `;
-    return;
-  }
-
-  const student = snap.data();
-
-  const attendance = student.attendance || "0";
-
-  table.innerHTML = `
-  <tr>
-    <td>Student Name</td>
-    <td>${student.name}</td>
-  </tr>
-
-  <tr>
-    <td>Class</td>
-    <td>${student.class}</td>
-  </tr>
-
-  <tr>
-    <td>Attendance</td>
-    <td>${attendance}</td>
-  </tr>
-
-  <tr class="summary">
-    <td>Status</td>
-    <td>${attendance}</td>
-  </tr>
-  `;
+return;
 
 }
-  </script>
+
+const table=document.getElementById("historyTable");
+
+table.innerHTML="";
+
+let present=0;
+let absent=0;
+let leave=0;
+
+if(historyDate!=""){
+
+const snap=await getDocs(
+collection(db,"attendance",historyDate,"students")
+);
+
+snap.forEach((d)=>{
+
+const data=d.data();
+
+if(data.emis===emis){
+
+table.innerHTML+=`
+
+<tr>
+
+<td>${data.date}</td>
+
+<td>${data.status}</td>
+
+</tr>
+
+`;
+
+if(data.status==="Present") present++;
+
+if(data.status==="Absent") absent++;
+
+if(data.status==="Leave") leave++;
+
+}
+
+});
+
+}else{
+
+table.innerHTML=`
+
+<tr>
+
+<td colspan="2">
+
+Please Select Date
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+if(table.innerHTML===""){
+
+table.innerHTML=`
+
+<tr>
+
+<td colspan="2">
+
+No Attendance Found
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+table.innerHTML+=`
+
+<tr class="summary">
+
+<td>Total Present</td>
+
+<td>${present}</td>
+
+</tr>
+
+<tr class="summary">
+
+<td>Total Absent</td>
+
+<td>${absent}</td>
+
+</tr>
+
+<tr class="summary">
+
+<td>Total Leave</td>
+
+<td>${leave}</td>
+
+</tr>
+
+`;
+
+}
+
+</script>
 
 </body>
+
 </html>
