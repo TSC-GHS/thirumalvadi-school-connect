@@ -1,1 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Parent Dashboard</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#1565C0;
+color:#fff;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+.card{
+background:#fff;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+text-align:center;
+}
+
+.card h3{
+margin:0;
+color:#1565C0;
+}
+
+.value{
+font-size:28px;
+font-weight:bold;
+margin-top:10px;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:12px;
+background:#1565C0;
+color:white;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+}
+
+.notice{
+background:#FFF8E1;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+👨‍👩‍👧 Parent Dashboard
+
+</div>
+
+<div class="container">
+
+<div class="grid">
+
+<div class="card">
+<h3>Student</h3>
+<div id="studentName" class="value">-</div>
+</div>
+
+<div class="card">
+<h3>Attendance</h3>
+<div id="attendanceValue" class="value">0%</div>
+</div>
+
+<div class="card">
+<h3>Grade</h3>
+<div id="gradeValue" class="value">-</div>
+</div>
+
+<div class="card notice">
+<h3>Latest Notice</h3>
+<div id="noticeText">No Notices</div>
+</div>
+
+</div>
+<br>
+
+<button onclick="location.href='report_card_view.html'">
+📄 View Report Card
+</button>
+
+<button onclick="location.href='attendance_history.html'">
+📅 Attendance History
+</button>
+
+<button onclick="location.href='homework.html'">
+📚 Homework
+</button>
+
+<button onclick="location.href='notice_board.html'">
+📢 School Notices
+</button>
+
+<button onclick="location.href='parent.html'">
+🏠 Back
+</button>
+
+</div>
+
+<script type="module" src="js/parent_dashboard_v2.js"></script>
+
+</body>
+</html>
