@@ -2,23 +2,62 @@ import { db } from "../firebase.js";
 
 import {
 collection,
+query,
+where,
 getDocs,
 doc,
-updateDoc,
-setDoc
+setDoc,
+updateDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const studentTable=document.getElementById("studentTable");
+const studentTable = document.getElementById("studentTable");
 
-let students=[];
+const dateInput = document.getElementById("attendanceDate");
+const classFilter = document.getElementById("classFilter");
+const sectionFilter = document.getElementById("sectionFilter");
 
-window.loadStudents=async function(){
+dateInput.value = new Date().toISOString().split("T")[0];
+
+let students = [];
+
+window.loadStudents = async function(){
 
 studentTable.innerHTML="";
 
 students=[];
 
-const snap=await getDocs(collection(db,"students"));
+const selectedClass = classFilter.value;
+const selectedSection = sectionFilter.value;
+
+if(selectedClass=="" || selectedSection==""){
+
+alert("Please Select Class and Section");
+
+return;
+
+}
+
+const q = query(
+collection(db,"students"),
+where("class","==",selectedClass),
+where("section","==",selectedSection)
+);
+
+const snap = await getDocs(q);
+
+if(snap.empty){
+
+studentTable.innerHTML=`
+<tr>
+<td colspan="3">
+No Students Found
+</td>
+</tr>
+`;
+
+return;
+
+}
 
 snap.forEach((d)=>{
 
@@ -26,13 +65,13 @@ const student=d.data();
 
 students.push(student);
 
-studentTable.innerHTML+=`
+studentTable.innerHTML += `
 
 <tr>
 
 <td>${student.name}</td>
 
-<td>${student.class}-${student.section}</td>
+<td>${student.emis}</td>
 
 <td>
 
@@ -57,36 +96,57 @@ studentTable.innerHTML+=`
 }
 window.saveAttendance = async function(){
 
-const today = new Date().toISOString().split("T")[0];
+const attendanceDate = dateInput.value;
+
+if(attendanceDate==""){
+
+alert("Please Select Date");
+
+return;
+
+}
+
+let saved = 0;
 
 for(const student of students){
 
 const status = document.getElementById(student.emis).value;
 
+try{
+
+// Latest Attendance (Parent / Student Dashboard)
 await updateDoc(
 doc(db,"students",student.emis),
 {
-attendance:status
+attendance:status,
+lastAttendanceDate:attendanceDate
 }
 );
 
+// Attendance History
 await setDoc(
-doc(db,"attendance",today,"students",student.emis),
+doc(db,"attendance",attendanceDate,"students",student.emis),
 {
 emis:student.emis,
 name:student.name,
 class:student.class,
 section:student.section,
 status:status,
-date:today,
+date:attendanceDate,
 updatedAt:new Date().toISOString()
 }
 );
 
+saved++;
+
+}catch(error){
+
+console.error(error);
+
 }
 
-alert("✅ Attendance Saved Successfully");
-
 }
 
-loadStudents();
+alert("✅ Attendance Saved Successfully\n\nTotal Records : " + saved);
+
+}
