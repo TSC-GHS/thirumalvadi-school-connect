@@ -1,1 +1,18 @@
-
+{
+  "name": "school-connect-tn",
+  "version": "1.0.0",
+  "description": "School Connect TN",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx cap run android",
+    "build": "npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.1",
+    "@capacitor/app": "^7.0.1",
+    "@capacitor/core": "^7.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.1"
+  }
+}
