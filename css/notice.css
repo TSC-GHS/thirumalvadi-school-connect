@@ -1,1 +1,125 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
 
+body{
+background:#f4f6f9;
+}
+
+.header{
+background:#E65100;
+color:#fff;
+padding:20px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+
+.header h2{
+font-size:28px;
+margin-bottom:5px;
+}
+
+.header p{
+font-size:15px;
+}
+
+.container{
+max-width:1000px;
+margin:20px auto;
+padding:15px;
+}
+
+.card{
+background:#fff;
+padding:20px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+margin-bottom:20px;
+}
+
+.card h3{
+margin-bottom:20px;
+color:#E65100;
+}
+
+input,
+select,
+textarea{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:16px;
+}
+
+textarea{
+min-height:120px;
+resize:vertical;
+}
+
+button{
+width:100%;
+padding:14px;
+background:#E65100;
+color:#fff;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#BF360C;
+}
+
+.noticeCard{
+padding:15px;
+border-left:6px solid #E65100;
+background:#FFF8F2;
+border-radius:8px;
+margin-bottom:15px;
+}
+
+.noticeCard h3{
+margin-bottom:8px;
+color:#BF360C;
+}
+
+.noticeCard p{
+margin:5px 0;
+}
+
+.bottomButtons{
+margin-top:20px;
+text-align:center;
+}
+
+.backBtn{
+display:inline-block;
+padding:12px 24px;
+background:#616161;
+color:#fff;
+text-decoration:none;
+border-radius:8px;
+}
+
+.backBtn:hover{
+background:#424242;
+}
+
+@media(max-width:768px){
+
+.header h2{
+font-size:22px;
+}
+
+.container{
+padding:10px;
+}
+
+}
