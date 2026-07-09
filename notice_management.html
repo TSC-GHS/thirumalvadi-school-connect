@@ -4,68 +4,11 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Notice Management</title>
 
-<style>
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f4f6f9;
-}
-
-.header{
-background:#E65100;
-color:white;
-padding:18px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-}
-
-.container{
-max-width:1000px;
-margin:auto;
-padding:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,.15);
-}
-
-input,select,textarea{
-width:100%;
-padding:12px;
-margin-bottom:15px;
-border:1px solid #ccc;
-border-radius:8px;
-box-sizing:border-box;
-font-size:16px;
-}
-
-textarea{
-height:140px;
-resize:vertical;
-}
-
-button{
-width:100%;
-padding:14px;
-background:#E65100;
-color:white;
-border:none;
-border-radius:8px;
-font-size:16px;
-cursor:pointer;
-margin-top:10px;
-}
-
-</style>
+<link rel="stylesheet" href="css/notice.css">
 
 </head>
 
@@ -73,13 +16,17 @@ margin-top:10px;
 
 <div class="header">
 
-📢 Notice Management
+<h2>📢 Notice Management</h2>
+
+<p>School Connect TN</p>
 
 </div>
 
 <div class="container">
 
 <div class="card">
+
+<h3>Add New Notice</h3>
 
 <input
 type="text"
@@ -88,38 +35,67 @@ placeholder="Notice Title">
 
 <textarea
 id="noticeMessage"
-placeholder="Enter Notice">
-</textarea>
+placeholder="Enter Notice Message"></textarea>
 
 <select id="priority">
 
 <option value="">Select Priority</option>
-<option>Normal</option>
-<option>Important</option>
-<option>Urgent</option>
+<option value="Normal">Normal</option>
+<option value="Important">Important</option>
+<option value="Urgent">Urgent</option>
 
 </select>
+
+<select id="target">
+
+<option value="All">All</option>
+<option value="Teachers">Teachers</option>
+<option value="Parents">Parents</option>
+<option value="Students">Students</option>
+
+</select>
+
+<label>Publish Date</label>
+
 <input
 type="date"
 id="publishDate">
 
-<button onclick="saveNotice()">
+<label>Expiry Date</label>
+
+<input
+type="date"
+id="expiryDate">
+
+<button id="saveBtn">
 
 💾 Save Notice
 
 </button>
 
-<button onclick="location.href='notice_list.html'">
+</div>
 
-📋 Notice List
+<br>
 
-</button>
+<div class="card">
 
-<button onclick="location.href='headmaster.html'">
+<h3>Latest Notices</h3>
 
-🏠 Back
+<div id="noticeList">
 
-</button>
+Loading...
+
+</div>
+
+</div>
+
+<div class="bottomButtons">
+
+<a href="headmaster.html" class="backBtn">
+
+🏠 Back to Dashboard
+
+</a>
 
 </div>
 
