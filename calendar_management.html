@@ -1,85 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calendar Management</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
+  <title>Calendar Management</title>
 
-body{
-font-family:Arial,sans-serif;
-background:#f4f6f9;
-margin:0;
-}
-
-.header{
-background:#FF9800;
-color:white;
-padding:20px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-}
-
-.container{
-padding:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-margin-bottom:20px;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
-}
-
-label{
-font-weight:bold;
-display:block;
-margin-top:12px;
-}
-
-input,textarea{
-width:100%;
-padding:12px;
-margin-top:6px;
-border:1px solid #ccc;
-border-radius:8px;
-box-sizing:border-box;
-font-size:16px;
-}
-
-textarea{
-height:120px;
-resize:none;
-}
-
-button{
-width:100%;
-padding:15px;
-margin-top:15px;
-border:none;
-border-radius:8px;
-font-size:17px;
-cursor:pointer;
-background:#1565C0;
-color:white;
-}
-
-.home{
-background:#2E7D32;
-}
-
-</style>
-
+  <link rel="stylesheet" href="css/calendar.css">
 </head>
 
 <body>
 
 <div class="header">
 
-📅 Calendar Management
+    <h2>📅 School Calendar Management</h2>
 
 </div>
 
@@ -87,72 +22,102 @@ background:#2E7D32;
 
 <div class="card">
 
+<h3>Add New Event</h3>
+
+<form id="eventForm">
+
+<div class="form-group">
+
 <label>Event Title</label>
-<input id="title" placeholder="Enter Event Title">
 
-<label>Event Date</label>
-<input type="date" id="date">
-
-<label>Description</label>
-<textarea id="description" placeholder="Enter Event Description"></textarea>
-
-<button onclick="saveEvent()">
-💾 Save Event
-</button>
-
-<button class="home"
-onclick="location.href='dashboard.html'">
-🏠 Home
-</button>
+<input
+type="text"
+id="title"
+placeholder="Enter Event Title"
+required>
 
 </div>
 
-<script type="module">
-import { db } from "./firebase.js";
+<div class="form-group">
 
-import {
-  collection,
-  addDoc
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+<label>Event Date</label>
 
-window.saveEvent = async function(){
+<input
+type="date"
+id="date"
+required>
 
-const title = document.getElementById("title").value.trim();
-const date = document.getElementById("date").value;
-const description = document.getElementById("description").value.trim();
+</div>
 
-if(title=="" || date==""){
+<div class="form-group">
 
-alert("Please fill all required fields");
+<label>Event Type</label>
 
-return;
+<select id="type">
 
-}
+<option value="Holiday">Holiday</option>
 
-try{
+<option value="Exam">Exam</option>
 
-await addDoc(collection(db,"calendar"),{
+<option value="Meeting">Meeting</option>
 
-title:title,
-date:date,
-description:description
+<option value="Sports">Sports</option>
 
-});
+<option value="Annual Day">Annual Day</option>
 
-alert("✅ Event Saved Successfully");
+<option value="Other">Other</option>
 
-document.getElementById("title").value="";
-document.getElementById("date").value="";
-document.getElementById("description").value="";
+</select>
 
-}catch(error){
+</div>
 
-alert(error.message);
+<div class="form-group">
 
-}
+<label>Description</label>
 
-}
-  </script>
+<textarea
+id="description"
+rows="4"
+placeholder="Enter Description">
+</textarea>
+
+</div>
+
+<button
+type="submit"
+class="saveBtn">
+
+💾 Save Event
+
+</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h3>School Events</h3>
+
+<div id="eventList">
+  </div>
+
+</div>
+
+<div class="bottomButtons">
+
+<a href="headmaster.html" class="backBtn">
+
+🏠 Back to Dashboard
+
+</a>
+
+</div>
+
+</div>
+
+<script type="module" src="js/calendar_management.js"></script>
 
 </body>
+
 </html>
