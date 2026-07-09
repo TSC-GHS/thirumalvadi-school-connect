@@ -1,1 +1,164 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Student ID Card</title><style>body{font-family:Arial;background:#eef2f7;padding:20px}.card{max-width:380px;margin:auto;background:#fff;border:2px solid #1565C0;border-radius:16px}.header{background:#1565C0;color:#fff;text-align:center;padding:12px;font-weight:bold}.content{padding:16px}.photo{width:100px;height:120px;border:1px solid #999;display:block;margin:0 auto 12px;background:#ddd}table{width:100%}td{padding:6px}.label{font-weight:bold}button{width:100%;padding:12px;background:#1565C0;color:#fff;border:none;border-radius:8px}</style></head><body><div class="card"><div class="header">THIRUMALVADI GOVT HIGH SCHOOL<br>STUDENT ID CARD</div><div class="content"><img class="photo" src="assets/student-placeholder.png" onerror="this.style.display='none'"><table><tr><td class="label">Name</td><td id="name">-</td></tr><tr><td class="label">EMIS</td><td id="emis">-</td></tr><tr><td class="label">Class</td><td id="class">-</td></tr><tr><td class="label">Section</td><td id="section">-</td></tr><tr><td class="label">Father</td><td id="father">-</td></tr><tr><td class="label">Mother</td><td id="mother">-</td></tr><tr><td class="label">Mobile</td><td id="mobile">-</td></tr></table><button onclick="window.print()">🖨 Print ID Card</button></div></div><script type="module" src="js/student_id_card.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student ID Card</title>
+
+<link rel="stylesheet" href="style/idcard.css">
+
+</head>
+
+<body>
+
+<div class="id-card">
+
+<div class="card-header">
+
+<img src="assets/school_logo.png" alt="School Logo">
+
+<h2>School Connect TN</h2>
+
+<h4>Thirumalvadi Government High School</h4>
+
+</div>
+
+<div class="student-photo">
+
+<img id="studentPhoto"
+
+src="https://via.placeholder.com/120x140.png?text=Photo"
+
+alt="Student Photo">
+
+</div>
+
+<div class="student-info">
+
+<table>
+
+<tr>
+
+<td>Name</td>
+
+<td id="name">Loading...</td>
+
+</tr>
+
+<tr>
+
+<td>EMIS</td>
+
+<td id="emis">Loading...</td>
+
+</tr>
+
+<tr>
+
+<td>Class</td>
+
+<td id="class">Loading...</td>
+
+</tr>
+
+<tr>
+
+<td>Section</td>
+
+<td id="section">Loading...</td>
+
+</tr>
+
+<tr>
+
+<td>Father</td>
+
+<td id="father">Loading...</td>
+
+</tr>
+
+<tr>
+
+<td>Mother</td>
+
+<td id="mother">Loading...</td>
+
+</tr>
+
+<tr>
+
+<td>Mobile</td>
+
+<td id="mobile">Loading...</td>
+
+</tr>
+
+<tr>
+
+<td>Blood Group</td>
+
+<td id="blood">--</td>
+
+</tr>
+
+</table>
+
+</div>
+<div class="qr-box">
+
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=SchoolConnectTN"
+alt="QR Code">
+
+</div>
+
+<div class="card-footer">
+
+<div class="school-name">
+
+Thirumalvadi Government High School
+
+</div>
+
+<div class="school-address">
+
+Thirumalvadi Village<br>
+
+Panaikulam Panchayat<br>
+
+Pennagaram Taluk<br>
+
+Dharmapuri District - 636808
+
+</div>
+
+<div class="email">
+
+📧 thirumalvadi.schoolconnect@gmail.com
+
+</div>
+
+<div class="signature">
+
+Headmaster Signature
+
+</div>
+
+<button class="print-btn" onclick="printCard()">
+
+🖨️ Print ID Card
+
+</button>
+
+</div>
+
+</div>
+
+<script type="module" src="js/student_id_card.js"></script>
+
+</body>
+
+</html>
