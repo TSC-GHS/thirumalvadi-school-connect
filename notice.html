@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Notice Management</title>
+
+<title>School Notice Board</title>
+
+<link rel="stylesheet" href="style.css">
 
 <style>
 
 body{
+margin:0;
 font-family:Arial,sans-serif;
 background:#f4f6f9;
-margin:0;
 }
 
 .header{
-background:#D32F2F;
+background:#d32f2f;
 color:white;
 padding:18px;
 text-align:center;
@@ -23,56 +27,44 @@ font-weight:bold;
 }
 
 .container{
-padding:20px;
+padding:15px;
+max-width:900px;
+margin:auto;
 }
 
-.card{
+.notice{
 background:white;
 padding:15px;
-margin-bottom:20px;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
+margin-bottom:15px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
 }
 
-label{
+.notice h3{
+margin:0;
+color:#1565C0;
+}
+
+.notice p{
+margin:8px 0;
+}
+
+.date{
+color:#D32F2F;
+font-size:14px;
 font-weight:bold;
-display:block;
-margin-top:10px;
-}
-
-input,textarea{
-width:100%;
-padding:12px;
-margin-top:5px;
-border:1px solid #ccc;
-border-radius:8px;
-box-sizing:border-box;
-font-size:16px;
-}
-
-textarea{
-height:150px;
-resize:vertical;
 }
 
 button{
 width:100%;
-padding:15px;
+padding:14px;
 margin-top:15px;
 border:none;
 border-radius:8px;
-font-size:17px;
-cursor:pointer;
-}
-
-.save{
-background:#1565C0;
-color:white;
-}
-
-.home{
 background:#2E7D32;
 color:white;
+font-size:17px;
+cursor:pointer;
 }
 
 </style>
@@ -83,114 +75,80 @@ color:white;
 
 <div class="header">
 
-📢 Notice Management
+📢 School Notice Board
 
 </div>
 
 <div class="container">
 
-<div class="card">
+<div id="noticeList">
 
-<label>Notice Title</label>
+Loading Notices...
 
-<input
-id="title"
-placeholder="Enter Notice Title">
+</div>
+</div>
 
-<label>Notice Message</label>
+<button onclick="location.href='dashboard.html'">
 
-<textarea
-id="message"
-placeholder="Enter Notice Message"></textarea>
-
-<button
-class="save"
-onclick="saveNotice()">
-
-💾 Save Notice
-
-</button>
-
-<button
-class="home"
-onclick="location.href='headmaster.html'">
-
-🏠 Back
+🏠 Home
 
 </button>
 
 </div>
 
 <script type="module">
+
 import { db } from "./firebase.js";
 
 import {
 collection,
-addDoc,
-getDocs
+getDocs,
+query,
+orderBy
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-window.saveNotice = async function(){
-
-const title = document.getElementById("title").value.trim();
-const message = document.getElementById("message").value.trim();
-
-if(title=="" || message==""){
-
-alert("Please enter Title and Notice");
-
-return;
-
-}
-
-await addDoc(collection(db,"notice"),{
-
-title:title,
-message:message,
-date:new Date().toLocaleDateString("en-GB")
-
-});
-
-alert("Notice Saved Successfully ✅");
-
-document.getElementById("title").value="";
-document.getElementById("message").value="";
-
-loadNotices();
-
-}
+const noticeList = document.getElementById("noticeList");
 
 async function loadNotices(){
 
-const container=document.getElementById("noticeHistory");
+noticeList.innerHTML = "Loading Notices...";
 
-if(!container) return;
+try{
 
-container.innerHTML="";
+const q = query(collection(db,"notice"),orderBy("date","desc"));
 
-const snap=await getDocs(collection(db,"notice"));
+const snap = await getDocs(q);
+
+noticeList.innerHTML = "";
 
 if(snap.empty){
 
-container.innerHTML="<p>No Notices Available</p>";
-
+noticeList.innerHTML = `
+<div class="notice">
+<h3>No Notices Available</h3>
+<p>Please check again later.</p>
+</div>`;
 return;
 
 }
 
-snap.forEach((d)=>{
+snap.forEach(doc=>{
 
-const n=d.data();
+const data = doc.data();
 
-container.innerHTML+=`
+noticeList.innerHTML += `
 
-<div class="card">
+<div class="notice">
 
-<b>${n.title}</b><br><br>
+<h3>${data.title || "-"}</h3>
 
-${n.message}<br><br>
+<p>${data.description || "-"}</p>
 
-<small>${n.date}</small>
+<div class="date">
+
+📅 ${data.date || "-"}
+
+</div>
 
 </div>
 
@@ -198,22 +156,24 @@ ${n.message}<br><br>
 
 });
 
+}catch(error){
+
+console.log(error);
+
+noticeList.innerHTML = `
+<div class="notice">
+<h3>Error</h3>
+<p>${error.message}</p>
+</div>`;
+
+}
+
 }
 
 loadNotices();
-  </script>
 
-<div class="container">
-
-<h2>📋 Notice History</h2>
-
-<div id="noticeHistory">
-
-<p>No Notices Available</p>
-
-</div>
-
-</div>
+</script>
 
 </body>
+
 </html>
