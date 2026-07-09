@@ -79,3 +79,88 @@ async function loadHomework() {
 }
 
 loadHomework();
+// Save Homework
+
+saveBtn.addEventListener("click", async () => {
+
+  const title = document.getElementById("homeworkTitle").value.trim();
+  const description = document.getElementById("homeworkDescription").value.trim();
+  const className = document.getElementById("className").value;
+  const section = document.getElementById("section").value;
+  const subject = document.getElementById("subject").value;
+  const dueDate = document.getElementById("dueDate").value;
+
+  if (
+    !title ||
+    !description ||
+    !className ||
+    !section ||
+    !subject ||
+    !dueDate
+  ) {
+
+    alert("Please fill all fields");
+
+    return;
+
+  }
+
+  try {
+
+    await addDoc(collection(db, "homework"), {
+
+      title,
+      description,
+      className,
+      section,
+      subject,
+      dueDate,
+      status: "Active",
+      createdAt: new Date().toISOString()
+
+    });
+
+    alert("✅ Homework Saved Successfully");
+
+    document.getElementById("homeworkTitle").value = "";
+    document.getElementById("homeworkDescription").value = "";
+    document.getElementById("className").value = "";
+    document.getElementById("section").value = "";
+    document.getElementById("subject").value = "";
+    document.getElementById("dueDate").value = "";
+
+    loadHomework();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Failed to save homework.");
+
+  }
+
+});
+
+// Delete Homework
+
+window.deleteHomework = async function(id){
+
+  if(!confirm("Delete this homework?")) return;
+
+  try {
+
+    await deleteDoc(doc(db, "homework", id));
+
+    alert("✅ Homework Deleted");
+
+    loadHomework();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Failed to delete homework.");
+
+  }
+
+};
