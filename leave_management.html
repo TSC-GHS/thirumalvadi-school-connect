@@ -1,1 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Leave Management</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+max-width:900px;
+margin:20px auto;
+padding:15px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.card h3{
+margin:0;
+color:#1565C0;
+}
+
+.card p{
+margin:8px 0;
+}
+
+.status{
+font-weight:bold;
+color:#FB8C00;
+}
+
+.actions{
+display:flex;
+gap:10px;
+margin-top:15px;
+}
+
+button{
+flex:1;
+padding:12px;
+border:none;
+border-radius:8px;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+.approve{
+background:#2E7D32;
+}
+
+.reject{
+background:#D32F2F;
+}
+
+.back{
+width:100%;
+margin-top:20px;
+background:#1565C0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📝 Leave Management
+
+</div>
+
+<div class="container">
+
+<div id="leaveList">
+
+Loading Leave Requests...
+
+</div>
+
+<button
+class="back"
+onclick="location.href='teacher.html'">
+
+🏠 Back to Teacher Dashboard
+
+</button>
+
+</div>
+
+<script type="module" src="js/leave_management.js"></script>
+
+</body>
+
+</html>
