@@ -50,11 +50,15 @@ font-size:17px;
 cursor:pointer;
 background:#1565C0;
 color:white;
-transition:0.3s;
+transition:.3s;
 }
 
 button:hover{
 opacity:.9;
+}
+
+.report{
+background:#00897B;
 }
 
 .leave{
@@ -88,61 +92,48 @@ background:#D32F2F;
 <h2>Welcome Parent 👋</h2>
 
 <button onclick="location.href='parent_dashboard.html'">
-
 👨‍🎓 My Child
-
 </button>
 
 <button onclick="location.href='notice_board.html'">
-
 📢 Notice Board
-
 </button>
 
 <button onclick="location.href='parent_dashboard.html'">
-
 📅 Child Attendance
-
 </button>
 
 <button onclick="location.href='parent_dashboard.html'">
-
 📚 Child Marks
-
 </button>
 
 <button onclick="location.href='parent_dashboard.html'">
-
 📝 Homework
+</button>
 
+<button class="report"
+onclick="location.href='parent_report_card.html?emis='+localStorage.getItem('parentEMIS')">
+📄 Report Card
 </button>
 
 <button class="leave"
 onclick="location.href='leave_request.html?emis='+localStorage.getItem('parentEMIS')">
-
 📝 Apply Leave
-
 </button>
 
 <button class="leave"
 onclick="location.href='leave_status.html?emis='+localStorage.getItem('parentEMIS')">
-
 📋 Leave Status
-
 </button>
 
 <button class="home"
 onclick="location.href='dashboard.html'">
-
 🏠 Home
-
 </button>
 
 <button class="logout"
 onclick="location.href='index.html'">
-
 🚪 Logout
-
 </button>
 
 </div>
