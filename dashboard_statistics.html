@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dashboard Statistics</title>
+<title>School Dashboard Statistics</title>
 
 <style>
 
@@ -41,7 +41,7 @@ text-align:center;
 
 .card h2{
 margin:0;
-font-size:36px;
+font-size:38px;
 color:#1565C0;
 }
 
@@ -78,6 +78,7 @@ cursor:pointer;
 </div>
 
 <div class="container">
+
 <div class="card">
 <h2 id="students">0</h2>
 <p>👨‍🎓 Students</p>
@@ -110,60 +111,58 @@ cursor:pointer;
 
 </div>
 
-<button class="home"
-onclick="location.href='admin_dashboard.html'">
+<button
+class="home"
+onclick="location.href='admin_dashboard_v2.html'">
+
 🏠 Back to Admin Dashboard
+
 </button>
 
 <script type="module">
-  import { db } from "./firebase.js";
+
+import { db } from "./firebase.js";
 
 import {
-  collection,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 async function loadStatistics(){
 
-  try{
+try{
 
-    const students = await getDocs(collection(db,"students"));
-    document.getElementById("students").innerText = students.size;
+const students=await getDocs(collection(db,"students"));
+document.getElementById("students").innerText=students.size;
 
-    const teachers = await getDocs(collection(db,"users"));
-    let teacherCount = 0;
+const teachers=await getDocs(collection(db,"teachers"));
+document.getElementById("teachers").innerText=teachers.size;
 
-    teachers.forEach((doc)=>{
-      if(doc.data().role === "Teacher"){
-        teacherCount++;
-      }
-    });
+const reports=await getDocs(collection(db,"report_cards"));
+document.getElementById("reports").innerText=reports.size;
 
-    document.getElementById("teachers").innerText = teacherCount;
+const news=await getDocs(collection(db,"news"));
+document.getElementById("news").innerText=news.size;
 
-    const reports = await getDocs(collection(db,"report_cards"));
-    document.getElementById("reports").innerText = reports.size;
+const notice=await getDocs(collection(db,"notice"));
+document.getElementById("notice").innerText=notice.size;
 
-    const news = await getDocs(collection(db,"news"));
-    document.getElementById("news").innerText = news.size;
+const calendar=await getDocs(collection(db,"calendar"));
+document.getElementById("calendar").innerText=calendar.size;
 
-    const notice = await getDocs(collection(db,"notice"));
-    document.getElementById("notice").innerText = notice.size;
+}catch(error){
 
-    const calendar = await getDocs(collection(db,"calendar"));
-    document.getElementById("calendar").innerText = calendar.size;
+console.log(error);
+alert(error.message);
 
-  }catch(error){
-
-    console.log(error);
-    alert(error.message);
-
-  }
+}
 
 }
 
 loadStatistics();
-  </script>
+
+</script>
 
 </body>
 </html>
