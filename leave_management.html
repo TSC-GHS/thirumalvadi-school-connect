@@ -4,11 +4,13 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<title>Leave Management V3</title>
+<title>Leave Management V4</title>
 
-<link rel="stylesheet" href="css/leave.css">
+<link rel="stylesheet"
+href="css/leave.css">
 
 </head>
 
@@ -24,9 +26,11 @@
 
 <div class="container">
 
-<div class="summaryCards">
+<!-- Dashboard -->
 
-<div class="summaryCard pending">
+<div class="dashboard">
+
+<div class="dashCard pending">
 
 <h3 id="pendingCount">0</h3>
 
@@ -34,7 +38,7 @@
 
 </div>
 
-<div class="summaryCard approved">
+<div class="dashCard approved">
 
 <h3 id="approvedCount">0</h3>
 
@@ -42,7 +46,7 @@
 
 </div>
 
-<div class="summaryCard rejected">
+<div class="dashCard rejected">
 
 <h3 id="rejectedCount">0</h3>
 
@@ -50,32 +54,56 @@
 
 </div>
 
+<div class="dashCard total">
+
+<h3 id="totalCount">0</h3>
+
+<p>Total Requests</p>
+
 </div>
+
+</div>
+
+<!-- Search -->
 
 <div class="card">
 
 <input
 type="text"
 id="searchStudent"
-placeholder="🔍 Search Student">
+placeholder="🔍 Search Student Name / EMIS">
 
 <div class="filters">
 
 <select id="statusFilter">
 
-<option value="All">All Status</option>
+<option value="All">
+All Status
+</option>
 
-<option value="Pending">Pending</option>
+<option value="Pending">
+Pending
+</option>
 
-<option value="Approved">Approved</option>
+<option value="Teacher Approved">
+Teacher Approved
+</option>
 
-<option value="Rejected">Rejected</option>
+<option value="Approved">
+Approved
+</option>
+
+<option value="Rejected">
+Rejected
+</option>
 
 </select>
 
 <select id="classFilter">
 
-<option value="All">All Classes</option>
+<option value="All">
+All Classes
+</option>
 
 <option>6</option>
 <option>7</option>
@@ -87,7 +115,9 @@ placeholder="🔍 Search Student">
 
 <select id="sectionFilter">
 
-<option value="All">All Sections</option>
+<option value="All">
+All Sections
+</option>
 
 <option>A</option>
 <option>B</option>
@@ -103,7 +133,7 @@ placeholder="🔍 Search Student">
 type="checkbox"
 id="selectAll">
 
-Select All
+Select All Leave Requests
 
 </label>
 
@@ -125,21 +155,43 @@ Select All
 
 </div>
 
+<!-- Leave List -->
+
 <div id="leaveList">
-  </div>
+  <!-- Leave Cards will load here -->
+
+</div>
+
+<div class="card">
+
+<h3>Leave Workflow</h3>
+
+<ul class="workflow">
+
+<li>👨‍👩‍👧 Parent → Apply Leave</li>
+
+<li>👨‍🏫 Class Teacher → Review & Recommend</li>
+
+<li>👨‍💼 Headmaster → Final Approval / Reject</li>
+
+<li>📲 Parent → View Status & Remarks</li>
+
+</ul>
+
+</div>
 
 <div class="bottomButtons">
 
 <button
-class="backBtn"
+class="teacherBtn"
 onclick="location.href='teacher.html'">
 
-🏠 Teacher Dashboard
+👨‍🏫 Teacher Dashboard
 
 </button>
 
 <button
-class="backBtn"
+class="headmasterBtn"
 onclick="location.href='headmaster.html'">
 
 🏫 Headmaster Dashboard
@@ -150,7 +202,10 @@ onclick="location.href='headmaster.html'">
 
 </div>
 
-<script type="module" src="js/leave_management.js"></script>
+<script type="module"
+src="js/leave_management.js">
+
+</script>
 
 </body>
 
