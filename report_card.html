@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -10,13 +11,13 @@
 <style>
 
 body{
+margin:0;
 font-family:Arial,sans-serif;
 background:#f4f6f9;
-margin:0;
 }
 
 .header{
-background:#0D47A1;
+background:#1565C0;
 color:white;
 padding:18px;
 text-align:center;
@@ -25,50 +26,52 @@ font-weight:bold;
 }
 
 .container{
+max-width:1100px;
+margin:auto;
 padding:20px;
 }
 
 .card{
 background:white;
-padding:15px;
-margin-bottom:20px;
+padding:20px;
 border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+margin-bottom:20px;
 }
 
 input{
 width:100%;
 padding:12px;
-border:1px solid #ccc;
 border-radius:8px;
-box-sizing:border-box;
+border:1px solid #ccc;
 font-size:16px;
+box-sizing:border-box;
 }
 
 button{
 width:100%;
-padding:15px;
+padding:14px;
 margin-top:15px;
 border:none;
 border-radius:8px;
-font-size:17px;
+font-size:16px;
 cursor:pointer;
-background:#1565C0;
+background:#1976D2;
 color:white;
 }
 
 .print{
-background:#EF6C00;
+background:#2E7D32;
 }
 
-.home{
-background:#2E7D32;
+.back{
+background:#616161;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:15px;
+margin-top:20px;
 }
 
 th,td{
@@ -78,12 +81,22 @@ text-align:center;
 }
 
 th{
-background:#1565C0;
+background:#1976D2;
 color:white;
 }
 
 .summary{
+font-weight:bold;
 background:#E3F2FD;
+}
+
+.pass{
+color:green;
+font-weight:bold;
+}
+
+.fail{
+color:red;
 font-weight:bold;
 }
 
@@ -127,12 +140,16 @@ placeholder="Enter Student EMIS Number">
 
 <table>
 
+<thead>
+
 <tr>
 
-<th>Exam</th>
+<th>Subject</th>
 <th>Marks</th>
 
 </tr>
+
+</thead>
 
 <tbody id="reportTable">
 
@@ -149,135 +166,141 @@ No Report Available
 </tbody>
 
 </table>
-
-<button
-class="print"
-onclick="window.print()">
+<button class="print" onclick="window.print()">
 
 🖨 Print Report
 
 </button>
 
-</div>
-
-<button
-class="home"
-onclick="location.href='parent.html'">
+<button class="back" onclick="location.href='parent.html'">
 
 🏠 Back
 
 </button>
 
+</div>
+
+</div>
+
 <script type="module">
+
 import { db } from "./firebase.js";
 
 import {
-  doc,
-  getDoc
+doc,
+getDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-window.loadReport = async function () {
+window.loadReport = async function(){
 
-  const emis = document.getElementById("emis").value.trim();
+const emis=document.getElementById("emis").value.trim();
 
-  if (emis === "") {
-    alert("Enter EMIS Number");
-    return;
-  }
+if(emis==""){
+alert("Enter EMIS Number");
+return;
+}
 
-  const studentSnap = await getDoc(doc(db, "students", emis));
+const studentSnap=await getDoc(doc(db,"students",emis));
 
-  if (!studentSnap.exists()) {
-    alert("Student Not Found");
-    return;
-  }
+if(!studentSnap.exists()){
+alert("Student Not Found");
+return;
+}
 
-  const student = studentSnap.data();
+const student=studentSnap.data();
 
-  document.getElementById("name").textContent = student.name;
-  document.getElementById("class").textContent = student.class;
-  document.getElementById("section").textContent = student.section;
+document.getElementById("name").textContent=student.name;
+document.getElementById("class").textContent=student.class;
+document.getElementById("section").textContent=student.section;
 
-  const exams = [
-    "Unit Test 1",
-    "Unit Test 2",
-    "Quarterly",
-    "Half Yearly",
-    "Annual"
-  ];
+const tbody=document.getElementById("reportTable");
+tbody.innerHTML="";
 
-  const tbody = document.getElementById("reportTable");
-  tbody.innerHTML = "";
+const exams=[
+"Unit Test",
+"Quarterly",
+"Half Yearly",
+"Annual"
+];
 
-  let total = 0;
-  let found = 0;
+let found=false;
 
-  for (const exam of exams) {
+for(const exam of exams){
 
-    const markSnap = await getDoc(
-      doc(db, "marks", exam, "students", emis)
-    );
+const markSnap=await getDoc(
+doc(db,"marks",exam,"students",emis)
+);
 
-    if (markSnap.exists()) {
+if(markSnap.exists()){
 
-      const m = markSnap.data();
+const m=markSnap.data();
 
-      const mark = Number(m.marks) || 0;
+found=true;
 
-      total += mark;
-      found++;
+tbody.innerHTML+=`
 
-      tbody.innerHTML += `
-      <tr>
-        <td>${exam}</td>
-        <td>${mark}</td>
-      </tr>
-      `;
+<tr><td colspan="2"><b>${exam}</b></td></tr>
 
-    }
+<tr><td>Tamil</td><td>${m.tamil}</td></tr>
+<tr><td>English</td><td>${m.english}</td></tr>
+<tr><td>Maths</td><td>${m.maths}</td></tr>
+<tr><td>Science</td><td>${m.science}</td></tr>
+<tr><td>Social</td><td>${m.social}</td></tr>
 
-  }
+<tr class="summary">
+<td>Total</td>
+<td>${m.total}</td>
+</tr>
 
-  if (found === 0) {
+<tr class="summary">
+<td>Percentage</td>
+<td>${m.percentage}%</td>
+</tr>
 
-    tbody.innerHTML = `
-    <tr>
-      <td colspan="2">No Report Available</td>
-    </tr>
-    `;
+<tr class="summary">
+<td>Grade</td>
+<td>${m.grade}</td>
+</tr>
 
-    return;
+<tr class="summary">
+<td>Result</td>
 
-  }
+<td class="${m.result==="PASS"?"pass":"fail"}">
 
-  const percentage = (total / (found * 100) * 100).toFixed(1);
+${m.result}
 
-  let grade = "D";
+</td>
 
-  if (percentage >= 90) grade = "A+";
-  else if (percentage >= 80) grade = "A";
-  else if (percentage >= 70) grade = "B";
-  else if (percentage >= 60) grade = "C";
+</tr>
 
-  tbody.innerHTML += `
-  <tr class="summary">
-    <td>Total</td>
-    <td>${total}</td>
-  </tr>
-
-  <tr class="summary">
-    <td>Percentage</td>
-    <td>${percentage}%</td>
-  </tr>
-
-  <tr class="summary">
-    <td>Grade</td>
-    <td>${grade}</td>
-  </tr>
-  `;
+`;
 
 }
-  </script>
+
+}
+
+if(!found){
+
+tbody.innerHTML=`
+
+<tr>
+
+<td colspan="2">
+
+No Report Available
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+}
+
+</script>
 
 </body>
+
 </html>
