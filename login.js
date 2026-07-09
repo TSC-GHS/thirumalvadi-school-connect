@@ -71,39 +71,48 @@ await signOut(auth);
 return;
 
 }
+
 switch(user.role){
 
 case "Admin":
 
-window.location.href = "admin_dashboard.html";
+window.location.href="admin_dashboard.html";
 
 break;
 
 case "Headmaster":
 
-window.location.href = "headmaster.html";
+window.location.href="headmaster.html";
 
 break;
 
 case "Teacher":
 
-window.location.href = "teacher_dashboard.html";
+window.location.href="teacher_dashboard.html";
 
 break;
 
 case "Parent":
 
-localStorage.setItem("parentEMIS", user.emis);
+localStorage.setItem("parentEMIS",user.emis);
+localStorage.setItem("emis",user.emis);
 
-window.location.href = "parent_dashboard.html";
+sessionStorage.setItem("parentEMIS",user.emis);
+sessionStorage.setItem("emis",user.emis);
+
+window.location.href="parent.html";
 
 break;
 
 case "Student":
 
-localStorage.setItem("studentEMIS", user.emis);
+localStorage.setItem("studentEMIS",user.emis);
+localStorage.setItem("emis",user.emis);
 
-window.location.href = "student.html";
+sessionStorage.setItem("studentEMIS",user.emis);
+sessionStorage.setItem("emis",user.emis);
+
+window.location.href="student.html";
 
 break;
 
@@ -119,7 +128,7 @@ return;
 
 }catch(error){
 
-alert("Login Failed\n\n" + error.message);
+alert("Login Failed\n\n"+error.message);
 
 await signOut(auth);
 
