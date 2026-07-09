@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Leave Status</title>
+<title>Parent Leave Status</title>
 
 <style>
+
 body{
 margin:0;
 font-family:Arial,sans-serif;
@@ -18,33 +20,49 @@ background:#1565C0;
 color:#fff;
 padding:18px;
 text-align:center;
-font-size:22px;
+font-size:24px;
 font-weight:bold;
 }
 
 .container{
-padding:15px;
+padding:20px;
 }
 
 .card{
 background:#fff;
-padding:15px;
-margin-bottom:15px;
+padding:18px;
 border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
+box-shadow:0 2px 8px rgba(0,0,0,.2);
+margin-bottom:15px;
 }
 
-.home{
+.card h3{
+margin:0 0 10px;
+color:#1565C0;
+}
+
+.card p{
+margin:8px 0;
+font-size:16px;
+}
+
+.status{
+font-weight:bold;
+font-size:17px;
+}
+
+.back{
 width:100%;
-padding:14px;
+padding:15px;
+margin-top:20px;
 border:none;
 border-radius:8px;
 background:#2E7D32;
 color:#fff;
 font-size:17px;
-margin-top:20px;
 cursor:pointer;
 }
+
 </style>
 
 </head>
@@ -52,18 +70,24 @@ cursor:pointer;
 <body>
 
 <div class="header">
+
 📋 Parent Leave Status
+
 </div>
 
 <div class="container">
 
 <div id="leaveList">
-Loading...
+
+Loading Leave Status...
+
 </div>
 
-<button class="home"
-onclick="location.href='parent_dashboard.html'">
+<button class="back"
+onclick="location.href='parent.html'">
+
 🏠 Back to Parent Dashboard
+
 </button>
 
 </div>
