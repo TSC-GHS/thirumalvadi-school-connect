@@ -1,29 +1,29 @@
 import { auth } from "../firebase.js";
 
 import {
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-window.checkSession = function () {
+// Check Login Session Automatically
+onAuthStateChanged(auth, (user) => {
 
-  onAuthStateChanged(auth, (user) => {
+  if (!user) {
 
-    if (!user) {
+    alert("Please Login First");
 
-      alert("Please Login First");
+    window.location.href = "roles.html";
 
-      window.location.href = "roles.html";
+  }
 
-    }
+});
 
-  });
-
-};
+// Logout Function
 window.logout = async function () {
 
   try {
 
-    await auth.signOut();
+    await signOut(auth);
 
     alert("Logged Out Successfully");
 
