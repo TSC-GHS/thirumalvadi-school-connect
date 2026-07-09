@@ -4,86 +4,13 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<title>Leave Management</title>
+<title>Leave Management V4</title>
 
-<style>
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f4f6f9;
-}
-
-.header{
-background:#1565C0;
-color:white;
-padding:20px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-}
-
-.container{
-max-width:900px;
-margin:20px auto;
-padding:15px;
-}
-
-.card{
-background:white;
-padding:15px;
-margin-bottom:15px;
-border-radius:12px;
-box-shadow:0 2px 8px rgba(0,0,0,.15);
-}
-
-.card h3{
-margin:0;
-color:#1565C0;
-}
-
-.card p{
-margin:8px 0;
-}
-
-.status{
-font-weight:bold;
-color:#FB8C00;
-}
-
-.actions{
-display:flex;
-gap:10px;
-margin-top:15px;
-}
-
-button{
-flex:1;
-padding:12px;
-border:none;
-border-radius:8px;
-color:white;
-font-size:16px;
-cursor:pointer;
-}
-
-.approve{
-background:#2E7D32;
-}
-
-.reject{
-background:#D32F2F;
-}
-
-.back{
-width:100%;
-margin-top:20px;
-background:#1565C0;
-}
-
-</style>
+<link rel="stylesheet"
+href="css/leave.css">
 
 </head>
 
@@ -91,29 +18,194 @@ background:#1565C0;
 
 <div class="header">
 
-📝 Leave Management
+<h2>📝 Leave Management</h2>
+
+<p>School Connect TN</p>
 
 </div>
 
 <div class="container">
 
-<div id="leaveList">
+<!-- Dashboard -->
 
-Loading Leave Requests...
+<div class="dashboard">
+
+<div class="dashCard pending">
+
+<h3 id="pendingCount">0</h3>
+
+<p>Pending</p>
 
 </div>
 
-<button
-class="back"
-onclick="location.href='teacher.html'">
+<div class="dashCard approved">
 
-🏠 Back to Teacher Dashboard
+<h3 id="approvedCount">0</h3>
+
+<p>Approved</p>
+
+</div>
+
+<div class="dashCard rejected">
+
+<h3 id="rejectedCount">0</h3>
+
+<p>Rejected</p>
+
+</div>
+
+<div class="dashCard total">
+
+<h3 id="totalCount">0</h3>
+
+<p>Total Requests</p>
+
+</div>
+
+</div>
+
+<!-- Search -->
+
+<div class="card">
+
+<input
+type="text"
+id="searchStudent"
+placeholder="🔍 Search Student Name / EMIS">
+
+<div class="filters">
+
+<select id="statusFilter">
+
+<option value="All">
+All Status
+</option>
+
+<option value="Pending">
+Pending
+</option>
+
+<option value="Teacher Approved">
+Teacher Approved
+</option>
+
+<option value="Approved">
+Approved
+</option>
+
+<option value="Rejected">
+Rejected
+</option>
+
+</select>
+
+<select id="classFilter">
+
+<option value="All">
+All Classes
+</option>
+
+<option>6</option>
+<option>7</option>
+<option>8</option>
+<option>9</option>
+<option>10</option>
+
+</select>
+
+<select id="sectionFilter">
+
+<option value="All">
+All Sections
+</option>
+
+<option>A</option>
+<option>B</option>
+<option>C</option>
+
+</select>
+
+</div>
+
+<label>
+
+<input
+type="checkbox"
+id="selectAll">
+
+Select All Leave Requests
+
+</label>
+
+<div class="bulkButtons">
+
+<button id="approveSelected">
+
+✅ Approve Selected
+
+</button>
+
+<button id="rejectSelected">
+
+❌ Reject Selected
 
 </button>
 
 </div>
 
-<script type="module" src="js/leave_management.js"></script>
+</div>
+
+<!-- Leave List -->
+
+<div id="leaveList">
+  <!-- Leave Cards will load here -->
+
+</div>
+
+<div class="card">
+
+<h3>Leave Workflow</h3>
+
+<ul class="workflow">
+
+<li>👨‍👩‍👧 Parent → Apply Leave</li>
+
+<li>👨‍🏫 Class Teacher → Review & Recommend</li>
+
+<li>👨‍💼 Headmaster → Final Approval / Reject</li>
+
+<li>📲 Parent → View Status & Remarks</li>
+
+</ul>
+
+</div>
+
+<div class="bottomButtons">
+
+<button
+class="teacherBtn"
+onclick="location.href='teacher.html'">
+
+👨‍🏫 Teacher Dashboard
+
+</button>
+
+<button
+class="headmasterBtn"
+onclick="location.href='headmaster.html'">
+
+🏫 Headmaster Dashboard
+
+</button>
+
+</div>
+
+</div>
+
+<script type="module"
+src="js/leave_management.js">
+
+</script>
 
 </body>
 
