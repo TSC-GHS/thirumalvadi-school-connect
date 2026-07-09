@@ -7,71 +7,99 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const params = new URLSearchParams(window.location.search);
-const emis = params.get("emis");
-
 const leaveList = document.getElementById("leaveList");
 
-async function loadLeaveStatus() {
+const params = new URLSearchParams(window.location.search);
 
-  if (!emis) {
-    leaveList.innerHTML = "<h3>EMIS Number Missing</h3>";
+let emis = params.get("emis");
+
+if(!emis){
+  emis = localStorage.getItem("parentEMIS");
+}
+
+async function loadLeaveStatus(){
+
+  if(!emis){
+
+    leaveList.innerHTML=`
+    <div class="card">
+      <h3 style="color:red;">EMIS Number Not Found</h3>
+      <p>Please login again.</p>
+    </div>`;
     return;
+
   }
 
-  leaveList.innerHTML = "<h3>Loading...</h3>";
+  leaveList.innerHTML="Loading...";
 
-  try {
+  try{
 
-    const q = query(
-      collection(db, "leave_requests"),
-      where("emis", "==", emis)
+    const q=query(
+      collection(db,"leave_requests"),
+      where("emis","==",String(emis))
     );
 
-    const snap = await getDocs(q);
+    const snap=await getDocs(q);
 
-    leaveList.innerHTML = "";
+    leaveList.innerHTML="";
 
-    if (snap.empty) {
-      leaveList.innerHTML = "<h3>No Leave Requests Found</h3>";
+    if(snap.empty){
+
+      leaveList.innerHTML=`
+      <div class="card">
+      <h3>No Leave Requests Found</h3>
+      </div>`;
       return;
+
     }
 
-    snap.forEach((doc) => {
+    snap.forEach((leaveDoc)=>{
 
-      const leave = doc.data();
+      const leave=leaveDoc.data();
 
-      let color = "#ff9800";
+      let color="#FB8C00";
 
-      if (leave.status === "Approved")
-        color = "#2E7D32";
+      if(leave.status==="Approved"){
+        color="#2E7D32";
+      }
 
-      if (leave.status === "Rejected")
-        color = "#D32F2F";
+      if(leave.status==="Rejected"){
+        color="#D32F2F";
+      }
 
-      leaveList.innerHTML += `
+      leaveList.innerHTML+=`
+
       <div class="card">
 
-        <h3>${leave.studentName}</h3>
+      <h3>${leave.studentName}</h3>
 
-        <p><b>Date :</b> ${leave.leaveDate}</p>
+      <p><b>EMIS :</b> ${leave.emis}</p>
 
-        <p><b>Reason :</b> ${leave.reason}</p>
+      <p><b>Leave Date :</b> ${leave.leaveDate}</p>
 
-        <p style="font-weight:bold;color:${color}">
-          Status : ${leave.status}
-        </p>
+      <p><b>Reason :</b> ${leave.reason}</p>
 
-        <hr>
+      <p class="status" style="color:${color}">
+      ${leave.status}
+      </p>
 
       </div>
+
       `;
+
     });
 
-  } catch (error) {
+  }
 
-    leaveList.innerHTML =
-      "<h3>" + error.message + "</h3>";
+  catch(error){
+
+    console.log(error);
+
+    leaveList.innerHTML=`
+    <div class="card">
+      <h3 style="color:red;">Error</h3>
+      <p>${error.message}</p>
+    </div>`;
 
   }
 
