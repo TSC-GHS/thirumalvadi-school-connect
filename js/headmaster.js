@@ -1,59 +1,65 @@
 import { db, auth } from "../firebase.js";
 
 import {
-collection,
-getDocs,
-query,
-where
+  collection,
+  getDocs,
+  query,
+  where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 import {
-signOut
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-async function loadDashboard(){
+async function loadDashboard() {
 
-// Students
-const studentSnap = await getDocs(collection(db,"students"));
-document.getElementById("studentCount").innerText =
-studentSnap.size;
+  try {
 
-// Teachers
-const teacherSnap = await getDocs(collection(db,"teachers"));
-document.getElementById("teacherCount").innerText =
-teacherSnap.size;
+    // Students
+    const studentSnap = await getDocs(collection(db, "students"));
+    document.getElementById("studentCount").textContent = studentSnap.size;
 
-// Pending Leave
-const leaveSnap = await getDocs(
-query(
-collection(db,"leave_requests"),
-where("status","==","Pending")
-)
-);
+    // Teachers
+    const teacherSnap = await getDocs(collection(db, "teachers"));
+    document.getElementById("teacherCount").textContent = teacherSnap.size;
 
-document.getElementById("leaveCount").innerText =
-leaveSnap.size;
+    // Pending Leave
+    const leaveSnap = await getDocs(
+      query(
+        collection(db, "leave_requests"),
+        where("status", "==", "Pending")
+      )
+    );
 
-// Attendance (Demo)
-document.getElementById("attendanceCount").innerText="95%";
+    document.getElementById("leaveCount").textContent = leaveSnap.size;
 
-// Pass / Fail (Demo)
-document.getElementById("passPercentage").innerText="92%";
-document.getElementById("failPercentage").innerText="8%";
+    // Attendance (Temporary)
+    document.getElementById("attendanceCount").textContent = "95%";
 
-// Notice (Demo)
-document.getElementById("noticeCount").innerText="3";
+    // Pass / Fail (Temporary)
+    document.getElementById("passPercentage").textContent = "92%";
+    document.getElementById("failPercentage").textContent = "8%";
+
+    // Notice (Temporary)
+    document.getElementById("noticeCount").textContent = "3";
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Dashboard data loading failed.");
+
+  }
 
 }
 
 loadDashboard();
 
-document
-.getElementById("logoutBtn")
-.addEventListener("click",async()=>{
+// Logout
+document.getElementById("logoutBtn").addEventListener("click", async () => {
 
-await signOut(auth);
+  await signOut(auth);
 
-window.location.href="index.html";
+  location.href = "index.html";
 
 });
