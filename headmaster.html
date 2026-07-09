@@ -1,108 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Headmaster Dashboard</title>
 
-<style>
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f4f6f9;
-}
-
-.header{
-background:#0D47A1;
-color:white;
-padding:18px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-}
-
-.container{
-padding:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,.2);
-}
-
-button{
-width:100%;
-padding:15px;
-margin-top:10px;
-border:none;
-border-radius:8px;
-font-size:17px;
-cursor:pointer;
-background:#1565C0;
-color:white;
-}
-
-.home{
-background:#2E7D32;
-}
-</style>
+<link rel="stylesheet" href="css/headmaster.css">
 
 </head>
 
 <body>
 
 <div class="header">
-🏫 Headmaster Dashboard
+
+<div>
+
+<h2>🏫 School Connect TN</h2>
+
+<p>Headmaster Dashboard</p>
+
+</div>
+
+<button id="logoutBtn">
+Logout
+</button>
+
 </div>
 
 <div class="container">
 
-<div class="card">
+<div class="welcome">
 
 <h2>Welcome Headmaster 👋</h2>
 
-<button onclick="location.href='add_student.html'">
-➕ Add Student
-</button>
+<p>Thirumalvadi Government High School</p>
 
-<button onclick="location.href='students.html'">
-🎓 Manage Students
-</button>
+</div>
 
-<button onclick="location.href='manage_teachers.html'">
-👨‍🏫 Manage Teachers
-</button>
+<div class="cards">
 
-<button onclick="location.href='attendance.html'">
-📅 Attendance
-</button>
+<div class="card blue">
 
-<button onclick="location.href='marks.html'">
-📚 Marks Entry
-</button>
+<h3 id="studentCount">0</h3>
 
-<button onclick="location.href='homework.html'">
-📝 Homework
-</button>
+<p>Total Students</p>
 
-<button onclick="alert('School Notices Module - Coming Soon')">
-📢 School Notices
-</button>
+</div>
 
-<button onclick="alert('Reports Module - Coming Soon')">
-📊 Reports
-</button>
+<div class="card green">
 
-<button class="home"
-onclick="location.href='dashboard.html'">
-🏠 Home
-</button>
+<h3 id="teacherCount">0</h3>
+
+<p>Total Teachers</p>
+
+</div>
+
+<div class="card orange">
+
+<h3 id="attendanceCount">0%</h3>
+
+<p>Today's Attendance</p>
+
+</div>
+
+<div class="card red">
+
+<h3 id="leaveCount">0</h3>
+
+<p>Pending Leaves</p>
 
 </div>
 
 </div>
+
+<h3 class="sectionTitle">
+
+Quick Actions
+
+</h3>
+
+<div class="menuGrid">
+
+<a href="student.html" class="menuCard">
+
+👨‍🎓
+
+<span>Students</span>
+
+</a>
+
+<a href="teachers.html" class="menuCard">
+
+👨‍🏫
+
+<span>Teachers</span>
+
+</a>
+
+<a href="attendance.html" class="menuCard">
+
+📅
+
+<span>Attendance</span>
+
+</a>
+
+<a href="marks_entry.html" class="menuCard">
+
+📚
+
+<span>Marks</span>
+
+</a>
+<a href="report_card.html" class="menuCard">
+
+📄
+
+<span>Report Card</span>
+
+</a>
+
+<a href="leave_approval.html" class="menuCard">
+
+📝
+
+<span>Leave Approval</span>
+
+</a>
+
+<a href="notice_board.html" class="menuCard">
+
+📢
+
+<span>Notice Board</span>
+
+</a>
+
+<a href="homework.html" class="menuCard">
+
+📚
+
+<span>Homework</span>
+
+</a>
+
+<a href="gallery.html" class="menuCard">
+
+🖼️
+
+<span>Gallery</span>
+
+</a>
+
+<a href="settings.html" class="menuCard">
+
+⚙️
+
+<span>Settings</span>
+
+</a>
+
+</div>
+
+<h3 class="sectionTitle">
+
+School Analytics
+
+</h3>
+
+<div class="cards">
+
+<div class="card">
+
+<h4>Pass Percentage</h4>
+
+<h2 id="passPercentage">0%</h2>
+
+</div>
+
+<div class="card">
+
+<h4>Fail Percentage</h4>
+
+<h2 id="failPercentage">0%</h2>
+
+</div>
+
+<div class="card">
+
+<h4>Total Classes</h4>
+
+<h2 id="classCount">5</h2>
+
+</div>
+
+<div class="card">
+
+<h4>Today's Notices</h4>
+
+<h2 id="noticeCount">0</h2>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module" src="js/headmaster.js"></script>
 
 </body>
+
 </html>
