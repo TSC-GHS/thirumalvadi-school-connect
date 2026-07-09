@@ -4,81 +4,11 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>School Calendar</title>
 
-<link rel="stylesheet" href="style.css">
-
-<style>
-
-body{
-font-family:Arial,sans-serif;
-background:#f4f6f9;
-margin:0;
-}
-
-.header{
-background:#1565C0;
-color:white;
-padding:18px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-}
-
-.container{
-padding:20px;
-max-width:900px;
-margin:auto;
-}
-
-.card{
-
-background:white;
-padding:15px;
-margin-bottom:15px;
-border-radius:12px;
-box-shadow:0 2px 8px rgba(0,0,0,.15);
-
-}
-
-.title{
-
-font-size:18px;
-font-weight:bold;
-color:#1565C0;
-
-}
-
-.date{
-
-margin-top:6px;
-color:#666;
-
-}
-
-.desc{
-
-margin-top:10px;
-
-}
-
-button{
-
-width:100%;
-padding:14px;
-margin-top:15px;
-border:none;
-border-radius:8px;
-background:#1565C0;
-color:white;
-font-size:17px;
-
-}
-
-</style>
+<link rel="stylesheet" href="css/calendar.css">
 
 </head>
 
@@ -86,94 +16,40 @@ font-size:17px;
 
 <div class="header">
 
-📅 School Calendar
+<h2>📅 School Calendar</h2>
 
 </div>
 
 <div class="container">
 
-<div id="calendarList">
-
-Loading...
-
-</div>
-</div>
-
-<button onclick="location.href='dashboard.html'">
-
-🏠 Home
-
-</button>
-
-</div>
-
-<script type="module">
-
-import { db } from "./firebase.js";
-
-import {
-collection,
-getDocs,
-orderBy,
-query
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
-const calendarList = document.getElementById("calendarList");
-
-async function loadCalendar(){
-
-calendarList.innerHTML="Loading...";
-
-try{
-
-const q = query(collection(db,"calendar"),orderBy("date"));
-
-const snap = await getDocs(q);
-
-calendarList.innerHTML="";
-
-if(snap.empty){
-
-calendarList.innerHTML="<div class='card'>No Events Found</div>";
-
-return;
-
-}
-
-snap.forEach(doc=>{
-
-const event = doc.data();
-
-calendarList.innerHTML += `
-
 <div class="card">
 
-<div class="title">${event.title || "-"}</div>
+<h3>Upcoming Events</h3>
 
-<div class="date">📅 ${event.date || "-"}</div>
+<div id="calendarList">
 
-<div class="desc">${event.description || "-"}</div>
+<div class="eventCard">
+
+Loading Events...
 
 </div>
 
-`;
+</div>
 
-});
+</div>
 
-}catch(error){
+<div class="bottomButtons">
 
-calendarList.innerHTML="<div class='card'>Error Loading Calendar</div>";
+<a href="parent.html" class="backBtn">
 
-console.log(error);
+🏠 Parent Dashboard
 
-}
+</a>
 
-}
+</div>
 
-loadCalendar();
-
-</script>
+</div>
+<script type="module" src="js/calendar.js"></script>
 
 </body>
-
 </html>
