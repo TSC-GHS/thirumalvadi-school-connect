@@ -1,1 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Leave Status</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#1565C0;
+color:#fff;
+padding:18px;
+text-align:center;
+font-size:22px;
+font-weight:bold;
+}
+
+.container{
+padding:15px;
+}
+
+.card{
+background:#fff;
+padding:15px;
+margin-bottom:15px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.home{
+width:100%;
+padding:14px;
+border:none;
+border-radius:8px;
+background:#2E7D32;
+color:#fff;
+font-size:17px;
+margin-top:20px;
+cursor:pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+📋 Parent Leave Status
+</div>
+
+<div class="container">
+
+<div id="leaveList">
+Loading...
+</div>
+
+<button class="home"
+onclick="location.href='parent_dashboard.html'">
+🏠 Back to Parent Dashboard
+</button>
+
+</div>
+
+<script type="module" src="js/leave_status.js"></script>
+
+</body>
+</html>
