@@ -47,6 +47,7 @@ font-size:17px;
 cursor:pointer;
 background:#6A1B9A;
 color:white;
+cursor:pointer;
 }
 
 .home{
@@ -55,6 +56,10 @@ background:#2E7D32;
 
 .logout{
 background:#D32F2F;
+}
+
+.leave{
+background:#1565C0;
 }
 
 </style>
@@ -76,52 +81,95 @@ background:#D32F2F;
 <h2>Welcome Parent 👋</h2>
 
 <button onclick="location.href='parent_dashboard.html'">
-
 👨‍🎓 My Child
-
 </button>
 
 <button onclick="location.href='notice_board.html'">
-
 📢 Notice Board
-
 </button>
 
 <button onclick="location.href='parent_dashboard.html'">
-
 📅 Child Attendance
-
 </button>
 
 <button onclick="location.href='parent_dashboard.html'">
-
 📚 Child Marks
-
 </button>
 
 <button onclick="location.href='parent_dashboard.html'">
-
 📝 Homework
-
 </button>
 
-<button class="home"
-onclick="location.href='dashboard.html'">
+<button class="leave" onclick="openLeaveRequest()">
+📝 Leave Request
+</button>
 
+<button class="leave" onclick="openLeaveStatus()">
+📋 Leave Status
+</button>
+
+<button class="home" onclick="location.href='dashboard.html'">
 🏠 Home
-
 </button>
 
-<button class="logout"
-onclick="location.href='index.html'">
-
+<button class="logout" onclick="logout()">
 🚪 Logout
-
 </button>
 
 </div>
 
 </div>
+
+<script>
+
+function getEmis(){
+
+return sessionStorage.getItem("emis")
+||localStorage.getItem("emis");
+
+}
+
+function openLeaveRequest(){
+
+const emis=getEmis();
+
+if(!emis){
+
+alert("EMIS Number Missing");
+
+return;
+
+}
+
+location.href="leave_request.html?emis="+emis;
+
+}
+
+function openLeaveStatus(){
+
+const emis=getEmis();
+
+if(!emis){
+
+alert("EMIS Number Missing");
+
+return;
+
+}
+
+location.href="leave_status.html?emis="+emis;
+
+}
+
+function logout(){
+
+sessionStorage.clear();
+
+location.href="index.html";
+
+}
+
+</script>
 
 </body>
 </html>
