@@ -4,6 +4,8 @@ import {
   collection,
   addDoc,
   getDocs,
+  deleteDoc,
+  doc,
   query,
   orderBy
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
@@ -12,6 +14,8 @@ const saveBtn = document.getElementById("saveBtn");
 const noticeList = document.getElementById("noticeList");
 
 async function loadNotices() {
+
+  noticeList.innerHTML = "Loading...";
 
   const q = query(
     collection(db, "notices"),
@@ -23,13 +27,16 @@ async function loadNotices() {
   noticeList.innerHTML = "";
 
   if (snap.empty) {
+
     noticeList.innerHTML = "<p>No Notices Available</p>";
+
     return;
+
   }
 
-  snap.forEach((doc) => {
+  snap.forEach((docSnap) => {
 
-    const data = doc.data();
+    const data = docSnap.data();
 
     noticeList.innerHTML += `
 
@@ -47,9 +54,15 @@ async function loadNotices() {
 
       <p><b>Expiry:</b> ${data.expiryDate}</p>
 
+      <button onclick="deleteNotice('${docSnap.id}')">
+
+      🗑 Delete
+
+      </button>
+
     </div>
 
-    <hr>
+    <br>
 
     `;
 
@@ -68,7 +81,13 @@ saveBtn.addEventListener("click", async () => {
   const publishDate = document.getElementById("publishDate").value;
   const expiryDate = document.getElementById("expiryDate").value;
 
-  if (!title || !message || !priority || !publishDate || !expiryDate) {
+  if (
+    !title ||
+    !message ||
+    !priority ||
+    !publishDate ||
+    !expiryDate
+  ) {
 
     alert("Please fill all fields");
 
@@ -101,3 +120,15 @@ saveBtn.addEventListener("click", async () => {
   loadNotices();
 
 });
+
+window.deleteNotice = async function(id){
+
+  if(!confirm("Delete this notice?")) return;
+
+  await deleteDoc(doc(db,"notices",id));
+
+  alert("Notice Deleted");
+
+  loadNotices();
+
+}
