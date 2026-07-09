@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Parent Dashboard</title>
 
 <style>
@@ -14,7 +16,7 @@ margin:0;
 }
 
 .header{
-background:#6A1B9A;
+background:#1565C0;
 color:white;
 padding:18px;
 text-align:center;
@@ -30,11 +32,12 @@ padding:20px;
 background:white;
 padding:20px;
 border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
+box-shadow:0 2px 8px rgba(0,0,0,.2);
 }
 
 h2{
 margin-top:0;
+color:#1565C0;
 }
 
 button{
@@ -45,9 +48,17 @@ border:none;
 border-radius:8px;
 font-size:17px;
 cursor:pointer;
-background:#6A1B9A;
+background:#1565C0;
 color:white;
-cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+opacity:.9;
+}
+
+.leave{
+background:#FB8C00;
 }
 
 .home{
@@ -56,10 +67,6 @@ background:#2E7D32;
 
 .logout{
 background:#D32F2F;
-}
-
-.leave{
-background:#1565C0;
 }
 
 </style>
@@ -81,95 +88,66 @@ background:#1565C0;
 <h2>Welcome Parent 👋</h2>
 
 <button onclick="location.href='parent_dashboard.html'">
+
 👨‍🎓 My Child
+
 </button>
 
 <button onclick="location.href='notice_board.html'">
+
 📢 Notice Board
+
 </button>
 
 <button onclick="location.href='parent_dashboard.html'">
+
 📅 Child Attendance
+
 </button>
 
 <button onclick="location.href='parent_dashboard.html'">
+
 📚 Child Marks
+
 </button>
 
 <button onclick="location.href='parent_dashboard.html'">
+
 📝 Homework
+
 </button>
 
-<button class="leave" onclick="openLeaveRequest()">
-📝 Leave Request
+<button class="leave"
+onclick="location.href='leave_request.html?emis='+localStorage.getItem('parentEMIS')">
+
+📝 Apply Leave
+
 </button>
 
-<button class="leave" onclick="openLeaveStatus()">
+<button class="leave"
+onclick="location.href='leave_status.html?emis='+localStorage.getItem('parentEMIS')">
+
 📋 Leave Status
+
 </button>
 
-<button class="home" onclick="location.href='dashboard.html'">
+<button class="home"
+onclick="location.href='dashboard.html'">
+
 🏠 Home
+
 </button>
 
-<button class="logout" onclick="logout()">
+<button class="logout"
+onclick="location.href='index.html'">
+
 🚪 Logout
+
 </button>
 
 </div>
 
 </div>
-
-<script>
-
-function getEmis(){
-
-return sessionStorage.getItem("emis")
-||localStorage.getItem("emis");
-
-}
-
-function openLeaveRequest(){
-
-const emis=getEmis();
-
-if(!emis){
-
-alert("EMIS Number Missing");
-
-return;
-
-}
-
-location.href="leave_request.html?emis="+emis;
-
-}
-
-function openLeaveStatus(){
-
-const emis=getEmis();
-
-if(!emis){
-
-alert("EMIS Number Missing");
-
-return;
-
-}
-
-location.href="leave_status.html?emis="+emis;
-
-}
-
-function logout(){
-
-sessionStorage.clear();
-
-location.href="index.html";
-
-}
-
-</script>
 
 </body>
 </html>
