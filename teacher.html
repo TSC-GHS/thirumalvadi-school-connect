@@ -1,40 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Teacher Dashboard</title>
+
 <style>
+
 body{
-font-family:Arial;
+font-family:Arial,sans-serif;
 background:#f5f5f5;
 margin:0;
 }
+
 .header{
-background:#1565c0;
+background:#1565C0;
 color:white;
-padding:15px;
+padding:18px;
 text-align:center;
 font-size:24px;
+font-weight:bold;
 }
+
 .card{
 background:white;
 margin:20px;
 padding:20px;
 border-radius:10px;
-box-shadow:0 2px 5px gray;
+box-shadow:0 2px 5px rgba(0,0,0,.2);
 }
+
 button{
 width:100%;
 padding:15px;
 margin-top:10px;
 font-size:18px;
-background:#1565c0;
+background:#1565C0;
 color:white;
 border:none;
 border-radius:8px;
+cursor:pointer;
 }
+
+.logout{
+background:#D32F2F;
+}
+
 </style>
+
 </head>
+
 <body>
 
 <div class="header">
@@ -42,17 +59,33 @@ border-radius:8px;
 </div>
 
 <div class="card">
+
 <h2>Welcome Teacher</h2>
 
-<button onclick="alert('Attendance Module')">📅 Attendance</button>
+<button onclick="location.href='attendance.html'">
+📅 Attendance
+</button>
 
-<button onclick="alert('Marks Module')">📚 Marks</button>
+<button onclick="location.href='marks.html'">
+📚 Marks Entry
+</button>
 
-<button onclick="alert('Homework Module')">📝 Homework</button>
+<button onclick="location.href='homework.html'">
+📝 Homework
+</button>
 
-<button onclick="location.href='dashboard.html'">🏠 Home</button>
+<button onclick="location.href='dashboard.html'">
+🏠 Home
+</button>
+
+<button class="logout" onclick="logout()">
+🚪 Logout
+</button>
 
 </div>
 
+<script type="module" src="js/session.js"></script>
+
 </body>
+
 </html>
