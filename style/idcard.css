@@ -1,1 +1,222 @@
+/*====================================
+ School Connect TN
+ Professional Student ID Card
+ Part 1
+====================================*/
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f3f6fb;
+padding:20px;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+}
+
+.id-card{
+
+width:360px;
+background:#ffffff;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 8px 25px rgba(0,0,0,.20);
+border:3px solid #0b6e4f;
+
+}
+
+.card-header{
+
+background:linear-gradient(90deg,#00695c,#2e7d32);
+color:#fff;
+text-align:center;
+padding:15px;
+
+}
+
+.card-header img{
+
+width:75px;
+height:75px;
+border-radius:50%;
+background:#fff;
+padding:5px;
+margin-bottom:8px;
+
+}
+
+.card-header h2{
+
+font-size:20px;
+margin-bottom:4px;
+
+}
+
+.card-header h4{
+
+font-size:14px;
+font-weight:normal;
+
+}
+
+.student-photo{
+
+display:flex;
+justify-content:center;
+margin-top:15px;
+
+}
+
+.student-photo img{
+
+width:120px;
+height:140px;
+border-radius:12px;
+border:3px solid #1565C0;
+object-fit:cover;
+background:#ddd;
+
+}
+
+.student-info{
+
+padding:18px;
+
+}
+
+.student-info table{
+
+width:100%;
+
+}
+
+.student-info td{
+
+padding:8px 4px;
+font-size:15px;
+border-bottom:1px solid #ececec;
+
+}
+
+.student-info td:first-child{
+
+font-weight:bold;
+color:#1565C0;
+width:38%;
+
+}
+/*==============================
+   Footer
+==============================*/
+
+.card-footer{
+
+background:#f5f5f5;
+padding:15px;
+text-align:center;
+
+}
+
+.school-name{
+
+font-size:16px;
+font-weight:bold;
+color:#1565C0;
+margin-bottom:6px;
+
+}
+
+.school-address{
+
+font-size:12px;
+color:#555;
+line-height:18px;
+
+}
+
+.email{
+
+margin-top:8px;
+font-size:13px;
+font-weight:bold;
+color:#2E7D32;
+
+}
+
+.qr-box{
+
+display:flex;
+justify-content:center;
+margin:18px 0;
+
+}
+
+.qr-box img{
+
+width:90px;
+height:90px;
+border:2px solid #ddd;
+padding:5px;
+background:#fff;
+
+}
+
+.signature{
+
+margin-top:20px;
+text-align:right;
+font-size:13px;
+font-weight:bold;
+color:#444;
+
+}
+
+.print-btn{
+
+width:100%;
+margin-top:18px;
+padding:14px;
+background:#1565C0;
+color:white;
+border:none;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+
+}
+
+.print-btn:hover{
+
+background:#0D47A1;
+
+}
+
+@media print{
+
+body{
+
+background:white;
+padding:0;
+
+}
+
+.print-btn{
+
+display:none;
+
+}
+
+.id-card{
+
+box-shadow:none;
+border:2px solid #000;
+
+}
+
+}
