@@ -3,131 +3,224 @@ import { db } from "../firebase.js";
 import {
   collection,
   getDocs,
-  doc,
-  updateDoc
+  updateDoc,
+  doc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 const leaveList = document.getElementById("leaveList");
 
-async function loadLeaveRequests() {
+const pendingCount = document.getElementById("pendingCount");
+const approvedCount = document.getElementById("approvedCount");
+const rejectedCount = document.getElementById("rejectedCount");
 
-  leaveList.innerHTML = "Loading Leave Requests...";
+const searchStudent = document.getElementById("searchStudent");
+const statusFilter = document.getElementById("statusFilter");
+const classFilter = document.getElementById("classFilter");
+const sectionFilter = document.getElementById("sectionFilter");
 
-  try {
+const selectAll = document.getElementById("selectAll");
+const approveSelected = document.getElementById("approveSelected");
+const rejectSelected = document.getElementById("rejectSelected");
 
-    const snap = await getDocs(collection(db, "leave_requests"));
+let leaveData = [];
 
-    leaveList.innerHTML = "";
+async function loadLeaveRequests(){
 
-    if (snap.empty) {
+    const snap = await getDocs(collection(db,"leave_requests"));
 
-      leaveList.innerHTML = `
-      <div class="card">
-        <h3>No Leave Requests</h3>
-      </div>`;
+    leaveData = [];
 
-      return;
+    snap.forEach((d)=>{
 
-    }
-
-    snap.forEach((leaveDoc) => {
-
-      const leave = leaveDoc.data();
-
-      leaveList.innerHTML += `
-
-      <div class="card">
-
-        <h3>${leave.studentName}</h3>
-
-        <p><b>EMIS :</b> ${leave.emis}</p>
-
-        <p><b>Date :</b> ${leave.leaveDate}</p>
-
-        <p><b>Reason :</b> ${leave.reason}</p>
-
-        <p class="status">
-          Status : ${leave.status}
-        </p>
-
-        <div class="actions">
-
-          <button
-          class="approve"
-          onclick="approveLeave('${leaveDoc.id}')">
-
-          ✅ Approve
-
-          </button>
-
-          <button
-          class="reject"
-          onclick="rejectLeave('${leaveDoc.id}')">
-
-          ❌ Reject
-
-          </button>
-
-        </div>
-
-      </div>
-
-      `;
+        leaveData.push({
+            id:d.id,
+            ...d.data()
+        });
 
     });
 
-  } catch (error) {
-
-    console.log(error);
-
-    alert(error.message);
-
-  }
+    renderLeave();
 
 }
 
-window.approveLeave = async function (id) {
+function renderLeave(){
 
-  try {
+    let pending=0;
+    let approved=0;
+    let rejected=0;
 
-    await updateDoc(doc(db, "leave_requests", id), {
+    leaveList.innerHTML="";
 
-      status: "Approved"
+    const keyword = searchStudent.value.toLowerCase();
+
+    leaveData.forEach((leave)=>{
+
+        if(leave.status==="Pending") pending++;
+        if(leave.status==="Approved") approved++;
+        if(leave.status==="Rejected") rejected++;
+
+        if(keyword &&
+        !leave.studentName.toLowerCase().includes(keyword))
+        return;
+
+        if(statusFilter.value!="All" &&
+        leave.status!=statusFilter.value)
+        return;
+
+        if(classFilter.value!="All" &&
+        leave.class!=classFilter.value)
+        return;
+
+        if(sectionFilter.value!="All" &&
+        leave.section!=sectionFilter.value)
+        return;
+
+        leaveList.innerHTML += `
+        `
+<div class="leaveCard">
+
+<label>
+
+<input
+type="checkbox"
+class="leaveCheck"
+value="${leave.id}">
+
+Select
+
+</label>
+
+<h3>${leave.studentName}</h3>
+
+<p><b>EMIS:</b> ${leave.emis}</p>
+
+<p><b>Class:</b> ${leave.class}-${leave.section}</p>
+
+<p><b>Date:</b> ${leave.leaveDate}</p>
+
+<p><b>Reason:</b> ${leave.reason}</p>
+
+<p><b>Status:</b> ${leave.status}</p>
+
+<div class="actions">
+
+<button
+class="approveBtn"
+onclick="approveLeave('${leave.id}')"
+${leave.status==="Approved"?"disabled":""}>
+
+✅ Approve
+
+</button>
+
+<button
+class="rejectBtn"
+onclick="rejectLeave('${leave.id}')"
+${leave.status==="Rejected"?"disabled":""}>
+
+❌ Reject
+
+</button>
+
+</div>
+
+</div>
+
+`;
 
     });
 
-    alert("Leave Approved");
+    pendingCount.innerText = pending;
+    approvedCount.innerText = approved;
+    rejectedCount.innerText = rejected;
 
-    loadLeaveRequests();
+}
 
-  } catch (error) {
+searchStudent.addEventListener("input",renderLeave);
 
-    alert(error.message);
+statusFilter.addEventListener("change",renderLeave);
+
+classFilter.addEventListener("change",renderLeave);
+
+sectionFilter.addEventListener("change",renderLeave);
+window.approveLeave = async function(id){
+
+  await updateDoc(doc(db,"leave_requests",id),{
+
+    status:"Approved"
+
+  });
+
+  loadLeaveRequests();
+
+}
+
+window.rejectLeave = async function(id){
+
+  await updateDoc(doc(db,"leave_requests",id),{
+
+    status:"Rejected"
+
+  });
+
+  loadLeaveRequests();
+
+}
+
+selectAll.addEventListener("change",()=>{
+
+  document.querySelectorAll(".leaveCheck").forEach((check)=>{
+
+    check.checked = selectAll.checked;
+
+  });
+
+});
+
+async function bulkUpdate(status){
+
+  const selected = [];
+
+  document.querySelectorAll(".leaveCheck:checked").forEach((check)=>{
+
+    selected.push(check.value);
+
+  });
+
+  if(selected.length===0){
+
+    alert("Please select at least one leave request.");
+
+    return;
 
   }
 
-};
+  for(const id of selected){
 
-window.rejectLeave = async function (id) {
+    await updateDoc(doc(db,"leave_requests",id),{
 
-  try {
-
-    await updateDoc(doc(db, "leave_requests", id), {
-
-      status: "Rejected"
+      status:status
 
     });
 
-    alert("Leave Rejected");
-
-    loadLeaveRequests();
-
-  } catch (error) {
-
-    alert(error.message);
-
   }
 
-};
+  alert(`${selected.length} leave request(s) updated.`);
+
+  loadLeaveRequests();
+
+}
+
+approveSelected.addEventListener("click",()=>{
+
+  bulkUpdate("Approved");
+
+});
+
+rejectSelected.addEventListener("click",()=>{
+
+  bulkUpdate("Rejected");
+
+});
 
 loadLeaveRequests();
