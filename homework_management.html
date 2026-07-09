@@ -4,78 +4,11 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Homework Management</title>
 
-<style>
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f4f6f9;
-}
-
-.header{
-background:#6A1B9A;
-color:white;
-padding:18px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-}
-
-.container{
-max-width:1000px;
-margin:auto;
-padding:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-margin-bottom:20px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,.15);
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
-}
-
-input,select,textarea{
-
-width:100%;
-padding:12px;
-border:1px solid #ccc;
-border-radius:8px;
-box-sizing:border-box;
-font-size:16px;
-
-}
-
-textarea{
-height:120px;
-resize:vertical;
-}
-
-button{
-
-width:100%;
-padding:14px;
-margin-top:12px;
-background:#6A1B9A;
-color:white;
-border:none;
-border-radius:8px;
-font-size:16px;
-cursor:pointer;
-
-}
-
-</style>
+<link rel="stylesheet" href="css/homework.css">
 
 </head>
 
@@ -83,7 +16,9 @@ cursor:pointer;
 
 <div class="header">
 
-📚 Homework Management
+<h2>📚 Homework Management</h2>
+
+<p>School Connect TN</p>
 
 </div>
 
@@ -91,9 +26,19 @@ cursor:pointer;
 
 <div class="card">
 
-<div class="grid">
+<h3>Add Homework</h3>
 
-<select id="classFilter">
+<input
+type="text"
+id="homeworkTitle"
+placeholder="Homework Title">
+
+<textarea
+id="homeworkDescription"
+placeholder="Homework Description">
+</textarea>
+
+<select id="className">
 
 <option value="">Select Class</option>
 
@@ -105,9 +50,9 @@ cursor:pointer;
 
 </select>
 
-<select id="sectionFilter">
+<select id="section">
 
-<option value="">Select Section</option>
+<option value="">Section</option>
 
 <option>A</option>
 <option>B</option>
@@ -115,35 +60,66 @@ cursor:pointer;
 
 </select>
 
+<select id="subject">
+
+<option value="">Subject</option>
+
+<option>Tamil</option>
+<option>English</option>
+<option>Maths</option>
+<option>Science</option>
+<option>Social</option>
+
+</select>
+
+<label>Due Date</label>
+
 <input
 type="date"
 id="dueDate">
 
-</div>
-
-<br>
-
-<textarea
-id="homeworkText"
-placeholder="Enter Homework">
-</textarea>
-<button onclick="saveHomework()">
+<button id="saveHomework">
 
 💾 Save Homework
 
 </button>
 
-<button onclick="location.href='homework_list.html'">
+</div>
 
-📋 Homework List
+<br>
 
-</button>
+<div class="card">
+
+<h3>Homework List</h3>
+
+<div id="homeworkList">
+
+Loading...
+
+</div>
+
+</div>
+<div class="card">
+
+<h3>Recent Homework</h3>
+
+<div id="homeworkList">
+
+Loading Homework...
+
+</div>
+
+</div>
+
+<div class="bottomButtons">
 
 <button onclick="location.href='teacher.html'">
 
-🏠 Back
+🏠 Back to Teacher Dashboard
 
 </button>
+
+</div>
 
 </div>
 
