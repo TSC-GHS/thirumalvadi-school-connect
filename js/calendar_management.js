@@ -18,7 +18,7 @@ async function loadEvents() {
   eventList.innerHTML = "Loading...";
 
   const q = query(
-    collection(db, "calendar_events"),
+    collection(db, "calendar"),
     orderBy("date", "asc")
   );
 
@@ -92,7 +92,7 @@ form.addEventListener("submit", async (e) => {
 
   try {
 
-    await addDoc(collection(db, "calendar_events"), {
+    await addDoc(collection(db, "calendar"), {
 
       title,
       date,
