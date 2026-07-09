@@ -1,1 +1,10 @@
-
+{
+  "appId": "com.schoolconnecttn.app",
+  "appName": "School Connect TN",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://tsc-ghs.github.io/thirumalvadi-school-connect/",
+    "cleartext": false
+  }
+}
