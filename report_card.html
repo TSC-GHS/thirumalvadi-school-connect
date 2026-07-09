@@ -4,7 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Student Report Card</title>
 
@@ -18,7 +18,7 @@ background:#f4f6f9;
 
 .header{
 background:#1565C0;
-color:white;
+color:#fff;
 padding:18px;
 text-align:center;
 font-size:24px;
@@ -32,7 +32,7 @@ padding:20px;
 }
 
 .card{
-background:white;
+background:#fff;
 padding:20px;
 border-radius:10px;
 box-shadow:0 2px 8px rgba(0,0,0,.15);
@@ -42,8 +42,8 @@ margin-bottom:20px;
 input{
 width:100%;
 padding:12px;
-border-radius:8px;
 border:1px solid #ccc;
+border-radius:8px;
 font-size:16px;
 box-sizing:border-box;
 }
@@ -86,8 +86,8 @@ color:white;
 }
 
 .summary{
-font-weight:bold;
 background:#E3F2FD;
+font-weight:bold;
 }
 
 .pass{
@@ -166,13 +166,57 @@ No Report Available
 </tbody>
 
 </table>
-<button class="print" onclick="window.print()">
+
+<div class="card">
+
+<h3>📊 Overall Performance</h3>
+
+<table>
+
+<tr>
+
+<td><b>Total Exams</b></td>
+
+<td id="overallExams">0</td>
+
+</tr>
+
+<tr>
+
+<td><b>Average Percentage</b></td>
+
+<td id="overallPercentage">0%</td>
+
+</tr>
+
+<tr>
+
+<td><b>Overall Grade</b></td>
+
+<td id="overallGrade">-</td>
+
+</tr>
+
+<tr>
+
+<td><b>Overall Result</b></td>
+
+<td id="overallResult">-</td>
+
+</tr>
+
+</table>
+
+</div>
+<button class="print"
+onclick="window.print()">
 
 🖨 Print Report
 
 </button>
 
-<button class="back" onclick="location.href='parent.html'">
+<button class="back"
+onclick="location.href='parent.html'">
 
 🏠 Back
 
@@ -195,74 +239,150 @@ window.loadReport = async function(){
 
 const emis=document.getElementById("emis").value.trim();
 
-if(emis==""){
-alert("Enter EMIS Number");
+if(emis===""){
+
+alert("Enter Student EMIS Number");
+
 return;
+
 }
 
 const studentSnap=await getDoc(doc(db,"students",emis));
 
 if(!studentSnap.exists()){
+
 alert("Student Not Found");
+
 return;
+
 }
 
 const student=studentSnap.data();
 
-document.getElementById("name").textContent=student.name;
-document.getElementById("class").textContent=student.class;
-document.getElementById("section").textContent=student.section;
+document.getElementById("name").innerText=student.name;
+document.getElementById("class").innerText=student.class;
+document.getElementById("section").innerText=student.section;
 
 const tbody=document.getElementById("reportTable");
+
 tbody.innerHTML="";
 
 const exams=[
+
 "Unit Test",
 "Quarterly",
 "Half Yearly",
 "Annual"
+
 ];
 
-let found=false;
+let examCount=0;
+
+let totalPercentage=0;
+
+let overallFail=false;
 
 for(const exam of exams){
 
-const markSnap=await getDoc(
+const snap=await getDoc(
+
 doc(db,"marks",exam,"students",emis)
+
 );
 
-if(markSnap.exists()){
+if(snap.exists()){
 
-const m=markSnap.data();
+const m=snap.data();
 
-found=true;
+examCount++;
+
+totalPercentage+=Number(m.percentage||0);
+
+if(m.result==="FAIL"){
+
+overallFail=true;
+
+}
 
 tbody.innerHTML+=`
 
-<tr><td colspan="2"><b>${exam}</b></td></tr>
+<tr>
 
-<tr><td>Tamil</td><td>${m.tamil}</td></tr>
-<tr><td>English</td><td>${m.english}</td></tr>
-<tr><td>Maths</td><td>${m.maths}</td></tr>
-<tr><td>Science</td><td>${m.science}</td></tr>
-<tr><td>Social</td><td>${m.social}</td></tr>
+<td colspan="2"
+style="background:#E3F2FD;font-weight:bold;">
+
+${exam}
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Tamil</td>
+
+<td>${m.tamil}</td>
+
+</tr>
+
+<tr>
+
+<td>English</td>
+
+<td>${m.english}</td>
+
+</tr>
+
+<tr>
+
+<td>Maths</td>
+
+<td>${m.maths}</td>
+
+</tr>
+
+<tr>
+
+<td>Science</td>
+
+<td>${m.science}</td>
+
+</tr>
+
+<tr>
+
+<td>Social</td>
+
+<td>${m.social}</td>
+
+</tr>
 
 <tr class="summary">
+
 <td>Total</td>
+
 <td>${m.total}</td>
+
 </tr>
 
 <tr class="summary">
+
 <td>Percentage</td>
+
 <td>${m.percentage}%</td>
+
 </tr>
 
 <tr class="summary">
+
 <td>Grade</td>
+
 <td>${m.grade}</td>
+
 </tr>
 
 <tr class="summary">
+
 <td>Result</td>
 
 <td class="${m.result==="PASS"?"pass":"fail"}">
@@ -274,12 +394,11 @@ ${m.result}
 </tr>
 
 `;
+  }
 
 }
 
-}
-
-if(!found){
+if(examCount===0){
 
 tbody.innerHTML=`
 
@@ -294,6 +413,56 @@ No Report Available
 </tr>
 
 `;
+
+return;
+
+}
+
+const average=(totalPercentage/examCount).toFixed(2);
+
+document.getElementById("overallExams").innerText=examCount;
+
+document.getElementById("overallPercentage").innerText=average+"%";
+
+let overallGrade="D";
+
+if(overallFail){
+
+overallGrade="FAIL";
+
+}else if(average>=90){
+
+overallGrade="A+";
+
+}else if(average>=80){
+
+overallGrade="A";
+
+}else if(average>=70){
+
+overallGrade="B+";
+
+}else if(average>=60){
+
+overallGrade="B";
+
+}else if(average>=50){
+
+overallGrade="C";
+
+}
+
+document.getElementById("overallGrade").innerText=overallGrade;
+
+const overallResult=document.getElementById("overallResult");
+
+if(overallFail){
+
+overallResult.innerHTML="<span class='fail'>FAIL</span>";
+
+}else{
+
+overallResult.innerHTML="<span class='pass'>PASS</span>";
 
 }
 
