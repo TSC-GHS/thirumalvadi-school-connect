@@ -1,1 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Leave Request</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+max-width:500px;
+margin:20px auto;
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+label{
+display:block;
+margin-top:15px;
+font-weight:bold;
+}
+
+input,textarea{
+width:100%;
+padding:12px;
+margin-top:6px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+font-size:16px;
+}
+
+textarea{
+height:120px;
+resize:none;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:20px;
+background:#2E7D32;
+color:white;
+border:none;
+border-radius:8px;
+font-size:17px;
+cursor:pointer;
+}
+
+.home{
+background:#1565C0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📝 Student Leave Request
+
+</div>
+
+<div class="container">
+
+<label>Student EMIS Number</label>
+
+<input
+type="text"
+id="emis"
+placeholder="Enter EMIS Number">
+
+<label>Student Name</label>
+
+<input
+type="text"
+id="studentName"
+placeholder="Enter Student Name">
+
+<label>Leave Date</label>
+
+<input
+type="date"
+id="leaveDate">
+
+<label>Reason</label>
+
+<textarea
+id="reason"
+placeholder="Enter Leave Reason"></textarea>
+
+<button
+onclick="submitLeave()">
+
+📤 Submit Leave Request
+
+</button>
+
+<button
+class="home"
+onclick="location.href='parent_dashboard_v2.html'">
+
+🏠 Parent Dashboard
+
+</button>
+
+</div>
+
+<script type="module" src="js/leave_request.js"></script>
+
+</body>
+
+</html>
