@@ -1,14 +1,14 @@
 import { db, auth } from "../firebase.js";
 
 import {
-collection,
-getDocs,
-query,
-where
+  collection,
+  getDocs,
+  query,
+  where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 import {
-signOut
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 // ===============================
@@ -39,6 +39,9 @@ document.getElementById("failPercentage");
 const classCount =
 document.getElementById("classCount");
 
+const homeworkCount =
+document.getElementById("homeworkCount");
+
 const logoutBtn =
 document.getElementById("logoutBtn");
 
@@ -65,24 +68,33 @@ passPercentage.textContent="...";
 failPercentage.textContent="...";
 
 classCount.textContent="5";
-  // ===============================
+
+if(homeworkCount){
+homeworkCount.textContent="...";
+}
+
+// ===============================
 // Student Count
 // ===============================
 
-const studentSnap = await getDocs(collection(db,"students"));
-studentCount.textContent = studentSnap.size;
+const studentSnap =
+await getDocs(collection(db,"students"));
+
+studentCount.textContent =
+studentSnap.size;
 
 // ===============================
-// Teacher Count (Active Only)
+// Teacher Count
 // ===============================
 
-const teacherSnap = await getDocs(collection(db,"teachers"));
+const teacherSnap =
+await getDocs(collection(db,"teachers"));
 
-let activeTeachers = 0;
+let activeTeachers=0;
 
 teacherSnap.forEach((doc)=>{
 
-const teacher = doc.data();
+const teacher=doc.data();
 
 if(teacher.status==="Active"){
 
@@ -92,9 +104,9 @@ activeTeachers++;
 
 });
 
-teacherCount.textContent = activeTeachers;
-
-// ===============================
+teacherCount.textContent=
+activeTeachers;
+  // ===============================
 // Pending Leave Count
 // ===============================
 
@@ -110,77 +122,86 @@ where("status","==","Pending")
 
 );
 
-leaveCount.textContent = leaveSnap.size;
+leaveCount.textContent =
+leaveSnap.size;
 
 // ===============================
 // Notice Count
 // ===============================
 
-const noticeSnap = await getDocs(collection(db,"notices"));
+const noticeSnap =
+await getDocs(collection(db,"notices"));
 
-noticeCount.textContent = noticeSnap.size;
+noticeCount.textContent =
+noticeSnap.size;
 
 // ===============================
 // Homework Count
 // ===============================
 
-const homeworkSnap = await getDocs(collection(db,"homework"));
+const homeworkSnap =
+await getDocs(collection(db,"homework"));
 
-document.getElementById("homeworkCount")?.textContent = homeworkSnap.size;
+if(homeworkCount){
+
+homeworkCount.textContent =
+homeworkSnap.size;
+
+}
 
 // ===============================
 // Attendance (Temporary)
 // ===============================
 
 attendanceCount.textContent = "95%";
-  // ===============================
-// Pass / Fail Analytics
+
+// ===============================
+// Half Yearly Result Analytics
 // ===============================
 
-try{
+const resultSnap = await getDocs(
 
-const marksSnap = await getDocs(collection(db,"marks"));
+collection(
+db,
+"marks",
+"Half Yearly",
+"students"
+)
+
+);
 
 let totalStudents = 0;
+
 let passedStudents = 0;
 
-marksSnap.forEach((doc)=>{
+resultSnap.forEach((doc)=>{
 
 const mark = doc.data();
 
 totalStudents++;
 
-if(Number(mark.total || 0) >= 175){
+if((mark.result || "").toUpperCase() === "PASS"){
 
 passedStudents++;
 
 }
 
 });
+  if(totalStudents > 0){
 
-if(totalStudents > 0){
+const pass =
+Math.round((passedStudents / totalStudents) * 100);
 
-const pass = Math.round((passedStudents/totalStudents)*100);
+passPercentage.textContent =
+pass + "%";
 
-passPercentage.textContent = pass + "%";
-
-failPercentage.textContent = (100-pass) + "%";
+failPercentage.textContent =
+(100 - pass) + "%";
 
 }else{
 
 passPercentage.textContent = "0%";
-
 failPercentage.textContent = "0%";
-
-}
-
-}catch(error){
-
-console.log("Marks analytics not available",error);
-
-passPercentage.textContent = "--";
-
-failPercentage.textContent = "--";
 
 }
 
@@ -203,6 +224,10 @@ leaveCount.textContent="-";
 noticeCount.textContent="-";
 passPercentage.textContent="-";
 failPercentage.textContent="-";
+
+if(homeworkCount){
+homeworkCount.textContent="-";
+}
 
 }
 
@@ -235,8 +260,6 @@ location.href="index.html";
 // Auto Refresh Dashboard
 // ===============================
 
-// Refresh every 60 seconds
-
 setInterval(()=>{
 
 loadDashboard();
@@ -253,5 +276,7 @@ loadDashboard();
 // Version
 // ===============================
 
+console.log("================================");
 console.log("School Connect TN");
-console.log("Headmaster Dashboard V2 Loaded");
+console.log("Headmaster Dashboard V3");
+console.log("================================");
