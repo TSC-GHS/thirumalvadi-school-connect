@@ -38,6 +38,32 @@ let currentTeacher = null;
 async function loadTeacher() {
 
 const teacherId = localStorage.getItem("teacherId");
+  async function loadTeacher() {
+
+    const teacherId = localStorage.getItem("teacherId");
+
+    alert("teacherId = " + teacherId);
+
+    const teacherRef = doc(db, "teachers", teacherId);
+
+    alert("Searching : teachers/" + teacherId);
+
+    const teacherSnap = await getDoc(teacherRef);
+
+    alert("Document Exists : " + teacherSnap.exists());
+
+    if (teacherSnap.exists()) {
+        alert(JSON.stringify(teacherSnap.data()));
+    }
+
+    if (!teacherSnap.exists()) {
+        alert("Teacher record not found.");
+        location.href = "index.html";
+        return;
+    }
+
+    currentTeacher = teacherSnap.data();
+  }
 
 alert("Teacher ID : " + teacherId);
 
