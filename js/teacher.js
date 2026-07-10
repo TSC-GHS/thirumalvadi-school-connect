@@ -50,38 +50,58 @@ async function loadTeacher() {
 
   }
 
-  const teacherRef = doc(db, "teachers", teacherId);
-  alert("Loading Teacher: " + teacherId);
-console.log("Loading Teacher:", teacherId);
+  alert("Loading Teacher : " + teacherId);
 
-  const teacherSnap = await getDoc(teacherRef);
+  try {
 
-  if (!teacherSnap.exists()) {
+    const teacherRef = doc(db, "teachers", teacherId);
 
-    alert("Teacher record not found.");
+    const teacherSnap = await getDoc(teacherRef);
 
-    location.href = "index.html";
+    alert("Document Exists : " + teacherSnap.exists());
+
+    if (!teacherSnap.exists()) {
+
+      alert("Teacher record not found.");
+
+      location.href = "index.html";
+
+      return;
+
+    }
+
+    currentTeacher = teacherSnap.data();
+
+    teacherName.textContent =
+      currentTeacher.name || "Teacher";
+
+    teacherRole.textContent =
+      currentTeacher.teacherType || "Teacher";
+
+    if (currentTeacher.teacherType === "Subject Teacher") {
+
+      leaveMenu.style.display = "none";
+
+      leaveCard.style.display = "none";
+
+    }
+
+  } catch (error) {
+
+    alert(
+      "Firestore Error\n\n" +
+      error.code +
+      "\n\n" +
+      error.message
+    );
+
+    console.error(error);
 
     return;
 
   }
 
-  currentTeacher = teacherSnap.data();
-
-  teacherName.textContent = currentTeacher.name || "Teacher";
-
-  teacherRole.textContent = currentTeacher.teacherType || "Teacher";
-    // Subject Teacher cannot approve leave
-
-  if (currentTeacher.teacherType === "Subject Teacher") {
-
-    leaveMenu.style.display = "none";
-    leaveCard.style.display = "none";
-
-  }
-
 }
-
 // =====================================
 // Dashboard Counts
 // =====================================
@@ -89,43 +109,39 @@ console.log("Loading Teacher:", teacherId);
 async function loadDashboard() {
 
   // Homework Count
-
-  const homeworkSnap = await getDocs(collection(db, "homework"));
+  const homeworkSnap =
+    await getDocs(collection(db, "homework"));
   homeworkCount.textContent = homeworkSnap.size;
 
   // Notice Count
-
-  const noticeSnap = await getDocs(collection(db, "notices"));
+  const noticeSnap =
+    await getDocs(collection(db, "notices"));
   noticeCount.textContent = noticeSnap.size;
 
   // Attendance (Temporary)
-
   attendanceCount.textContent = "Today";
 
-  // Pending Leave Count
-
+  // Leave Count
   if (currentTeacher.teacherType === "Class Teacher") {
 
-    const leaveSnap = await getDocs(
-      query(
-        collection(db, "leave_requests"),
-        where("status", "==", "Pending")
-      )
+    const leaveQuery = query(
+      collection(db, "leave_requests"),
+      where("status", "==", "Pending")
     );
+
+    const leaveSnap = await getDocs(leaveQuery);
 
     let pending = 0;
 
-    leaveSnap.forEach((leaveDoc) => {
+    leaveSnap.forEach((docSnap) => {
 
-      const leave = leaveDoc.data();
+      const leave = docSnap.data();
 
       if (
-        leave.class === currentTeacher.class ||
-        leave.class === currentTeacher.className
+        leave.class === currentTeacher.className &&
+        leave.section === currentTeacher.section
       ) {
-
         pending++;
-
       }
 
     });
@@ -139,6 +155,7 @@ async function loadDashboard() {
   }
 
 }
+
 // =====================================
 // Initialize Dashboard
 // =====================================
@@ -149,6 +166,8 @@ async function initializeDashboard() {
 
     await loadTeacher();
 
+    if (!currentTeacher) return;
+
     await loadDashboard();
 
     console.log("Teacher Dashboard Loaded Successfully");
@@ -157,14 +176,16 @@ async function initializeDashboard() {
 
     console.error(error);
 
-    alert("Failed to load Teacher Dashboard.");
-
-    location.href = "index.html";
+    alert(
+      "Dashboard Error\n\n" +
+      error.code +
+      "\n\n" +
+      error.message
+    );
 
   }
 
 }
-
 // =====================================
 // Auto Refresh
 // =====================================
@@ -173,11 +194,13 @@ setInterval(async () => {
 
   try {
 
-    await loadDashboard();
+    if (currentTeacher) {
+      await loadDashboard();
+    }
 
   } catch (error) {
 
-    console.log("Dashboard refresh failed", error);
+    console.log("Dashboard Refresh Error", error);
 
   }
 
@@ -189,9 +212,7 @@ setInterval(async () => {
 
 logoutBtn.addEventListener("click", async () => {
 
-  const ok = confirm("Are you sure you want to logout?");
-
-  if (!ok) return;
+  if (!confirm("Are you sure you want to logout?")) return;
 
   try {
 
@@ -204,26 +225,14 @@ logoutBtn.addEventListener("click", async () => {
   }
 
   localStorage.removeItem("teacherId");
-
-  sessionStorage.removeItem("teacherId");
+  sessionStorage.clear();
 
   location.href = "index.html";
 
 });
-// =====================================
-// Session Validation
-// =====================================
-
-if (!localStorage.getItem("teacherId")) {
-
-  alert("Session Expired. Please login again.");
-
-  location.href = "index.html";
-
-}
 
 // =====================================
-// Initialize Application
+// Initialize
 // =====================================
 
 initializeDashboard();
@@ -238,17 +247,13 @@ console.log("Teacher Dashboard V3");
 console.log("================================");
 
 // =====================================
-// Global Error Handler
+// Error Handler
 // =====================================
 
 window.addEventListener("error", (event) => {
-
-  console.error("Global Error:", event.error);
-
+  console.error(event.error);
 });
 
 window.addEventListener("unhandledrejection", (event) => {
-
-  console.error("Unhandled Promise:", event.reason);
-
+  console.error(event.reason);
 });
