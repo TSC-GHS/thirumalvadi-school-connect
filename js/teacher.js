@@ -43,7 +43,9 @@ const teacherId = localStorage.getItem("teacherId");
     const teacherId = localStorage.getItem("teacherId");
 
     alert("teacherId = " + teacherId);
-
+alert("Project ID = " + db.app.options.projectId);
+alert("Teacher ID = " + teacherId);
+    
     const teacherRef = doc(db, "teachers", teacherId);
 
     alert("Searching : teachers/" + teacherId);
