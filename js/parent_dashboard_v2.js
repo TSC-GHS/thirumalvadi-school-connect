@@ -30,6 +30,8 @@ document.getElementById("noticeText");
 const emis =
 localStorage.getItem("parentEMIS") ||
 sessionStorage.getItem("parentEMIS");
+console.log("Parent EMIS :", emis);
+alert("Parent EMIS : " + emis);
 
 if(!emis){
 
