@@ -13,9 +13,9 @@ import {
   where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-// =====================================
+// ==============================
 // Elements
-// =====================================
+// ==============================
 
 const teacherName = document.getElementById("teacherName");
 const teacherRole = document.getElementById("teacherRole");
@@ -31,239 +31,209 @@ const leaveCard = document.getElementById("leaveCard");
 const logoutBtn = document.getElementById("logoutBtn");
 
 let currentTeacher = null;
-// =====================================
+
+// ==============================
 // Load Teacher Profile
-// =====================================
+// ==============================
 
 async function loadTeacher() {
 
-const teacherId = localStorage.getItem("teacherId");
-  async function loadTeacher() {
+    const teacherId =
+        localStorage.getItem("teacherId") ||
+        sessionStorage.getItem("teacherId");
 
-    const teacherId = localStorage.getItem("teacherId");
+    if (!teacherId) {
+        alert("Teacher session expired");
+        location.href = "index.html";
+        return false;
+    }
 
-    alert("teacherId = " + teacherId);
-alert("Project ID = " + db.app.options.projectId);
-alert("Teacher ID = " + teacherId);
-    
+    console.log("Teacher ID :", teacherId);
+
     const teacherRef = doc(db, "teachers", teacherId);
-
-    alert("Searching : teachers/" + teacherId);
 
     const teacherSnap = await getDoc(teacherRef);
 
-    alert("Document Exists : " + teacherSnap.exists());
-
-    if (teacherSnap.exists()) {
-        alert(JSON.stringify(teacherSnap.data()));
-    }
-
     if (!teacherSnap.exists()) {
-        alert("Teacher record not found.");
+        alert("Teacher Record Not Found\n\nID : " + teacherId);
         location.href = "index.html";
-        return;
+        return false;
     }
 
     currentTeacher = teacherSnap.data();
-  }
 
-alert("Teacher ID : " + teacherId);
+    teacherName.textContent =
+        currentTeacher.name || "Teacher";
 
-if (!teacherId) {
+    teacherRole.textContent =
+        currentTeacher.teacherType || "Teacher";
 
-alert("Teacher session expired.");
+    if (currentTeacher.teacherType === "Subject Teacher") {
+        leaveMenu.style.display = "none";
+        leaveCard.style.display = "none";
+    }
 
-location.href = "index.html";
-
-return;
-
+    return true;
 }
-
-const teacherRef = doc(db, "teachers", teacherId);
-
-const teacherSnap = await getDoc(teacherRef);
-
-alert("Searching : teachers/" + teacherId);
-
-alert("Document Exists : " + teacherSnap.exists());
-
-if (!teacherSnap.exists()) {
-
-alert("Teacher record not found.");
-
-location.href = "index.html";
-
-return;
-
-}
-
-currentTeacher = teacherSnap.data();
-
-teacherName.textContent = currentTeacher.name || "Teacher";
-
-teacherRole.textContent = currentTeacher.teacherType || "Teacher";
-
-if (currentTeacher.teacherType === "Subject Teacher") {
-
-leaveMenu.style.display = "none";
-
-leaveCard.style.display = "none";
-
-}
-
-}
-// =====================================
+// ==============================
 // Dashboard Counts
-// =====================================
+// ==============================
 
 async function loadDashboard() {
 
-  // Homework Count
-  const homeworkSnap =
-    await getDocs(collection(db, "homework"));
-  homeworkCount.textContent = homeworkSnap.size;
-
-  // Notice Count
-  const noticeSnap =
-    await getDocs(collection(db, "notices"));
-  noticeCount.textContent = noticeSnap.size;
-
-  // Attendance (Temporary)
-  attendanceCount.textContent = "Today";
-
-  // Leave Count
-  if (currentTeacher.teacherType === "Class Teacher") {
-
-    const leaveQuery = query(
-      collection(db, "leave_requests"),
-      where("status", "==", "Pending")
+    // Homework Count
+    const homeworkSnap = await getDocs(
+        collection(db, "homework")
     );
+    homeworkCount.textContent = homeworkSnap.size;
 
-    const leaveSnap = await getDocs(leaveQuery);
+    // Notice Count
+    const noticeSnap = await getDocs(
+        collection(db, "notices")
+    );
+    noticeCount.textContent = noticeSnap.size;
 
-    let pending = 0;
+    // Attendance (Temporary)
+    attendanceCount.textContent = "Today";
 
-    leaveSnap.forEach((docSnap) => {
+    // Pending Leave Count
+    if (currentTeacher.teacherType === "Class Teacher") {
 
-      const leave = docSnap.data();
+        const leaveQuery = query(
+            collection(db, "leave_requests"),
+            where("status", "==", "Pending")
+        );
 
-      if (
-        leave.class === currentTeacher.className &&
-        leave.section === currentTeacher.section
-      ) {
-        pending++;
-      }
+        const leaveSnap = await getDocs(leaveQuery);
 
-    });
+        let pending = 0;
 
-    leaveCount.textContent = pending;
+        leaveSnap.forEach((docSnap) => {
 
-  } else {
+            const leave = docSnap.data();
 
-    leaveCount.textContent = "-";
+            if (
+                leave.class === currentTeacher.className &&
+                leave.section === currentTeacher.section
+            ) {
+                pending++;
+            }
 
-  }
+        });
+
+        leaveCount.textContent = pending;
+
+    } else {
+
+        leaveCount.textContent = "-";
+
+    }
 
 }
 
-// =====================================
+// ==============================
 // Initialize Dashboard
-// =====================================
+// ==============================
 
 async function initializeDashboard() {
 
-  try {
+    try {
 
-    await loadTeacher();
+        const loaded = await loadTeacher();
 
-    if (!currentTeacher) return;
+        if (!loaded) return;
 
-    await loadDashboard();
+        await loadDashboard();
 
-    console.log("Teacher Dashboard Loaded Successfully");
+        console.log("Teacher Dashboard Loaded");
 
-  } catch (error) {
+    } catch (error) {
 
-    console.error(error);
+        console.error(error);
 
-    alert(
-      "Dashboard Error\n\n" +
-      error.code +
-      "\n\n" +
-      error.message
-    );
+        alert(
+            "Dashboard Error\n\n" +
+            error.message
+        );
 
-  }
+    }
 
 }
-// =====================================
+// ==============================
 // Auto Refresh
-// =====================================
+// ==============================
 
 setInterval(async () => {
 
-  try {
+    try {
 
-    if (currentTeacher) {
-      await loadDashboard();
+        if (currentTeacher) {
+
+            await loadDashboard();
+
+        }
+
+    } catch (error) {
+
+        console.log("Dashboard Refresh Error", error);
+
     }
-
-  } catch (error) {
-
-    console.log("Dashboard Refresh Error", error);
-
-  }
 
 }, 60000);
 
-// =====================================
+// ==============================
 // Logout
-// =====================================
+// ==============================
 
 logoutBtn.addEventListener("click", async () => {
 
-  if (!confirm("Are you sure you want to logout?")) return;
+    const ok = confirm("Are you sure you want to logout?");
 
-  try {
+    if (!ok) return;
 
-    await signOut(auth);
+    try {
 
-  } catch (error) {
+        await signOut(auth);
 
-    console.log(error);
+    } catch (error) {
 
-  }
+        console.log(error);
 
-  localStorage.removeItem("teacherId");
-  sessionStorage.clear();
+    }
 
-  location.href = "index.html";
+    localStorage.removeItem("teacherId");
+    sessionStorage.removeItem("teacherId");
+
+    location.href = "index.html";
 
 });
-
-// =====================================
-// Initialize
-// =====================================
+// ==============================
+// Initialize Application
+// ==============================
 
 initializeDashboard();
 
-// =====================================
-// Version
-// =====================================
+// ==============================
+// Version Information
+// ==============================
 
 console.log("================================");
 console.log("School Connect TN");
-console.log("Teacher Dashboard V3");
+console.log("Teacher Dashboard V4");
 console.log("================================");
 
-// =====================================
-// Error Handler
-// =====================================
+// ==============================
+// Global Error Handler
+// ==============================
 
 window.addEventListener("error", (event) => {
-  console.error(event.error);
+
+    console.error("Global Error:", event.error);
+
 });
 
 window.addEventListener("unhandledrejection", (event) => {
-  console.error(event.reason);
+
+    console.error("Unhandled Promise:", event.reason);
+
 });
