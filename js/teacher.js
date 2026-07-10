@@ -1,145 +1,252 @@
-import { auth, db } from "./firebase.js";
+import { auth, db } from "../firebase.js";
 
 import {
-  signInWithEmailAndPassword,
   signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
   doc,
-  getDoc
+  getDoc,
+  collection,
+  getDocs,
+  query,
+  where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-window.loginUser = async function () {
+// =====================================
+// Elements
+// =====================================
 
-  let loginId = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const selectedRole = document.getElementById("role").value;
+const teacherName = document.getElementById("teacherName");
+const teacherRole = document.getElementById("teacherRole");
 
-  if (loginId === "" || password === "") {
-    alert("Please enter Login ID and Password");
+const attendanceCount = document.getElementById("attendanceCount");
+const homeworkCount = document.getElementById("homeworkCount");
+const noticeCount = document.getElementById("noticeCount");
+const leaveCount = document.getElementById("leaveCount");
+
+const leaveMenu = document.getElementById("leaveMenu");
+const leaveCard = document.getElementById("leaveCard");
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+let currentTeacher = null;
+
+// =====================================
+// Load Teacher Profile
+// =====================================
+
+async function loadTeacher() {
+
+  const teacherId = localStorage.getItem("teacherId");
+
+  if (!teacherId) {
+
+    alert("Teacher session expired.");
+
+    location.href = "index.html";
+
     return;
+
   }
 
-  // Parent Login
-  if (selectedRole === "Parent") {
-    loginId = loginId + "@schoolconnecttn.app";
+  const teacherRef = doc(db, "teachers", teacherId);
+
+  const teacherSnap = await getDoc(teacherRef);
+
+  if (!teacherSnap.exists()) {
+
+    alert("Teacher record not found.");
+
+    location.href = "index.html";
+
+    return;
+
   }
 
-  // Student Login
-  if (selectedRole === "Student") {
-    loginId = loginId + "@student.schoolconnecttn.app";
+  currentTeacher = teacherSnap.data();
+
+  teacherName.textContent = currentTeacher.name || "Teacher";
+
+  teacherRole.textContent = currentTeacher.teacherType || "Teacher";
+    // Subject Teacher cannot approve leave
+
+  if (currentTeacher.teacherType === "Subject Teacher") {
+
+    leaveMenu.style.display = "none";
+    leaveCard.style.display = "none";
+
   }
+
+}
+
+// =====================================
+// Dashboard Counts
+// =====================================
+
+async function loadDashboard() {
+
+  // Homework Count
+
+  const homeworkSnap = await getDocs(collection(db, "homework"));
+  homeworkCount.textContent = homeworkSnap.size;
+
+  // Notice Count
+
+  const noticeSnap = await getDocs(collection(db, "notices"));
+  noticeCount.textContent = noticeSnap.size;
+
+  // Attendance (Temporary)
+
+  attendanceCount.textContent = "Today";
+
+  // Pending Leave Count
+
+  if (currentTeacher.teacherType === "Class Teacher") {
+
+    const leaveSnap = await getDocs(
+      query(
+        collection(db, "leave_requests"),
+        where("status", "==", "Pending")
+      )
+    );
+
+    let pending = 0;
+
+    leaveSnap.forEach((leaveDoc) => {
+
+      const leave = leaveDoc.data();
+
+      if (
+        leave.class === currentTeacher.class ||
+        leave.class === currentTeacher.className
+      ) {
+
+        pending++;
+
+      }
+
+    });
+
+    leaveCount.textContent = pending;
+
+  } else {
+
+    leaveCount.textContent = "-";
+
+  }
+
+}
+// =====================================
+// Initialize Dashboard
+// =====================================
+
+async function initializeDashboard() {
 
   try {
 
-    await signInWithEmailAndPassword(auth, loginId, password);
+    await loadTeacher();
 
-    const userRef = doc(db, "users", loginId);
-    const userSnap = await getDoc(userRef);
+    await loadDashboard();
 
-    if (!userSnap.exists()) {
-      alert("User Record Not Found");
-      await signOut(auth);
-      return;
-    }
-
-    const user = userSnap.data();
-        if (user.role !== selectedRole) {
-
-      alert("Selected Role is Incorrect");
-
-      await signOut(auth);
-
-      return;
-
-    }
-
-    switch (user.role) {
-
-      case "Admin":
-
-        window.location.href = "admin_dashboard.html";
-
-        break;
-
-      case "Headmaster":
-
-        localStorage.setItem("userRole", "Headmaster");
-
-        window.location.href = "headmaster.html";
-
-        break;
-
-      case "Teacher":
-
-        // Save Teacher Session
-
-        localStorage.setItem("teacherId", user.teacherId || "");
-
-        localStorage.setItem("teacherName", user.name || "");
-
-        localStorage.setItem("userRole", "Teacher");
-
-        sessionStorage.setItem("teacherId", user.teacherId || "");
-
-        sessionStorage.setItem("teacherName", user.name || "");
-
-        sessionStorage.setItem("userRole", "Teacher");
-
-        window.location.href = "teacher.html";
-
-        break;
-              case "Parent":
-
-        localStorage.setItem("parentEMIS", user.emis || "");
-        localStorage.setItem("emis", user.emis || "");
-
-        sessionStorage.setItem("parentEMIS", user.emis || "");
-        sessionStorage.setItem("emis", user.emis || "");
-
-        window.location.href = "parent.html";
-
-        break;
-
-      case "Student":
-
-        localStorage.setItem("studentEMIS", user.emis || "");
-        localStorage.setItem("emis", user.emis || "");
-
-        sessionStorage.setItem("studentEMIS", user.emis || "");
-        sessionStorage.setItem("emis", user.emis || "");
-
-        window.location.href = "student.html";
-
-        break;
-
-      default:
-
-        alert("Invalid User Role");
-
-        await signOut(auth);
-
-        return;
-
-    }
+    console.log("Teacher Dashboard Loaded Successfully");
 
   } catch (error) {
 
     console.error(error);
 
-    alert("Login Failed\n\n" + error.message);
+    alert("Failed to load Teacher Dashboard.");
 
-    try {
-
-      await signOut(auth);
-
-    } catch (e) {
-
-      console.log(e);
-
-    }
+    location.href = "index.html";
 
   }
 
-};
+}
+
+// =====================================
+// Auto Refresh
+// =====================================
+
+setInterval(async () => {
+
+  try {
+
+    await loadDashboard();
+
+  } catch (error) {
+
+    console.log("Dashboard refresh failed", error);
+
+  }
+
+}, 60000);
+
+// =====================================
+// Logout
+// =====================================
+
+logoutBtn.addEventListener("click", async () => {
+
+  const ok = confirm("Are you sure you want to logout?");
+
+  if (!ok) return;
+
+  try {
+
+    await signOut(auth);
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+  localStorage.removeItem("teacherId");
+
+  sessionStorage.removeItem("teacherId");
+
+  location.href = "index.html";
+
+});
+// =====================================
+// Session Validation
+// =====================================
+
+if (!localStorage.getItem("teacherId")) {
+
+  alert("Session Expired. Please login again.");
+
+  location.href = "index.html";
+
+}
+
+// =====================================
+// Initialize Application
+// =====================================
+
+initializeDashboard();
+
+// =====================================
+// Version
+// =====================================
+
+console.log("================================");
+console.log("School Connect TN");
+console.log("Teacher Dashboard V3");
+console.log("================================");
+
+// =====================================
+// Global Error Handler
+// =====================================
+
+window.addEventListener("error", (event) => {
+
+  console.error("Global Error:", event.error);
+
+});
+
+window.addEventListener("unhandledrejection", (event) => {
+
+  console.error("Unhandled Promise:", event.reason);
+
+});
