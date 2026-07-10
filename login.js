@@ -10,132 +10,160 @@ import {
   getDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-window.loginUser = async function(){
+window.loginUser = async function () {
 
-let loginId = document.getElementById("email").value.trim();
+  let loginId = document.getElementById("email").value.trim();
 
-const password = document.getElementById("password").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-const selectedRole = document.getElementById("role").value;
+  const selectedRole = document.getElementById("role").value;
 
-if(loginId=="" || password==""){
+  if (!loginId || !password) {
 
-alert("Please enter Login ID and Password");
+    alert("Please enter Login ID and Password");
 
-return;
+    return;
 
-}
+  }
 
-// Parent Login
+  // Parent Login
 
-if(selectedRole==="Parent"){
+  if (selectedRole === "Parent") {
 
-loginId = loginId + "@schoolconnecttn.app";
+    loginId += "@schoolconnecttn.app";
 
-}
+  }
 
-// Student Login
+  // Student Login
 
-if(selectedRole==="Student"){
+  if (selectedRole === "Student") {
 
-loginId = loginId + "@student.schoolconnecttn.app";
+    loginId += "@student.schoolconnecttn.app";
 
-}
+  }
 
-try{
+  try {
 
-await signInWithEmailAndPassword(auth,loginId,password);
+    await signInWithEmailAndPassword(
+      auth,
+      loginId,
+      password
+    );
 
-const userRef = doc(db,"users",loginId);
+    const userRef = doc(db, "users", loginId);
 
-const userSnap = await getDoc(userRef);
+    const userSnap = await getDoc(userRef);
 
-if(!userSnap.exists()){
+    if (!userSnap.exists()) {
 
-alert("User Record Not Found");
+      alert("User Record Not Found");
 
-await signOut(auth);
+      await signOut(auth);
 
-return;
+      return;
 
-}
+    }
 
-const user = userSnap.data();
+    const user = userSnap.data();
+        if (user.role !== selectedRole) {
 
-if(user.role!==selectedRole){
+      alert("Selected Role is Incorrect");
 
-alert("Selected Role is Incorrect");
+      await signOut(auth);
 
-await signOut(auth);
+      return;
 
-return;
+    }
 
-}
+    switch (user.role) {
 
-switch(user.role){
+      case "Admin":
 
-case "Admin":
+        localStorage.setItem("userRole", "Admin");
 
-window.location.href="admin_dashboard.html";
+        window.location.href = "admin_dashboard.html";
 
-break;
+        break;
 
-case "Headmaster":
+      case "Headmaster":
 
-window.location.href="headmaster.html";
+        localStorage.setItem("userRole", "Headmaster");
 
-break;
+        window.location.href = "headmaster.html";
 
-case "Teacher":
-    // Save Teacher Document ID
-localStorage.setItem("teacherId", user.teacherId || user.id);
+        break;
 
-sessionStorage.setItem("teacherId", user.teacherId || user.id);
+      case "Teacher":
 
-window.location.href = "teacher.html";
+        localStorage.setItem("teacherId", user.teacherId);
 
-break;
+        localStorage.setItem("teacherName", user.name || "");
 
-case "Parent":
+        localStorage.setItem("userRole", "Teacher");
 
-localStorage.setItem("parentEMIS",user.emis);
-localStorage.setItem("emis",user.emis);
+        sessionStorage.setItem("teacherId", user.teacherId);
 
-sessionStorage.setItem("parentEMIS",user.emis);
-sessionStorage.setItem("emis",user.emis);
+        sessionStorage.setItem("teacherName", user.name || "");
 
-window.location.href="parent.html";
+        sessionStorage.setItem("userRole", "Teacher");
 
-break;
+        window.location.href = "teacher.html";
 
-case "Student":
+        break;
+              case "Parent":
 
-localStorage.setItem("studentEMIS",user.emis);
-localStorage.setItem("emis",user.emis);
+        localStorage.setItem("parentEMIS", user.emis || "");
+        localStorage.setItem("emis", user.emis || "");
+        localStorage.setItem("userRole", "Parent");
 
-sessionStorage.setItem("studentEMIS",user.emis);
-sessionStorage.setItem("emis",user.emis);
+        sessionStorage.setItem("parentEMIS", user.emis || "");
+        sessionStorage.setItem("emis", user.emis || "");
+        sessionStorage.setItem("userRole", "Parent");
 
-window.location.href="student.html";
+        window.location.href = "parent.html";
 
-break;
+        break;
 
-default:
+      case "Student":
 
-alert("Invalid User Role");
+        localStorage.setItem("studentEMIS", user.emis || "");
+        localStorage.setItem("emis", user.emis || "");
+        localStorage.setItem("userRole", "Student");
 
-await signOut(auth);
+        sessionStorage.setItem("studentEMIS", user.emis || "");
+        sessionStorage.setItem("emis", user.emis || "");
+        sessionStorage.setItem("userRole", "Student");
 
-return;
+        window.location.href = "student.html";
 
-}
+        break;
 
-}catch(error){
+      default:
 
-alert("Login Failed\n\n"+error.message);
+        alert("Invalid User Role");
 
-await signOut(auth);
+        await signOut(auth);
 
-}
+        return;
 
-}
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Login Failed\n\n" + error.message);
+
+    try {
+
+      await signOut(auth);
+
+    } catch (e) {
+
+      console.log(e);
+
+    }
+
+  }
+
+};
