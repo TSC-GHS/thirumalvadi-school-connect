@@ -1,1 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Teacher Settings</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+margin-bottom:20px;
+}
+
+.card h2{
+margin-top:0;
+color:#1565C0;
+}
+
+.profileTable{
+width:100%;
+border-collapse:collapse;
+}
+
+.profileTable td{
+padding:12px;
+border-bottom:1px solid #eee;
+}
+
+.label{
+font-weight:bold;
+width:220px;
+}
+
+.value{
+color:#333;
+}
+
+button{
+
+width:100%;
+padding:14px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+font-size:17px;
+cursor:pointer;
+
+}
+
+.primary{
+background:#1565C0;
+color:white;
+}
+
+.success{
+background:#2E7D32;
+color:white;
+}
+
+.danger{
+background:#D32F2F;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+⚙️ Teacher Settings
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Teacher Profile</h2>
+
+<table class="profileTable">
+
+<tr>
+<td class="label">Teacher ID</td>
+<td class="value" id="teacherId">Loading...</td>
+</tr>
+
+<tr>
+<td class="label">Name</td>
+<td class="value" id="teacherName">Loading...</td>
+</tr>
+
+<tr>
+<td class="label">Teacher Type</td>
+<td class="value" id="teacherType">Loading...</td>
+</tr>
+<tr>
+<td class="label">Subject</td>
+<td class="value" id="subject">Loading...</td>
+</tr>
+
+<tr>
+<td class="label">Class</td>
+<td class="value" id="className">Loading...</td>
+</tr>
+
+<tr>
+<td class="label">Section</td>
+<td class="value" id="section">Loading...</td>
+</tr>
+
+<tr>
+<td class="label">Email</td>
+<td class="value" id="email">Loading...</td>
+</tr>
+
+<tr>
+<td class="label">Mobile</td>
+<td class="value" id="mobile">Loading...</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>Account</h2>
+
+<button
+class="primary"
+id="changePasswordBtn">
+
+🔐 Change Password
+
+</button>
+
+<button
+class="success"
+onclick="location.href='teacher.html'">
+
+🏠 Back to Teacher Dashboard
+
+</button>
+
+<button
+class="danger"
+id="logoutBtn">
+
+🚪 Logout
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>About</h2>
+
+<table class="profileTable">
+
+<tr>
+<td class="label">Application</td>
+<td class="value">School Connect TN</td>
+</tr>
+
+<tr>
+<td class="label">Version</td>
+<td class="value">v1.0</td>
+</tr>
+
+<tr>
+<td class="label">School</td>
+<td class="value">
+Thirumalvadi Government High School
+</td>
+</tr>
+
+</table>
+
+</div>
+</div>
+
+<script type="module" src="js/settings.js"></script>
+
+</body>
+</html>
