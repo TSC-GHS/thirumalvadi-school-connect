@@ -51,6 +51,8 @@ async function loadTeacher() {
   }
 
   const teacherRef = doc(db, "teachers", teacherId);
+  alert("Loading Teacher: " + teacherId);
+console.log("Loading Teacher:", teacherId);
 
   const teacherSnap = await getDoc(teacherRef);
 
