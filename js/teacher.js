@@ -1,276 +1,145 @@
-import { auth, db } from "../firebase.js";
+import { auth, db } from "./firebase.js";
 
 import {
-signOut
+  signInWithEmailAndPassword,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
-doc,
-getDoc,
-collection,
-getDocs,
-query,
-where
+  doc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-// =====================================
-// Elements
-// =====================================
+window.loginUser = async function () {
 
-const teacherName = document.getElementById("teacherName");
-const teacherRole = document.getElementById("teacherRole");
+  let loginId = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const selectedRole = document.getElementById("role").value;
 
-const attendanceCount = document.getElementById("attendanceCount");
-const homeworkCount = document.getElementById("homeworkCount");
-const noticeCount = document.getElementById("noticeCount");
-const leaveCount = document.getElementById("leaveCount");
+  if (loginId === "" || password === "") {
+    alert("Please enter Login ID and Password");
+    return;
+  }
 
-const leaveMenu = document.getElementById("leaveMenu");
-const leaveCard = document.getElementById("leaveCard");
+  // Parent Login
+  if (selectedRole === "Parent") {
+    loginId = loginId + "@schoolconnecttn.app";
+  }
 
-const logoutBtn = document.getElementById("logoutBtn");
+  // Student Login
+  if (selectedRole === "Student") {
+    loginId = loginId + "@student.schoolconnecttn.app";
+  }
 
-let currentTeacher = null;
+  try {
 
-// =====================================
-// Load Teacher Profile
-// =====================================
+    await signInWithEmailAndPassword(auth, loginId, password);
 
-async function loadTeacher(){
+    const userRef = doc(db, "users", loginId);
+    const userSnap = await getDoc(userRef);
 
-const teacherDocId = localStorage.getItem("teacherId");
+    if (!userSnap.exists()) {
+      alert("User Record Not Found");
+      await signOut(auth);
+      return;
+    }
 
-if(!teacherDocId){
+    const user = userSnap.data();
+        if (user.role !== selectedRole) {
 
-alert("Teacher session expired.");
+      alert("Selected Role is Incorrect");
 
-location.href = "login.html";
+      await signOut(auth);
 
-return;
+      return;
 
-}
+    }
 
-const teacherRef = doc(db,"teachers",teacherId);
+    switch (user.role) {
 
-const teacherSnap = await getDoc(teacherRef);
+      case "Admin":
 
-if(!teacherSnap.exists()){
+        window.location.href = "admin_dashboard.html";
 
-alert("Teacher record not found.");
+        break;
 
-location.href = "login.html";
+      case "Headmaster":
 
-return;
+        localStorage.setItem("userRole", "Headmaster");
 
-}
+        window.location.href = "headmaster.html";
 
-currentTeacher = teacherSnap.data();
+        break;
 
-teacherName.textContent = currentTeacher.name || "Teacher";
+      case "Teacher":
 
-teacherRole.textContent = currentTeacher.teacherType || "Teacher";
+        // Save Teacher Session
 
-// Subject Teacher cannot approve leave
+        localStorage.setItem("teacherId", user.teacherId || "");
 
-if(currentTeacher.teacherType === "Subject Teacher"){
+        localStorage.setItem("teacherName", user.name || "");
 
-leaveMenu.style.display = "none";
+        localStorage.setItem("userRole", "Teacher");
 
-leaveCard.style.display = "none";
+        sessionStorage.setItem("teacherId", user.teacherId || "");
 
-}
+        sessionStorage.setItem("teacherName", user.name || "");
 
-}
-// =====================================
-// Dashboard Counts
-// =====================================
+        sessionStorage.setItem("userRole", "Teacher");
 
-async function loadDashboard(){
+        window.location.href = "teacher.html";
 
-// ===============================
-// Homework Count
-// ===============================
+        break;
+              case "Parent":
 
-const homeworkSnap =
-await getDocs(collection(db,"homework"));
+        localStorage.setItem("parentEMIS", user.emis || "");
+        localStorage.setItem("emis", user.emis || "");
 
-homeworkCount.textContent = homeworkSnap.size;
+        sessionStorage.setItem("parentEMIS", user.emis || "");
+        sessionStorage.setItem("emis", user.emis || "");
 
-// ===============================
-// Notice Count
-// ===============================
+        window.location.href = "parent.html";
 
-const noticeSnap =
-await getDocs(collection(db,"notices"));
+        break;
 
-noticeCount.textContent = noticeSnap.size;
+      case "Student":
 
-// ===============================
-// Attendance Count
-// (Temporary - Later connect Attendance Module)
-// ===============================
+        localStorage.setItem("studentEMIS", user.emis || "");
+        localStorage.setItem("emis", user.emis || "");
 
-attendanceCount.textContent = "Today";
+        sessionStorage.setItem("studentEMIS", user.emis || "");
+        sessionStorage.setItem("emis", user.emis || "");
 
-// ===============================
-// Leave Count
-// ===============================
+        window.location.href = "student.html";
 
-if(currentTeacher.teacherType === "Class Teacher"){
+        break;
 
-const leaveQuery = query(
-collection(db,"leave_requests"),
-where("status","==","Pending")
-);
+      default:
 
-const leaveSnap = await getDocs(leaveQuery);
+        alert("Invalid User Role");
 
-let pending = 0;
+        await signOut(auth);
 
-leaveSnap.forEach((doc)=>{
+        return;
 
-const leave = doc.data();
+    }
 
-if(
-leave.class === currentTeacher.className &&
-leave.section === currentTeacher.section
-){
+  } catch (error) {
 
-pending++;
+    console.error(error);
 
-}
+    alert("Login Failed\n\n" + error.message);
 
-});
+    try {
 
-leaveCount.textContent = pending;
+      await signOut(auth);
 
-}else{
+    } catch (e) {
 
-leaveCount.textContent = "-";
+      console.log(e);
 
-}
+    }
 
-}
-// =====================================
-// Initialize Dashboard
-// =====================================
+  }
 
-async function initializeDashboard(){
-
-try{
-
-await loadTeacher();
-
-await loadDashboard();
-
-console.log("Teacher Dashboard Loaded Successfully");
-
-}catch(error){
-
-console.error(error);
-
-alert("Failed to load Teacher Dashboard.");
-
-location.href="login.html";
-
-}
-
-}
-
-// =====================================
-// Auto Refresh
-// =====================================
-
-// Refresh dashboard every 60 seconds
-
-setInterval(async()=>{
-
-try{
-
-await loadDashboard();
-
-}catch(error){
-
-console.log("Dashboard refresh failed",error);
-
-}
-
-},60000);
-// =====================================
-// Logout
-// =====================================
-
-logoutBtn.addEventListener("click", async ()=>{
-
-const ok = confirm("Are you sure you want to logout?");
-
-if(!ok) return;
-
-try{
-
-await signOut(auth);
-
-}catch(error){
-
-console.log(error);
-
-}
-
-// Clear Session
-
-localStorage.removeItem("teacherId");
-localStorage.removeItem("teacherId");
-localStorage.removeItem("teacherName");
-localStorage.removeItem("teacherType");
-localStorage.removeItem("teacherClass");
-localStorage.removeItem("teacherSection");
-localStorage.removeItem("userRole");
-
-sessionStorage.clear();
-
-location.href="index.html";
-
-});
-
-// =====================================
-// Session Validation
-// =====================================
-
-if(!localStorage.getItem("teacherId")){
-
-alert("Session Expired. Please login again.");
-
-location.href="index.html";
-
-}
-// =====================================
-// Initialize Application
-// =====================================
-
-initializeDashboard();
-
-// =====================================
-// Version Information
-// =====================================
-
-console.log("================================");
-console.log("School Connect TN");
-console.log("Teacher Dashboard V2");
-console.log("Status : Production Ready");
-console.log("================================");
-
-// =====================================
-// Global Error Handler
-// =====================================
-
-window.addEventListener("error",(event)=>{
-
-console.error("Global Error :",event.error);
-
-});
-
-window.addEventListener("unhandledrejection",(event)=>{
-
-console.error("Unhandled Promise :",event.reason);
-
-});
+};
