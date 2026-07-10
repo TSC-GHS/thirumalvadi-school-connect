@@ -1,43 +1,162 @@
-import { db } from "../firebase.js";
+import { auth, db } from "../firebase.js";
 
 import {
-collection,
-getDocs,
-updateDoc,
-doc
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  query,
+  where,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const leaveList=document.getElementById("leaveList");
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-const pendingCount=document.getElementById("pendingCount");
-const approvedCount=document.getElementById("approvedCount");
-const rejectedCount=document.getElementById("rejectedCount");
-const totalCount=document.getElementById("totalCount");
+// ======================================
+// School Connect TN
+// Leave Management V2
+// ======================================
 
-const searchStudent=document.getElementById("searchStudent");
-const statusFilter=document.getElementById("statusFilter");
-const classFilter=document.getElementById("classFilter");
-const sectionFilter=document.getElementById("sectionFilter");
+// Elements
 
-const selectAll=document.getElementById("selectAll");
-const approveSelected=document.getElementById("approveSelected");
-const rejectSelected=document.getElementById("rejectSelected");
+const leaveList =
+document.getElementById("leaveList");
 
-let leaveRequests=[];
+const pendingCount =
+document.getElementById("pendingCount");
+
+const approvedCount =
+document.getElementById("approvedCount");
+
+const rejectedCount =
+document.getElementById("rejectedCount");
+
+const totalCount =
+document.getElementById("totalCount");
+
+const searchStudent =
+document.getElementById("searchStudent");
+
+const statusFilter =
+document.getElementById("statusFilter");
+
+const classFilter =
+document.getElementById("classFilter");
+
+const sectionFilter =
+document.getElementById("sectionFilter");
+
+const selectAll =
+document.getElementById("selectAll");
+
+const approveSelected =
+document.getElementById("approveSelected");
+
+const rejectSelected =
+document.getElementById("rejectSelected");
+
+// ======================================
+
+let leaveRequests = [];
+
+let currentTeacher = null;
+
+// ======================================
+// Load Current Teacher
+// ======================================
+
+async function loadTeacher(){
+
+const teacherId =
+localStorage.getItem("teacherId");
+
+if(!teacherId){
+
+alert("Session Expired");
+
+location.href="index.html";
+
+return false;
+
+}
+
+const teacherDoc =
+await getDocs(
+
+query(
+
+collection(db,"teachers"),
+
+where("id","==",teacherId)
+
+)
+
+);
+
+if(teacherDoc.empty){
+
+alert("Teacher Profile Not Found");
+
+location.href="index.html";
+
+return false;
+
+}
+
+currentTeacher =
+teacherDoc.docs[0].data();
+
+return true;
+
+}
+// ======================================
+// Load Leave Requests
+// ======================================
 
 async function loadLeaveRequests(){
 
-const snap=await getDocs(collection(db,"leave_requests"));
+const loaded = await loadTeacher();
 
-leaveRequests=[];
+if(!loaded) return;
 
-snap.forEach((d)=>{
+leaveRequests = [];
+
+let leaveQuery;
+
+// Subject Teacher -> No Approval
+
+if(currentTeacher.teacherType==="Subject Teacher"){
+
+leaveList.innerHTML=
+"<h3>No Leave Approval Permission</h3>";
+
+return;
+
+}
+
+// Class Teacher
+
+leaveQuery = query(
+
+collection(db,"leave_requests"),
+
+where("class","==",currentTeacher.className),
+
+where("section","==",currentTeacher.section)
+
+);
+
+const snap = await getDocs(leaveQuery);
+
+snap.forEach((docSnap)=>{
 
 leaveRequests.push({
 
-id:d.id,
+id:docSnap.id,
 
-...d.data()
+...docSnap.data()
 
 });
 
@@ -46,15 +165,20 @@ id:d.id,
 renderLeaveList();
 
 }
-function renderLeaveList(){
+// ======================================
+// Render Leave List
+// ======================================
 
-let pending=0;
-let approved=0;
-let rejected=0;
+function renderLeaveList() {
 
-leaveList.innerHTML="";
+let pending = 0;
+let approved = 0;
+let rejected = 0;
 
-const keyword=searchStudent.value.trim().toLowerCase();
+leaveList.innerHTML = "";
+
+const keyword =
+searchStudent.value.trim().toLowerCase();
 
 leaveRequests.forEach((leave)=>{
 
@@ -64,40 +188,31 @@ if(leave.status==="Rejected") rejected++;
 
 if(keyword){
 
-const student=(leave.studentName||"").toLowerCase();
-const emis=(leave.emis||"").toLowerCase();
+const student =
+(leave.studentName || "").toLowerCase();
 
-if(!student.includes(keyword) && !emis.includes(keyword))
+const emis =
+(leave.emis || "").toLowerCase();
+
+if(
+!student.includes(keyword) &&
+!emis.includes(keyword)
+){
 return;
+}
 
 }
 
-if(statusFilter.value!="All" &&
-leave.status!=statusFilter.value)
+if(
+statusFilter.value !== "All" &&
+leave.status !== statusFilter.value
+){
 return;
-
-if(classFilter.value!="All" &&
-leave.class!=classFilter.value)
-return;
-
-if(sectionFilter.value!="All" &&
-leave.section!=sectionFilter.value)
-return;
+}
 
 leaveList.innerHTML += `
 
 <div class="leaveCard">
-
-<label>
-
-<input
-type="checkbox"
-class="leaveCheck"
-value="${leave.id}">
-
-Select
-
-</label>
 
 <h3>${leave.studentName}</h3>
 
@@ -112,14 +227,11 @@ Select
 <p><b>Status :</b> ${leave.status}</p>
 
 <textarea
-id="teacherRemark_${leave.id}"
-placeholder="Teacher Remark">${leave.teacherRemark||""}</textarea>
-
-<textarea
-id="headmasterRemark_${leave.id}"
-placeholder="Headmaster Remark">${leave.headmasterRemark||""}</textarea>
+id="remark_${leave.id}"
+placeholder="Teacher Remark">${leave.teacherRemark || ""}</textarea>
 
 <div class="actions">
+
 <button
 class="approveBtn"
 onclick="approveLeave('${leave.id}')"
@@ -146,185 +258,280 @@ ${leave.status==="Rejected" ? "disabled" : ""}>
 
 });
 
-pendingCount.innerText = pending;
-approvedCount.innerText = approved;
-rejectedCount.innerText = rejected;
-totalCount.innerText = leaveRequests.length;
+pendingCount.textContent = pending;
+approvedCount.textContent = approved;
+rejectedCount.textContent = rejected;
+totalCount.textContent = leaveRequests.length;
+
+}
+// ======================================
+// Render Leave List
+// ======================================
+
+function renderLeaveList() {
+
+let pending = 0;
+let approved = 0;
+let rejected = 0;
+
+leaveList.innerHTML = "";
+
+const keyword =
+searchStudent.value.trim().toLowerCase();
+
+leaveRequests.forEach((leave)=>{
+
+if(leave.status==="Pending") pending++;
+if(leave.status==="Approved") approved++;
+if(leave.status==="Rejected") rejected++;
+
+if(keyword){
+
+const student =
+(leave.studentName || "").toLowerCase();
+
+const emis =
+(leave.emis || "").toLowerCase();
+
+if(
+!student.includes(keyword) &&
+!emis.includes(keyword)
+){
+return;
+}
 
 }
 
-searchStudent.addEventListener("input",renderLeaveList);
+if(
+statusFilter.value !== "All" &&
+leave.status !== statusFilter.value
+){
+return;
+}
 
-statusFilter.addEventListener("change",renderLeaveList);
+leaveList.innerHTML += `
 
-classFilter.addEventListener("change",renderLeaveList);
+<div class="leaveCard">
 
-sectionFilter.addEventListener("change",renderLeaveList);
-// ===============================
-// Individual Approve
-// ===============================
+<h3>${leave.studentName}</h3>
+
+<p><b>EMIS :</b> ${leave.emis}</p>
+
+<p><b>Class :</b> ${leave.class}-${leave.section}</p>
+
+<p><b>Date :</b> ${leave.leaveDate}</p>
+
+<p><b>Reason :</b> ${leave.reason}</p>
+
+<p><b>Status :</b> ${leave.status}</p>
+
+<textarea
+id="remark_${leave.id}"
+placeholder="Teacher Remark">${leave.teacherRemark || ""}</textarea>
+
+<div class="actions">
+
+<button
+class="approveBtn"
+onclick="approveLeave('${leave.id}')"
+${leave.status==="Approved" ? "disabled" : ""}>
+
+✅ Approve
+
+</button>
+
+<button
+class="rejectBtn"
+onclick="rejectLeave('${leave.id}')"
+${leave.status==="Rejected" ? "disabled" : ""}>
+
+❌ Reject
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+pendingCount.textContent = pending;
+approvedCount.textContent = approved;
+rejectedCount.textContent = rejected;
+totalCount.textContent = leaveRequests.length;
+
+}
+// ======================================
+// Approve Leave
+// ======================================
 
 window.approveLeave = async function(id){
 
-  const teacherRemark =
-    document.getElementById(`teacherRemark_${id}`)?.value || "";
+const remark =
+document.getElementById(`remark_${id}`)?.value || "";
 
-  const headmasterRemark =
-    document.getElementById(`headmasterRemark_${id}`)?.value || "";
-
-  try{
-
-    await updateDoc(doc(db,"leave_requests",id),{
-
-      status:"Approved",
-
-      teacherRemark:teacherRemark,
-
-      headmasterRemark:headmasterRemark,
-
-      updatedAt:new Date().toISOString()
-
-    });
-
-    alert("✅ Leave Approved Successfully");
-
-    loadLeaveRequests();
-
-  }catch(error){
-
-    console.error(error);
-
-    alert(error.message);
-
-  }
-
-};
-
-// ===============================
-// Individual Reject
-// ===============================
-
-window.rejectLeave = async function(id){
-
-  const teacherRemark =
-    document.getElementById(`teacherRemark_${id}`)?.value || "";
-
-  const headmasterRemark =
-    document.getElementById(`headmasterRemark_${id}`)?.value || "";
-
-  try{
-
-    await updateDoc(doc(db,"leave_requests",id),{
-
-      status:"Rejected",
-
-      teacherRemark:teacherRemark,
-
-      headmasterRemark:headmasterRemark,
-
-      updatedAt:new Date().toISOString()
-
-    });
-
-    alert("❌ Leave Rejected");
-
-    loadLeaveRequests();
-
-  }catch(error){
-
-    console.error(error);
-
-    alert(error.message);
-
-  }
-
-};
-// =======================================
-// Select All
-// =======================================
-
-selectAll.addEventListener("change",()=>{
-
-document.querySelectorAll(".leaveCheck").forEach((check)=>{
-
-check.checked=selectAll.checked;
-
-});
-
-});
-
-// =======================================
-// Bulk Update
-// =======================================
-
-async function bulkUpdate(status){
-
-const selected=[];
-
-document.querySelectorAll(".leaveCheck:checked")
-.forEach((check)=>{
-
-selected.push(check.value);
-
-});
-
-if(selected.length===0){
-
-alert("Please select at least one leave request.");
-
-return;
-
-}
-
-if(!confirm(`Are you sure you want to ${status.toLowerCase()} ${selected.length} leave request(s)?`))
-return;
-
-for(const id of selected){
-
-const teacherRemark=
-document.getElementById(`teacherRemark_${id}`)?.value||"";
-
-const headmasterRemark=
-document.getElementById(`headmasterRemark_${id}`)?.value||"";
+try{
 
 await updateDoc(doc(db,"leave_requests",id),{
 
-status:status,
+status:"Approved",
 
-teacherRemark,
+teacherRemark:remark,
 
-headmasterRemark,
+approvedBy:
+currentTeacher.name,
 
-updatedAt:new Date().toISOString()
+approvedDate:
+serverTimestamp()
 
 });
 
-}
-
-alert(`${selected.length} Leave Request(s) Updated Successfully`);
+alert("✅ Leave Approved Successfully");
 
 loadLeaveRequests();
 
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
+
 }
 
-// =======================================
-// Bulk Buttons
-// =======================================
+};
 
-approveSelected.addEventListener("click",()=>{
+// ======================================
+// Reject Leave
+// ======================================
 
-bulkUpdate("Approved");
+window.rejectLeave = async function(id){
+
+const remark =
+document.getElementById(`remark_${id}`)?.value || "";
+
+try{
+
+await updateDoc(doc(db,"leave_requests",id),{
+
+status:"Rejected",
+
+teacherRemark:remark,
+
+approvedBy:
+currentTeacher.name,
+
+approvedDate:
+serverTimestamp()
 
 });
 
-rejectSelected.addEventListener("click",()=>{
-
-bulkUpdate("Rejected");
-
-});
-
-// =======================================
-// Initial Load
-// =======================================
+alert("❌ Leave Rejected Successfully");
 
 loadLeaveRequests();
+
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+};
+
+// ======================================
+// Search & Filters
+// ======================================
+
+searchStudent.addEventListener(
+"input",
+renderLeaveList
+);
+
+statusFilter.addEventListener(
+"change",
+renderLeaveList
+);
+
+classFilter?.addEventListener(
+"change",
+renderLeaveList
+);
+
+sectionFilter?.addEventListener(
+"change",
+renderLeaveList
+);
+// ======================================
+// Select All
+// ======================================
+
+selectAll?.addEventListener("change", () => {
+
+document.querySelectorAll(".leaveCheck").forEach((check)=>{
+
+check.checked = selectAll.checked;
+
+});
+
+});
+
+// ======================================
+// Bulk Actions (Coming Soon)
+// ======================================
+
+approveSelected?.addEventListener("click",()=>{
+
+alert("Bulk Approve will be available in Version 2");
+
+});
+
+rejectSelected?.addEventListener("click",()=>{
+
+alert("Bulk Reject will be available in Version 2");
+
+});
+
+// ======================================
+// Auto Refresh
+// ======================================
+
+setInterval(()=>{
+
+loadLeaveRequests();
+
+},60000);
+
+// ======================================
+// Initialize
+// ======================================
+
+loadLeaveRequests();
+
+// ======================================
+// Version
+// ======================================
+
+console.log("================================");
+console.log("School Connect TN");
+console.log("Leave Management V2");
+console.log("Status : Production Ready");
+console.log("================================");
+
+// ======================================
+// Global Error Handler
+// ======================================
+
+window.addEventListener("error",(event)=>{
+
+console.error("Global Error :",event.error);
+
+});
+
+window.addEventListener("unhandledrejection",(event)=>{
+
+console.error("Unhandled Promise :",event.reason);
+
+});
