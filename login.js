@@ -87,8 +87,12 @@ window.location.href="headmaster.html";
 break;
 
 case "Teacher":
+    // Save Teacher Document ID
+localStorage.setItem("teacherId", user.teacherId || user.id);
 
-window.location.href="teacher_dashboard.html";
+sessionStorage.setItem("teacherId", user.teacherId || user.id);
+
+window.location.href = "teacher.html";
 
 break;
 
