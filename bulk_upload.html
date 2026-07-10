@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -69,8 +70,20 @@ button:hover{
 background:#0D47A1;
 }
 
-.home{
+.downloadBtn{
 background:#2E7D32;
+}
+
+.downloadBtn:hover{
+background:#1B5E20;
+}
+
+.home{
+background:#455A64;
+}
+
+.home:hover{
+background:#263238;
 }
 
 .status{
@@ -78,6 +91,15 @@ margin-top:15px;
 font-weight:bold;
 text-align:center;
 color:#1565C0;
+}
+
+.note{
+margin-top:15px;
+padding:12px;
+background:#FFF8E1;
+border-left:5px solid orange;
+border-radius:6px;
+font-size:14px;
 }
 
 </style>
@@ -88,7 +110,7 @@ color:#1565C0;
 
 <div class="header">
 
-📥 Bulk Upload
+📥 School Connect TN - Bulk Upload
 
 </div>
 
@@ -100,32 +122,64 @@ color:#1565C0;
 
 <select id="uploadType">
 
-<option value="students">Students</option>
-
-<option value="attendance">Attendance</option>
-
-<option value="marks">Marks</option>
-
-<option value="teachers">Teachers</option>
+<option value="students">👨‍🎓 Students</option>
+<option value="teachers">👨‍🏫 Teachers</option>
+<option value="attendance">📅 Attendance</option>
+<option value="marks">📝 Marks</option>
 
 </select>
+
+<button
+class="downloadBtn"
+id="downloadTemplateBtn">
+
+⬇ Download CSV Template
+
+</button>
 
 <input
 type="file"
 id="csvFile"
 accept=".csv">
 
-<button id="uploadBtn">
+<button
+id="uploadBtn">
 
 📤 Upload CSV
 
 </button>
 
-<p class="status" id="status">
+<p
+class="status"
+id="status">
 
 Waiting for upload...
 
 </p>
+
+<div class="note">
+
+<b>CSV Format</b><br><br>
+
+Students :
+EMIS,Name,Class,Section,Father,Mother,Mobile
+
+<br><br>
+
+Teachers :
+ID,Name,Subject,Email,Mobile
+
+<br><br>
+
+Attendance :
+EMIS,Date,Status
+
+<br><br>
+
+Marks :
+EMIS,Exam,Tamil,English,Maths,Science,Social
+
+</div>
 
 </div>
 
@@ -136,87 +190,381 @@ onclick="location.href='dashboard.html'">
 🏠 Back to Dashboard
 
 </button>
-<script type="module">
 
+</div>
+
+<script type="module" src="bulk_upload.js"></script>
+
+</body>
+
+</html>
 import { db } from "./firebase.js";
 
-document.getElementById("uploadBtn").addEventListener("click", uploadCSV);
+import {
+  doc,
+  setDoc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+// =======================================
+// Elements
+// =======================================
+
+const uploadBtn =
+document.getElementById("uploadBtn");
+
+const uploadType =
+document.getElementById("uploadType");
+
+const csvFile =
+document.getElementById("csvFile");
+
+const status =
+document.getElementById("status");
+
+const downloadTemplateBtn =
+document.getElementById("downloadTemplateBtn");
+
+// =======================================
+// Events
+// =======================================
+
+uploadBtn.addEventListener(
+"click",
+uploadCSV
+);
+
+downloadTemplateBtn.addEventListener(
+"click",
+downloadTemplate
+);
+
+// =======================================
+// Download Template
+// =======================================
+
+function downloadTemplate(){
+
+const type = uploadType.value;
+
+let fileName = "";
+
+switch(type){
+
+case "students":
+fileName = "students_template.csv";
+break;
+
+case "teachers":
+fileName = "teachers_template.csv";
+break;
+
+case "attendance":
+fileName = "attendance_template.csv";
+break;
+
+case "marks":
+fileName = "marks_template.csv";
+break;
+
+}
+
+window.location.href = fileName;
+
+}
+
+// =======================================
+// Upload CSV
+// =======================================
 
 async function uploadCSV(){
 
-const file=document.getElementById("csvFile").files[0];
+const file = csvFile.files[0];
 
-const type=document.getElementById("uploadType").value;
+const type = uploadType.value;
 
 if(!file){
 
-alert("Please Select CSV File");
+alert("Please select CSV file");
 
 return;
 
 }
 
-document.getElementById("status").innerHTML="Reading CSV File...";
+status.innerHTML = "Reading CSV...";
 
-const reader=new FileReader();
+const reader = new FileReader();
 
-reader.onload=function(e){
+reader.onload = async function(e){
 
-const csv=e.target.result;
+const csv =
+e.target.result.trim();
 
-const rows=csv.split("\n");
+const rows =
+csv.split("\n");
 
-console.log(rows);
+if(rows.length <= 1){
 
-document.getElementById("status").innerHTML=
+alert("CSV File Empty");
 
-"CSV Loaded Successfully ("+(rows.length-1)+" Records)";
+return;
+
+}
+
+const headers =
+rows[0].split(",");
+
+let success = 0;
+
+let failed = 0;
+// =======================================
+// Process Records
+// =======================================
+
+for(let i=1;i<rows.length;i++){
+
+const cols = rows[i].split(",");
+
+try{
+
+switch(type){
+
+// =======================================
+// STUDENTS
+// =======================================
+
+case "students":{
+
+if(cols.length < 7){
+
+failed++;
+continue;
+
+}
+
+const emis = cols[0].trim();
+
+await setDoc(doc(db,"students",emis),{
+
+emis:emis,
+name:cols[1].trim(),
+class:cols[2].trim(),
+section:cols[3].trim(),
+father:cols[4].trim(),
+mother:cols[5].trim(),
+mobile:cols[6].trim(),
+
+attendance:"0%",
+
+updatedAt:new Date().toISOString()
+
+},{merge:true});
+
+success++;
+
+break;
+
+}
+
+// =======================================
+// TEACHERS
+// =======================================
+
+case "teachers":{
+
+if(cols.length < 5){
+
+failed++;
+continue;
+
+}
+
+const teacherId = cols[0].trim();
+
+await setDoc(doc(db,"teachers",teacherId),{
+
+id:teacherId,
+name:cols[1].trim(),
+subject:cols[2].trim(),
+email:cols[3].trim(),
+mobile:cols[4].trim(),
+
+status:"Active",
+
+updatedAt:new Date().toISOString()
+
+},{merge:true});
+
+success++;
+
+break;
+
+}
+
+// =======================================
+// ATTENDANCE
+// =======================================
+
+case "attendance":{
+
+if(cols.length < 3){
+
+failed++;
+continue;
+
+}
+
+const emis = cols[0].trim();
+
+const date = cols[1].trim();
+
+const attendanceStatus = cols[2].trim();
+
+await setDoc(
+
+doc(db,"attendance",date,"students",emis),
+
+{
+
+emis:emis,
+
+date:date,
+
+status:attendanceStatus,
+
+updatedAt:new Date().toISOString()
+
+},
+
+{merge:true}
+
+);
+
+success++;
+
+break;
+
+}
+// =======================================
+// MARKS
+// =======================================
+
+case "marks":{
+
+if(cols.length < 7){
+
+failed++;
+continue;
+
+}
+
+const emis = cols[0].trim();
+
+const exam = cols[1].trim();
+
+const tamil = Number(cols[2].trim());
+const english = Number(cols[3].trim());
+const maths = Number(cols[4].trim());
+const science = Number(cols[5].trim());
+const social = Number(cols[6].trim());
+
+const total =
+tamil + english + maths + science + social;
+
+const percentage =
+(total/5).toFixed(2);
+
+const result =
+(tamil>=35 &&
+english>=35 &&
+maths>=35 &&
+science>=35 &&
+social>=35)
+? "PASS"
+: "FAIL";
+
+await setDoc(
+
+doc(db,"marks",exam,"students",emis),
+
+{
+
+emis,
+
+exam,
+
+tamil,
+
+english,
+
+maths,
+
+science,
+
+social,
+
+total,
+
+percentage,
+
+result,
+
+updatedAt:new Date().toISOString()
+
+},
+
+{merge:true}
+
+);
+
+success++;
+
+break;
+
+}
+
+default:
+
+failed++;
+
+}
+
+}catch(error){
+
+console.error(error);
+
+failed++;
+
+}
+
+}
+
+// =======================================
+// Import Summary
+// =======================================
+
+status.innerHTML =
+`✅ Import Completed<br>
+Success : ${success}<br>
+Failed : ${failed}`;
+
+alert(
+`Import Completed
+
+Success : ${success}
+
+Failed : ${failed}`
+);
+
+};
+
+reader.onerror = function(){
+
+status.innerHTML =
+"❌ Error Reading CSV File";
 
 };
 
 reader.readAsText(file);
 
-}
-  reader.onload=function(e){
-
-const csv=e.target.result.trim();
-
-const rows=csv.split("\n");
-
-if(rows.length<=1){
-
-document.getElementById("status").innerHTML="CSV File is Empty";
-
-return;
-
-}
-
-const headers=rows[0].split(",");
-
-console.log("Headers:",headers);
-
-console.log("Total Records:",rows.length-1);
-
-document.getElementById("status").innerHTML=
-
-"✅ Ready to Import : "+(rows.length-1)+" Records";
-
-alert("CSV Validation Completed Successfully");
-
-};
-
-reader.onerror=function(){
-
-document.getElementById("status").innerHTML=
-
-"❌ Error Reading CSV File";
-
-};
-
-}
-
-</script>
-
-</body>
-
-</html>
+}  
