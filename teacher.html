@@ -8,48 +8,7 @@
 
 <title>Teacher Dashboard</title>
 
-<style>
-
-body{
-font-family:Arial,sans-serif;
-background:#f5f5f5;
-margin:0;
-}
-
-.header{
-background:#1565C0;
-color:white;
-padding:18px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-}
-
-.card{
-background:white;
-margin:20px;
-padding:20px;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
-}
-
-button{
-width:100%;
-padding:15px;
-margin-top:12px;
-font-size:17px;
-background:#1565C0;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
-
-.logout{
-background:#D32F2F;
-}
-
-</style>
+<link rel="stylesheet" href="css/teacher.css">
 
 </head>
 
@@ -57,53 +16,218 @@ background:#D32F2F;
 
 <div class="header">
 
-👨‍🏫 Teacher Dashboard
+<div>
+
+<h2>👨‍🏫 School Connect TN</h2>
+
+<p id="teacherWelcome">
+Welcome Teacher
+</p>
 
 </div>
 
-<div class="card">
+<button id="logoutBtn">
 
-<h2>Welcome Teacher</h2>
-
-<button onclick="location.href='attendance.html'">
-
-📅 Attendance
-
-</button>
-
-<button onclick="location.href='marks_entry.html'">
-
-📝 Marks Entry
-
-</button>
-
-<button onclick="location.href='homework_management.html'">
-
-📚 Homework
-
-</button>
-
-<button onclick="location.href='notice_list.html'">
-
-📢 Notices
-
-</button>
-
-<button onclick="location.href='dashboard.html'">
-
-🏠 Home
-
-</button>
-
-<button class="logout" onclick="logout()">
-
-🚪 Logout
+Logout
 
 </button>
 
 </div>
 
-<script type="module" src="js/session.js"></script>
+<div class="container">
+
+<div class="profileCard">
+
+<h2 id="teacherName">
+
+Teacher Name
+
+</h2>
+
+<p id="teacherRole">
+
+Loading Role...
+
+</p>
+
+</div>
+
+<div class="dashboard">
+
+<div class="dashCard blue">
+
+<h3 id="attendanceCount">
+
+0
+
+</h3>
+
+<p>Today's Attendance</p>
+
+</div>
+
+<div class="dashCard green">
+
+<h3 id="homeworkCount">
+
+0
+
+</h3>
+
+<p>Homework</p>
+
+</div>
+
+<div class="dashCard orange">
+
+<h3 id="noticeCount">
+
+0
+
+</h3>
+
+<p>Notices</p>
+
+</div>
+
+<div
+class="dashCard red"
+id="leaveCard">
+
+<h3 id="leaveCount">
+
+0
+
+</h3>
+
+<p>Pending Leaves</p>
+
+</div>
+
+</div>
+
+<h3 class="sectionTitle">
+
+Quick Actions
+
+</h3>
+
+<div class="menuGrid">
+
+<a
+href="attendance.html"
+class="menuCard">
+
+📅
+
+<span>Attendance</span>
+
+</a>
+
+<a
+href="marks_entry.html"
+class="menuCard">
+
+📝
+
+<span>Marks Entry</span>
+
+</a>
+
+<a
+href="homework_management.html"
+class="menuCard">
+
+📚
+
+<span>Homework</span>
+
+</a>
+
+<a
+href="notice_management.html"
+class="menuCard">
+
+📢
+
+<span>Notices</span>
+
+</a>
+
+<a
+href="calendar_management.html"
+class="menuCard">
+
+📅
+
+<span>Calendar</span>
+
+</a>
+<a
+href="report_card.html"
+class="menuCard">
+
+📄
+
+<span>Report Card</span>
+
+</a>
+
+<a
+href="student.html"
+class="menuCard">
+
+👨‍🎓
+
+<span>Students</span>
+
+</a>
+
+<a
+href="leave_management.html"
+class="menuCard"
+id="leaveMenu">
+
+📝
+
+<span>Leave Approval</span>
+
+</a>
+
+<a
+href="settings.html"
+class="menuCard">
+
+⚙️
+
+<span>Settings</span>
+
+</a>
+
+</div>
+
+<div class="footer">
+
+<p>
+
+School Connect TN v1.0
+
+</p>
+
+<p>
+
+© 2026 Thirumalvadi Government High School
+
+</p>
+
+</div>
+
+</div>
+
+<script type="module"
+src="js/teacher.js">
+
+</script>
 
 </body>
 
