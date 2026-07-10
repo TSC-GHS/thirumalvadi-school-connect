@@ -38,7 +38,7 @@ let currentTeacher = null;
 
 async function loadTeacher(){
 
-const teacherDocId = localStorage.getItem("teacherDocId");
+const teacherDocId = localStorage.getItem("teacherId");
 
 if(!teacherDocId){
 
@@ -50,7 +50,7 @@ return;
 
 }
 
-const teacherRef = doc(db,"teachers",teacherDocId);
+const teacherRef = doc(db,"teachers",teacherId);
 
 const teacherSnap = await getDoc(teacherRef);
 
@@ -218,7 +218,7 @@ console.log(error);
 
 // Clear Session
 
-localStorage.removeItem("teacherDocId");
+localStorage.removeItem("teacherId");
 localStorage.removeItem("teacherId");
 localStorage.removeItem("teacherName");
 localStorage.removeItem("teacherType");
@@ -236,7 +236,7 @@ location.href="index.html";
 // Session Validation
 // =====================================
 
-if(!localStorage.getItem("teacherDocId")){
+if(!localStorage.getItem("teacherId")){
 
 alert("Session Expired. Please login again.");
 
