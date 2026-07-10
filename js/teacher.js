@@ -31,75 +31,57 @@ const leaveCard = document.getElementById("leaveCard");
 const logoutBtn = document.getElementById("logoutBtn");
 
 let currentTeacher = null;
-
 // =====================================
 // Load Teacher Profile
 // =====================================
 
 async function loadTeacher() {
 
-  const teacherId = localStorage.getItem("teacherId");
+const teacherId = localStorage.getItem("teacherId");
 
-  if (!teacherId) {
+alert("Teacher ID : " + teacherId);
 
-    alert("Teacher session expired.");
+if (!teacherId) {
 
-    location.href = "index.html";
+alert("Teacher session expired.");
 
-    return;
+location.href = "index.html";
 
-  }
+return;
 
-  alert("Loading Teacher : " + teacherId);
+}
 
-  try {
+const teacherRef = doc(db, "teachers", teacherId);
 
-    const teacherRef = doc(db, "teachers", teacherId);
+const teacherSnap = await getDoc(teacherRef);
 
-    const teacherSnap = await getDoc(teacherRef);
+alert("Searching : teachers/" + teacherId);
 
-    alert("Document Exists : " + teacherSnap.exists());
+alert("Document Exists : " + teacherSnap.exists());
 
-    if (!teacherSnap.exists()) {
+if (!teacherSnap.exists()) {
 
-      alert("Teacher record not found.");
+alert("Teacher record not found.");
 
-      location.href = "index.html";
+location.href = "index.html";
 
-      return;
+return;
 
-    }
+}
 
-    currentTeacher = teacherSnap.data();
+currentTeacher = teacherSnap.data();
 
-    teacherName.textContent =
-      currentTeacher.name || "Teacher";
+teacherName.textContent = currentTeacher.name || "Teacher";
 
-    teacherRole.textContent =
-      currentTeacher.teacherType || "Teacher";
+teacherRole.textContent = currentTeacher.teacherType || "Teacher";
 
-    if (currentTeacher.teacherType === "Subject Teacher") {
+if (currentTeacher.teacherType === "Subject Teacher") {
 
-      leaveMenu.style.display = "none";
+leaveMenu.style.display = "none";
 
-      leaveCard.style.display = "none";
+leaveCard.style.display = "none";
 
-    }
-
-  } catch (error) {
-
-    alert(
-      "Firestore Error\n\n" +
-      error.code +
-      "\n\n" +
-      error.message
-    );
-
-    console.error(error);
-
-    return;
-
-  }
+}
 
 }
 // =====================================
