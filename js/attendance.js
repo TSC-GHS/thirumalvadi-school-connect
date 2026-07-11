@@ -206,8 +206,7 @@ Absent
 console.error(error);
 
 alert(error.message);
-
-}
+});
   // ======================================
 // Save / Update Attendance
 // ======================================
