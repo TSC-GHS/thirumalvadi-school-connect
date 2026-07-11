@@ -7,7 +7,41 @@ import {
   doc,
   getDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+// ===============================
+// Auto Load Student Details
+// ===============================
 
+const parentEMIS = localStorage.getItem("parentEMIS");
+
+if (parentEMIS) {
+
+  document.getElementById("emis").value = parentEMIS;
+  document.getElementById("emis").readOnly = true;
+
+  loadStudent(parentEMIS);
+
+}
+
+async function loadStudent(emis) {
+
+  try {
+
+    const studentSnap = await getDoc(doc(db, "students", emis));
+
+    if (!studentSnap.exists()) return;
+
+    const student = studentSnap.data();
+
+    document.getElementById("studentName").value = student.name;
+    document.getElementById("studentName").readOnly = true;
+
+  } catch (e) {
+
+    console.log(e);
+
+  }
+
+}
 window.submitLeave = async function () {
 
   const emis = document.getElementById("emis").value.trim();
