@@ -4,14 +4,71 @@ import {
 collection,
 query,
 where,
-getDocs
+getDocs,
+addDoc,
+updateDoc,
+doc,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const studentList =
-document.getElementById("studentList");
+const studentList = document.getElementById("studentList");
+const loadStudents = document.getElementById("loadStudents");
+const saveAttendance = document.getElementById("saveAttendance");
+const attendanceDate = document.getElementById("attendanceDate");
 
-const loadStudents =
-document.getElementById("loadStudents");
+let existingAttendance = [];
+let isUpdate = false;
+
+// ======================================
+// Check Existing Attendance
+// ======================================
+
+async function checkExistingAttendance(className, section, date){
+
+existingAttendance = [];
+isUpdate = false;
+
+const q = query(
+
+collection(db,"attendance"),
+
+where("class","==",className),
+
+where("section","==",section),
+
+where("date","==",date)
+
+);
+
+const snap = await getDocs(q);
+
+snap.forEach((docSnap)=>{
+
+existingAttendance.push({
+
+id:docSnap.id,
+
+...docSnap.data()
+
+});
+
+});
+
+if(existingAttendance.length>0){
+
+isUpdate = true;
+
+saveAttendance.innerHTML =
+"✏️ Update Attendance";
+
+}else{
+
+saveAttendance.innerHTML =
+"💾 Save Attendance";
+
+}
+
+}
 
 // ======================================
 // Load Students
@@ -24,6 +81,17 @@ document.getElementById("className").value;
 
 const section =
 document.getElementById("section").value;
+
+const date =
+attendanceDate.value;
+
+if(!date){
+
+alert("Please Select Date");
+
+return;
+
+}
 
 if(!className || !section){
 
@@ -39,6 +107,12 @@ studentList.innerHTML = `
 </tr>
 `;
 
+await checkExistingAttendance(
+className,
+section,
+date
+);
+
 try{
 
 const q = query(
@@ -53,13 +127,15 @@ where("section","==",section)
 
 const snap = await getDocs(q);
 
-studentList.innerHTML = "";
+studentList.innerHTML="";
 
 if(snap.empty){
 
-studentList.innerHTML = `
+studentList.innerHTML=`
 <tr>
-<td colspan="3">No Students Found</td>
+<td colspan="3">
+No Students Found
+</td>
 </tr>
 `;
 
@@ -71,6 +147,24 @@ snap.forEach((docSnap)=>{
 
 const student = docSnap.data();
 
+let status = "Present";
+
+if(isUpdate){
+
+const old = existingAttendance.find(
+
+x=>x.emis===student.emis
+
+);
+
+if(old){
+
+status = old.status;
+
+}
+
+}
+
 studentList.innerHTML += `
 
 <tr>
@@ -81,11 +175,21 @@ studentList.innerHTML += `
 
 <td>
 
-<select class="status" data-emis="${student.emis}">
+<select
+class="status"
+data-emis="${student.emis}">
 
-<option value="Present">Present</option>
+<option
+value="Present"
+${status==="Present"?"selected":""}>
+Present
+</option>
 
-<option value="Absent">Absent</option>
+<option
+value="Absent"
+${status==="Absent"?"selected":""}>
+Absent
+</option>
 
 </select>
 
@@ -104,24 +208,11 @@ console.error(error);
 alert(error.message);
 
 }
-
-});
-import {
-addDoc,
-serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
+  // ======================================
+// Save / Update Attendance
 // ======================================
-// Save Attendance
-// ======================================
-
-const saveAttendance =
-document.getElementById("saveAttendance");
 
 saveAttendance.addEventListener("click", async ()=>{
-
-const attendanceDate =
-document.getElementById("attendanceDate").value;
 
 const className =
 document.getElementById("className").value;
@@ -129,9 +220,12 @@ document.getElementById("className").value;
 const section =
 document.getElementById("section").value;
 
-if(!attendanceDate || !className || !section){
+const date =
+attendanceDate.value;
 
-alert("Please select Date, Class and Section");
+if(!date || !className || !section){
+
+alert("Please Select Date, Class & Section");
 
 return;
 
@@ -166,13 +260,50 @@ statusSelect.value;
 const studentName =
 row.cells[1].textContent;
 
-await addDoc(collection(db,"attendance"),{
+// Existing Attendance
+
+const old =
+existingAttendance.find(
+x=>x.emis===emis
+);
+
+if(old){
+
+await updateDoc(
+
+doc(db,"attendance",old.id),
+
+{
+
+status:status,
+
+markedBy:
+localStorage.getItem("teacherName") || "Teacher",
+
+createdAt:
+serverTimestamp()
+
+}
+
+);
+
+}else{
+
+await addDoc(
+
+collection(db,"attendance"),
+
+{
 
 emis,
 studentName,
+
 class:className,
+
 section,
-date:attendanceDate,
+
+date,
+
 status,
 
 markedBy:
@@ -181,11 +312,30 @@ localStorage.getItem("teacherName") || "Teacher",
 createdAt:
 serverTimestamp()
 
-});
+}
+
+);
 
 }
 
-alert("✅ Attendance Saved Successfully");
+}
+
+alert(
+
+isUpdate
+
+? "✅ Attendance Updated Successfully"
+
+: "✅ Attendance Saved Successfully"
+
+);
+
+// Refresh
+await checkExistingAttendance(
+className,
+section,
+date
+);
 
 }catch(error){
 
@@ -197,4 +347,19 @@ alert(error.message);
 
 });
 
-console.log("Attendance Module Loaded");
+// ======================================
+// Default Date = Today
+// ======================================
+
+attendanceDate.value =
+new Date().toISOString().split("T")[0];
+
+// ======================================
+// Module Loaded
+// ======================================
+
+console.log("================================");
+console.log("School Connect TN");
+console.log("Attendance Management V2");
+console.log("Duplicate Prevention Enabled");
+console.log("================================");
