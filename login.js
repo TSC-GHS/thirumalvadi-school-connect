@@ -120,7 +120,7 @@ window.loginUser = async function () {
         sessionStorage.setItem("emis", user.emis || "");
         sessionStorage.setItem("userRole", "Parent");
 
-        window.location.href = "parent.html";
+        window.location.href = "parent_dashboard.html";
 
         break;
 
@@ -134,7 +134,7 @@ window.loginUser = async function () {
         sessionStorage.setItem("emis", user.emis || "");
         sessionStorage.setItem("userRole", "Student");
 
-        window.location.href = "student.html";
+        window.location.href = "student_dashboard.html";
 
         break;
 
