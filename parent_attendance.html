@@ -1,1 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Attendance</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+max-width:900px;
+margin:20px auto;
+padding:15px;
+}
+
+.card{
+background:white;
+padding:18px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+margin-bottom:15px;
+}
+
+.summary{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-bottom:20px;
+}
+
+.box{
+padding:15px;
+border-radius:10px;
+text-align:center;
+color:white;
+font-weight:bold;
+}
+
+.present{
+background:#2E7D32;
+}
+
+.absent{
+background:#D32F2F;
+}
+
+.percent{
+background:#1565C0;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#1565C0;
+color:white;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:20px;
+border:none;
+border-radius:8px;
+background:#2E7D32;
+color:white;
+font-size:17px;
+cursor:pointer;
+}
+
+.statusPresent{
+color:#2E7D32;
+font-weight:bold;
+}
+
+.statusAbsent{
+color:#D32F2F;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📅 My Attendance
+
+</div>
+
+<div class="container">
+
+<div class="summary">
+
+<div class="box present">
+
+Present
+
+<h2 id="presentCount">0</h2>
+
+</div>
+
+<div class="box absent">
+
+Absent
+
+<h2 id="absentCount">0</h2>
+
+</div>
+
+<div class="box percent">
+
+Attendance %
+
+<h2 id="attendancePercent">0%</h2>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="attendanceBody">
+
+<tr>
+
+<td colspan="2">
+
+Loading...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<button onclick="location.href='parent.html'">
+
+🏠 Back to Parent Dashboard
+
+</button>
+
+</div>
+
+<script type="module" src="js/parent_attendance.js"></script>
+
+</body>
+</html>
+import { db } from "../firebase.js";
+
+import {
+collection,
+query,
+where,
+getDocs,
+orderBy
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+const attendanceBody =
+document.getElementById("attendanceBody");
+
+const presentCount =
+document.getElementById("presentCount");
+
+const absentCount =
+document.getElementById("absentCount");
+
+const attendancePercent =
+document.getElementById("attendancePercent");
+
+const emis =
+localStorage.getItem("parentEMIS");
+
+async function loadAttendance(){
+
+if(!emis){
+
+attendanceBody.innerHTML=`
+<tr>
+<td colspan="2">
+EMIS Number Not Found
+</td>
+</tr>
+`;
+
+return;
+
+}
+
+try{
+
+const q=query(
+
+collection(db,"attendance"),
+
+where("emis","==",String(emis)),
+
+orderBy("date","desc")
+
+);
+
+const snap=await getDocs(q);
+
+attendanceBody.innerHTML="";
+
+let present=0;
+let absent=0;
+
+if(snap.empty){
+
+attendanceBody.innerHTML=`
+<tr>
+<td colspan="2">
+No Attendance Found
+</td>
+</tr>
+`;
+
+return;
+
+}
+
+snap.forEach((docSnap)=>{
+
+const a=docSnap.data();
+
+if(a.status==="Present"){
+
+present++;
+
+}else{
+
+absent++;
+
+}
+
+attendanceBody.innerHTML+=`
+
+<tr>
+
+<td>${a.date}</td>
+
+<td class="${
+a.status==="Present"
+?"statusPresent"
+:"statusAbsent"
+}">
+
+${a.status}
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+presentCount.innerHTML=present;
+
+absentCount.innerHTML=absent;
+
+const total=present+absent;
+
+attendancePercent.innerHTML=
+total===0
+?"0%"
+:((present/total)*100).toFixed(1)+"%";
+
+}catch(error){
+
+console.error(error);
+
+attendanceBody.innerHTML=`
+<tr>
+<td colspan="2">
+${error.message}
+</td>
+</tr>
+`;
+
+}
+
+}
+
+loadAttendance();
