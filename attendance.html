@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Attendance Management</title>
-
-<link rel="stylesheet" href="css/style.css">
 
 <style>
 
@@ -19,7 +16,7 @@ background:#f4f6f9;
 }
 
 .header{
-background:#2E7D32;
+background:#1565C0;
 color:white;
 padding:18px;
 text-align:center;
@@ -28,9 +25,9 @@ font-weight:bold;
 }
 
 .container{
-max-width:1100px;
-margin:auto;
-padding:20px;
+max-width:900px;
+margin:20px auto;
+padding:15px;
 }
 
 .card{
@@ -41,88 +38,56 @@ box-shadow:0 2px 8px rgba(0,0,0,.15);
 margin-bottom:20px;
 }
 
-.filters{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:15px;
-margin-bottom:20px;
+label{
+font-weight:bold;
+display:block;
+margin-top:12px;
 }
 
-input,select{
-
+select,input{
 width:100%;
 padding:12px;
+margin-top:6px;
 border:1px solid #ccc;
 border-radius:8px;
 box-sizing:border-box;
 font-size:16px;
-
-}
-
-button{
-
-width:100%;
-padding:14px;
-margin-top:10px;
-border:none;
-border-radius:8px;
-background:#2E7D32;
-color:white;
-font-size:17px;
-cursor:pointer;
-
-}
-
-button:hover{
-
-background:#1B5E20;
-
 }
 
 table{
-
 width:100%;
 border-collapse:collapse;
-
+margin-top:20px;
 }
 
 th,td{
-
 border:1px solid #ddd;
 padding:10px;
 text-align:center;
-
 }
 
 th{
-
-background:#2E7D32;
+background:#1565C0;
 color:white;
-
 }
 
-.status{
-
-font-weight:bold;
-
+button{
+width:100%;
+padding:14px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+font-size:17px;
+cursor:pointer;
+color:white;
 }
 
-.present{
-
-color:green;
-
+.save{
+background:#2E7D32;
 }
 
-.absent{
-
-color:red;
-
-}
-
-.leave{
-
-color:orange;
-
+.back{
+background:#1565C0;
 }
 
 </style>
@@ -132,55 +97,36 @@ color:orange;
 <body>
 
 <div class="header">
-
 📅 Attendance Management
-
 </div>
 
 <div class="container">
 
 <div class="card">
 
-<div class="filters">
+<label>Date</label>
+<input type="date" id="attendanceDate">
 
-<input
-type="date"
-id="attendanceDate">
-
-<select id="classFilter">
-
+<label>Class</label>
+<select id="className">
 <option value="">Select Class</option>
-
 <option>6</option>
-
 <option>7</option>
-
 <option>8</option>
-
 <option>9</option>
-
 <option>10</option>
-
 </select>
 
-<select id="sectionFilter">
-
-<option value="">Section</option>
-
+<label>Section</label>
+<select id="section">
+<option value="">Select Section</option>
 <option>A</option>
-
 <option>B</option>
-
 <option>C</option>
-
 </select>
 
-</div>
-
-<button onclick="loadStudents()">
-
-🔍 Load Students
-
+<button class="save" id="loadStudents">
+📋 Load Students
 </button>
 
 </div>
@@ -193,23 +139,23 @@ id="attendanceDate">
 
 <tr>
 
-<th>Name</th>
-
 <th>EMIS</th>
 
-<th>Attendance</th>
+<th>Name</th>
+
+<th>Status</th>
 
 </tr>
 
 </thead>
 
-<tbody id="studentTable">
+<tbody id="studentList">
 
 <tr>
 
 <td colspan="3">
 
-Select Class & Date
+Click "Load Students"
 
 </td>
 
@@ -219,27 +165,24 @@ Select Class & Date
 
 </table>
 
-</div>
-
-<button onclick="saveAttendance()">
+<button class="save" id="saveAttendance">
 
 💾 Save Attendance
 
 </button>
-<button onclick="location.href='attendance_history.html'">
 
-📊 Attendance History
+<button class="back"
+onclick="location.href='teacher.html'">
 
-</button>
-
-<button onclick="location.href='headmaster.html'">
-
-🏠 Back
+🏠 Back to Teacher Dashboard
 
 </button>
+
+</div>
+
+</div>
 
 <script type="module" src="js/attendance.js"></script>
 
 </body>
-
 </html>
