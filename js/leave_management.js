@@ -10,13 +10,9 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-import {
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-
 // ======================================
 // School Connect TN
-// Leave Management V2
+// Leave Management V3
 // ======================================
 
 // Elements
@@ -57,10 +53,7 @@ document.getElementById("approveSelected");
 const rejectSelected =
 document.getElementById("rejectSelected");
 
-// ======================================
-
 let leaveRequests = [];
-
 let currentTeacher = null;
 
 // ======================================
@@ -70,7 +63,8 @@ let currentTeacher = null;
 async function loadTeacher(){
 
 const teacherId =
-localStorage.getItem("teacherId");
+localStorage.getItem("teacherId") ||
+sessionStorage.getItem("teacherId");
 
 if(!teacherId){
 
@@ -82,7 +76,7 @@ return false;
 
 }
 
-const teacherDoc =
+const teacherSnap =
 await getDocs(
 
 query(
@@ -95,7 +89,7 @@ where("id","==",teacherId)
 
 );
 
-if(teacherDoc.empty){
+if(teacherSnap.empty){
 
 alert("Teacher Profile Not Found");
 
@@ -106,39 +100,35 @@ return false;
 }
 
 currentTeacher =
-teacherDoc.docs[0].data();
+teacherSnap.docs[0].data();
 
 return true;
 
 }
+
 // ======================================
 // Load Leave Requests
 // ======================================
 
 async function loadLeaveRequests(){
 
-const loaded = await loadTeacher();
+const loaded =
+await loadTeacher();
 
 if(!loaded) return;
 
 leaveRequests = [];
 
-let leaveQuery;
-
-// Subject Teacher -> No Approval
-
 if(currentTeacher.teacherType==="Subject Teacher"){
 
-leaveList.innerHTML=
+leaveList.innerHTML =
 "<h3>No Leave Approval Permission</h3>";
 
 return;
 
 }
 
-// Class Teacher
-
-leaveQuery = query(
+const leaveQuery = query(
 
 collection(db,"leave_requests"),
 
@@ -169,7 +159,7 @@ renderLeaveList();
 // Render Leave List
 // ======================================
 
-function renderLeaveList() {
+function renderLeaveList(){
 
 let pending = 0;
 let approved = 0;
@@ -192,7 +182,7 @@ const student =
 (leave.studentName || "").toLowerCase();
 
 const emis =
-(leave.emis || "").toLowerCase();
+String(leave.emis || "").toLowerCase();
 
 if(
 !student.includes(keyword) &&
@@ -218,7 +208,7 @@ leaveList.innerHTML += `
 
 <p><b>EMIS :</b> ${leave.emis}</p>
 
-<p><b>Class :</b> ${leave.class}-${leave.section}</p>
+<p><b>Class :</b> ${leave.class || "-"} - ${leave.section || "-"}</p>
 
 <p><b>Date :</b> ${leave.leaveDate}</p>
 
@@ -264,105 +254,7 @@ rejectedCount.textContent = rejected;
 totalCount.textContent = leaveRequests.length;
 
 }
-// ======================================
-// Render Leave List
-// ======================================
 
-function renderLeaveList() {
-
-let pending = 0;
-let approved = 0;
-let rejected = 0;
-
-leaveList.innerHTML = "";
-
-const keyword =
-searchStudent.value.trim().toLowerCase();
-
-leaveRequests.forEach((leave)=>{
-
-if(leave.status==="Pending") pending++;
-if(leave.status==="Approved") approved++;
-if(leave.status==="Rejected") rejected++;
-
-if(keyword){
-
-const student =
-(leave.studentName || "").toLowerCase();
-
-const emis =
-(leave.emis || "").toLowerCase();
-
-if(
-!student.includes(keyword) &&
-!emis.includes(keyword)
-){
-return;
-}
-
-}
-
-if(
-statusFilter.value !== "All" &&
-leave.status !== statusFilter.value
-){
-return;
-}
-
-leaveList.innerHTML += `
-
-<div class="leaveCard">
-
-<h3>${leave.studentName}</h3>
-
-<p><b>EMIS :</b> ${leave.emis}</p>
-
-<p><b>Class :</b> ${leave.class}-${leave.section}</p>
-
-<p><b>Date :</b> ${leave.leaveDate}</p>
-
-<p><b>Reason :</b> ${leave.reason}</p>
-
-<p><b>Status :</b> ${leave.status}</p>
-
-<textarea
-id="remark_${leave.id}"
-placeholder="Teacher Remark">${leave.teacherRemark || ""}</textarea>
-
-<div class="actions">
-
-<button
-class="approveBtn"
-onclick="approveLeave('${leave.id}')"
-${leave.status==="Approved" ? "disabled" : ""}>
-
-✅ Approve
-
-</button>
-
-<button
-class="rejectBtn"
-onclick="rejectLeave('${leave.id}')"
-${leave.status==="Rejected" ? "disabled" : ""}>
-
-❌ Reject
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-pendingCount.textContent = pending;
-approvedCount.textContent = approved;
-rejectedCount.textContent = rejected;
-totalCount.textContent = leaveRequests.length;
-
-}
 // ======================================
 // Approve Leave
 // ======================================
@@ -377,14 +269,9 @@ try{
 await updateDoc(doc(db,"leave_requests",id),{
 
 status:"Approved",
-
 teacherRemark:remark,
-
-approvedBy:
-currentTeacher.name,
-
-approvedDate:
-serverTimestamp()
+approvedBy:currentTeacher.name,
+approvedDate:serverTimestamp()
 
 });
 
@@ -416,14 +303,9 @@ try{
 await updateDoc(doc(db,"leave_requests",id),{
 
 status:"Rejected",
-
 teacherRemark:remark,
-
-approvedBy:
-currentTeacher.name,
-
-approvedDate:
-serverTimestamp()
+approvedBy:currentTeacher.name,
+approvedDate:serverTimestamp()
 
 });
 
@@ -440,30 +322,39 @@ alert(error.message);
 }
 
 };
-
 // ======================================
 // Search & Filters
 // ======================================
 
-searchStudent.addEventListener(
-"input",
-renderLeaveList
-);
+searchStudent?.addEventListener("input", renderLeaveList);
 
-statusFilter.addEventListener(
-"change",
-renderLeaveList
-);
+statusFilter?.addEventListener("change", renderLeaveList);
 
-classFilter?.addEventListener(
-"change",
-renderLeaveList
-);
+classFilter?.addEventListener("change", () => {
 
-sectionFilter?.addEventListener(
-"change",
-renderLeaveList
-);
+  const value = classFilter.value;
+
+  if (value === "All") {
+
+    renderLeaveList();
+
+    return;
+
+  }
+
+  leaveList.querySelectorAll(".leaveCard").forEach((card) => {
+
+    card.style.display =
+      card.innerHTML.includes(`Class :</b> ${value} -`)
+        ? "block"
+        : "none";
+
+  });
+
+});
+
+sectionFilter?.addEventListener("change", renderLeaveList);
+
 // ======================================
 // Select All
 // ======================================
@@ -479,7 +370,7 @@ check.checked = selectAll.checked;
 });
 
 // ======================================
-// Bulk Actions (Coming Soon)
+// Bulk Actions
 // ======================================
 
 approveSelected?.addEventListener("click",()=>{
@@ -498,9 +389,17 @@ alert("Bulk Reject will be available in Version 2");
 // Auto Refresh
 // ======================================
 
-setInterval(()=>{
+setInterval(async()=>{
 
-loadLeaveRequests();
+try{
+
+await loadLeaveRequests();
+
+}catch(error){
+
+console.error(error);
+
+}
 
 },60000);
 
@@ -516,8 +415,8 @@ loadLeaveRequests();
 
 console.log("================================");
 console.log("School Connect TN");
-console.log("Leave Management V2");
-console.log("Status : Production Ready");
+console.log("Leave Management V3");
+console.log("Teacher Approval Ready");
 console.log("================================");
 
 // ======================================
