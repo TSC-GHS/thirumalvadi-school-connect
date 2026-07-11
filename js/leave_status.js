@@ -4,6 +4,7 @@ import {
   collection,
   query,
   where,
+  orderBy,
   getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
@@ -30,13 +31,14 @@ async function loadLeaveStatus() {
     return;
   }
 
-  leaveList.innerHTML = "<p>Loading...</p>";
+  leaveList.innerHTML = "<h3>Loading...</h3>";
 
   try {
 
     const q = query(
       collection(db, "leave_requests"),
-      where("emis", "==", String(emis))
+      where("emis", "==", String(emis)),
+      orderBy("createdAt", "desc")
     );
 
     const snap = await getDocs(q);
@@ -47,80 +49,94 @@ async function loadLeaveStatus() {
 
       leaveList.innerHTML = `
       <div class="card">
-        <h3>No Leave Requests Found</h3>
+      <h3>No Leave Requests Found</h3>
       </div>`;
 
       return;
     }
-        snap.forEach((leaveDoc) => {
+
+    snap.forEach((leaveDoc) => {
 
       const leave = leaveDoc.data();
 
       let color = "#FB8C00";
 
-      if (leave.status === "Approved") {
+      if (leave.status === "Approved")
         color = "#2E7D32";
-      }
 
-      if (leave.status === "Rejected") {
+      if (leave.status === "Rejected")
         color = "#D32F2F";
-      }
 
-      const approvedDate =
-        leave.approvedDate && leave.approvedDate.seconds
-          ? new Date(
-              leave.approvedDate.seconds * 1000
-            ).toLocaleString()
-          : "-";
+      let approvedDate = "-";
+
+      if (leave.approvedDate && leave.approvedDate.toDate) {
+        approvedDate =
+          leave.approvedDate
+          .toDate()
+          .toLocaleString("en-IN");
+      }
 
       leaveList.innerHTML += `
 
       <div class="card">
 
-      <h3>👨‍🎓 ${leave.studentName}</h3>
+      <h3 style="color:#1565C0;">
+      ${leave.studentName}
+      </h3>
 
-      <p><b>🆔 EMIS :</b> ${leave.emis}</p>
+      <p><b>EMIS :</b> ${leave.emis}</p>
 
-      <p><b>📅 Leave Date :</b> ${leave.leaveDate}</p>
+      <p><b>Leave Date :</b> ${leave.leaveDate}</p>
 
-      <p><b>📝 Reason :</b> ${leave.reason}</p>
+      <p><b>Reason :</b> ${leave.reason}</p>
 
       <p>
-      <b>📌 Status :</b>
-      <span style="
-      color:${color};
-      font-weight:bold;
-      ">
+      <b>Status :</b>
+      <span style="color:${color};font-weight:bold;">
       ${leave.status}
       </span>
       </p>
 
-      <p><b>💬 Teacher Remark :</b><br>
-      ${leave.teacherRemark || "No Remarks"}
+      <p>
+      <b>Teacher Remark :</b>
+      ${leave.teacherRemark || "-"}
       </p>
 
-      <p><b>👨‍🏫 Approved By :</b>
+      <p>
+      <b>Approved By :</b>
       ${leave.approvedBy || "-"}
       </p>
 
-      <p><b>🕒 Approved Date :</b>
+      <p>
+      <b>Approved Date :</b>
       ${approvedDate}
       </p>
+
+      <hr>
 
       </div>
 
       `;
 
     });
-      } catch (error) {
+
+  }
+
+  catch (error) {
 
     console.error(error);
 
     leaveList.innerHTML = `
+
     <div class="card">
-      <h3 style="color:red;">Error</h3>
-      <p>${error.message}</p>
-    </div>`;
+
+    <h3 style="color:red;">Error</h3>
+
+    <p>${error.message}</p>
+
+    </div>
+
+    `;
 
   }
 
