@@ -38,7 +38,6 @@ async function loadLeaveStatus() {
     const q = query(
       collection(db, "leave_requests"),
       where("emis", "==", String(emis)),
-      orderBy("createdAt", "desc")
     );
 
     const snap = await getDocs(q);
