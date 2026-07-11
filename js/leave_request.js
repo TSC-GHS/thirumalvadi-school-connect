@@ -3,13 +3,37 @@ import { db } from "../firebase.js";
 import {
   collection,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  doc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-// ======================================
-// Parent Leave Request
-// ======================================
+// Parent EMIS
+const emis = localStorage.getItem("parentEMIS");
 
+// Auto Load Student Details
+async function loadStudent() {
+
+  if (!emis) return;
+
+  document.getElementById("emis").value = emis;
+
+  const snap = await getDoc(doc(db, "students", emis));
+
+  if (snap.exists()) {
+
+    const student = snap.data();
+
+    document.getElementById("studentName").value =
+      student.name || "";
+
+  }
+
+}
+
+loadStudent();
+
+// Submit Leave
 window.submitLeave = async function () {
 
   const emis =
@@ -18,76 +42,40 @@ window.submitLeave = async function () {
   const studentName =
     document.getElementById("studentName").value.trim();
 
-  const className =
-    document.getElementById("className")?.value.trim() || "";
-
-  const section =
-    document.getElementById("section")?.value.trim() || "";
-
   const leaveDate =
     document.getElementById("leaveDate").value;
 
   const reason =
     document.getElementById("reason").value.trim();
 
-  if (
-    !emis ||
-    !studentName ||
-    !leaveDate ||
-    !reason
-  ) {
+  if (!emis || !studentName || !leaveDate || !reason) {
 
-    alert("Please fill all required fields.");
-
+    alert("Please fill all fields");
     return;
 
   }
 
   try {
-        await addDoc(collection(db, "leave_requests"), {
 
-      emis: emis,
-      studentName: studentName,
+    await addDoc(collection(db, "leave_requests"), {
 
-      class: className,
-      section: section,
-
-      leaveDate: leaveDate,
-      reason: reason,
-
+      emis,
+      studentName,
+      leaveDate,
+      reason,
       status: "Pending",
-
-      teacherRemark: "",
-      approvedBy: "",
-      approvedDate: "",
-
       createdAt: serverTimestamp()
 
     });
 
-    alert("✅ Leave Request Submitted Successfully");
-
-    document.getElementById("emis").value = "";
-    document.getElementById("studentName").value = "";
-
-    if(document.getElementById("className"))
-      document.getElementById("className").value = "";
-
-    if(document.getElementById("section"))
-      document.getElementById("section").value = "";
+    alert("✅ Leave Request Submitted");
 
     document.getElementById("leaveDate").value = "";
     document.getElementById("reason").value = "";
-        console.log("Leave Request Submitted Successfully");
 
-  } catch (error) {
+  } catch (e) {
 
-    console.error("Leave Request Error:", error);
-
-    alert(
-      "Failed to submit leave request.\n\n" +
-      error.message
-    );
+    alert(e.message);
 
   }
 
