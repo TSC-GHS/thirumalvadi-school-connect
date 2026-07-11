@@ -1,167 +1,255 @@
 import { auth, db } from "../firebase.js";
 
 import {
-signOut
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
-doc,
-getDoc,
-collection,
-getDocs,
-query,
-orderBy,
-limit
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  limit
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const emis=localStorage.getItem("parentEMIS");
+const emis = localStorage.getItem("parentEMIS");
 
-if(!emis){
+if (!emis) {
+  alert("Please Login Again");
+  location.href = "login.html";
+}
 
-alert("Please Login");
+async function loadDashboard() {
 
-location.href="parent_login.html";
+  try {
+
+    const studentRef = doc(db, "students", emis);
+
+    const studentSnap = await getDoc(studentRef);
+
+    if (!studentSnap.exists()) {
+
+      alert("Student Not Found");
+
+      return;
+
+    }
+
+    const student = studentSnap.data();
+
+    document.getElementById("studentName").innerHTML =
+      student.name || "-";
+
+    document.getElementById("studentEMIS").innerHTML =
+      student.emis || emis;
+
+    document.getElementById("studentClass").innerHTML =
+      student.class || "-";
+
+    document.getElementById("studentSection").innerHTML =
+      student.section || "-";
+
+    document.getElementById("attendancePercent").innerHTML =
+      student.attendance || "0%";
+
+    if (student.photo) {
+
+      document.getElementById("studentPhoto").src =
+        student.photo;
+
+    }
+
+    await loadHomework(student.class);
+
+    await loadNotice();
+
+    await loadMarks(emis);
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(error.message);
+
+  }
+
+}
+async function loadHomework(studentClass) {
+
+  try {
+
+    const homeworkRef = collection(db, "homework");
+
+    const homeworkSnap = await getDocs(homeworkRef);
+
+    let html = "";
+    let count = 0;
+
+    homeworkSnap.forEach((docSnap) => {
+
+      const hw = docSnap.data();
+
+      if (hw.class === studentClass) {
+
+        count++;
+
+        html += `
+        <div class="homework-item">
+          <div class="homework-sub">
+            ${hw.subject || "-"}
+          </div>
+          <div>
+            ${hw.homework || "-"}
+          </div>
+        </div>
+        `;
+
+      }
+
+    });
+
+    document.getElementById("homeworkCount").innerHTML = count;
+
+    document.getElementById("todayHomework").innerHTML =
+      count === 0
+        ? "<p>No Homework Available</p>"
+        : html;
+
+  } catch (error) {
+
+    console.error(error);
+
+    document.getElementById("todayHomework").innerHTML =
+      "<p>Unable to Load Homework</p>";
+
+  }
 
 }
 
-async function loadDashboard(){
+async function loadNotice() {
+
+  try {
+
+    const q = query(
+      collection(db, "notice"),
+      orderBy("createdAt", "desc"),
+      limit(3)
+    );
+
+    const noticeSnap = await getDocs(q);
+
+    let html = "";
+    let count = 0;
+
+    noticeSnap.forEach((docSnap) => {
+
+      count++;
+
+      const notice = docSnap.data();
+
+      html += `
+      <div class="notice-item">
+        <div class="notice-title">
+          ${notice.title || "Notice"}
+        </div>
+        <div>
+          ${notice.notice || "-"}
+        </div>
+        <div class="notice-date">
+          ${notice.date || "-"}
+        </div>
+      </div>
+      `;
+
+    });
+
+    document.getElementById("noticeCount").innerHTML = count;
+
+    document.getElementById("latestNotice").innerHTML =
+      count === 0
+        ? "<p>No Notice Available</p>"
+        : html;
+
+  } catch (error) {
+
+    console.error(error);
+
+    document.getElementById("latestNotice").innerHTML =
+      "<p>Unable to Load Notice</p>";
+
+  }
+
+}
+async function loadMarks(emis){
 
 try{
 
-const snap=await getDoc(doc(db,"students",emis));
+const marksRef = collection(db,"marks","Unit Test","students");
 
-if(!snap.exists()){
+const marksSnap = await getDocs(marksRef);
 
-alert("Student Not Found");
+let total = 0;
+let subjects = 0;
 
-return;
+marksSnap.forEach((docSnap)=>{
 
-}
+const mark = docSnap.data();
 
-const student=snap.data();
+if(mark.emis===emis){
 
-document.getElementById("name").innerHTML=student.name||"-";
-document.getElementById("emisNo").innerHTML=student.emis||emis;
-document.getElementById("class").innerHTML=student.class||"-";
-document.getElementById("section").innerHTML=student.section||"-";
-document.getElementById("attendance").innerHTML=student.attendance||"0%";
+total += Number(mark.total || 0);
 
-loadHomework(student.class);
-
-loadNotice();
-
-}catch(err){
-
-console.log(err);
-
-alert(err.message);
-
-}
-
-}
-
-async function loadHomework(cls){
-
-const div=document.getElementById("latestHomework");
-
-div.innerHTML="Loading...";
-
-try{
-
-const snap=await getDocs(collection(db,"homework"));
-
-let html="";
-
-snap.forEach(d=>{
-
-const hw=d.data();
-
-if(hw.class==cls){
-
-html+=`
-
-<p>
-
-<b>${hw.subject}</b>
-
-<br>
-
-${hw.homework}
-
-</p>
-
-<hr>
-
-`;
+subjects++;
 
 }
 
 });
 
-if(html===""){
+const average =
 
-html="No Homework";
+subjects===0 ? 0 : Math.round(total/subjects);
 
-}
+document.getElementById("marksAverage").innerHTML = average;
 
-div.innerHTML=html;
+}catch(error){
 
-}catch{
+console.error(error);
 
-div.innerHTML="Unable to Load";
-
-}
+document.getElementById("marksAverage").innerHTML = "0";
 
 }
 
-async function loadNotice(){
+}
 
-const q=query(
-
-collection(db,"notice"),
-
-orderBy("createdAt","desc"),
-
-limit(1)
-
-);
+window.logoutParent = async function(){
 
 try{
-
-const snap=await getDocs(q);
-
-if(snap.empty){
-
-document.getElementById("latestNotice").innerHTML="No Notice";
-
-return;
-
-}
-
-snap.forEach(d=>{
-
-const n=d.data();
-
-document.getElementById("latestNotice").innerHTML=n.notice;
-
-});
-
-}catch{
-
-document.getElementById("latestNotice").innerHTML="No Notice";
-
-}
-
-}
-
-window.logoutParent=async()=>{
 
 await signOut(auth);
 
-localStorage.clear();
+localStorage.removeItem("parentEMIS");
+localStorage.removeItem("emis");
+localStorage.removeItem("userRole");
 
-location.href="parent_login.html";
+sessionStorage.removeItem("parentEMIS");
+sessionStorage.removeItem("emis");
+
+location.href = "login.html";
+
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
 
 }
 
+};
+
+window.addEventListener("DOMContentLoaded",()=>{
+
 loadDashboard();
+
+});
