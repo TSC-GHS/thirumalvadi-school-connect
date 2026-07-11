@@ -16,65 +16,17 @@ const loadStudents = document.getElementById("loadStudents");
 const saveAttendance = document.getElementById("saveAttendance");
 const attendanceDate = document.getElementById("attendanceDate");
 
-let existingAttendance = [];
-let isUpdate = false;
+let attendanceDocs = [];
 
-// ======================================
-// Check Existing Attendance
-// ======================================
+// Default Date
+attendanceDate.value =
+new Date().toISOString().split("T")[0];
 
-async function checkExistingAttendance(className, section, date){
-
-existingAttendance = [];
-isUpdate = false;
-
-const q = query(
-
-collection(db,"attendance"),
-
-where("class","==",className),
-
-where("section","==",section),
-
-where("date","==",date)
-
-);
-
-const snap = await getDocs(q);
-
-snap.forEach((docSnap)=>{
-
-existingAttendance.push({
-
-id:docSnap.id,
-
-...docSnap.data()
-
-});
-
-});
-
-if(existingAttendance.length>0){
-
-isUpdate = true;
-
-saveAttendance.innerHTML =
-"✏️ Update Attendance";
-
-}else{
-
-saveAttendance.innerHTML =
-"💾 Save Attendance";
-
-}
-
-}
-
-// ======================================
+// ===============================
 // Load Students
-// ======================================
+// ===============================
 
-loadStudents.addEventListener("click", async ()=>{
+loadStudents.addEventListener("click", async () => {
 
 const className =
 document.getElementById("className").value;
@@ -101,21 +53,60 @@ return;
 
 }
 
-studentList.innerHTML = `
+studentList.innerHTML=`
 <tr>
 <td colspan="3">Loading...</td>
 </tr>
 `;
 
-await checkExistingAttendance(
-className,
-section,
-date
-);
+attendanceDocs=[];
 
 try{
 
-const q = query(
+// Existing Attendance
+
+const attendanceQuery=query(
+
+collection(db,"attendance"),
+
+where("date","==",date),
+
+where("class","==",className),
+
+where("section","==",section)
+
+);
+
+const attendanceSnap=
+await getDocs(attendanceQuery);
+
+attendanceSnap.forEach((d)=>{
+
+attendanceDocs.push({
+
+id:d.id,
+
+...d.data()
+
+});
+
+});
+
+if(attendanceDocs.length>0){
+
+saveAttendance.innerHTML=
+"✏️ Update Attendance";
+
+}else{
+
+saveAttendance.innerHTML=
+"💾 Save Attendance";
+
+}
+
+// Student List
+
+const studentQuery=query(
 
 collection(db,"students"),
 
@@ -125,11 +116,12 @@ where("section","==",section)
 
 );
 
-const snap = await getDocs(q);
+const studentSnap=
+await getDocs(studentQuery);
 
 studentList.innerHTML="";
 
-if(snap.empty){
+if(studentSnap.empty){
 
 studentList.innerHTML=`
 <tr>
@@ -143,29 +135,25 @@ return;
 
 }
 
-snap.forEach((docSnap)=>{
+studentSnap.forEach((docSnap)=>{
 
-const student = docSnap.data();
+const student=docSnap.data();
 
-let status = "Present";
+let status="Present";
 
-if(isUpdate){
+const old=attendanceDocs.find(
 
-const old = existingAttendance.find(
-
-x=>x.emis===student.emis
+x=>String(x.emis)===String(student.emis)
 
 );
 
 if(old){
 
-status = old.status;
+status=old.status;
 
 }
 
-}
-
-studentList.innerHTML += `
+studentList.innerHTML+=`
 
 <tr>
 
@@ -208,12 +196,13 @@ console.error(error);
 alert(error.message);
 
 }
-  
-// ======================================
-// Save / Update Attendance
-// ======================================
 
-saveAttendance.addEventListener("click", async ()=>{
+});
+// ===============================
+// Save / Update Attendance
+// ===============================
+
+saveAttendance.addEventListener("click", async () => {
 
 const className =
 document.getElementById("className").value;
@@ -224,7 +213,7 @@ document.getElementById("section").value;
 const date =
 attendanceDate.value;
 
-if(!date || !className || !section){
+if (!date || !className || !section) {
 
 alert("Please Select Date, Class & Section");
 
@@ -235,7 +224,7 @@ return;
 const rows =
 document.querySelectorAll("#studentList tr");
 
-if(rows.length===0){
+if (rows.length === 0) {
 
 alert("No Students Loaded");
 
@@ -243,69 +232,72 @@ return;
 
 }
 
-try{
+try {
 
-for(const row of rows){
+for (const row of rows) {
 
 const statusSelect =
 row.querySelector(".status");
 
-if(!statusSelect) continue;
+if (!statusSelect) continue;
 
 const emis =
 statusSelect.dataset.emis;
 
-const status =
-statusSelect.value;
-
 const studentName =
 row.cells[1].textContent;
 
-// Existing Attendance
+const status =
+statusSelect.value;
 
-const old =
-existingAttendance.find(
-x=>x.emis===emis
+const existing =
+attendanceDocs.find(
+x => String(x.emis) === String(emis)
 );
 
-if(old){
+if (existing) {
+
+// Update Existing Attendance
 
 await updateDoc(
 
-doc(db,"attendance",old.id),
+doc(db, "attendance", existing.id),
 
 {
 
-status:status,
+status: status,
 
 markedBy:
 localStorage.getItem("teacherName") || "Teacher",
 
-createdAt:
+updatedAt:
 serverTimestamp()
 
 }
 
 );
 
-}else{
+} else {
+
+// Save New Attendance
 
 await addDoc(
 
-collection(db,"attendance"),
+collection(db, "attendance"),
 
 {
 
 emis,
+
 studentName,
 
-class:className,
+class: className,
 
-section,
+section: section,
 
-date,
+date: date,
 
-status,
+status: status,
 
 markedBy:
 localStorage.getItem("teacherName") || "Teacher",
@@ -322,23 +314,16 @@ serverTimestamp()
 }
 
 alert(
-
-isUpdate
-
+attendanceDocs.length > 0
 ? "✅ Attendance Updated Successfully"
-
 : "✅ Attendance Saved Successfully"
-
 );
 
-// Refresh
-await checkExistingAttendance(
-className,
-section,
-date
-);
+// Reload latest attendance
 
-}catch(error){
+loadStudents.click();
+
+} catch (error) {
 
 console.error(error);
 
@@ -348,19 +333,12 @@ alert(error.message);
 
 });
 
-// ======================================
-// Default Date = Today
-// ======================================
-
-attendanceDate.value =
-new Date().toISOString().split("T")[0];
-
-// ======================================
+// ===============================
 // Module Loaded
-// ======================================
+// ===============================
 
 console.log("================================");
 console.log("School Connect TN");
 console.log("Attendance Management V2");
-console.log("Duplicate Prevention Enabled");
+console.log("Status : Production Ready");
 console.log("================================");
