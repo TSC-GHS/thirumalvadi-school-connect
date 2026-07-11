@@ -13,74 +13,98 @@ const params = new URLSearchParams(window.location.search);
 
 let emis = params.get("emis");
 
-if(!emis){
+if (!emis) {
   emis = localStorage.getItem("parentEMIS");
 }
 
-async function loadLeaveStatus(){
+async function loadLeaveStatus() {
 
-  if(!emis){
+  if (!emis) {
 
-    leaveList.innerHTML=`
+    leaveList.innerHTML = `
     <div class="card">
       <h3 style="color:red;">EMIS Number Not Found</h3>
       <p>Please login again.</p>
     </div>`;
-    return;
 
+    return;
   }
 
-  leaveList.innerHTML="Loading...";
+  leaveList.innerHTML = "<p>Loading...</p>";
 
-  try{
+  try {
 
-    const q=query(
-      collection(db,"leave_requests"),
-      where("emis","==",String(emis))
+    const q = query(
+      collection(db, "leave_requests"),
+      where("emis", "==", String(emis))
     );
 
-    const snap=await getDocs(q);
+    const snap = await getDocs(q);
 
-    leaveList.innerHTML="";
+    leaveList.innerHTML = "";
 
-    if(snap.empty){
+    if (snap.empty) {
 
-      leaveList.innerHTML=`
+      leaveList.innerHTML = `
       <div class="card">
-      <h3>No Leave Requests Found</h3>
+        <h3>No Leave Requests Found</h3>
       </div>`;
+
       return;
-
     }
+        snap.forEach((leaveDoc) => {
 
-    snap.forEach((leaveDoc)=>{
+      const leave = leaveDoc.data();
 
-      const leave=leaveDoc.data();
+      let color = "#FB8C00";
 
-      let color="#FB8C00";
-
-      if(leave.status==="Approved"){
-        color="#2E7D32";
+      if (leave.status === "Approved") {
+        color = "#2E7D32";
       }
 
-      if(leave.status==="Rejected"){
-        color="#D32F2F";
+      if (leave.status === "Rejected") {
+        color = "#D32F2F";
       }
 
-      leaveList.innerHTML+=`
+      const approvedDate =
+        leave.approvedDate && leave.approvedDate.seconds
+          ? new Date(
+              leave.approvedDate.seconds * 1000
+            ).toLocaleString()
+          : "-";
+
+      leaveList.innerHTML += `
 
       <div class="card">
 
-      <h3>${leave.studentName}</h3>
+      <h3>👨‍🎓 ${leave.studentName}</h3>
 
-      <p><b>EMIS :</b> ${leave.emis}</p>
+      <p><b>🆔 EMIS :</b> ${leave.emis}</p>
 
-      <p><b>Leave Date :</b> ${leave.leaveDate}</p>
+      <p><b>📅 Leave Date :</b> ${leave.leaveDate}</p>
 
-      <p><b>Reason :</b> ${leave.reason}</p>
+      <p><b>📝 Reason :</b> ${leave.reason}</p>
 
-      <p class="status" style="color:${color}">
+      <p>
+      <b>📌 Status :</b>
+      <span style="
+      color:${color};
+      font-weight:bold;
+      ">
       ${leave.status}
+      </span>
+      </p>
+
+      <p><b>💬 Teacher Remark :</b><br>
+      ${leave.teacherRemark || "No Remarks"}
+      </p>
+
+      <p><b>👨‍🏫 Approved By :</b>
+      ${leave.approvedBy || "-"}
+      </p>
+
+      <p><b>🕒 Approved Date :</b>
+      ${approvedDate}
       </p>
 
       </div>
@@ -88,14 +112,11 @@ async function loadLeaveStatus(){
       `;
 
     });
+      } catch (error) {
 
-  }
+    console.error(error);
 
-  catch(error){
-
-    console.log(error);
-
-    leaveList.innerHTML=`
+    leaveList.innerHTML = `
     <div class="card">
       <h3 style="color:red;">Error</h3>
       <p>${error.message}</p>
