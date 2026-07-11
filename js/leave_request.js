@@ -7,33 +7,36 @@ import {
   doc,
   getDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-// ===============================
-// Auto Load Student Details
-// ===============================
+
+// =====================================
+// Auto Load Parent Student
+// =====================================
+
+const emisInput = document.getElementById("emis");
+const studentNameInput = document.getElementById("studentName");
+const leaveDateInput = document.getElementById("leaveDate");
+const reasonInput = document.getElementById("reason");
 
 const parentEMIS = localStorage.getItem("parentEMIS");
 
 if (parentEMIS) {
-
-  document.getElementById("emis").value = parentEMIS;
-  document.getElementById("emis").readOnly = true;
-
+  emisInput.value = parentEMIS;
+  emisInput.readOnly = true;
   loadStudent(parentEMIS);
-
 }
 
 async function loadStudent(emis) {
 
   try {
 
-    const studentSnap = await getDoc(doc(db, "students", emis));
+    const snap = await getDoc(doc(db, "students", emis));
 
-    if (!studentSnap.exists()) return;
+    if (!snap.exists()) return;
 
-    const student = studentSnap.data();
+    const student = snap.data();
 
-    document.getElementById("studentName").value = student.name;
-    document.getElementById("studentName").readOnly = true;
+    studentNameInput.value = student.name || "";
+    studentNameInput.readOnly = true;
 
   } catch (e) {
 
@@ -42,11 +45,16 @@ async function loadStudent(emis) {
   }
 
 }
+
+// =====================================
+// Submit Leave
+// =====================================
+
 window.submitLeave = async function () {
 
-  const emis = document.getElementById("emis").value.trim();
-  const leaveDate = document.getElementById("leaveDate").value;
-  const reason = document.getElementById("reason").value.trim();
+  const emis = emisInput.value.trim();
+  const leaveDate = leaveDateInput.value;
+  const reason = reasonInput.value.trim();
 
   if (!emis || !leaveDate || !reason) {
     alert("Please fill all required fields.");
@@ -55,7 +63,6 @@ window.submitLeave = async function () {
 
   try {
 
-    // Student Details
     const studentSnap = await getDoc(doc(db, "students", emis));
 
     if (!studentSnap.exists()) {
@@ -69,7 +76,6 @@ window.submitLeave = async function () {
 
       emis: student.emis,
       studentName: student.name,
-
       class: student.class,
       section: student.section,
 
@@ -77,7 +83,6 @@ window.submitLeave = async function () {
       reason: reason,
 
       status: "Pending",
-
       teacherRemark: "",
       approvedBy: "",
       approvedDate: "",
@@ -88,15 +93,12 @@ window.submitLeave = async function () {
 
     alert("✅ Leave Request Submitted Successfully");
 
-    document.getElementById("emis").value = "";
-    document.getElementById("studentName").value = "";
-    document.getElementById("leaveDate").value = "";
-    document.getElementById("reason").value = "";
+    leaveDateInput.value = "";
+    reasonInput.value = "";
 
   } catch (error) {
 
     console.error(error);
-
     alert(error.message);
 
   }
