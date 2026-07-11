@@ -8,7 +8,117 @@
 
 <title>Notice Management</title>
 
-<link rel="stylesheet" href="css/notice.css">
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+}
+
+.header{
+background:#1565C0;
+color:#fff;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+max-width:700px;
+margin:20px auto;
+padding:15px;
+}
+
+.card{
+background:#fff;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.2);
+margin-bottom:20px;
+}
+
+label{
+display:block;
+margin-top:12px;
+font-weight:bold;
+}
+
+input,
+textarea,
+select{
+
+width:100%;
+padding:12px;
+margin-top:5px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+font-size:16px;
+
+}
+
+textarea{
+
+height:120px;
+resize:none;
+
+}
+
+button{
+
+width:100%;
+padding:14px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+font-size:17px;
+cursor:pointer;
+color:#fff;
+
+}
+
+.save{
+
+background:#2E7D32;
+
+}
+
+.dashboard{
+
+background:#1565C0;
+
+}
+
+.notice{
+
+border-left:5px solid #1565C0;
+margin-top:15px;
+
+}
+
+.notice h3{
+
+margin:0;
+color:#1565C0;
+
+}
+
+.notice small{
+
+color:#666;
+
+}
+
+.delete{
+
+background:#D32F2F;
+margin-top:10px;
+
+}
+
+</style>
 
 </head>
 
@@ -16,9 +126,7 @@
 
 <div class="header">
 
-<h2>📢 Notice Management</h2>
-
-<p>School Connect TN</p>
+📢 Notice Management
 
 </div>
 
@@ -26,76 +134,52 @@
 
 <div class="card">
 
-<h3>Add New Notice</h3>
+<label>Notice Title</label>
 
 <input
 type="text"
-id="noticeTitle"
-placeholder="Notice Title">
+id="title"
+placeholder="Enter Notice Title">
+
+<label>Description</label>
 
 <textarea
-id="noticeMessage"
-placeholder="Enter Notice Message"></textarea>
+id="description"
+placeholder="Enter Notice Details"></textarea>
+
+<label>Priority</label>
 
 <select id="priority">
 
-<option value="">Select Priority</option>
-<option value="Normal">Normal</option>
-<option value="Important">Important</option>
-<option value="Urgent">Urgent</option>
+<option value="Normal">
+Normal
+</option>
+
+<option value="Important">
+Important
+</option>
 
 </select>
 
-<select id="target">
+<button
+class="save"
+onclick="saveNotice()">
 
-<option value="All">All</option>
-<option value="Teachers">Teachers</option>
-<option value="Parents">Parents</option>
-<option value="Students">Students</option>
+💾 Publish Notice
 
-</select>
+</button>
 
-<label>Publish Date</label>
+<button
+class="dashboard"
+onclick="location.href='teacher.html'">
 
-<input
-type="date"
-id="publishDate">
-
-<label>Expiry Date</label>
-
-<input
-type="date"
-id="expiryDate">
-
-<button id="saveBtn">
-
-💾 Save Notice
+🏠 Back to Teacher Dashboard
 
 </button>
 
 </div>
 
-<br>
-
-<div class="card">
-
-<h3>Latest Notices</h3>
-
 <div id="noticeList">
-
-Loading...
-
-</div>
-
-</div>
-
-<div class="bottomButtons">
-
-<a href="headmaster.html" class="backBtn">
-
-🏠 Back to Dashboard
-
-</a>
 
 </div>
 
