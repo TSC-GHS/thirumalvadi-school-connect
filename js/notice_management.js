@@ -1,134 +1,202 @@
 import { db } from "../firebase.js";
 
 import {
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  doc,
-  query,
-  orderBy
+collection,
+addDoc,
+getDocs,
+deleteDoc,
+doc,
+serverTimestamp,
+query,
+orderBy
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const saveBtn = document.getElementById("saveBtn");
-const noticeList = document.getElementById("noticeList");
+const noticeList =
+document.getElementById("noticeList");
 
-async function loadNotices() {
+// ======================================
+// Save Notice
+// ======================================
 
-  noticeList.innerHTML = "Loading...";
+window.saveNotice = async function(){
 
-  const q = query(
-    collection(db, "notices"),
-    orderBy("createdAt", "desc")
-  );
+const title =
+document.getElementById("title").value.trim();
 
-  const snap = await getDocs(q);
+const description =
+document.getElementById("description").value.trim();
 
-  noticeList.innerHTML = "";
+const priority =
+document.getElementById("priority").value;
 
-  if (snap.empty) {
+if(!title || !description){
 
-    noticeList.innerHTML = "<p>No Notices Available</p>";
+alert("Please fill all fields");
 
-    return;
-
-  }
-
-  snap.forEach((docSnap) => {
-
-    const data = docSnap.data();
-
-    noticeList.innerHTML += `
-
-    <div class="noticeCard">
-
-      <h3>${data.title}</h3>
-
-      <p>${data.message}</p>
-
-      <p><b>Priority:</b> ${data.priority}</p>
-
-      <p><b>Target:</b> ${data.target}</p>
-
-      <p><b>Publish:</b> ${data.publishDate}</p>
-
-      <p><b>Expiry:</b> ${data.expiryDate}</p>
-
-      <button onclick="deleteNotice('${docSnap.id}')">
-
-      🗑 Delete
-
-      </button>
-
-    </div>
-
-    <br>
-
-    `;
-
-  });
+return;
 
 }
 
-loadNotices();
+try{
 
-saveBtn.addEventListener("click", async () => {
+await addDoc(collection(db,"notices"),{
 
-  const title = document.getElementById("noticeTitle").value.trim();
-  const message = document.getElementById("noticeMessage").value.trim();
-  const priority = document.getElementById("priority").value;
-  const target = document.getElementById("target").value;
-  const publishDate = document.getElementById("publishDate").value;
-  const expiryDate = document.getElementById("expiryDate").value;
+title,
+description,
+priority,
 
-  if (
-    !title ||
-    !message ||
-    !priority ||
-    !publishDate ||
-    !expiryDate
-  ) {
+postedBy:
+localStorage.getItem("teacherName") || "Teacher",
 
-    alert("Please fill all fields");
-
-    return;
-
-  }
-
-  await addDoc(collection(db, "notices"), {
-
-    title,
-    message,
-    priority,
-    target,
-    publishDate,
-    expiryDate,
-    status: "Active",
-    createdAt: new Date().toISOString()
-
-  });
-
-  alert("✅ Notice Saved Successfully");
-
-  document.getElementById("noticeTitle").value = "";
-  document.getElementById("noticeMessage").value = "";
-  document.getElementById("priority").value = "";
-  document.getElementById("target").value = "All";
-  document.getElementById("publishDate").value = "";
-  document.getElementById("expiryDate").value = "";
-
-  loadNotices();
+createdAt:
+serverTimestamp()
 
 });
 
-window.deleteNotice = async function(id){
+alert("✅ Notice Published Successfully");
 
-  if(!confirm("Delete this notice?")) return;
+document.getElementById("title").value="";
+document.getElementById("description").value="";
+document.getElementById("priority").value="Normal";
 
-  await deleteDoc(doc(db,"notices",id));
+loadNotices();
 
-  alert("Notice Deleted");
+}catch(error){
 
-  loadNotices();
+console.error(error);
+
+alert(error.message);
 
 }
+// ======================================
+// Load Notices
+// ======================================
+
+async function loadNotices(){
+
+try{
+
+const q = query(
+
+collection(db,"notices"),
+
+orderBy("createdAt","desc")
+
+);
+
+const snap = await getDocs(q);
+
+noticeList.innerHTML = "";
+
+if(snap.empty){
+
+noticeList.innerHTML = `
+<div class="card">
+<h3>No Notices Available</h3>
+</div>
+`;
+
+return;
+
+}
+
+snap.forEach((noticeDoc)=>{
+
+const notice = noticeDoc.data();
+
+let createdDate = "-";
+
+if(notice.createdAt && notice.createdAt.toDate){
+
+createdDate =
+notice.createdAt.toDate().toLocaleString("en-IN");
+
+}
+
+noticeList.innerHTML += `
+
+<div class="card notice">
+
+<h3>${notice.title}</h3>
+
+<p>${notice.description}</p>
+
+<p><b>Priority :</b> ${notice.priority}</p>
+
+<p><b>Posted By :</b> ${notice.postedBy}</p>
+
+<p><b>Date :</b> ${createdDate}</p>
+
+<button
+class="delete"
+onclick="deleteNotice('${noticeDoc.id}')">
+
+🗑 Delete Notice
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}catch(error){
+
+console.error(error);
+
+noticeList.innerHTML = `
+<div class="card">
+<h3 style="color:red;">${error.message}</h3>
+</div>
+`;
+
+}
+
+}
+
+// ======================================
+// Delete Notice
+// ======================================
+
+window.deleteNotice = async function(id){
+
+const ok = confirm("Delete this notice?");
+
+if(!ok) return;
+
+try{
+
+await deleteDoc(doc(db,"notices",id));
+
+alert("✅ Notice Deleted");
+
+loadNotices();
+
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+};
+
+// ======================================
+// Initialize
+// ======================================
+
+loadNotices();
+
+// ======================================
+// Auto Refresh
+// ======================================
+
+setInterval(loadNotices,30000);
+
+console.log("================================");
+console.log("School Connect TN");
+console.log("Notice Management V1");
+console.log("================================");
+};
