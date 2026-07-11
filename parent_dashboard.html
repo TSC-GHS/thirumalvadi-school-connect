@@ -4,396 +4,194 @@
 <head>
 
 <meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
 <title>Parent Dashboard</title>
 
-<style>
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f4f6f9;
-}
-
-.header{
-background:#1565C0;
-color:white;
-padding:18px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-}
-
-.container{
-padding:20px;
-max-width:900px;
-margin:auto;
-}
-
-.card{
-background:white;
-padding:18px;
-margin-bottom:20px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,.15);
-}
-
-.card h3{
-margin-top:0;
-color:#1565C0;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:10px;
-}
-
-th,td{
-border:1px solid #ddd;
-padding:10px;
-text-align:center;
-}
-
-th{
-background:#1565C0;
-color:white;
-}
-
-.logout{
-
-width:100%;
-padding:14px;
-margin-top:15px;
-border:none;
-border-radius:8px;
-background:#d32f2f;
-color:white;
-font-size:17px;
-cursor:pointer;
-
-}
-
-.home{
-
-width:100%;
-padding:14px;
-margin-top:10px;
-border:none;
-border-radius:8px;
-background:#2E7D32;
-color:white;
-font-size:17px;
-cursor:pointer;
-
-}
-
-</style>
+<link rel="stylesheet" href="css/parent.css">
 
 </head>
 
 <body>
 
-<div class="header">
+<header class="header">
 
-👨‍👩‍👧 Parent Dashboard
+<h2>👨‍👩‍👧 Parent Dashboard</h2>
 
-</div>
+</header>
 
 <div class="container">
+
+<!-- Student Details -->
 
 <div class="card">
 
 <h3>👤 Student Details</h3>
 
-<p><b>Name :</b> <span id="name">Loading...</span></p>
+<p><b>Name :</b>
+<span id="name">Loading...</span></p>
 
-<p><b>EMIS :</b> <span id="emisNo">Loading...</span></p>
+<p><b>EMIS :</b>
+<span id="emisNo">Loading...</span></p>
 
-<p><b>Class :</b> <span id="class">Loading...</span></p>
+<p><b>Class :</b>
+<span id="class">Loading...</span></p>
 
-<p><b>Section :</b> <span id="section">Loading...</span></p>
+<p><b>Section :</b>
+<span id="section">Loading...</span></p>
 
-<p><b>Father :</b> <span id="father">Loading...</span></p>
+<p><b>Attendance :</b>
 
-<p><b>Mother :</b> <span id="mother">Loading...</span></p>
+<span id="attendance">
+Loading...
+</span>
 
-<p><b>Mobile :</b> <span id="mobile">Loading...</span></p>
-
-<p><b>Attendance :</b> <span id="attendance">Loading...</span></p>
+</p>
 
 </div>
+
+<!-- Quick Menu -->
 
 <div class="card">
 
-<h3>📚 Marks</h3>
+<h3>⚡ Quick Menu</h3>
 
-<table>
-
-<thead>
-
-<tr>
-
-<th>Exam</th>
-
-<th>Marks</th>
-
-</tr>
-
-</thead>
-
-<tbody id="marksTable">
-
-<tr>
-
-<td colspan="2">
-
-Loading...
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
-
-<div class="card">
-
-<h3>📝 Homework</h3>
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Date</th>
-
-<th>Subject</th>
-
-<th>Homework</th>
-
-</tr>
-
-</thead>
-
-<tbody id="homeworkTable">
-
-<tr>
-
-<td colspan="3">
-
-Loading...
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
+<div class="grid">
 
 <button
-class="logout"
-onclick="logoutParent()">
+onclick="location.href='parent_attendance.html'">
 
-🚪 Logout
+📅
+Attendance
 
 </button>
 
 <button
-class="home"
-onclick="location.href='index.html'">
+onclick="location.href='parent_report_card.html'">
 
-🏠 Home
+📊
+Report Card
 
 </button>
-<script type="module">
 
-import { auth, db } from "./firebase.js";
+<button
+onclick="location.href='homework.html'">
 
-import {
-signOut
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+📚
+Homework
 
-import {
-doc,
-getDoc,
-collection,
-getDocs
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+</button>
 
-window.logoutParent = async function(){
+<button
+onclick="location.href='notice_board.html'">
 
-await signOut(auth);
+📢
+Notice
 
-localStorage.removeItem("parentEMIS");
+</button>
 
-window.location.href="login.html";
+<button
+onclick="location.href='leave_request.html'">
 
-}
+📝
+Leave
 
-const emis = localStorage.getItem("parentEMIS");
+</button>
 
-if(!emis){
+<button
+onclick="location.href='student_profile.html'">
 
-alert("Please Login Again");
+👤
+Profile
 
-window.location.href="login.html";
+</button>
 
-}
+</div>
 
-async function loadStudent(){
+</div>
 
-try{
+<!-- Latest Notice -->
 
-const studentRef = doc(db,"students",emis);
+<div class="card">
 
-const studentSnap = await getDoc(studentRef);
+<h3>📢 Latest Notice</h3>
 
-if(!studentSnap.exists()){
+<p id="latestNotice">
 
-alert("Student Not Found");
+Loading...
 
-return;
+</p>
 
-}
+</div>
 
-const student = studentSnap.data();
+<!-- Latest Homework -->
 
-document.getElementById("name").innerHTML = student.name || "-";
+<div class="card">
 
-document.getElementById("emisNo").innerHTML = student.emis || emis;
+<h3>📚 Today's Homework</h3>
 
-document.getElementById("class").innerHTML = student.class || "-";
+<div id="latestHomework">
 
-document.getElementById("section").innerHTML = student.section || "-";
+Loading...
 
-document.getElementById("father").innerHTML = student.father || "-";
+</div>
 
-document.getElementById("mother").innerHTML = student.mother || "-";
+</div>
 
-document.getElementById("mobile").innerHTML = student.mobile || "-";
+<!-- Bottom Navigation -->
 
-document.getElementById("attendance").innerHTML = student.attendance || "0%";
+<div class="bottomNav">
 
-const marksTable = document.getElementById("marksTable");
+<a href="parent_dashboard.html">
 
-marksTable.innerHTML="";
+🏠
 
-let marksFound=false;
-   const marksSnap = await getDocs(
-collection(db,"marks","Unit Test","students")
-);
+<br>
 
-marksSnap.forEach((d)=>{
+Home
 
-const mark=d.data();
+</a>
 
-if(mark.emis===emis){
+<a href="parent_attendance.html">
 
-marksFound=true;
+📅
 
-marksTable.innerHTML+=`
+<br>
 
-<tr>
+Attendance
 
-<td>${mark.exam || "Unit Test"}</td>
+</a>
 
-<td>${mark.total || "-"}</td>
+<a href="parent_report_card.html">
 
-</tr>
+📊
 
-`;
+<br>
 
-}
+Report
 
-});
+</a>
 
-if(!marksFound){
+<a href="student_profile.html">
 
-marksTable.innerHTML=`
+👤
 
-<tr>
+<br>
 
-<td colspan="2">No Marks Available</td>
+Profile
 
-</tr>
+</a>
 
-`;
+</div>
 
-}
+</div>
 
-const homeworkTable=document.getElementById("homeworkTable");
-
-homeworkTable.innerHTML="";
-
-let homeworkFound=false;
-
-const homeworkSnap=await getDocs(collection(db,"homework"));
-
-homeworkSnap.forEach((d)=>{
-
-const hw=d.data();
-
-if(hw.class===student.class){
-
-homeworkFound=true;
-
-homeworkTable.innerHTML+=`
-
-<tr>
-
-<td>${hw.date || "-"}</td>
-
-<td>${hw.subject || "-"}</td>
-
-<td>${hw.homework || "-"}</td>
-
-</tr>
-
-`;
-
-}
-
-});
-
-if(!homeworkFound){
-
-homeworkTable.innerHTML=`
-
-<tr>
-
-<td colspan="3">No Homework Available</td>
-
-</tr>
-
-`;
-
-}
-
-}catch(error){
-
-console.error(error);
-
-alert(error.message);
-
-}
-
-}
-
-loadStudent();
+<script
+type="module"
+src="js/parent_dashboard.js">
 
 </script>
-
-</div>
 
 </body>
 
