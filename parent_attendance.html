@@ -1,107 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>My Attendance</title>
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>Child Attendance</title>
+
+<link rel="stylesheet" href="style.css">
 
 <style>
 
-body{
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
 font-family:Arial,sans-serif;
-background:#f4f6f9;
+}
+
+body{
+background:#f3f6fb;
+padding-bottom:90px;
 }
 
 .header{
+
 background:#1565C0;
 color:white;
 padding:18px;
 text-align:center;
 font-size:24px;
 font-weight:bold;
+
 }
 
 .container{
+
 max-width:900px;
-margin:20px auto;
+margin:auto;
 padding:15px;
+
 }
 
 .card{
+
 background:white;
+border-radius:15px;
 padding:18px;
-border-radius:10px;
+margin-bottom:18px;
 box-shadow:0 2px 8px rgba(0,0,0,.15);
-margin-bottom:15px;
+
 }
 
 .summary{
+
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:10px;
-margin-bottom:20px;
+gap:12px;
+
 }
 
 .box{
-padding:15px;
-border-radius:10px;
-text-align:center;
-color:white;
-font-weight:bold;
-}
 
-.present{
-background:#2E7D32;
-}
-
-.absent{
-background:#D32F2F;
-}
-
-.percent{
 background:#1565C0;
+color:white;
+padding:18px;
+border-radius:12px;
+text-align:center;
+
+}
+
+.box h2{
+
+font-size:28px;
+margin-bottom:5px;
+
 }
 
 table{
+
 width:100%;
 border-collapse:collapse;
 margin-top:15px;
-}
 
-th,td{
-border:1px solid #ddd;
-padding:10px;
-text-align:center;
 }
 
 th{
+
 background:#1565C0;
 color:white;
+padding:12px;
+
 }
 
-button{
-width:100%;
-padding:14px;
-margin-top:20px;
-border:none;
-border-radius:8px;
-background:#2E7D32;
-color:white;
-font-size:17px;
-cursor:pointer;
+td{
+
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+
 }
 
-.statusPresent{
-color:#2E7D32;
+.present{
+
+color:green;
 font-weight:bold;
+
 }
 
-.statusAbsent{
-color:#D32F2F;
+.absent{
+
+color:red;
 font-weight:bold;
+
+}
+
+.leave{
+
+color:orange;
+font-weight:bold;
+
 }
 
 </style>
@@ -112,41 +133,63 @@ font-weight:bold;
 
 <div class="header">
 
-📅 My Attendance
+📅 Child Attendance
 
 </div>
 
 <div class="container">
 
+<div class="card">
+
 <div class="summary">
 
-<div class="box present">
+<div class="box">
+
+<h2 id="presentCount">
+
+0
+
+</h2>
 
 Present
 
-<h2 id="presentCount">0</h2>
-
 </div>
 
-<div class="box absent">
+<div class="box">
+
+<h2 id="absentCount">
+
+0
+
+</h2>
 
 Absent
 
-<h2 id="absentCount">0</h2>
-
 </div>
 
-<div class="box percent">
+<div class="box">
 
-Attendance %
+<h2 id="attendancePercent">
 
-<h2 id="attendancePercent">0%</h2>
+0%
+
+</h2>
+
+Attendance
+
+</div>
 
 </div>
 
 </div>
 
 <div class="card">
+
+<h3>
+
+Attendance History
+
+</h3>
 
 <table>
 
@@ -162,7 +205,7 @@ Attendance %
 
 </thead>
 
-<tbody id="attendanceBody">
+<tbody id="attendanceTable">
 
 <tr>
 
@@ -173,22 +216,122 @@ Loading...
 </td>
 
 </tr>
-
 </tbody>
 
 </table>
 
 </div>
 
-<button onclick="location.href='parent.html'">
+<div class="card">
 
-🏠 Back to Parent Dashboard
+<button
+onclick="location.href='parent_dashboard.html'">
+
+🏠 Back to Dashboard
 
 </button>
 
 </div>
 
-<script type="module" src="js/parent_attendance.js"></script>
+</div>
+
+<script type="module">
+
+import { db } from "./firebase.js";
+
+import {
+collection,
+query,
+where,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+const emis =
+localStorage.getItem("parentEMIS");
+
+if(!emis){
+
+location.href="parent_login.html";
+
+}
+
+let present=0;
+let absent=0;
+let leave=0;
+
+const tbody =
+document.getElementById("attendanceTable");
+
+tbody.innerHTML="";
+
+const q=query(
+collection(db,"attendance"),
+where("emis","==",emis)
+);
+
+const snap=await getDocs(q);
+
+if(snap.empty){
+
+tbody.innerHTML=`
+
+<tr>
+
+<td colspan="2">
+
+No Attendance Found
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+snap.forEach(doc=>{
+
+const a=doc.data();
+
+if(a.status==="Present") present++;
+
+if(a.status==="Absent") absent++;
+
+if(a.status==="Leave") leave++;
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${a.date}</td>
+
+<td class="${a.status.toLowerCase()}">
+
+${a.status}
+
+</td>
+
+</tr>
+
+`;
+
+});
+  const total = present + absent + leave;
+
+const percent =
+total === 0
+? 0
+: Math.round((present / total) * 100);
+
+document.getElementById("presentCount").innerHTML = present;
+
+document.getElementById("absentCount").innerHTML = absent;
+
+document.getElementById("attendancePercent").innerHTML =
+percent + "%";
+
+</script>
 
 </body>
+
 </html>
