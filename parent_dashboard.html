@@ -290,7 +290,7 @@ marksTable.innerHTML="";
 
 let marksFound=false;
    const marksSnap = await getDocs(
-collection(db,"marks","Unit Test 1","students")
+collection(db,"marks","Unit Test","students")
 );
 
 marksSnap.forEach((d)=>{
@@ -305,9 +305,9 @@ marksTable.innerHTML+=`
 
 <tr>
 
-<td>${mark.exam || "Unit Test 1"}</td>
+<td>${mark.exam || "Unit Test"}</td>
 
-<td>${mark.marks || "-"}</td>
+<td>${mark.total || "-"}</td>
 
 </tr>
 
