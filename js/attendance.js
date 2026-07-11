@@ -4,54 +4,62 @@ import {
 collection,
 query,
 where,
-getDocs,
-doc,
-setDoc,
-updateDoc
+getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const studentTable = document.getElementById("studentTable");
+const studentList =
+document.getElementById("studentList");
 
-const dateInput = document.getElementById("attendanceDate");
-const classFilter = document.getElementById("classFilter");
-const sectionFilter = document.getElementById("sectionFilter");
+const loadStudents =
+document.getElementById("loadStudents");
 
-dateInput.value = new Date().toISOString().split("T")[0];
+// ======================================
+// Load Students
+// ======================================
 
-let students = [];
+loadStudents.addEventListener("click", async ()=>{
 
-window.loadStudents = async function(){
+const className =
+document.getElementById("className").value;
 
-studentTable.innerHTML="";
+const section =
+document.getElementById("section").value;
 
-students=[];
+if(!className || !section){
 
-const selectedClass = classFilter.value;
-const selectedSection = sectionFilter.value;
-
-if(selectedClass=="" || selectedSection==""){
-
-alert("Please Select Class and Section");
+alert("Please Select Class & Section");
 
 return;
 
 }
 
+studentList.innerHTML = `
+<tr>
+<td colspan="3">Loading...</td>
+</tr>
+`;
+
+try{
+
 const q = query(
+
 collection(db,"students"),
-where("class","==",selectedClass),
-where("section","==",selectedSection)
+
+where("class","==",className),
+
+where("section","==",section)
+
 );
 
 const snap = await getDocs(q);
 
+studentList.innerHTML = "";
+
 if(snap.empty){
 
-studentTable.innerHTML=`
+studentList.innerHTML = `
 <tr>
-<td colspan="3">
-No Students Found
-</td>
+<td colspan="3">No Students Found</td>
 </tr>
 `;
 
@@ -59,29 +67,25 @@ return;
 
 }
 
-snap.forEach((d)=>{
+snap.forEach((docSnap)=>{
 
-const student=d.data();
+const student = docSnap.data();
 
-students.push(student);
-
-studentTable.innerHTML += `
+studentList.innerHTML += `
 
 <tr>
 
-<td>${student.name}</td>
-
 <td>${student.emis}</td>
+
+<td>${student.name}</td>
 
 <td>
 
-<select id="${student.emis}">
+<select class="status" data-emis="${student.emis}">
 
 <option value="Present">Present</option>
 
 <option value="Absent">Absent</option>
-
-<option value="Leave">Leave</option>
 
 </select>
 
@@ -93,60 +97,104 @@ studentTable.innerHTML += `
 
 });
 
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
+
 }
-window.saveAttendance = async function(){
 
-const attendanceDate = dateInput.value;
+});
+import {
+addDoc,
+serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-if(attendanceDate==""){
+// ======================================
+// Save Attendance
+// ======================================
 
-alert("Please Select Date");
+const saveAttendance =
+document.getElementById("saveAttendance");
+
+saveAttendance.addEventListener("click", async ()=>{
+
+const attendanceDate =
+document.getElementById("attendanceDate").value;
+
+const className =
+document.getElementById("className").value;
+
+const section =
+document.getElementById("section").value;
+
+if(!attendanceDate || !className || !section){
+
+alert("Please select Date, Class and Section");
 
 return;
 
 }
 
-let saved = 0;
+const rows =
+document.querySelectorAll("#studentList tr");
 
-for(const student of students){
+if(rows.length===0){
 
-const status = document.getElementById(student.emis).value;
+alert("No Students Loaded");
+
+return;
+
+}
 
 try{
 
-// Latest Attendance (Parent / Student Dashboard)
-await updateDoc(
-doc(db,"students",student.emis),
-{
-attendance:status,
-lastAttendanceDate:attendanceDate
-}
-);
+for(const row of rows){
 
-// Attendance History
-await setDoc(
-doc(db,"attendance",attendanceDate,"students",student.emis),
-{
-emis:student.emis,
-name:student.name,
-class:student.class,
-section:student.section,
-status:status,
+const statusSelect =
+row.querySelector(".status");
+
+if(!statusSelect) continue;
+
+const emis =
+statusSelect.dataset.emis;
+
+const status =
+statusSelect.value;
+
+const studentName =
+row.cells[1].textContent;
+
+await addDoc(collection(db,"attendance"),{
+
+emis,
+studentName,
+class:className,
+section,
 date:attendanceDate,
-updatedAt:new Date().toISOString()
-}
-);
+status,
 
-saved++;
+markedBy:
+localStorage.getItem("teacherName") || "Teacher",
+
+createdAt:
+serverTimestamp()
+
+});
+
+}
+
+alert("✅ Attendance Saved Successfully");
 
 }catch(error){
 
 console.error(error);
 
-}
+alert(error.message);
 
 }
 
-alert("✅ Attendance Saved Successfully\n\nTotal Records : " + saved);
+});
 
-}
+console.log("Attendance Module Loaded");
