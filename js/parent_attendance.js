@@ -1,138 +1,167 @@
-import { db } from "../firebase.js";
+import { auth, db } from "../firebase.js";
 
 import {
+signOut
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+import {
+doc,
+getDoc,
 collection,
-query,
-where,
 getDocs,
-orderBy
+query,
+orderBy,
+limit
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const attendanceBody =
-document.getElementById("attendanceBody");
-
-const presentCount =
-document.getElementById("presentCount");
-
-const absentCount =
-document.getElementById("absentCount");
-
-const attendancePercent =
-document.getElementById("attendancePercent");
-
-const emis =
-localStorage.getItem("parentEMIS");
-
-async function loadAttendance(){
+const emis=localStorage.getItem("parentEMIS");
 
 if(!emis){
 
-attendanceBody.innerHTML=`
-<tr>
-<td colspan="2">
-EMIS Number Not Found
-</td>
-</tr>
-`;
+alert("Please Login");
 
-return;
+location.href="parent_login.html";
 
 }
+
+async function loadDashboard(){
 
 try{
 
-const q=query(
+const snap=await getDoc(doc(db,"students",emis));
 
-collection(db,"attendance"),
+if(!snap.exists()){
 
-where("emis","==",String(emis)),
-
-orderBy("date","desc")
-
-);
-
-const snap=await getDocs(q);
-
-attendanceBody.innerHTML="";
-
-let present=0;
-let absent=0;
-
-if(snap.empty){
-
-attendanceBody.innerHTML=`
-<tr>
-<td colspan="2">
-No Attendance Found
-</td>
-</tr>
-`;
+alert("Student Not Found");
 
 return;
 
 }
 
-snap.forEach((docSnap)=>{
+const student=snap.data();
 
-const a=docSnap.data();
+document.getElementById("name").innerHTML=student.name||"-";
+document.getElementById("emisNo").innerHTML=student.emis||emis;
+document.getElementById("class").innerHTML=student.class||"-";
+document.getElementById("section").innerHTML=student.section||"-";
+document.getElementById("attendance").innerHTML=student.attendance||"0%";
 
-if(a.status==="Present"){
+loadHomework(student.class);
 
-present++;
+loadNotice();
 
-}else{
+}catch(err){
 
-absent++;
+console.log(err);
+
+alert(err.message);
 
 }
 
-attendanceBody.innerHTML+=`
+}
 
-<tr>
+async function loadHomework(cls){
 
-<td>${a.date}</td>
+const div=document.getElementById("latestHomework");
 
-<td class="${
-a.status==="Present"
-?"statusPresent"
-:"statusAbsent"
-}">
+div.innerHTML="Loading...";
 
-${a.status}
+try{
 
-</td>
+const snap=await getDocs(collection(db,"homework"));
 
-</tr>
+let html="";
+
+snap.forEach(d=>{
+
+const hw=d.data();
+
+if(hw.class==cls){
+
+html+=`
+
+<p>
+
+<b>${hw.subject}</b>
+
+<br>
+
+${hw.homework}
+
+</p>
+
+<hr>
 
 `;
+
+}
 
 });
 
-presentCount.innerHTML=present;
+if(html===""){
 
-absentCount.innerHTML=absent;
+html="No Homework";
 
-const total=present+absent;
+}
 
-attendancePercent.innerHTML=
-total===0
-?"0%"
-:((present/total)*100).toFixed(1)+"%";
+div.innerHTML=html;
 
-}catch(error){
+}catch{
 
-console.error(error);
-
-attendanceBody.innerHTML=`
-<tr>
-<td colspan="2">
-${error.message}
-</td>
-</tr>
-`;
+div.innerHTML="Unable to Load";
 
 }
 
 }
 
-loadAttendance();
+async function loadNotice(){
+
+const q=query(
+
+collection(db,"notice"),
+
+orderBy("createdAt","desc"),
+
+limit(1)
+
+);
+
+try{
+
+const snap=await getDocs(q);
+
+if(snap.empty){
+
+document.getElementById("latestNotice").innerHTML="No Notice";
+
+return;
+
+}
+
+snap.forEach(d=>{
+
+const n=d.data();
+
+document.getElementById("latestNotice").innerHTML=n.notice;
+
+});
+
+}catch{
+
+document.getElementById("latestNotice").innerHTML="No Notice";
+
+}
+
+}
+
+window.logoutParent=async()=>{
+
+await signOut(auth);
+
+localStorage.clear();
+
+location.href="parent_login.html";
+
+}
+
+loadDashboard();
