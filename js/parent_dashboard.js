@@ -1,3 +1,9 @@
+//============================
+// School Connect TN Pro
+// parent_dashboard.js
+// Part 1
+//============================
+
 import { auth, db } from "../firebase.js";
 
 import {
@@ -16,21 +22,75 @@ limit
 
 const emis = localStorage.getItem("parentEMIS");
 
-if (!emis) {
-    alert("Please Login Again");
-    location.href = "parent_login.html";
+if(!emis){
+
+alert("Session Expired");
+
+location.href="parent_login.html";
+
 }
 
-async function loadDashboard() {
+async function loadDashboard(){
 
-try {
+try{
 
-const studentRef = doc(db, "students", emis);
+const studentRef = doc(db,"students",emis);
 
 const studentSnap = await getDoc(studentRef);
 
-...
-    async function loadHomework(studentClass){
+if(!studentSnap.exists()){
+
+alert("Student Not Found");
+
+return;
+
+}
+
+const student = studentSnap.data();
+
+document.getElementById("studentName").innerHTML =
+student.name || "-";
+
+document.getElementById("studentEMIS").innerHTML =
+student.emis || emis;
+
+document.getElementById("studentClass").innerHTML =
+student.class || "-";
+
+document.getElementById("studentSection").innerHTML =
+student.section || "-";
+
+document.getElementById("attendancePercent").innerHTML =
+student.attendance || "0%";
+
+if(student.photo){
+
+document.getElementById("studentPhoto").src =
+student.photo;
+
+}
+
+await loadHomework(student.class);
+
+await loadNotice();
+
+await loadMarks(emis);
+
+}catch(err){
+
+console.error(err);
+
+alert(err.message);
+
+}
+
+}
+//============================
+// parent_dashboard.js
+// Part 2
+//============================
+
+async function loadHomework(studentClass){
 
 try{
 
@@ -75,22 +135,20 @@ ${hw.homework || "-"}
 
 document.getElementById("homeworkCount").innerHTML=count;
 
-if(count===0){
-
 document.getElementById("todayHomework").innerHTML=
-"<p>No Homework Available</p>";
 
-}else{
+count===0
 
-document.getElementById("todayHomework").innerHTML=html;
+? "<p>No Homework Available</p>"
 
-}
+: html;
 
 }catch(error){
 
 console.error(error);
 
 document.getElementById("todayHomework").innerHTML=
+
 "<p>Unable to Load Homework</p>";
 
 }
@@ -152,28 +210,31 @@ ${notice.date || "-"}
 
 document.getElementById("noticeCount").innerHTML=count;
 
-if(count===0){
-
 document.getElementById("latestNotice").innerHTML=
-"<p>No Notice Available</p>";
 
-}else{
+count===0
 
-document.getElementById("latestNotice").innerHTML=html;
+? "<p>No Notice Available</p>"
 
-}
+: html;
 
 }catch(error){
 
 console.error(error);
 
 document.getElementById("latestNotice").innerHTML=
+
 "<p>Unable to Load Notice</p>";
 
 }
 
 }
-    async function loadMarks(emis){
+//============================
+// parent_dashboard.js
+// Part 3 (Final)
+//============================
+
+async function loadMarks(emis){
 
 try{
 
@@ -184,7 +245,7 @@ const marksSnap =
 await getDocs(marksRef);
 
 let total=0;
-let subjects=0;
+let count=0;
 
 marksSnap.forEach((d)=>{
 
@@ -194,15 +255,14 @@ if(mark.emis===emis){
 
 total += Number(mark.total || 0);
 
-subjects++;
+count++;
 
 }
 
 });
 
 const average =
-subjects===0 ? 0 :
-Math.round(total/subjects);
+count===0 ? 0 : Math.round(total/count);
 
 document.getElementById("marksAverage").innerHTML =
 average;
@@ -225,9 +285,15 @@ await signOut(auth);
 
 localStorage.removeItem("parentEMIS");
 
+localStorage.removeItem("role");
+localStorage.removeItem("schoolCode");
+localStorage.removeItem("email");
+
 location.href="parent_login.html";
 
 }catch(error){
+
+console.error(error);
 
 alert(error.message);
 
@@ -235,4 +301,8 @@ alert(error.message);
 
 }
 
+window.addEventListener("load",()=>{
+
 loadDashboard();
+
+});
