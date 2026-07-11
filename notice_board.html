@@ -66,88 +66,114 @@ cursor:pointer;
 <body>
 
 <div class="header">
-
 📢 Notice Board
-
 </div>
 
 <div class="container">
 
 <div id="noticeList">
-
-<p style="text-align:center;">
-Loading Notices...
-</p>
-
+<p style="text-align:center;">Loading Notices...</p>
 </div>
 
 <button onclick="history.back()">
-
 🏠 Back
-
 </button>
 
+</div>
+
 <script type="module">
+
 import { db } from "./firebase.js";
 
 import {
-  collection,
-  getDocs,
-  query,
-  orderBy
+collection,
+getDocs,
+query,
+orderBy
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-async function loadNotices() {
+async function loadNotices(){
 
-  const noticeList = document.getElementById("noticeList");
-  noticeList.innerHTML = "";
+const noticeList=document.getElementById("noticeList");
 
-  const q = query(
-    collection(db, "notice"),
-    orderBy("date", "desc")
-  );
+noticeList.innerHTML="";
 
-  const snap = await getDocs(q);
+try{
 
-  if (snap.empty) {
+const q=query(
+collection(db,"notices"),
+orderBy("createdAt","desc")
+);
 
-    noticeList.innerHTML = `
-      <div class="card">
-        <h3>No Notices Available</h3>
-      </div>
-    `;
+const snap=await getDocs(q);
 
-    return;
-  }
+if(snap.empty){
 
-  snap.forEach((doc) => {
+noticeList.innerHTML=`
+<div class="card">
+<h3>No Notices Available</h3>
+</div>
+`;
 
-    const n = doc.data();
+return;
 
-    noticeList.innerHTML += `
-      <div class="card">
+}
 
-        <div class="noticeTitle">
-          ${n.title}
-        </div>
+snap.forEach((docSnap)=>{
 
-        <div>
-          ${n.message}
-        </div>
+const n=docSnap.data();
 
-        <div class="noticeDate">
-          📅 ${n.date}
-        </div>
+let date="-";
 
-      </div>
-    `;
+if(n.createdAt && n.createdAt.toDate){
 
-  });
+date=n.createdAt.toDate().toLocaleString("en-IN");
+
+}
+
+noticeList.innerHTML+=`
+
+<div class="card">
+
+<div class="noticeTitle">
+${n.title}
+</div>
+
+<p>${n.description}</p>
+
+<p><b>Priority :</b> ${n.priority}</p>
+
+<p><b>Posted By :</b> ${n.postedBy}</p>
+
+<div class="noticeDate">
+📅 ${date}
+</div>
+
+</div>
+
+`;
+
+});
+
+}catch(error){
+
+console.error(error);
+
+noticeList.innerHTML=`
+<div class="card">
+<h3 style="color:red;">${error.message}</h3>
+</div>
+`;
+
+}
 
 }
 
 loadNotices();
-  </script>
+
+setInterval(loadNotices,30000);
+
+</script>
 
 </body>
 </html>
