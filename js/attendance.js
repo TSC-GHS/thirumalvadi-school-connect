@@ -206,10 +206,10 @@ Absent
 console.error(error);
 
 alert(error.message);
-}
-});
 
-  // ======================================
+}
+  
+// ======================================
 // Save / Update Attendance
 // ======================================
 
@@ -262,8 +262,10 @@ const studentName =
 row.cells[1].textContent;
 
 // Existing Attendance
-  const old = existingAttendance.find(
-x => String(x.emis) === String(student.emis)
+
+const old =
+existingAttendance.find(
+x=>x.emis===emis
 );
 
 if(old){
