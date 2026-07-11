@@ -1,84 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
 <title>Student Profile</title>
+
+<link rel="stylesheet" href="style.css">
 
 <style>
 
-body{
-font-family:Arial,sans-serif;
-background:#f4f6f9;
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f2f5fa;
+padding-bottom:90px;
 }
 
 .header{
+
 background:#1565C0;
 color:white;
 padding:18px;
 text-align:center;
 font-size:24px;
 font-weight:bold;
+
 }
 
 .container{
-padding:20px;
+
+max-width:900px;
+margin:auto;
+padding:15px;
+
 }
 
 .card{
+
 background:white;
-padding:15px;
-margin-bottom:20px;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
+border-radius:15px;
+padding:20px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+
 }
 
-label{
-font-weight:bold;
-display:block;
-margin-bottom:8px;
-}
+.profile{
 
-input{
-width:100%;
-padding:12px;
-border:1px solid #ccc;
-border-radius:8px;
-box-sizing:border-box;
-}
-
-button{
-width:100%;
-padding:15px;
-margin-top:15px;
-background:#1565C0;
-color:white;
-border:none;
-border-radius:8px;
-font-size:17px;
-cursor:pointer;
-}
-
-.home{
-background:#2E7D32;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:10px;
-}
-
-th,td{
-border:1px solid #ddd;
-padding:10px;
 text-align:center;
+
 }
 
-th{
+.profile img{
+
+width:120px;
+height:120px;
+border-radius:50%;
+border:4px solid #1565C0;
+object-fit:cover;
+margin-bottom:15px;
+
+}
+
+.profile h2{
+
+color:#1565C0;
+margin-bottom:5px;
+
+}
+
+.profile p{
+
+color:#555;
+
+}
+
+.details{
+
+margin-top:20px;
+
+}
+
+.row{
+
+display:flex;
+justify-content:space-between;
+padding:12px;
+border-bottom:1px solid #eee;
+
+}
+
+.row:last-child{
+
+border:none;
+
+}
+
+.title{
+
+font-weight:bold;
+color:#1565C0;
+
+}
+
+.value{
+
+color:#444;
+
+}
+
+.action{
+
+margin-top:25px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+
+}
+
+.action button{
+
+padding:15px;
+border:none;
+border-radius:10px;
 background:#1565C0;
 color:white;
+font-size:16px;
+cursor:pointer;
+
+}
+
+.action button:hover{
+
+background:#0D47A1;
+
 }
 
 </style>
@@ -89,7 +153,7 @@ color:white;
 
 <div class="header">
 
-🎓 Student Profile
+👦 Student Profile
 
 </div>
 
@@ -97,206 +161,280 @@ color:white;
 
 <div class="card">
 
-<label>Enter EMIS Number</label>
+<div class="profile">
 
-<input
-id="emis"
-placeholder="Enter EMIS Number">
+<img
+id="photo"
+src="assets/student.png">
 
-<button onclick="loadStudent()">
+<h2 id="studentName">
 
-🔍 Search Student
+Loading...
 
-</button>
+</h2>
 
-</div>
+<p id="studentClass">
 
-<div class="card">
+Loading...
 
-<h3>Student Details</h3>
-
-<p><b>Name :</b> <span id="name">-</span></p>
-
-<p><b>Class :</b> <span id="class">-</span></p>
-
-<p><b>Section :</b> <span id="section">-</span></p>
-
-<p><b>Father :</b> <span id="father">-</span></p>
-
-<p><b>Mother :</b> <span id="mother">-</span></p>
-
-<p><b>Mobile :</b> <span id="mobile">-</span></p>
-
-<p><b>Attendance :</b> <span id="attendance">-</span></p>
+</p>
 
 </div>
 
-<div class="card">
+<div class="details">
 
-<h3>Marks</h3>
+<div class="row">
 
-<table>
+<div class="title">
 
-<tr>
-
-<th>Exam</th>
-
-<th>Marks</th>
-
-</tr>
-
-<tbody id="marksTable">
-
-<tr>
-
-<td colspan="2">
-
-No Marks Available
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
+EMIS Number
 
 </div>
+
+<div
+class="value"
+id="emis">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="title">
+
+Father
+
+</div>
+
+<div
+class="value"
+id="father">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="title">
+
+Mother
+
+</div>
+
+<div
+class="value"
+id="mother">
+
+Loading...
+
+</div>
+
+</div>
+<div class="row">
+
+<div class="title">
+
+Mobile
+
+</div>
+
+<div
+class="value"
+id="mobile">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="title">
+
+Blood Group
+
+</div>
+
+<div
+class="value"
+id="blood">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="title">
+
+Date of Birth
+
+</div>
+
+<div
+class="value"
+id="dob">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="title">
+
+Address
+
+</div>
+
+<div
+class="value"
+id="address">
+
+Loading...
+
+</div>
+
+</div>
+
+</div>
+
+<div class="action">
 
 <button
-class="home"
-onclick="location.href='student.html'">
+onclick="location.href='parent_dashboard.html'">
 
-🏠 Back
+🏠 Dashboard
 
 </button>
 
+<button
+onclick="location.href='parent_attendance.html'">
+
+📅 Attendance
+
+</button>
+
+<button
+onclick="location.href='parent_report_card.html'">
+
+📊 Report Card
+
+</button>
+
+<button
+onclick="location.href='leave_request.html'">
+
+📝 Apply Leave
+
+</button>
+
+<button
+onclick="location.href='leave_status.html'">
+
+📋 Leave Status
+
+</button>
+
+<button
+onclick="logoutParent()">
+
+🚪 Logout
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
 <script type="module">
-  import { db } from "./firebase.js";
+
+import { auth, db } from "./firebase.js";
+
+import {
+signOut
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
 doc,
-getDoc,
-collection,
-getDocs
+getDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-window.loadStudent = async function(){
-
 const emis =
-document.getElementById("emis").value.trim();
+localStorage.getItem("parentEMIS");
 
-if(emis==""){
+if(!emis){
 
-alert("Enter EMIS Number");
-
-return;
+location.href="parent_login.html";
 
 }
 
-// Student Details
+const snap =
+await getDoc(doc(db,"students",emis));
 
-const studentRef =
-doc(db,"students",emis);
+if(snap.exists()){
 
-const studentSnap =
-await getDoc(studentRef);
+const s=snap.data();
 
-if(!studentSnap.exists()){
+document.getElementById("studentName").innerHTML=s.name||"-";
 
-alert("Student Not Found");
+document.getElementById("studentClass").innerHTML=
+(s.class||"-")+" - "+(s.section||"-");
 
-return;
+document.getElementById("emis").innerHTML=s.emis||emis;
 
-}
+document.getElementById("father").innerHTML=s.father||"-";
 
-const student =
-studentSnap.data();
+document.getElementById("mother").innerHTML=s.mother||"-";
 
-document.getElementById("name").innerHTML =
-student.name;
+document.getElementById("mobile").innerHTML=s.mobile||"-";
 
-document.getElementById("class").innerHTML =
-student.class;
+document.getElementById("blood").innerHTML=s.blood||"-";
 
-document.getElementById("section").innerHTML =
-student.section;
+document.getElementById("dob").innerHTML=s.dob||"-";
 
-document.getElementById("father").innerHTML =
-student.father;
+document.getElementById("address").innerHTML=s.address||"-";
 
-document.getElementById("mother").innerHTML =
-student.mother;
+if(s.photo){
 
-document.getElementById("mobile").innerHTML =
-student.mobile;
-
-document.getElementById("attendance").innerHTML =
-student.attendance || "0%";
-
-// Load Marks
-
-const tbody =
-document.getElementById("marksTable");
-
-tbody.innerHTML="";
-
-const marksSnap =
-await getDocs(
-collection(
-db,
-"marks",
-"Unit Test 1",
-"students"
-)
-);
-
-let found=false;
-
-marksSnap.forEach((d)=>{
-
-const mark=d.data();
-
-if(mark.emis==emis){
-
-found=true;
-
-tbody.innerHTML+=`
-
-<tr>
-
-<td>${mark.exam}</td>
-
-<td>${mark.marks}</td>
-
-</tr>
-
-`;
-
-}
-
-});
-
-if(!found){
-
-tbody.innerHTML=`
-
-<tr>
-
-<td colspan="2">
-
-No Marks Available
-
-</td>
-
-</tr>
-
-`;
+document.getElementById("photo").src=s.photo;
 
 }
 
 }
-  </script>
+  window.logoutParent = async function(){
+
+try{
+
+await signOut(auth);
+
+localStorage.removeItem("parentEMIS");
+
+location.href="parent_login.html";
+
+}catch(error){
+
+alert(error.message);
+
+}
+
+}
+
+</script>
 
 </body>
+
 </html>
