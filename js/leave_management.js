@@ -1,18 +1,18 @@
 import { auth, db } from "../firebase.js";
 
 import {
-  collection,
-  getDocs,
-  updateDoc,
-  doc,
-  query,
-  where,
-  serverTimestamp
+collection,
+getDocs,
+updateDoc,
+doc,
+query,
+where,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 // ======================================
 // School Connect TN
-// Leave Management V3
+// Leave Management V4
 // ======================================
 
 // Elements
@@ -57,7 +57,7 @@ let leaveRequests = [];
 let currentTeacher = null;
 
 // ======================================
-// Load Current Teacher
+// Load Teacher
 // ======================================
 
 async function loadTeacher(){
@@ -107,7 +107,7 @@ return true;
 }
 
 // ======================================
-// Load Leave Requests
+// Load Pending Leave Requests
 // ======================================
 
 async function loadLeaveRequests(){
@@ -121,7 +121,8 @@ leaveRequests = [];
 
 if(currentTeacher.teacherType==="Subject Teacher"){
 
-leaveList.innerHTML =
+leaveList.innerHTML=
+
 "<h3>No Leave Approval Permission</h3>";
 
 return;
@@ -134,7 +135,9 @@ collection(db,"leave_requests"),
 
 where("class","==",currentTeacher.className),
 
-where("section","==",currentTeacher.section)
+where("section","==",currentTeacher.section),
+
+where("status","==","Pending")
 
 );
 
@@ -156,14 +159,12 @@ renderLeaveList();
 
 }
 // ======================================
-// Render Leave List
+// Render Pending Leave List
 // ======================================
 
 function renderLeaveList(){
 
-let pending = 0;
-let approved = 0;
-let rejected = 0;
+let pending = leaveRequests.length;
 
 leaveList.innerHTML = "";
 
@@ -172,9 +173,7 @@ searchStudent.value.trim().toLowerCase();
 
 leaveRequests.forEach((leave)=>{
 
-if(leave.status==="Pending") pending++;
-if(leave.status==="Approved") approved++;
-if(leave.status==="Rejected") rejected++;
+// Search
 
 if(keyword){
 
@@ -193,13 +192,6 @@ return;
 
 }
 
-if(
-statusFilter.value !== "All" &&
-leave.status !== statusFilter.value
-){
-return;
-}
-
 leaveList.innerHTML += `
 
 <div class="leaveCard">
@@ -208,24 +200,21 @@ leaveList.innerHTML += `
 
 <p><b>EMIS :</b> ${leave.emis}</p>
 
-<p><b>Class :</b> ${leave.class || "-"} - ${leave.section || "-"}</p>
+<p><b>Class :</b> ${leave.class} - ${leave.section}</p>
 
-<p><b>Date :</b> ${leave.leaveDate}</p>
+<p><b>Leave Date :</b> ${leave.leaveDate}</p>
 
 <p><b>Reason :</b> ${leave.reason}</p>
 
-<p><b>Status :</b> ${leave.status}</p>
-
 <textarea
 id="remark_${leave.id}"
-placeholder="Teacher Remark">${leave.teacherRemark || ""}</textarea>
+placeholder="Teacher Remark"></textarea>
 
 <div class="actions">
 
 <button
 class="approveBtn"
-onclick="approveLeave('${leave.id}')"
-${leave.status==="Approved" ? "disabled" : ""}>
+onclick="approveLeave('${leave.id}')">
 
 ✅ Approve
 
@@ -233,8 +222,7 @@ ${leave.status==="Approved" ? "disabled" : ""}>
 
 <button
 class="rejectBtn"
-onclick="rejectLeave('${leave.id}')"
-${leave.status==="Rejected" ? "disabled" : ""}>
+onclick="rejectLeave('${leave.id}')">
 
 ❌ Reject
 
@@ -248,10 +236,17 @@ ${leave.status==="Rejected" ? "disabled" : ""}>
 
 });
 
-pendingCount.textContent = pending;
-approvedCount.textContent = approved;
-rejectedCount.textContent = rejected;
-totalCount.textContent = leaveRequests.length;
+// Dashboard
+
+pendingCount.textContent =
+leaveRequests.length;
+
+approvedCount.textContent = "-";
+
+rejectedCount.textContent = "-";
+
+totalCount.textContent =
+leaveRequests.length;
 
 }
 
@@ -262,22 +257,35 @@ totalCount.textContent = leaveRequests.length;
 window.approveLeave = async function(id){
 
 const remark =
-document.getElementById(`remark_${id}`)?.value || "";
+document.getElementById(`remark_${id}`).value;
 
 try{
 
-await updateDoc(doc(db,"leave_requests",id),{
+await updateDoc(
+
+doc(db,"leave_requests",id),
+
+{
 
 status:"Approved",
+
 teacherRemark:remark,
+
 approvedBy:currentTeacher.name,
+
 approvedDate:serverTimestamp()
 
-});
+}
 
-alert("✅ Leave Approved Successfully");
+);
 
-loadLeaveRequests();
+// Remove from current list
+leaveRequests =
+leaveRequests.filter(x=>x.id!==id);
+
+renderLeaveList();
+
+alert("✅ Leave Approved");
 
 }catch(error){
 
@@ -296,22 +304,35 @@ alert(error.message);
 window.rejectLeave = async function(id){
 
 const remark =
-document.getElementById(`remark_${id}`)?.value || "";
+document.getElementById(`remark_${id}`).value;
 
 try{
 
-await updateDoc(doc(db,"leave_requests",id),{
+await updateDoc(
+
+doc(db,"leave_requests",id),
+
+{
 
 status:"Rejected",
+
 teacherRemark:remark,
+
 approvedBy:currentTeacher.name,
+
 approvedDate:serverTimestamp()
 
-});
+}
 
-alert("❌ Leave Rejected Successfully");
+);
 
-loadLeaveRequests();
+// Remove from current list
+leaveRequests =
+leaveRequests.filter(x=>x.id!==id);
+
+renderLeaveList();
+
+alert("❌ Leave Rejected");
 
 }catch(error){
 
@@ -323,40 +344,19 @@ alert(error.message);
 
 };
 // ======================================
-// Search & Filters
+// Search & Filter
 // ======================================
 
 searchStudent?.addEventListener("input", renderLeaveList);
 
 statusFilter?.addEventListener("change", renderLeaveList);
 
-classFilter?.addEventListener("change", () => {
-
-  const value = classFilter.value;
-
-  if (value === "All") {
-
-    renderLeaveList();
-
-    return;
-
-  }
-
-  leaveList.querySelectorAll(".leaveCard").forEach((card) => {
-
-    card.style.display =
-      card.innerHTML.includes(`Class :</b> ${value} -`)
-        ? "block"
-        : "none";
-
-  });
-
-});
+classFilter?.addEventListener("change", renderLeaveList);
 
 sectionFilter?.addEventListener("change", renderLeaveList);
 
 // ======================================
-// Select All
+// Select All (Future)
 // ======================================
 
 selectAll?.addEventListener("change", () => {
@@ -370,7 +370,7 @@ check.checked = selectAll.checked;
 });
 
 // ======================================
-// Bulk Actions
+// Bulk Actions (Future)
 // ======================================
 
 approveSelected?.addEventListener("click",()=>{
@@ -415,8 +415,8 @@ loadLeaveRequests();
 
 console.log("================================");
 console.log("School Connect TN");
-console.log("Leave Management V3");
-console.log("Teacher Approval Ready");
+console.log("Leave Management V4");
+console.log("Pending Workflow Enabled");
 console.log("================================");
 
 // ======================================
