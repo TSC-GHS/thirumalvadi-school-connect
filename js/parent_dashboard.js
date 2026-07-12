@@ -1,308 +1,240 @@
-//============================
-// School Connect TN Pro
-// parent_dashboard.js
-// Part 1
-//============================
-
 import { auth, db } from "../firebase.js";
 
 import {
-signOut
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
-doc,
-getDoc,
-collection,
-getDocs,
-query,
-orderBy,
-limit
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  limit
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 const emis = localStorage.getItem("parentEMIS");
 
-if(!emis){
+if (!emis) {
 
-alert("Session Expired");
+    alert("Session Expired");
 
-location.href="parent_login.html";
-
-}
-
-async function loadDashboard(){
-
-try{
-
-const studentRef = doc(db,"students",emis);
-
-const studentSnap = await getDoc(studentRef);
-
-if(!studentSnap.exists()){
-
-alert("Student Not Found");
-
-return;
+    location.href = "login.html";
 
 }
 
-const student = studentSnap.data();
+async function loadDashboard() {
 
-document.getElementById("studentName").innerHTML =
-student.name || "-";
+    try {
 
-document.getElementById("studentEMIS").innerHTML =
-student.emis || emis;
+        const studentRef = doc(db, "students", emis);
 
-document.getElementById("studentClass").innerHTML =
-student.class || "-";
+        const studentSnap = await getDoc(studentRef);
 
-document.getElementById("studentSection").innerHTML =
-student.section || "-";
+        if (!studentSnap.exists()) {
 
-document.getElementById("attendancePercent").innerHTML =
-student.attendance || "0%";
+            alert("Student Not Found");
 
-if(student.photo){
+            return;
 
-document.getElementById("studentPhoto").src =
-student.photo;
+        }
+
+        const student = studentSnap.data();
+
+        document.getElementById("studentName").textContent =
+            student.name || "-";
+
+        document.getElementById("studentEMIS").textContent =
+            student.emis || emis;
+
+        document.getElementById("studentClass").textContent =
+            student.class || "-";
+
+        document.getElementById("studentSection").textContent =
+            student.section || "-";
+
+        document.getElementById("attendancePercent").textContent =
+            student.attendance || "0%";
+
+        if (student.photo) {
+
+            document.getElementById("studentPhoto").src =
+                student.photo;
+
+        }
+
+        await loadHomework(student.class);
+
+        await loadNotice();
+
+        await loadMarks();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(error.message);
+
+    }
+
+}
+async function loadHomework(studentClass) {
+
+    try {
+
+        const homeworkRef = collection(db, "homework");
+        const homeworkSnap = await getDocs(homeworkRef);
+
+        let html = "";
+        let count = 0;
+
+        homeworkSnap.forEach((docSnap) => {
+
+            const hw = docSnap.data();
+
+            if (hw.class === studentClass &&
+                (hw.status === "Active" || hw.status === true)) {
+
+                count++;
+
+                html += `
+                <div class="homework-item">
+                    <div class="homework-sub">
+                        📚 Homework
+                    </div>
+                    <div>${hw.homework || "-"}</div>
+                    <small>Due : ${hw.dueDate || "-"}</small>
+                </div>`;
+            }
+
+        });
+
+        document.getElementById("homeworkCount").textContent = count;
+
+        document.getElementById("todayHomework").innerHTML =
+            count > 0 ? html : "<p>No Homework Available</p>";
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById("todayHomework").innerHTML =
+            "<p>Unable to Load Homework</p>";
+
+    }
 
 }
 
-await loadHomework(student.class);
+async function loadNotice() {
 
-await loadNotice();
+    try {
 
-await loadMarks(emis);
+        const q = query(
+            collection(db, "notices"),
+            orderBy("createdAt", "desc"),
+            limit(3)
+        );
 
-}catch(err){
+        const noticeSnap = await getDocs(q);
 
-console.error(err);
+        let html = "";
+        let count = 0;
 
-alert(err.message);
+        noticeSnap.forEach((docSnap) => {
 
-}
+            const notice = docSnap.data();
 
-}
-//============================
-// parent_dashboard.js
-// Part 2
-//============================
+            count++;
 
-async function loadHomework(studentClass){
+            html += `
+            <div class="notice-item">
+                <div class="notice-title">
+                    ${notice.title || "Notice"}
+                </div>
+                <div>
+                    ${notice.description || "-"}
+                </div>
+            </div>`;
+        });
 
-try{
+        document.getElementById("noticeCount").textContent = count;
 
-const homeworkRef = collection(db,"homework");
+        document.getElementById("latestNotice").innerHTML =
+            count > 0 ? html : "<p>No Notice Available</p>";
 
-const homeworkSnap = await getDocs(homeworkRef);
+    } catch (error) {
 
-let html="";
-let count=0;
+        console.error(error);
 
-homeworkSnap.forEach((d)=>{
+        document.getElementById("latestNotice").innerHTML =
+            "<p>Unable to Load Notice</p>";
 
-const hw=d.data();
-
-if(hw.class===studentClass){
-
-count++;
-
-html+=`
-
-<div class="homework-item">
-
-<div class="homework-sub">
-
-${hw.subject || "-"}
-
-</div>
-
-<div>
-
-${hw.homework || "-"}
-
-</div>
-
-</div>
-
-`;
+    }
 
 }
 
-});
+async function loadMarks() {
 
-document.getElementById("homeworkCount").innerHTML=count;
+    try {
 
-document.getElementById("todayHomework").innerHTML=
+        const marksRef = collection(db, "marks", "Unit Test", "students");
 
-count===0
+        const marksSnap = await getDocs(marksRef);
 
-? "<p>No Homework Available</p>"
+        let total = 0;
+        let subjects = 0;
 
-: html;
+        marksSnap.forEach((docSnap) => {
 
-}catch(error){
+            const mark = docSnap.data();
 
-console.error(error);
+            if (mark.emis === emis) {
 
-document.getElementById("todayHomework").innerHTML=
+                total += Number(mark.total || 0);
+                subjects++;
 
-"<p>Unable to Load Homework</p>";
+            }
 
-}
+        });
 
-}
+        const average =
+            subjects === 0 ? 0 : Math.round(total / subjects);
 
-async function loadNotice(){
+        document.getElementById("marksAverage").textContent = average;
 
-try{
+    } catch (error) {
 
-const q=query(
+        console.error(error);
 
-collection(db,"notice"),
+        document.getElementById("marksAverage").textContent = "0";
 
-orderBy("createdAt","desc"),
-
-limit(3)
-
-);
-
-const noticeSnap=await getDocs(q);
-
-let html="";
-let count=0;
-
-noticeSnap.forEach((d)=>{
-
-count++;
-
-const notice=d.data();
-
-html+=`
-
-<div class="notice-item">
-
-<div class="notice-title">
-
-${notice.title || "Notice"}
-
-</div>
-
-<div>
-
-${notice.notice || "-"}
-
-</div>
-
-<div class="notice-date">
-
-${notice.date || "-"}
-
-</div>
-
-</div>
-
-`;
-
-});
-
-document.getElementById("noticeCount").innerHTML=count;
-
-document.getElementById("latestNotice").innerHTML=
-
-count===0
-
-? "<p>No Notice Available</p>"
-
-: html;
-
-}catch(error){
-
-console.error(error);
-
-document.getElementById("latestNotice").innerHTML=
-
-"<p>Unable to Load Notice</p>";
+    }
 
 }
 
-}
-//============================
-// parent_dashboard.js
-// Part 3 (Final)
-//============================
+window.logoutParent = async function () {
 
-async function loadMarks(emis){
+    try {
 
-try{
+        await signOut(auth);
 
-const marksRef =
-collection(db,"marks","Unit Test","students");
+        localStorage.removeItem("parentEMIS");
+        localStorage.removeItem("emis");
+        localStorage.removeItem("userRole");
 
-const marksSnap =
-await getDocs(marksRef);
+        location.href = "login.html";
 
-let total=0;
-let count=0;
+    } catch (error) {
 
-marksSnap.forEach((d)=>{
+        alert(error.message);
 
-const mark=d.data();
+    }
 
-if(mark.emis===emis){
+};
 
-total += Number(mark.total || 0);
+window.addEventListener("DOMContentLoaded", () => {
 
-count++;
-
-}
-
-});
-
-const average =
-count===0 ? 0 : Math.round(total/count);
-
-document.getElementById("marksAverage").innerHTML =
-average;
-
-}catch(error){
-
-console.error(error);
-
-document.getElementById("marksAverage").innerHTML="0";
-
-}
-
-}
-
-window.logoutParent = async function(){
-
-try{
-
-await signOut(auth);
-
-localStorage.removeItem("parentEMIS");
-
-localStorage.removeItem("role");
-localStorage.removeItem("schoolCode");
-localStorage.removeItem("email");
-
-location.href="parent_login.html";
-
-}catch(error){
-
-console.error(error);
-
-alert(error.message);
-
-}
-
-}
-
-window.addEventListener("load",()=>{
-
-loadDashboard();
+    loadDashboard();
 
 });
