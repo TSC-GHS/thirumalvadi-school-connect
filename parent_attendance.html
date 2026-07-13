@@ -4,128 +4,11 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+<title>Child Attendance | School Connect TN</title>
 
-<title>Child Attendance</title>
-
-<link rel="stylesheet" href="style.css">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:#f3f6fb;
-padding-bottom:90px;
-}
-
-.header{
-
-background:#1565C0;
-color:white;
-padding:18px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-
-}
-
-.container{
-
-max-width:900px;
-margin:auto;
-padding:15px;
-
-}
-
-.card{
-
-background:white;
-border-radius:15px;
-padding:18px;
-margin-bottom:18px;
-box-shadow:0 2px 8px rgba(0,0,0,.15);
-
-}
-
-.summary{
-
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
-
-}
-
-.box{
-
-background:#1565C0;
-color:white;
-padding:18px;
-border-radius:12px;
-text-align:center;
-
-}
-
-.box h2{
-
-font-size:28px;
-margin-bottom:5px;
-
-}
-
-table{
-
-width:100%;
-border-collapse:collapse;
-margin-top:15px;
-
-}
-
-th{
-
-background:#1565C0;
-color:white;
-padding:12px;
-
-}
-
-td{
-
-padding:12px;
-border-bottom:1px solid #ddd;
-text-align:center;
-
-}
-
-.present{
-
-color:green;
-font-weight:bold;
-
-}
-
-.absent{
-
-color:red;
-font-weight:bold;
-
-}
-
-.leave{
-
-color:orange;
-font-weight:bold;
-
-}
-
-</style>
+<link rel="stylesheet" href="css/parent_attendance.css">
 
 </head>
 
@@ -139,57 +22,49 @@ font-weight:bold;
 
 <div class="container">
 
+<!-- Attendance Summary -->
+
 <div class="card">
+
+<h2>Attendance Summary</h2>
 
 <div class="summary">
 
-<div class="box">
+<div class="summary-box">
 
-<h2 id="presentCount">
+<h1 id="presentCount">0</h1>
 
-0
-
-</h2>
-
-Present
+<p>Present</p>
 
 </div>
 
-<div class="box">
+<div class="summary-box">
 
-<h2 id="absentCount">
+<h1 id="absentCount">0</h1>
 
-0
-
-</h2>
-
-Absent
+<p>Absent</p>
 
 </div>
 
-<div class="box">
+<div class="summary-box">
 
-<h2 id="attendancePercent">
+<h1 id="attendancePercent">0%</h1>
 
-0%
-
-</h2>
-
-Attendance
+<p>Attendance</p>
 
 </div>
 
 </div>
 
 </div>
+
+<!-- Attendance History -->
 
 <div class="card">
 
-<h3>
+<h2>Attendance History</h2>
 
-Attendance History
-
-</h3>
+<div class="table-responsive">
 
 <table>
 
@@ -222,9 +97,9 @@ Loading...
 
 </div>
 
-<div class="card">
+</div>
 
-<button
+<button class="back-btn"
 onclick="location.href='parent_dashboard.html'">
 
 🏠 Back to Dashboard
@@ -233,104 +108,33 @@ onclick="location.href='parent_dashboard.html'">
 
 </div>
 
+<!-- Bottom Navigation -->
+
+<div class="bottom-nav">
+
+<button onclick="location.href='parent_dashboard.html'">
+<span>🏠</span>
+Home
+</button>
+
+<button onclick="location.href='parent_attendance.html'">
+<span>📅</span>
+Attendance
+</button>
+
+<button onclick="location.href='parent_report_card.html'">
+<span>📊</span>
+Report
+</button>
+
+<button onclick="location.href='student_profile.html'">
+<span>👤</span>
+Profile
+</button>
+
 </div>
 
-<script type="module">
-
-import { db } from "./firebase.js";
-
-import {
-collection,
-query,
-where,
-getDocs
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
-const emis =
-localStorage.getItem("parentEMIS");
-
-if(!emis){
-
-location.href="parent_login.html";
-
-}
-
-let present=0;
-let absent=0;
-let leave=0;
-
-const tbody =
-document.getElementById("attendanceTable");
-
-tbody.innerHTML="";
-
-const q=query(
-collection(db,"attendance"),
-where("emis","==",emis)
-);
-
-const snap=await getDocs(q);
-
-if(snap.empty){
-
-tbody.innerHTML=`
-
-<tr>
-
-<td colspan="2">
-
-No Attendance Found
-
-</td>
-
-</tr>
-
-`;
-
-}
-
-snap.forEach(doc=>{
-
-const a=doc.data();
-
-if(a.status==="Present") present++;
-
-if(a.status==="Absent") absent++;
-
-if(a.status==="Leave") leave++;
-
-tbody.innerHTML+=`
-
-<tr>
-
-<td>${a.date}</td>
-
-<td class="${a.status.toLowerCase()}">
-
-${a.status}
-
-</td>
-
-</tr>
-
-`;
-
-});
-  const total = present + absent + leave;
-
-const percent =
-total === 0
-? 0
-: Math.round((present / total) * 100);
-
-document.getElementById("presentCount").innerHTML = present;
-
-document.getElementById("absentCount").innerHTML = absent;
-
-document.getElementById("attendancePercent").innerHTML =
-percent + "%";
-
-</script>
+<script type="module" src="js/parent_attendance.js"></script>
 
 </body>
 
