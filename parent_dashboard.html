@@ -4,10 +4,9 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Parent Attendance</title>
+<title>Parent Dashboard | School Connect TN</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -27,20 +26,20 @@ padding-bottom:90px;
 }
 
 .header{
+position:sticky;
+top:0;
+z-index:999;
 background:#1565C0;
 color:#fff;
 padding:18px;
 text-align:center;
 font-size:24px;
 font-weight:bold;
-position:sticky;
-top:0;
-z-index:999;
 box-shadow:0 2px 10px rgba(0,0,0,.2);
 }
 
 .container{
-max-width:1000px;
+max-width:1100px;
 margin:auto;
 padding:15px;
 }
@@ -55,83 +54,128 @@ box-shadow:0 4px 12px rgba(0,0,0,.12);
 
 .card h2{
 color:#1565C0;
-margin-bottom:15px;
+margin-bottom:18px;
+}
+
+.profile{
+display:flex;
+align-items:center;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.profile img{
+width:100px;
+height:100px;
+border-radius:50%;
+border:4px solid #1565C0;
+object-fit:cover;
+background:#fff;
+}
+
+.info{
+flex:1;
+}
+
+.info p{
+margin:8px 0;
+font-size:16px;
 }
 
 .summary{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 gap:15px;
-margin-top:10px;
+margin-top:20px;
 }
 
-.box{
+.summary-box{
 background:#1565C0;
-color:#fff;
-padding:20px;
+color:white;
+padding:18px;
 border-radius:15px;
 text-align:center;
 }
 
-.box h1{
-font-size:32px;
+.summary-box h1{
+font-size:30px;
 margin-bottom:8px;
 }
 
-.box p{
+.summary-box p{
 font-size:15px;
 }
 
-.table-box{
-overflow-x:auto;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:10px;
-}
-
-th{
-background:#1565C0;
-color:white;
-padding:12px;
-}
-
-td{
-padding:12px;
+.notice-item,
+.homework-item{
+padding:12px 0;
 border-bottom:1px solid #ddd;
-text-align:center;
 }
 
-.present{
+.notice-item:last-child,
+.homework-item:last-child{
+border-bottom:none;
+}
+
+.notice-title{
+font-weight:bold;
+color:#1565C0;
+margin-bottom:6px;
+}
+
+.homework-sub{
+font-weight:bold;
 color:#2E7D32;
-font-weight:bold;
+margin-bottom:6px;
 }
 
-.absent{
-color:#D32F2F;
-font-weight:bold;
-}
- .box span{
-font-size:15px;
+.quickmenu{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
 }
 
-.back-btn{
-width:100%;
-padding:15px;
-margin-top:15px;
-background:#2E7D32;
+.quickmenu button{
+background:#1565C0;
 color:#fff;
 border:none;
-border-radius:10px;
-font-size:17px;
+padding:15px;
+border-radius:12px;
+font-size:15px;
 font-weight:bold;
+cursor:pointer;
+transition:.3s;
+}
+
+.quickmenu button:hover{
+background:#0D47A1;
+}
+ .bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#1565C0;
+display:flex;
+justify-content:space-around;
+padding:10px 0;
+box-shadow:0 -2px 10px rgba(0,0,0,.2);
+}
+
+.bottom-nav button{
+background:none;
+border:none;
+color:white;
+display:flex;
+flex-direction:column;
+align-items:center;
+font-size:13px;
 cursor:pointer;
 }
 
-.back-btn:hover{
-background:#1B5E20;
+.bottom-nav span{
+font-size:22px;
+margin-bottom:5px;
 }
 
 @media(max-width:768px){
@@ -140,24 +184,34 @@ background:#1B5E20;
 padding:12px;
 }
 
+.profile{
+flex-direction:column;
+text-align:center;
+}
+
+.profile img{
+width:90px;
+height:90px;
+}
+
 .summary{
 grid-template-columns:repeat(2,1fr);
 }
 
-.box h1{
+.quickmenu{
+grid-template-columns:repeat(2,1fr);
+}
+
+.summary-box h1{
 font-size:24px;
+}
+
+.info p{
+font-size:15px;
 }
 
 .card{
 padding:15px;
-}
-
-table{
-font-size:14px;
-}
-
-th,td{
-padding:10px;
 }
 
 }
@@ -170,7 +224,7 @@ padding:10px;
 
 <div class="header">
 
-📅 Child Attendance
+👨‍👩‍👧 Parent Dashboard
 
 </div>
 
@@ -178,100 +232,191 @@ padding:10px;
 
 <div class="card">
 
-<h2>Attendance Summary</h2>
+<h2>👋 Welcome Parent</h2>
+
+<div class="profile">
+
+<img
+id="studentPhoto"
+src="assets/school_logo.png"
+alt="Student">
+
+<div class="info">
+
+<p><b>Name :</b>
+<span id="studentName">Loading...</span></p>
+
+<p><b>EMIS :</b>
+<span id="studentEMIS">Loading...</span></p>
+
+<p><b>Class :</b>
+<span id="studentClass">Loading...</span></p>
+
+<p><b>Section :</b>
+<span id="studentSection">Loading...</span></p>
+
+</div>
+
+</div>
 
 <div class="summary">
 
-<div class="box">
-
-<h1 id="presentCount">0</h1>
-
-<span>Present</span>
-
-</div>
-
-<div class="box">
-
-<h1 id="absentCount">0</h1>
-
-<span>Absent</span>
-
-</div>
-
-<div class="box">
+<div class="summary-box">
 
 <h1 id="attendancePercent">0%</h1>
 
-<span>Attendance</span>
+<p>Attendance</p>
 
 </div>
 
-<div class="box">
+<div class="summary-box">
 
-<h1 id="workingDays">0</h1>
+<h1 id="marksAverage">0</h1>
 
-<span>Working Days</span>
+<p>Average</p>
+
+</div>
+
+<div class="summary-box">
+
+<h1 id="homeworkCount">0</h1>
+
+<p>Homework</p>
+
+</div>
+
+<div class="summary-box">
+
+<h1 id="noticeCount">0</h1>
+
+<p>Notice</p>
 
 </div>
 
 </div>
 
 </div>
+<!-- Latest Notice -->
 
 <div class="card">
 
-<h2>Attendance History</h2>
+<h2>📢 Latest Notice</h2>
 
-<div class="table-box">
+<div id="latestNotice">
 
-<table>
+<div class="notice-item">
 
-<thead>
-
-<tr>
-
-<th>Date</th>
-
-<th>Status</th>
-
-</tr>
-
-</thead>
-
-<tbody id="attendanceTable">
-
-<tr>
-
-<td colspan="2">
-
+<div class="notice-title">
 Loading...
+</div>
 
-</td>
+<div>
+Please wait...
+</div>
 
-</tr>
-
-</tbody>
-
-</table>
+</div>
 
 </div>
 
 </div>
-<!-- Back Button -->
 
-<button class="back-btn"
-onclick="location.href='parent_dashboard.html'">
+<!-- Today's Homework -->
 
-🏠 Back to Dashboard
+<div class="card">
 
+<h2>📚 Today's Homework</h2>
+
+<div id="todayHomework">
+
+<div class="homework-item">
+
+<div class="homework-sub">
+Loading...
+</div>
+
+<div>
+Please wait...
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Quick Menu -->
+
+<div class="card">
+
+<h2>⚡ Quick Menu</h2>
+
+<div class="quickmenu">
+
+<button onclick="location.href='student_profile.html'">
+👤 Student Profile
+</button>
+
+<button onclick="location.href='parent_attendance.html'">
+📅 Attendance
+</button>
+
+<button onclick="location.href='parent_report_card.html'">
+📊 Report Card
+</button>
+
+<button onclick="location.href='homework.html'">
+📚 Homework
+</button>
+
+<button onclick="location.href='notice_board.html'">
+📢 Notice Board
+</button>
+
+<button onclick="location.href='leave_request.html'">
+📝 Apply Leave
+</button>
+
+<button onclick="location.href='leave_status.html'">
+📋 Leave Status
+</button>
+
+<button onclick="logoutParent()">
+🚪 Logout
 </button>
 
 </div>
 
-<script type="module"
-src="js/parent_attendance.js">
+</div>
 
-</script>
+</div>
+
+<!-- Bottom Navigation -->
+
+<div class="bottom-nav">
+
+<button onclick="location.href='parent_dashboard.html'">
+<span>🏠</span>
+Home
+</button>
+
+<button onclick="location.href='parent_attendance.html'">
+<span>📅</span>
+Attendance
+</button>
+
+<button onclick="location.href='parent_report_card.html'">
+<span>📊</span>
+Report
+</button>
+
+<button onclick="location.href='student_profile.html'">
+<span>👤</span>
+Profile
+</button>
+
+</div>
+
+<script type="module" src="js/parent_dashboard.js"></script>
 
 </body>
 
