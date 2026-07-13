@@ -72,40 +72,67 @@ td{
 padding:12px;
 border-bottom:1px solid #ddd;
 text-align:center;
+vertical-align:middle;
+}
+
+.completeBtn{
+
+background:#2E7D32;
+
+color:white;
+
+border:none;
+
+padding:10px 14px;
+
+border-radius:8px;
+
+cursor:pointer;
+
+font-size:15px;
+
+}
+
+.completeBtn:hover{
+
+background:#1B5E20;
+
 }
 
 .back-btn{
-width:100%;
-padding:15px;
-margin-top:20px;
-background:#2E7D32;
-color:white;
-border:none;
-border-radius:10px;
-font-size:17px;
-cursor:pointer;
-}
 
-.back-btn:hover{
-background:#1B5E20;
+width:100%;
+
+padding:15px;
+
+margin-top:20px;
+
+background:#1565C0;
+
+color:white;
+
+border:none;
+
+border-radius:10px;
+
+font-size:17px;
+
+cursor:pointer;
+
 }
 
 @media(max-width:768px){
 
-.container{
-padding:10px;
-}
-
 table{
-font-size:14px;
+
+font-size:13px;
+
 }
 
 th,td{
-padding:10px;
-}
 
-.header{
-font-size:20px;
+padding:8px;
+
 }
 
 }
@@ -126,7 +153,11 @@ font-size:20px;
 
 <div class="card">
 
-<h2>Today's Homework</h2>
+<h2>
+
+Today's Homework
+
+</h2>
 
 <div class="table-box">
 
@@ -142,6 +173,8 @@ font-size:20px;
 
 <th>Due Date</th>
 
+<th>Status</th>
+
 </tr>
 
 </thead>
@@ -150,13 +183,14 @@ font-size:20px;
 
 <tr>
 
-<td colspan="3">
+<td colspan="4">
 
 Loading...
 
 </td>
 
 </tr>
+
 </tbody>
 
 </table>
@@ -165,7 +199,10 @@ Loading...
 
 </div>
 
-<button class="back-btn"
+<button
+
+class="back-btn"
+
 onclick="location.href='parent_dashboard.html'">
 
 🏠 Back to Dashboard
