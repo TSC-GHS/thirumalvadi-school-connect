@@ -17,7 +17,6 @@ async function loadAttendance() {
     try {
 
         const attendanceRef = collection(db, "attendance");
-
         const attendanceSnap = await getDocs(attendanceRef);
 
         let present = 0;
@@ -32,13 +31,9 @@ async function loadAttendance() {
             if (data.emis === emis) {
 
                 if (data.status === "Present") {
-
                     present++;
-
                 } else {
-
                     absent++;
-
                 }
 
                 html += `
@@ -57,17 +52,18 @@ ${data.status}
         const total = present + absent;
 
         const percent =
-            total === 0 ? 0 : Math.round((present / total) * 100);
+            total === 0
+            ? 0
+            : Math.round((present / total) * 100);
 
-        document.getElementById("attendancePercent").innerHTML =
+        document.getElementById("attendancePercent").textContent =
             percent + "%";
 
-        document.getElementById("presentDays").innerHTML =
+        document.getElementById("presentCount").textContent =
             present;
 
-        document.getElementById("absentDays").innerHTML =
+        document.getElementById("absentCount").textContent =
             absent;
-
         document.getElementById("attendanceTable").innerHTML =
             html || `
 <tr>
@@ -79,13 +75,20 @@ No Attendance Found
 
     } catch (error) {
 
-        console.error(error);
+        console.error("Attendance Error :", error);
 
-        alert(error.message);
+        document.getElementById("attendanceTable").innerHTML = `
+<tr>
+<td colspan="2" style="text-align:center;color:red;">
+Failed to Load Attendance
+</td>
+</tr>
+`;
 
     }
 
 }
+
 window.addEventListener("DOMContentLoaded", () => {
 
     loadAttendance();
