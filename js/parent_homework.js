@@ -217,3 +217,22 @@ alert("Unable to Submit Homework");
 }
 
 }
+//==========================================
+// Reload Homework After Completion
+//==========================================
+
+async function refreshHomework(){
+
+await loadHomework();
+
+}
+
+//==========================================
+// Version
+//==========================================
+
+console.log("================================");
+console.log("School Connect TN");
+console.log("Parent Homework");
+console.log("Production Version V1");
+console.log("================================");
