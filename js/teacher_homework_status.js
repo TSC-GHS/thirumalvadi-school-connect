@@ -1,249 +1,170 @@
-//==========================================
-// School Connect TN
+//=========================================
 // Teacher Homework Status
+// Production Version
 // Part 1
-//==========================================
+//=========================================
 
-import { auth, db } from "../firebase.js";
+import { db } from "../firebase.js";
 
 import {
-  doc,
-  getDoc,
-  collection,
-  getDocs
+collection,
+query,
+where,
+getDocs,
+doc,
+getDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-let teacherId = "";
-let teacherName = "";
-let teacherSubject = "";
-let teacherClass = "";
-let teacherSection = "";
+const totalHomework=document.getElementById("totalHomework");
+const completedHomework=document.getElementById("completedHomework");
+const pendingHomework=document.getElementById("pendingHomework");
 
-let completedStudents = [];
-let allStudents = [];
-let homeworkList = [];
+const completedList=document.getElementById("completedStudents");
+const pendingList=document.getElementById("pendingStudents");
 
-window.addEventListener("DOMContentLoaded", () => {
+let teacherId="";
+let teacher={};
 
-    loadTeacher();
+window.addEventListener("DOMContentLoaded",init);
+
+async function init(){
+
+teacherId=
+localStorage.getItem("teacherId")||
+sessionStorage.getItem("teacherId");
+
+if(!teacherId){
+
+alert("Session Expired");
+
+location.href="index.html";
+
+return;
+
+}
+
+const teacherSnap=await getDoc(doc(db,"teachers",teacherId));
+
+if(!teacherSnap.exists()){
+
+alert("Teacher Not Found");
+
+return;
+
+}
+
+teacher=teacherSnap.data();
+
+await loadStatus();
+
+}
+//=========================================
+// Load Homework Status
+//=========================================
+
+async function loadStatus(){
+
+try{
+
+//------------------------------
+// Total Homework
+//------------------------------
+
+const homeworkSnap = await getDocs(
+
+query(
+collection(db,"homework"),
+where("teacherId","==",teacherId)
+)
+
+);
+
+totalHomework.textContent = homeworkSnap.size;
+
+//------------------------------
+// Homework Submissions
+//------------------------------
+
+const submissionSnap = await getDocs(
+
+query(
+collection(db,"homework_submissions"),
+where("teacherId","==",teacherId)
+)
+
+);
+
+let completed = 0;
+let pending = 0;
+
+completedList.innerHTML = "";
+pendingList.innerHTML = "";
+
+submissionSnap.forEach((docSnap)=>{
+
+const data = docSnap.data();
+
+if(data.status==="Completed"){
+
+completed++;
+
+completedList.innerHTML += `
+
+<div class="studentCard">
+
+<b>${data.studentName}</b><br>
+
+EMIS : ${data.emis}
+
+</div>
+
+`;
+
+}else{
+
+pending++;
+
+pendingList.innerHTML += `
+
+<div class="studentCard">
+
+<b>${data.studentName}</b><br>
+
+EMIS : ${data.emis}
+
+</div>
+
+`;
+
+}
 
 });
 
-async function loadTeacher(){
+completedHomework.textContent = completed;
+pendingHomework.textContent = pending;
 
-    try{
+if(completed===0){
 
-        teacherId = localStorage.getItem("teacherId");
-
-        if(!teacherId){
-
-            alert("Please Login Again");
-
-            location.href="teacher_login.html";
-            return;
-
-        }
-
-        const teacherRef = doc(db,"teachers",teacherId);
-
-        const teacherSnap = await getDoc(teacherRef);
-
-        if(!teacherSnap.exists()){
-
-            alert("Teacher Record Not Found");
-            return;
-
-        }
-
-        const teacher = teacherSnap.data();
-
-        teacherName = teacher.name || "";
-        teacherSubject = teacher.subject || "";
-        teacherClass = teacher.className || "";
-        teacherSection = teacher.section || "";
-
-        await loadHomeworkStatus();
-
-    }
-
-    catch(error){
-
-        console.log(error);
-        alert(error.message);
-
-    }
+completedList.innerHTML =
+"No student has completed the homework yet.";
 
 }
-async function loadHomeworkStatus(){
 
-    try{
+if(pending===0){
 
-        // Homework
-        const homeworkSnap =
-        await getDocs(collection(db,"homework"));
-
-        homeworkSnap.forEach((docSnap)=>{
-
-            const hw = docSnap.data();
-
-            if(
-                hw.class==teacherClass &&
-                hw.section==teacherSection &&
-                hw.subject==teacherSubject &&
-                (hw.status=="Active" || hw.status===true)
-            ){
-
-                homeworkList.push(hw);
-
-            }
-
-        });
-
-        // Students
-
-        const studentSnap =
-        await getDocs(collection(db,"students"));
-
-        studentSnap.forEach((docSnap)=>{
-
-            const student = docSnap.data();
-
-            if(
-                student.class==teacherClass &&
-                student.section==teacherSection
-            ){
-
-                allStudents.push(student);
-
-            }
-
-        });
-
-        // Homework Submission
-
-        const submissionSnap =
-        await getDocs(collection(db,"homework_submissions"));
-
-        submissionSnap.forEach((docSnap)=>{
-
-            const submit = docSnap.data();
-
-            if(
-                submit.class==teacherClass &&
-                submit.section==teacherSection &&
-                submit.subject==teacherSubject &&
-                submit.status=="Completed"
-            ){
-
-                completedStudents.push(submit);
-
-            }
-
-        });
-
-        showDashboard();
-
-    }
-
-    catch(error){
-
-        console.log(error);
-
-        alert(error.message);
-
-    }
+pendingList.innerHTML =
+"All students completed the homework.";
 
 }
-function showDashboard(){
 
-    document.getElementById("totalHomework").textContent =
-        homeworkList.length;
+}catch(error){
 
-    document.getElementById("completedCount").textContent =
-        completedStudents.length;
+console.error(error);
 
-    const pendingStudents = allStudents.filter(student => {
-
-        return !completedStudents.some(submission =>
-            submission.emis === student.emis
-        );
-
-    });
-
-    document.getElementById("pendingCount").textContent =
-        pendingStudents.length;
-
-    // Completed Students List
-
-    let completedHTML = "";
-
-    if(completedStudents.length === 0){
-
-        completedHTML = `
-        <div class="profileCard">
-            No student has completed the homework yet.
-        </div>
-        `;
-
-    }else{
-
-        completedStudents.forEach((student,index)=>{
-
-            completedHTML += `
-            <div class="profileCard">
-
-                <b>${index+1}. ${student.studentName}</b><br>
-
-                EMIS : ${student.emis}<br>
-
-                Homework : ${student.homeworkTitle}<br>
-
-                Completed :
-                ${student.completedAt?.toDate
-                    ? student.completedAt.toDate().toLocaleString()
-                    : "-"}
-
-            </div>
-            `;
-
-        });
-
-    }
-
-    document.getElementById("completedList").innerHTML =
-        completedHTML;
-
-    // Pending Students List
-
-    let pendingHTML = "";
-
-    if(pendingStudents.length === 0){
-
-        pendingHTML = `
-        <div class="profileCard">
-            🎉 All students have completed the homework.
-        </div>
-        `;
-
-    }else{
-
-        pendingStudents.forEach((student,index)=>{
-
-            pendingHTML += `
-            <div class="profileCard">
-
-                <b>${index+1}. ${student.name}</b><br>
-
-                EMIS : ${student.emis}
-
-            </div>
-            `;
-
-        });
-
-    }
-
-    document.getElementById("pendingList").innerHTML =
-        pendingHTML;
+alert(error.message);
 
 }
+
+}
+
+console.log("Teacher Homework Status Loaded");
