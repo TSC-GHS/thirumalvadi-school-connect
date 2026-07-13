@@ -1,96 +1,121 @@
-import { db, auth } from "../firebase.js";
+//==========================================
+// Homework Management
+// Production Version
+// Part 1
+//==========================================
+
+import { db } from "../firebase.js";
 
 import {
 collection,
 addDoc,
 getDocs,
+getDoc,
 deleteDoc,
 doc,
 query,
 where,
 orderBy,
-limit
+writeBatch
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
-import {
-onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 const saveBtn = document.getElementById("saveHomework");
 const homeworkList = document.getElementById("homeworkList");
 
-let currentTeacher = null;
+let teacherId = "";
+let teacher = {};
 
-onAuthStateChanged(auth, async(user)=>{
+window.addEventListener("DOMContentLoaded", init);
 
-if(!user){
-location.href="login.html";
+async function init(){
+
+teacherId =
+localStorage.getItem("teacherId") ||
+sessionStorage.getItem("teacherId");
+
+if(!teacherId){
+
+alert("Session Expired");
+
+location.href="index.html";
+
 return;
+
 }
 
-const teacherQuery=query(
-collection(db,"teachers"),
-where("email","==",user.email),
-limit(1)
+const teacherDoc =
+await getDoc(doc(db,"teachers",teacherId));
+
+if(!teacherDoc.exists()){
+
+alert("Teacher Profile Not Found");
+
+return;
+
+}
+
+teacher = teacherDoc.data();
+
+await loadHomework();
+
+}
+//==========================================
+// Load Homework List
+//==========================================
+
+async function loadHomework(){
+
+try{
+
+homeworkList.innerHTML="Loading Homework...";
+
+const q=query(
+collection(db,"homework"),
+where("teacherId","==",teacherId),
+orderBy("createdAt","desc")
 );
 
-const teacherSnap=await getDocs(teacherQuery);
+const snap=await getDocs(q);
 
-if(teacherSnap.empty){
-alert("Teacher not found");
-location.href="login.html";
+homeworkList.innerHTML="";
+
+if(snap.empty){
+
+homeworkList.innerHTML=`
+<p style="text-align:center;">
+No Homework Available
+</p>
+`;
+
 return;
+
 }
 
-currentTeacher={
-docId:teacherSnap.docs[0].id,
-...teacherSnap.docs[0].data()
-};
+snap.forEach((docSnap)=>{
 
-loadHomework();
+const hw=docSnap.data();
 
-});
-async function loadHomework() {
-
-homeworkList.innerHTML = "Loading Homework...";
-
-try {
-
-const q = query(
-collection(db, "homework"),
-where("subject", "==", currentTeacher.subject),
-orderBy("createdAt", "desc")
-);
-
-const snap = await getDocs(q);
-
-homeworkList.innerHTML = "";
-
-if (snap.empty) {
-homeworkList.innerHTML = "<p>No Homework Available</p>";
-return;
-}
-
-snap.forEach((docSnap) => {
-
-const data = docSnap.data();
-
-homeworkList.innerHTML += `
+homeworkList.innerHTML+=`
 
 <div class="homeworkCard">
 
-<h3>${data.title}</h3>
+<h3>${hw.title}</h3>
 
-<p>${data.description}</p>
+<p>${hw.description}</p>
 
-<p><b>Class :</b> ${data.className}-${data.section}</p>
+<p><b>Class :</b> ${hw.className}</p>
 
-<p><b>Subject :</b> ${data.subject}</p>
+<p><b>Section :</b> ${hw.section}</p>
 
-<p><b>Due Date :</b> ${data.dueDate}</p>
+<p><b>Subject :</b> ${hw.subject}</p>
 
-<button onclick="deleteHomework('${docSnap.id}')">
+<p><b>Due Date :</b> ${hw.dueDate}</p>
+
+<button
+onclick="deleteHomework('${docSnap.id}')">
+
 🗑 Delete
+
 </button>
 
 </div>
@@ -101,15 +126,23 @@ homeworkList.innerHTML += `
 
 });
 
-} catch (e) {
+}catch(error){
 
-console.error(e);
+console.error(error);
 
-homeworkList.innerHTML = "Failed to Load Homework";
+homeworkList.innerHTML=`
+<p style="color:red;">
+Failed to Load Homework
+</p>
+`;
 
 }
 
 }
+//==========================================
+// Save Homework
+//==========================================
+
 saveBtn.addEventListener("click", async () => {
 
 const title = document.getElementById("homeworkTitle").value.trim();
@@ -119,7 +152,7 @@ const section = document.getElementById("section").value;
 const subject = document.getElementById("subject").value;
 const dueDate = document.getElementById("dueDate").value;
 
-if (
+if(
 !title ||
 !description ||
 !className ||
@@ -133,7 +166,7 @@ return;
 
 try{
 
-await addDoc(collection(db,"homework"),{
+const homeworkRef = await addDoc(collection(db,"homework"),{
 
 title,
 description,
@@ -142,13 +175,62 @@ section,
 subject,
 dueDate,
 
-teacherId: currentTeacher.id,
-teacherName: currentTeacher.name,
+teacherId,
+teacherName: teacher.name,
+teacherType: teacher.teacherType || "",
 
 status:"Active",
-createdAt:new Date().toISOString()
+
+createdAt:new Date()
 
 });
+
+//==========================================
+// Create Homework Submission Records
+//==========================================
+
+const studentQuery = query(
+collection(db,"students"),
+where("class","==",className),
+where("section","==",section)
+);
+
+const studentSnap = await getDocs(studentQuery);
+
+const batch = writeBatch(db);
+
+studentSnap.forEach((studentDoc)=>{
+
+const student = studentDoc.data();
+
+const submissionRef =
+doc(collection(db,"homework_submissions"));
+
+batch.set(submissionRef,{
+
+homeworkId: homeworkRef.id,
+
+teacherId,
+teacherName: teacher.name,
+
+studentName: student.name,
+emis: student.emis,
+
+class: className,
+section,
+subject,
+
+status:"Pending",
+
+completedAt:null,
+
+createdAt:new Date()
+
+});
+
+});
+
+await batch.commit();
 
 alert("✅ Homework Saved Successfully");
 
@@ -164,30 +246,45 @@ loadHomework();
 }catch(error){
 
 console.error(error);
-alert("Failed to save homework.");
+
+alert(error.message);
 
 }
 
 });
+//==========================================
 // Delete Homework
+//==========================================
+
 window.deleteHomework = async function(id){
 
-if(!confirm("Delete this homework?")) return;
+const ok = confirm("Delete this Homework?");
+
+if(!ok) return;
 
 try{
 
 await deleteDoc(doc(db,"homework",id));
 
-alert("✅ Homework Deleted Successfully");
+alert("✅ Homework Deleted");
 
-loadHomework();
+await loadHomework();
 
 }catch(error){
 
 console.error(error);
 
-alert("Failed to delete homework.");
+alert("Unable to Delete Homework");
 
 }
 
-};
+}
+
+//==========================================
+// End
+//==========================================
+
+console.log("================================");
+console.log("Homework Management Loaded");
+console.log("Production Version");
+console.log("================================");
