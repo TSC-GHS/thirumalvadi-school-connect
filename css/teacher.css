@@ -1,7 +1,8 @@
 /*=========================================
- School Connect TN
- Teacher Dashboard
- Part 1
+School Connect TN
+Teacher Dashboard
+Production CSS
+Part 1
 =========================================*/
 
 *{
@@ -11,36 +12,41 @@ box-sizing:border-box;
 font-family:Arial,sans-serif;
 }
 
+html{
+scroll-behavior:smooth;
+}
+
 body{
 background:#eef3f9;
 color:#333;
-padding-bottom:90px;
+padding-bottom:30px;
 overflow-x:hidden;
 }
+
+/* Header */
 
 .header{
 position:sticky;
 top:0;
-left:0;
-width:100%;
+z-index:999;
 background:#1565C0;
 color:#fff;
-padding:18px 20px;
+padding:15px 18px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-box-shadow:0 2px 10px rgba(0,0,0,.2);
-z-index:999;
+box-shadow:0 3px 10px rgba(0,0,0,.15);
 }
 
 .header h2{
 font-size:24px;
-margin-bottom:5px;
+font-weight:bold;
 }
 
 .header p{
+margin-top:4px;
 font-size:14px;
-opacity:.9;
+opacity:.95;
 }
 
 #logoutBtn{
@@ -49,7 +55,7 @@ color:#fff;
 border:none;
 padding:10px 18px;
 border-radius:10px;
-font-size:15px;
+font-size:14px;
 font-weight:bold;
 cursor:pointer;
 transition:.3s;
@@ -59,56 +65,64 @@ transition:.3s;
 background:#B71C1C;
 }
 
+/* Container */
+
 .container{
-width:100%;
 max-width:1200px;
 margin:auto;
 padding:15px;
 }
 
+/* Profile Card */
+
 .profileCard{
 background:#fff;
-padding:22px;
+padding:18px;
 border-radius:18px;
 box-shadow:0 4px 12px rgba(0,0,0,.12);
-margin-bottom:20px;
+margin-bottom:18px;
+text-align:center;
 }
 
 .profileCard h2{
+font-size:30px;
 color:#1565C0;
-font-size:28px;
 margin-bottom:8px;
 }
 
 .profileCard p{
-font-size:16px;
+font-size:17px;
 color:#666;
 }
 /*=========================================
- School Connect TN
- Teacher Dashboard
- Part 2
+School Connect TN
+Teacher Dashboard
+Production CSS
+Part 2
 =========================================*/
+
+/* Dashboard Summary */
 
 .dashboard{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:18px;
+gap:16px;
 margin-bottom:25px;
 }
 
 .dashCard{
-padding:22px;
-border-radius:18px;
+background:#1565C0;
 color:#fff;
+border-radius:16px;
+padding:18px;
 text-align:center;
-box-shadow:0 4px 12px rgba(0,0,0,.15);
-transition:.3s ease;
+box-shadow:0 4px 10px rgba(0,0,0,.15);
+transition:.3s;
 cursor:pointer;
 }
 
 .dashCard:hover{
-transform:translateY(-5px);
+transform:translateY(-4px);
 }
 
 .blue{
@@ -128,38 +142,43 @@ background:linear-gradient(135deg,#C62828,#EF5350);
 }
 
 .dashCard h3{
-font-size:34px;
-margin-bottom:10px;
+font-size:32px;
 font-weight:bold;
+margin-bottom:8px;
 }
 
 .dashCard p{
 font-size:15px;
 font-weight:bold;
+line-height:20px;
 }
 
+/* Section Title */
+
 .sectionTitle{
-margin:25px 0 15px;
 font-size:24px;
 font-weight:bold;
 color:#1565C0;
+margin:20px 0 15px;
 }
+
+/* Quick Menu */
 
 .menuGrid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:18px;
+gap:15px;
 }
 
 .menuCard{
 background:#fff;
-padding:25px 15px;
-border-radius:18px;
+border-radius:16px;
+padding:20px 12px;
 text-align:center;
 text-decoration:none;
-color:#333;
-box-shadow:0 4px 12px rgba(0,0,0,.12);
-transition:.3s ease;
+color:#1565C0;
+box-shadow:0 4px 10px rgba(0,0,0,.12);
+transition:.3s;
 }
 
 .menuCard:hover{
@@ -173,24 +192,29 @@ font-size:34px;
 
 .menuCard span{
 display:block;
-margin-top:12px;
-font-size:15px;
+margin-top:10px;
+font-size:14px;
 font-weight:bold;
 color:#1565C0;
 }
+/*=========================================
+School Connect TN
+Teacher Dashboard
+Production CSS
+Part 3
+=========================================*/
+
+/* Footer */
 
 .footer{
-margin-top:35px;
+margin-top:30px;
 padding:20px;
 text-align:center;
 font-size:14px;
 color:#666;
 }
-/*=========================================
- School Connect TN
- Teacher Dashboard
- Part 3 - Responsive
-=========================================*/
+
+/* Tablet */
 
 @media screen and (max-width:992px){
 
@@ -204,27 +228,29 @@ grid-template-columns:repeat(2,1fr);
 
 }
 
+/* Mobile */
+
 @media screen and (max-width:768px){
 
 .header{
 flex-direction:column;
-align-items:center;
 text-align:center;
-padding:16px;
-gap:12px;
+gap:10px;
+padding:12px;
 }
 
 .header h2{
-font-size:22px;
+font-size:20px;
 }
 
 .header p{
-font-size:14px;
+font-size:13px;
 }
 
 #logoutBtn{
-width:100%;
-max-width:220px;
+width:170px;
+padding:8px;
+font-size:14px;
 }
 
 .container{
@@ -232,76 +258,105 @@ padding:10px;
 }
 
 .profileCard{
-padding:18px;
-text-align:center;
+padding:15px;
+margin-bottom:15px;
 }
 
 .profileCard h2{
-font-size:24px;
+font-size:22px;
+}
+
+.profileCard p{
+font-size:14px;
 }
 
 .dashboard{
 grid-template-columns:repeat(2,1fr);
-gap:12px;
+gap:10px;
+margin-bottom:18px;
 }
 
 .dashCard{
-padding:18px 10px;
+padding:14px 8px;
+border-radius:14px;
+min-height:95px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 }
 
 .dashCard h3{
-font-size:28px;
+font-size:24px;
+margin-bottom:5px;
 }
 
 .dashCard p{
-font-size:13px;
+font-size:12px;
+line-height:16px;
+}
+
+.sectionTitle{
+font-size:20px;
+margin:15px 0 10px;
 }
 
 .menuGrid{
 grid-template-columns:repeat(2,1fr);
-gap:12px;
+gap:10px;
 }
 
 .menuCard{
-padding:20px 10px;
-font-size:30px;
+padding:16px 8px;
+font-size:26px;
+border-radius:14px;
 }
 
 .menuCard span{
-font-size:13px;
-margin-top:8px;
+font-size:12px;
+margin-top:6px;
 }
 
 .footer{
-font-size:13px;
+margin-top:20px;
 padding:15px;
-}
-
-}
-
-@media screen and (max-width:480px){
-
-.dashboard{
-grid-template-columns:1fr;
-}
-
-.menuGrid{
-grid-template-columns:repeat(2,1fr);
-}
-
-.menuCard{
-padding:18px 8px;
-}
-
-.menuCard span{
 font-size:12px;
 }
 
 }
 
-html{
-scroll-behavior:smooth;
+/* Small Mobile */
+
+@media screen and (max-width:480px){
+
+.dashboard{
+grid-template-columns:repeat(2,1fr);
 }
+
+.menuGrid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.dashCard{
+min-height:88px;
+}
+
+.dashCard h3{
+font-size:22px;
+}
+
+.menuCard{
+font-size:24px;
+padding:14px 8px;
+}
+
+.menuCard span{
+font-size:11px;
+}
+
+}
+
+/* Animation */
 
 button,
 a{
