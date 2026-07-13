@@ -1,8 +1,9 @@
-//=========================================
+//========================================
+// School Connect TN
 // Teacher Homework Status
 // Production Version
 // Part 1
-//=========================================
+//========================================
 
 import { db } from "../firebase.js";
 
@@ -11,26 +12,34 @@ collection,
 query,
 where,
 getDocs,
-doc,
-getDoc
+getDoc,
+doc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const totalHomework=document.getElementById("totalHomework");
-const completedHomework=document.getElementById("completedHomework");
-const pendingHomework=document.getElementById("pendingHomework");
+const totalHomework =
+document.getElementById("totalHomework");
 
-const completedList=document.getElementById("completedStudents");
-const pendingList=document.getElementById("pendingStudents");
+const completedCount =
+document.getElementById("completedCount");
 
-let teacherId="";
-let teacher={};
+const pendingCount =
+document.getElementById("pendingCount");
 
-window.addEventListener("DOMContentLoaded",init);
+const completedList =
+document.getElementById("completedList");
 
-async function init(){
+const pendingList =
+document.getElementById("pendingList");
 
-teacherId=
-localStorage.getItem("teacherId")||
+let teacherId = "";
+let teacher = {};
+
+window.addEventListener("DOMContentLoaded", initialize);
+
+async function initialize(){
+
+teacherId =
+localStorage.getItem("teacherId") ||
 sessionStorage.getItem("teacherId");
 
 if(!teacherId){
@@ -43,56 +52,60 @@ return;
 
 }
 
-const teacherSnap=await getDoc(doc(db,"teachers",teacherId));
+try{
+
+const teacherRef =
+doc(db,"teachers",teacherId);
+
+const teacherSnap =
+await getDoc(teacherRef);
 
 if(!teacherSnap.exists()){
 
 alert("Teacher Not Found");
 
+location.href="index.html";
+
 return;
 
 }
 
-teacher=teacherSnap.data();
+teacher = teacherSnap.data();
 
-await loadStatus();
+await loadHomeworkStatus();
+
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
 
 }
-//=========================================
-// Load Homework Status
-//=========================================
 
-async function loadStatus(){
+}
+//========================================
+// Load Homework Status
+//========================================
+
+async function loadHomeworkStatus(){
 
 try{
 
-//------------------------------
-// Total Homework
-//------------------------------
-
-const homeworkSnap = await getDocs(
-
-query(
+const homeworkQuery = query(
 collection(db,"homework"),
 where("teacherId","==",teacherId)
-)
-
 );
+
+const homeworkSnap = await getDocs(homeworkQuery);
 
 totalHomework.textContent = homeworkSnap.size;
 
-//------------------------------
-// Homework Submissions
-//------------------------------
-
-const submissionSnap = await getDocs(
-
-query(
+const submissionQuery = query(
 collection(db,"homework_submissions"),
 where("teacherId","==",teacherId)
-)
-
 );
+
+const submissionSnap = await getDocs(submissionQuery);
 
 let completed = 0;
 let pending = 0;
@@ -109,15 +122,11 @@ if(data.status==="Completed"){
 completed++;
 
 completedList.innerHTML += `
-
 <div class="studentCard">
-
 <b>${data.studentName}</b><br>
-
-EMIS : ${data.emis}
-
+EMIS : ${data.emis}<br>
+${data.subject}
 </div>
-
 `;
 
 }else{
@@ -125,35 +134,40 @@ EMIS : ${data.emis}
 pending++;
 
 pendingList.innerHTML += `
-
 <div class="studentCard">
-
 <b>${data.studentName}</b><br>
-
-EMIS : ${data.emis}
-
+EMIS : ${data.emis}<br>
+${data.subject}
 </div>
-
 `;
 
 }
 
 });
 
-completedHomework.textContent = completed;
-pendingHomework.textContent = pending;
+completedCount.textContent = completed;
+pendingCount.textContent = pending;
+  //========================================
+// Empty Message Handling
+//========================================
 
 if(completed===0){
 
-completedList.innerHTML =
-"No student has completed the homework yet.";
+completedList.innerHTML=`
+<div class="studentCard">
+No students have completed the homework.
+</div>
+`;
 
 }
 
 if(pending===0){
 
-pendingList.innerHTML =
-"All students completed the homework.";
+pendingList.innerHTML=`
+<div class="studentCard">
+No pending students.
+</div>
+`;
 
 }
 
@@ -161,10 +175,35 @@ pendingList.innerHTML =
 
 console.error(error);
 
-alert(error.message);
+alert("Unable to load Homework Status");
 
 }
 
 }
 
-console.log("Teacher Homework Status Loaded");
+//========================================
+// Auto Refresh
+//========================================
+
+setInterval(async()=>{
+
+try{
+
+await loadHomeworkStatus();
+
+}catch(error){
+
+console.log(error);
+
+}
+
+},30000);
+
+//========================================
+// Version
+//========================================
+
+console.log("================================");
+console.log("Teacher Homework Status");
+console.log("Production Version V2");
+console.log("================================");
