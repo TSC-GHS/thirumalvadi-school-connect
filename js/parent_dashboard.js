@@ -1,17 +1,23 @@
+//==========================================
+// School Connect TN
+// Parent Dashboard
+// Part 1
+//==========================================
+
 import { auth, db } from "../firebase.js";
 
 import {
-  signOut
+    signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
-  doc,
-  getDoc,
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  limit
+    doc,
+    getDoc,
+    collection,
+    getDocs,
+    query,
+    orderBy,
+    limit
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 const emis = localStorage.getItem("parentEMIS");
@@ -34,7 +40,7 @@ async function loadDashboard() {
 
         if (!studentSnap.exists()) {
 
-            alert("Student Not Found");
+            alert("Student Record Not Found");
 
             return;
 
@@ -57,7 +63,7 @@ async function loadDashboard() {
         document.getElementById("attendancePercent").textContent =
             student.attendance || "0%";
 
-        if (student.photo) {
+        if (student.photo && student.photo !== "") {
 
             document.getElementById("studentPhoto").src =
                 student.photo;
@@ -70,7 +76,9 @@ async function loadDashboard() {
 
         await loadMarks();
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error);
 
@@ -79,33 +87,46 @@ async function loadDashboard() {
     }
 
 }
-async function loadHomework(studentClass) {
+//==========================================
+// School Connect TN
+// Parent Dashboard
+// Part 2 (Final)
+//==========================================
 
-    try {
+async function loadHomework(studentClass){
 
-        const homeworkRef = collection(db, "homework");
-        const homeworkSnap = await getDocs(homeworkRef);
+    try{
+
+        const snap = await getDocs(collection(db,"homework"));
 
         let html = "";
         let count = 0;
 
-        homeworkSnap.forEach((docSnap) => {
+        snap.forEach((docSnap)=>{
 
             const hw = docSnap.data();
 
-            if (hw.class === studentClass &&
-                (hw.status === "Active" || hw.status === true)) {
+            if(
+                hw.class === studentClass &&
+                (hw.status === "Active" || hw.status === true)
+            ){
 
                 count++;
 
                 html += `
                 <div class="homework-item">
+
                     <div class="homework-sub">
-                        📚 Homework
+                        Homework
                     </div>
+
                     <div>${hw.homework || "-"}</div>
+
                     <small>Due : ${hw.dueDate || "-"}</small>
-                </div>`;
+
+                </div>
+                `;
+
             }
 
         });
@@ -113,35 +134,37 @@ async function loadHomework(studentClass) {
         document.getElementById("homeworkCount").textContent = count;
 
         document.getElementById("todayHomework").innerHTML =
-            count > 0 ? html : "<p>No Homework Available</p>";
+        count > 0
+        ? html
+        : "<p>No Homework Available</p>";
 
-    } catch (error) {
+    }catch(error){
 
-        console.error(error);
+        console.log(error);
 
         document.getElementById("todayHomework").innerHTML =
-            "<p>Unable to Load Homework</p>";
+        "<p>Unable to Load Homework</p>";
 
     }
 
 }
 
-async function loadNotice() {
+async function loadNotice(){
 
-    try {
+    try{
 
         const q = query(
-            collection(db, "notices"),
-            orderBy("createdAt", "desc"),
+            collection(db,"notices"),
+            orderBy("createdAt","desc"),
             limit(3)
         );
 
-        const noticeSnap = await getDocs(q);
+        const snap = await getDocs(q);
 
         let html = "";
         let count = 0;
 
-        noticeSnap.forEach((docSnap) => {
+        snap.forEach((docSnap)=>{
 
             const notice = docSnap.data();
 
@@ -149,49 +172,57 @@ async function loadNotice() {
 
             html += `
             <div class="notice-item">
+
                 <div class="notice-title">
                     ${notice.title || "Notice"}
                 </div>
+
                 <div>
                     ${notice.description || "-"}
                 </div>
-            </div>`;
+
+            </div>
+            `;
+
         });
 
         document.getElementById("noticeCount").textContent = count;
 
         document.getElementById("latestNotice").innerHTML =
-            count > 0 ? html : "<p>No Notice Available</p>";
+        count > 0
+        ? html
+        : "<p>No Notice Available</p>";
 
-    } catch (error) {
+    }catch(error){
 
-        console.error(error);
+        console.log(error);
 
         document.getElementById("latestNotice").innerHTML =
-            "<p>Unable to Load Notice</p>";
+        "<p>Unable to Load Notice</p>";
 
     }
 
 }
 
-async function loadMarks() {
+async function loadMarks(){
 
-    try {
+    try{
 
-        const marksRef = collection(db, "marks", "Unit Test", "students");
-
-        const marksSnap = await getDocs(marksRef);
+        const snap = await getDocs(
+            collection(db,"marks","Unit Test","students")
+        );
 
         let total = 0;
         let subjects = 0;
 
-        marksSnap.forEach((docSnap) => {
+        snap.forEach((docSnap)=>{
 
             const mark = docSnap.data();
 
-            if (mark.emis === emis) {
+            if(mark.emis === emis){
 
                 total += Number(mark.total || 0);
+
                 subjects++;
 
             }
@@ -199,13 +230,16 @@ async function loadMarks() {
         });
 
         const average =
-            subjects === 0 ? 0 : Math.round(total / subjects);
+        subjects === 0
+        ? 0
+        : Math.round(total / subjects);
 
-        document.getElementById("marksAverage").textContent = average;
+        document.getElementById("marksAverage").textContent =
+        average;
 
-    } catch (error) {
+    }catch(error){
 
-        console.error(error);
+        console.log(error);
 
         document.getElementById("marksAverage").textContent = "0";
 
@@ -213,9 +247,9 @@ async function loadMarks() {
 
 }
 
-window.logoutParent = async function () {
+window.logoutParent = async function(){
 
-    try {
+    try{
 
         await signOut(auth);
 
@@ -225,15 +259,15 @@ window.logoutParent = async function () {
 
         location.href = "login.html";
 
-    } catch (error) {
+    }catch(error){
 
         alert(error.message);
 
     }
 
-};
+}
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded",()=>{
 
     loadDashboard();
 
