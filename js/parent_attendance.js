@@ -75,7 +75,9 @@ No Attendance Found
 
     } catch (error) {
 
-        console.error("Attendance Error :", error);
+        console.error(error);
+        alert(error.stack)
+    }    
 
         document.getElementById("attendanceTable").innerHTML = `
 <tr>
