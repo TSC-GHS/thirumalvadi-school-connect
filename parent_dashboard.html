@@ -10,214 +10,6 @@
 
 <link rel="stylesheet" href="css/parent.css">
 
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:#eef3f9;
-color:#333;
-padding-bottom:90px;
-}
-
-.header{
-position:sticky;
-top:0;
-z-index:999;
-background:#1565C0;
-color:#fff;
-padding:18px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-box-shadow:0 2px 10px rgba(0,0,0,.2);
-}
-
-.container{
-max-width:1100px;
-margin:auto;
-padding:15px;
-}
-
-.card{
-background:#fff;
-border-radius:18px;
-padding:20px;
-margin-bottom:18px;
-box-shadow:0 4px 12px rgba(0,0,0,.12);
-}
-
-.card h2{
-color:#1565C0;
-margin-bottom:18px;
-}
-
-.profile{
-display:flex;
-align-items:center;
-gap:20px;
-flex-wrap:wrap;
-}
-
-.profile img{
-width:100px;
-height:100px;
-border-radius:50%;
-border:4px solid #1565C0;
-object-fit:cover;
-background:#fff;
-}
-
-.info{
-flex:1;
-}
-
-.info p{
-margin:8px 0;
-font-size:16px;
-}
-
-.summary{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:15px;
-margin-top:20px;
-}
-
-.summary-box{
-background:#1565C0;
-color:white;
-padding:18px;
-border-radius:15px;
-text-align:center;
-}
-
-.summary-box h1{
-font-size:30px;
-margin-bottom:8px;
-}
-
-.summary-box p{
-font-size:15px;
-}
-
-.notice-item,
-.homework-item{
-padding:12px 0;
-border-bottom:1px solid #ddd;
-}
-
-.notice-item:last-child,
-.homework-item:last-child{
-border-bottom:none;
-}
-
-.notice-title{
-font-weight:bold;
-color:#1565C0;
-margin-bottom:6px;
-}
-
-.homework-sub{
-font-weight:bold;
-color:#2E7D32;
-margin-bottom:6px;
-}
-
-.quickmenu{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:15px;
-}
-
-.quickmenu button{
-background:#1565C0;
-color:#fff;
-border:none;
-padding:15px;
-border-radius:12px;
-font-size:15px;
-font-weight:bold;
-cursor:pointer;
-transition:.3s;
-}
-
-.quickmenu button:hover{
-background:#0D47A1;
-}
- .bottom-nav{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:#1565C0;
-display:flex;
-justify-content:space-around;
-padding:10px 0;
-box-shadow:0 -2px 10px rgba(0,0,0,.2);
-}
-
-.bottom-nav button{
-background:none;
-border:none;
-color:white;
-display:flex;
-flex-direction:column;
-align-items:center;
-font-size:13px;
-cursor:pointer;
-}
-
-.bottom-nav span{
-font-size:22px;
-margin-bottom:5px;
-}
-
-@media(max-width:768px){
-
-.container{
-padding:12px;
-}
-
-.profile{
-flex-direction:column;
-text-align:center;
-}
-
-.profile img{
-width:90px;
-height:90px;
-}
-
-.summary{
-grid-template-columns:repeat(2,1fr);
-}
-
-.quickmenu{
-grid-template-columns:repeat(2,1fr);
-}
-
-.summary-box h1{
-font-size:24px;
-}
-
-.info p{
-font-size:15px;
-}
-
-.card{
-padding:15px;
-}
-
-}
-
-</style>
-
 </head>
 
 <body>
@@ -229,6 +21,8 @@ padding:15px;
 </div>
 
 <div class="container">
+
+<!-- Student Card -->
 
 <div class="card">
 
@@ -243,17 +37,33 @@ alt="Student">
 
 <div class="info">
 
-<p><b>Name :</b>
-<span id="studentName">Loading...</span></p>
+<p>
+<b>Name :</b>
+<span id="studentName">
+Loading...
+</span>
+</p>
 
-<p><b>EMIS :</b>
-<span id="studentEMIS">Loading...</span></p>
+<p>
+<b>EMIS :</b>
+<span id="studentEMIS">
+Loading...
+</span>
+</p>
 
-<p><b>Class :</b>
-<span id="studentClass">Loading...</span></p>
+<p>
+<b>Class :</b>
+<span id="studentClass">
+Loading...
+</span>
+</p>
 
-<p><b>Section :</b>
-<span id="studentSection">Loading...</span></p>
+<p>
+<b>Section :</b>
+<span id="studentSection">
+Loading...
+</span>
+</p>
 
 </div>
 
@@ -263,33 +73,65 @@ alt="Student">
 
 <div class="summary-box">
 
-<h1 id="attendancePercent">0%</h1>
+<h1 id="attendancePercent">
 
-<p>Attendance</p>
+0%
 
-</div>
+</h1>
 
-<div class="summary-box">
+<p>
 
-<h1 id="marksAverage">0</h1>
+Attendance
 
-<p>Average</p>
-
-</div>
-
-<div class="summary-box">
-
-<h1 id="homeworkCount">0</h1>
-
-<p>Homework</p>
+</p>
 
 </div>
 
 <div class="summary-box">
 
-<h1 id="noticeCount">0</h1>
+<h1 id="marksAverage">
 
-<p>Notice</p>
+0
+
+</h1>
+
+<p>
+
+Average
+
+</p>
+
+</div>
+
+<div class="summary-box">
+
+<h1 id="homeworkCount">
+
+0
+
+</h1>
+
+<p>
+
+Homework
+
+</p>
+
+</div>
+
+<div class="summary-box">
+
+<h1 id="noticeCount">
+
+0
+
+</h1>
+
+<p>
+
+Notice
+
+</p>
 
 </div>
 
@@ -307,11 +149,15 @@ alt="Student">
 <div class="notice-item">
 
 <div class="notice-title">
+
 Loading...
+
 </div>
 
 <div>
+
 Please wait...
+
 </div>
 
 </div>
@@ -331,11 +177,15 @@ Please wait...
 <div class="homework-item">
 
 <div class="homework-sub">
+
 Loading...
+
 </div>
 
 <div>
+
 Please wait...
+
 </div>
 
 </div>
@@ -387,9 +237,6 @@ Please wait...
 </div>
 
 </div>
-
-</div>
-
 <!-- Bottom Navigation -->
 
 <div class="bottom-nav">
@@ -413,6 +260,8 @@ Report
 <span>👤</span>
 Profile
 </button>
+
+</div>
 
 </div>
 
