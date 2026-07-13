@@ -1,166 +1,193 @@
-import { db } from "../firebase.js";
+import { db, auth } from "../firebase.js";
 
 import {
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  doc,
-  query,
-  orderBy
+collection,
+addDoc,
+getDocs,
+deleteDoc,
+doc,
+query,
+where,
+orderBy,
+limit
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+import {
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 const saveBtn = document.getElementById("saveHomework");
 const homeworkList = document.getElementById("homeworkList");
 
-async function loadHomework() {
+let currentTeacher = null;
 
-  homeworkList.innerHTML = "Loading Homework...";
+onAuthStateChanged(auth, async(user)=>{
 
-  try {
-
-    const q = query(
-      collection(db, "homework"),
-      orderBy("createdAt", "desc")
-    );
-
-    const snap = await getDocs(q);
-
-    homeworkList.innerHTML = "";
-
-    if (snap.empty) {
-
-      homeworkList.innerHTML = "<p>No Homework Available</p>";
-
-      return;
-
-    }
-
-    snap.forEach((docSnap) => {
-
-      const data = docSnap.data();
-
-      homeworkList.innerHTML += `
-
-      <div class="homeworkCard">
-
-      <h3>${data.title}</h3>
-
-      <p>${data.description}</p>
-
-      <p><b>Class :</b> ${data.className}-${data.section}</p>
-
-      <p><b>Subject :</b> ${data.subject}</p>
-
-      <p><b>Due Date :</b> ${data.dueDate}</p>
-
-      <button onclick="deleteHomework('${docSnap.id}')">
-
-      🗑 Delete
-
-      </button>
-
-      </div>
-
-      <br>
-
-      `;
-
-    });
-
-  } catch (e) {
-
-    console.error(e);
-
-    homeworkList.innerHTML = "Failed to Load Homework";
-
-  }
-
+if(!user){
+location.href="login.html";
+return;
 }
 
+const teacherQuery=query(
+collection(db,"teachers"),
+where("email","==",user.email),
+limit(1)
+);
+
+const teacherSnap=await getDocs(teacherQuery);
+
+if(teacherSnap.empty){
+alert("Teacher not found");
+location.href="login.html";
+return;
+}
+
+currentTeacher={
+docId:teacherSnap.docs[0].id,
+...teacherSnap.docs[0].data()
+};
+
 loadHomework();
-// Save Homework
 
-saveBtn.addEventListener("click", async () => {
+});
+async function loadHomework() {
 
-  const title = document.getElementById("homeworkTitle").value.trim();
-  const description = document.getElementById("homeworkDescription").value.trim();
-  const className = document.getElementById("className").value;
-  const section = document.getElementById("section").value;
-  const subject = document.getElementById("subject").value;
-  const dueDate = document.getElementById("dueDate").value;
+homeworkList.innerHTML = "Loading Homework...";
 
-  if (
-    !title ||
-    !description ||
-    !className ||
-    !section ||
-    !subject ||
-    !dueDate
-  ) {
+try {
 
-    alert("Please fill all fields");
+const q = query(
+collection(db, "homework"),
+where("subject", "==", currentTeacher.subject),
+orderBy("createdAt", "desc")
+);
 
-    return;
+const snap = await getDocs(q);
 
-  }
+homeworkList.innerHTML = "";
 
-  try {
+if (snap.empty) {
+homeworkList.innerHTML = "<p>No Homework Available</p>";
+return;
+}
 
-    await addDoc(collection(db, "homework"), {
+snap.forEach((docSnap) => {
 
-      title,
-      description,
-      className,
-      section,
-      subject,
-      dueDate,
-      status: "Active",
-      createdAt: new Date().toISOString()
+const data = docSnap.data();
 
-    });
+homeworkList.innerHTML += `
 
-    alert("✅ Homework Saved Successfully");
+<div class="homeworkCard">
 
-    document.getElementById("homeworkTitle").value = "";
-    document.getElementById("homeworkDescription").value = "";
-    document.getElementById("className").value = "";
-    document.getElementById("section").value = "";
-    document.getElementById("subject").value = "";
-    document.getElementById("dueDate").value = "";
+<h3>${data.title}</h3>
 
-    loadHomework();
+<p>${data.description}</p>
 
-  } catch (error) {
+<p><b>Class :</b> ${data.className}-${data.section}</p>
 
-    console.error(error);
+<p><b>Subject :</b> ${data.subject}</p>
 
-    alert("Failed to save homework.");
+<p><b>Due Date :</b> ${data.dueDate}</p>
 
-  }
+<button onclick="deleteHomework('${docSnap.id}')">
+🗑 Delete
+</button>
+
+</div>
+
+<br>
+
+`;
 
 });
 
-// Delete Homework
+} catch (e) {
 
+console.error(e);
+
+homeworkList.innerHTML = "Failed to Load Homework";
+
+}
+
+}
+saveBtn.addEventListener("click", async () => {
+
+const title = document.getElementById("homeworkTitle").value.trim();
+const description = document.getElementById("homeworkDescription").value.trim();
+const className = document.getElementById("className").value;
+const section = document.getElementById("section").value;
+const subject = document.getElementById("subject").value;
+const dueDate = document.getElementById("dueDate").value;
+
+if (
+!title ||
+!description ||
+!className ||
+!section ||
+!subject ||
+!dueDate
+){
+alert("Please fill all fields");
+return;
+}
+
+try{
+
+await addDoc(collection(db,"homework"),{
+
+title,
+description,
+className,
+section,
+subject,
+dueDate,
+
+teacherId: currentTeacher.id,
+teacherName: currentTeacher.name,
+
+status:"Active",
+createdAt:new Date().toISOString()
+
+});
+
+alert("✅ Homework Saved Successfully");
+
+document.getElementById("homeworkTitle").value="";
+document.getElementById("homeworkDescription").value="";
+document.getElementById("className").value="";
+document.getElementById("section").value="";
+document.getElementById("subject").value="";
+document.getElementById("dueDate").value="";
+
+loadHomework();
+
+}catch(error){
+
+console.error(error);
+alert("Failed to save homework.");
+
+}
+
+});
+// Delete Homework
 window.deleteHomework = async function(id){
 
-  if(!confirm("Delete this homework?")) return;
+if(!confirm("Delete this homework?")) return;
 
-  try {
+try{
 
-    await deleteDoc(doc(db, "homework", id));
+await deleteDoc(doc(db,"homework",id));
 
-    alert("✅ Homework Deleted");
+alert("✅ Homework Deleted Successfully");
 
-    loadHomework();
+loadHomework();
 
-  } catch (error) {
+}catch(error){
 
-    console.error(error);
+console.error(error);
 
-    alert("Failed to delete homework.");
+alert("Failed to delete homework.");
 
-  }
+}
 
 };
