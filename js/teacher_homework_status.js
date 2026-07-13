@@ -1,104 +1,126 @@
-//========================================
-// School Connect TN
-// Teacher Homework Status
-// Production Version
+//==========================================
+// Homework Status V2
 // Part 1
-//========================================
+//==========================================
 
-import { db } from "../firebase.js";
+// Filter Mode
 
-import {
-collection,
-query,
-where,
-getDocs,
-getDoc,
-doc
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+let SHOW_MODE = "PENDING";
 
-const totalHomework =
-document.getElementById("totalHomework");
+// Available Modes
+// PENDING
+// COMPLETED
+// HISTORY
 
-const completedCount =
-document.getElementById("completedCount");
+function changeMode(mode){
 
-const pendingCount =
-document.getElementById("pendingCount");
+SHOW_MODE = mode;
 
-const completedList =
-document.getElementById("completedList");
+loadHomeworkStatus();
 
-const pendingList =
-document.getElementById("pendingList");
+}
+//==========================================
+// Homework Status Filter
+// Part 2
+//==========================================
 
-let teacherId = "";
-let teacher = {};
+function filterSubmission(hw){
 
-window.addEventListener("DOMContentLoaded", initialize);
+const today = new Date();
 
-async function initialize(){
+if(SHOW_MODE === "PENDING"){
 
-teacherId =
-localStorage.getItem("teacherId") ||
-sessionStorage.getItem("teacherId");
-
-if(!teacherId){
-
-alert("Session Expired");
-
-location.href="index.html";
-
-return;
+return hw.status !== "Completed";
 
 }
 
-try{
+if(SHOW_MODE === "COMPLETED"){
 
-const teacherRef =
-doc(db,"teachers",teacherId);
-
-const teacherSnap =
-await getDoc(teacherRef);
-
-if(!teacherSnap.exists()){
-
-alert("Teacher Not Found");
-
-location.href="index.html";
-
-return;
+return hw.status === "Completed";
 
 }
 
-teacher = teacherSnap.data();
+if(SHOW_MODE === "HISTORY"){
 
-await loadHomeworkStatus();
+if(hw.status !== "Completed") return false;
 
-}catch(error){
+if(!hw.completedTime) return false;
 
-console.error(error);
+const completedDate = hw.completedTime.toDate
+? hw.completedTime.toDate()
+: new Date(hw.completedTime);
 
-alert(error.message);
+const diffDays =
+(today - completedDate) / (1000*60*60*24);
+
+return diffDays > 7;
 
 }
 
+return true;
+
 }
-//========================================
+//==========================================
+// Build Homework Card
+// Part 3
+//==========================================
+
+function buildHomeworkCard(hw, id){
+
+const isCompleted = hw.status === "Completed";
+
+const isOverdue =
+!isCompleted &&
+hw.dueDate &&
+(new Date(hw.dueDate) < new Date());
+
+let badge = "🟢 Pending";
+
+if(isCompleted){
+
+badge = "✅ Completed";
+
+}else if(isOverdue){
+
+badge = "🔴 Overdue";
+
+}
+
+return `
+
+<div class="homeworkCard">
+
+<h3>👨‍🎓 ${hw.studentName}</h3>
+
+<p><b>EMIS :</b> ${hw.emis}</p>
+
+<p><b>Subject :</b> ${hw.subject}</p>
+
+<p><b>Due :</b> ${hw.dueDate || "-"}</p>
+
+<p><b>Status :</b> ${badge}</p>
+
+${isCompleted ? `
+
+<p><b>Completed By :</b> ${hw.completedBy || "Parent"}</p>
+
+<p><b>Comment :</b> ${hw.parentComment || "-"}</p>
+
+` : ""}
+
+</div>
+
+`;
+
+}
+//==========================================
 // Load Homework Status
-//========================================
+// Final Part
+//==========================================
 
 async function loadHomeworkStatus(){
 
 try{
-
-const homeworkQuery = query(
-collection(db,"homework"),
-where("teacherId","==",teacherId)
-);
-
-const homeworkSnap = await getDocs(homeworkQuery);
-
-totalHomework.textContent = homeworkSnap.size;
 
 const submissionQuery = query(
 collection(db,"homework_submissions"),
@@ -107,6 +129,7 @@ where("teacherId","==",teacherId)
 
 const submissionSnap = await getDocs(submissionQuery);
 
+let total = 0;
 let completed = 0;
 let pending = 0;
 
@@ -115,57 +138,55 @@ pendingList.innerHTML = "";
 
 submissionSnap.forEach((docSnap)=>{
 
-const data = docSnap.data();
+const hw = docSnap.data();
 
-if(data.status==="Completed"){
+total++;
+
+if(hw.status==="Completed"){
 
 completed++;
 
-completedList.innerHTML += `
-<div class="studentCard">
-<b>${data.studentName}</b><br>
-EMIS : ${data.emis}<br>
-${data.subject}
-</div>
-`;
+if(SHOW_MODE==="COMPLETED"){
+
+completedList.innerHTML +=
+createStudentCard(hw,docSnap.id);
+
+}
 
 }else{
 
 pending++;
 
-pendingList.innerHTML += `
-<div class="studentCard">
-<b>${data.studentName}</b><br>
-EMIS : ${data.emis}<br>
-${data.subject}
-</div>
-`;
+if(SHOW_MODE==="PENDING"){
+
+pendingList.innerHTML +=
+createStudentCard(hw,docSnap.id);
+
+}
 
 }
 
 });
 
+totalHomework.textContent = total;
 completedCount.textContent = completed;
 pendingCount.textContent = pending;
-  //========================================
-// Empty Message Handling
-//========================================
 
-if(completed===0){
+if(SHOW_MODE==="PENDING" && pending===0){
 
-completedList.innerHTML=`
-<div class="studentCard">
-No students have completed the homework.
+pendingList.innerHTML=`
+<div class="homeworkCard">
+🎉 No Pending Homework
 </div>
 `;
 
 }
 
-if(pending===0){
+if(SHOW_MODE==="COMPLETED" && completed===0){
 
-pendingList.innerHTML=`
-<div class="studentCard">
-No pending students.
+completedList.innerHTML=`
+<div class="homeworkCard">
+No Completed Homework
 </div>
 `;
 
@@ -175,35 +196,18 @@ No pending students.
 
 console.error(error);
 
-alert("Unable to load Homework Status");
+alert("Unable to Load Homework Status");
 
 }
 
 }
 
-//========================================
+//==========================================
 // Auto Refresh
-//========================================
+//==========================================
 
-setInterval(async()=>{
+setInterval(loadHomeworkStatus,30000);
 
-try{
+loadHomeworkStatus();
 
-await loadHomeworkStatus();
-
-}catch(error){
-
-console.log(error);
-
-}
-
-},30000);
-
-//========================================
-// Version
-//========================================
-
-console.log("================================");
-console.log("Teacher Homework Status");
-console.log("Production Version V2");
-console.log("================================");
+console.log("Homework Status V2 Loaded");
