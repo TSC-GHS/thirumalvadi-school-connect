@@ -172,3 +172,48 @@ Unable to Load Homework
 }
 
 }
+//==========================================
+// Parent Complete Homework
+//==========================================
+
+import {
+updateDoc,
+serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.completeHomework = async function(submissionId){
+
+const comment = prompt(
+"Comment (Optional)"
+) || "";
+
+try{
+
+await updateDoc(
+doc(db,"homework_submissions",submissionId),
+{
+
+status:"Completed",
+
+completedBy:"Parent",
+
+parentComment:comment,
+
+completedTime:serverTimestamp()
+
+}
+);
+
+alert("✅ Homework Submitted Successfully");
+
+loadHomework();
+
+}catch(error){
+
+console.error(error);
+
+alert("Unable to Submit Homework");
+
+}
+
+}
