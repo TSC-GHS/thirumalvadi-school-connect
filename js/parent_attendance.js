@@ -1,53 +1,66 @@
+//==========================================
+// School Connect TN
+// Parent Attendance
+// Part 1
+//==========================================
+
 import { db } from "../firebase.js";
 
 import {
-collection,
-getDocs
+    collection,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const emis = localStorage.getItem("parentEMIS");
+const emis = String(localStorage.getItem("parentEMIS") || "").trim();
 
 if (!emis) {
-    alert("Please Login Again");
+
+    alert("Session Expired");
+
     location.href = "login.html";
+
 }
 
 async function loadAttendance() {
 
     try {
 
-        const attendanceRef = collection(db, "attendance");
-        const attendanceSnap = await getDocs(attendanceRef);
+        const attendanceSnap = await getDocs(
+            collection(db, "attendance")
+        );
 
         let present = 0;
         let absent = 0;
-
         let html = "";
 
         attendanceSnap.forEach((docSnap) => {
 
             const data = docSnap.data();
 
-            if (data.emis === emis) {
+            const firebaseEmis =
+                String(data.emis || "").trim();
 
-                if (data.status === "Present") {
-                    present++;
-                } else {
-                    absent++;
-                }
+            if (firebaseEmis !== emis) return;
 
-                html += `
-<tr>
-<td>${data.date || "-"}</td>
-<td class="${data.status === "Present" ? "present" : "absent"}">
-${data.status}
-</td>
-</tr>
-`;
+            if (data.status === "Present") {
+
+                present++;
+
+            } else {
+
+                absent++;
 
             }
 
-        });
+            html += `
+<tr>
+<td>${data.date || "-"}</td>
+<td class="${data.status === "Present" ? "present" : "absent"}">
+${data.status || "-"}
+</td>
+</tr>
+`;
+                    });
 
         const total = present + absent;
 
@@ -56,28 +69,27 @@ ${data.status}
             ? 0
             : Math.round((present / total) * 100);
 
-        document.getElementById("attendancePercent").textContent =
-            percent + "%";
-
         document.getElementById("presentCount").textContent =
             present;
 
         document.getElementById("absentCount").textContent =
             absent;
+
+        document.getElementById("attendancePercent").textContent =
+            percent + "%";
+
         document.getElementById("attendanceTable").innerHTML =
             html || `
 <tr>
 <td colspan="2" style="text-align:center;">
-No Attendance Found
+No Attendance Records Found
 </td>
 </tr>
 `;
 
     } catch (error) {
 
-        console.error(error);
-        alert(error.stack)
-    }    
+        console.error("Attendance Error:", error);
 
         document.getElementById("attendanceTable").innerHTML = `
 <tr>
@@ -86,8 +98,7 @@ Failed to Load Attendance
 </td>
 </tr>
 `;
-
-    }
+            }
 
 }
 
