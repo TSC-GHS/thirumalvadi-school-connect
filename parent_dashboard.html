@@ -65,8 +65,8 @@ flex-wrap:wrap;
 }
 
 .profile img{
-width:110px;
-height:110px;
+width:100px;
+height:100px;
 border-radius:50%;
 border:4px solid #1565C0;
 object-fit:cover;
@@ -78,44 +78,37 @@ flex:1;
 }
 
 .info p{
-font-size:18px;
 margin:8px 0;
+font-size:16px;
 }
 
 .summary{
 display:grid;
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 gap:15px;
 margin-top:20px;
 }
 
 .summary-box{
 background:#1565C0;
-color:#fff;
+color:white;
 padding:18px;
-border-radius:14px;
+border-radius:15px;
 text-align:center;
 }
 
 .summary-box h1{
-font-size:34px;
+font-size:30px;
+margin-bottom:8px;
 }
 
 .summary-box p{
-margin-top:8px;
-font-size:16px;
-}
-
-.section-title{
-font-size:28px;
-color:#1565C0;
-font-weight:bold;
-margin-bottom:18px;
+font-size:15px;
 }
 
 .notice-item,
 .homework-item{
-padding:15px 0;
+padding:12px 0;
 border-bottom:1px solid #ddd;
 }
 
@@ -125,31 +118,30 @@ border-bottom:none;
 }
 
 .notice-title{
-font-size:18px;
 font-weight:bold;
 color:#1565C0;
-margin-bottom:8px;
+margin-bottom:6px;
 }
 
 .homework-sub{
-font-size:18px;
 font-weight:bold;
 color:#2E7D32;
-margin-bottom:8px;
+margin-bottom:6px;
 }
 
 .quickmenu{
 display:grid;
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 gap:15px;
 }
+
 .quickmenu button{
 background:#1565C0;
 color:#fff;
 border:none;
+padding:15px;
 border-radius:12px;
-padding:16px;
-font-size:16px;
+font-size:15px;
 font-weight:bold;
 cursor:pointer;
 transition:.3s;
@@ -158,12 +150,11 @@ transition:.3s;
 .quickmenu button:hover{
 background:#0D47A1;
 }
-
 .bottom-nav{
 position:fixed;
-left:0;
-right:0;
 bottom:0;
+left:0;
+width:100%;
 background:#1565C0;
 display:flex;
 justify-content:space-around;
@@ -174,7 +165,7 @@ box-shadow:0 -2px 10px rgba(0,0,0,.2);
 .bottom-nav button{
 background:none;
 border:none;
-color:#fff;
+color:white;
 display:flex;
 flex-direction:column;
 align-items:center;
@@ -184,14 +175,13 @@ cursor:pointer;
 
 .bottom-nav span{
 font-size:22px;
-margin-bottom:4px;
+margin-bottom:5px;
 }
 
 @media(max-width:768px){
 
 .container{
-max-width:100%;
-padding:10px;
+padding:12px;
 }
 
 .profile{
@@ -204,34 +194,24 @@ width:90px;
 height:90px;
 }
 
-.info p{
-font-size:15px;
-}
-
 .summary{
 grid-template-columns:repeat(2,1fr);
-gap:10px;
-}
-
-.summary-box h1{
-font-size:24px;
-}
-
-.summary-box p{
-font-size:13px;
-}
-
-.section-title{
-font-size:20px;
 }
 
 .quickmenu{
 grid-template-columns:repeat(2,1fr);
 }
 
-.quickmenu button{
-font-size:14px;
-padding:14px;
+.summary-box h1{
+font-size:24px;
+}
+
+.info p{
+font-size:15px;
+}
+
+.card{
+padding:15px;
 }
 
 }
@@ -256,19 +236,24 @@ padding:14px;
 
 <div class="profile">
 
-<img id="studentPhoto"
+<img
+id="studentPhoto"
 src="assets/school_logo.png"
 alt="Student">
 
 <div class="info">
 
-<p><b>Name :</b> <span id="studentName">Loading...</span></p>
+<p><b>Name :</b>
+<span id="studentName">Loading...</span></p>
 
-<p><b>EMIS :</b> <span id="studentEMIS">Loading...</span></p>
+<p><b>EMIS :</b>
+<span id="studentEMIS">Loading...</span></p>
 
-<p><b>Class :</b> <span id="studentClass">Loading...</span></p>
+<p><b>Class :</b>
+<span id="studentClass">Loading...</span></p>
 
-<p><b>Section :</b> <span id="studentSection">Loading...</span></p>
+<p><b>Section :</b>
+<span id="studentSection">Loading...</span></p>
 
 </div>
 
@@ -277,129 +262,37 @@ alt="Student">
 <div class="summary">
 
 <div class="summary-box">
+
 <h1 id="attendancePercent">0%</h1>
+
 <p>Attendance</p>
+
 </div>
 
 <div class="summary-box">
+
 <h1 id="marksAverage">0</h1>
+
 <p>Average</p>
+
 </div>
 
 <div class="summary-box">
+
 <h1 id="homeworkCount">0</h1>
+
 <p>Homework</p>
+
 </div>
 
 <div class="summary-box">
+
 <h1 id="noticeCount">0</h1>
+
 <p>Notice</p>
+
 </div>
 
 </div>
 
 </div>  
-<!-- Latest Notice -->
-
-<div class="card">
-
-<h2 class="section-title">📢 Latest Notice</h2>
-
-<div id="latestNotice">
-
-<p>Loading...</p>
-
-</div>
-
-</div>
-
-<!-- Today's Homework -->
-
-<div class="card">
-
-<h2 class="section-title">📚 Today's Homework</h2>
-
-<div id="todayHomework">
-
-<p>Loading...</p>
-
-</div>
-
-</div>
-
-<!-- Quick Menu -->
-
-<div class="card">
-
-<h2 class="section-title">⚡ Quick Menu</h2>
-
-<div class="quickmenu">
-
-<button onclick="location.href='student_profile.html'">
-👤 Student Profile
-</button>
-
-<button onclick="location.href='parent_attendance.html'">
-📅 Attendance
-</button>
-
-<button onclick="location.href='parent_report_card.html'">
-📊 Report Card
-</button>
-
-<button onclick="location.href='homework.html'">
-📚 Homework
-</button>
-
-<button onclick="location.href='notice_board.html'">
-📢 Notice Board
-</button>
-
-<button onclick="location.href='leave_request.html'">
-📝 Apply Leave
-</button>
-
-<button onclick="location.href='leave_status.html'">
-📋 Leave Status
-</button>
-
-<button onclick="logoutParent()">
-🚪 Logout
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- Bottom Navigation -->
-
-<div class="bottom-nav">
-
-<button onclick="location.href='parent_dashboard.html'">
-<span>🏠</span>
-Home
-</button>
-
-<button onclick="location.href='parent_attendance.html'">
-<span>📅</span>
-Attendance
-</button>
-
-<button onclick="location.href='parent_report_card.html'">
-<span>📊</span>
-Report
-</button>
-
-<button onclick="location.href='student_profile.html'">
-<span>👤</span>
-Profile
-</button>
-
-</div>
-
-<script type="module" src="js/parent_dashboard.js"></script>
-
-</body>
-</html>  
