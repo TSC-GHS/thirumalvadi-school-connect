@@ -168,3 +168,92 @@ cursor:pointer;
 font-size:22px;
 margin-bottom:3px;
 }
+/* ==========================================
+   Parent Attendance - Part 3
+   Responsive Design
+========================================== */
+
+@media screen and (max-width:768px){
+
+.header{
+font-size:20px;
+padding:16px;
+}
+
+.container{
+padding:10px;
+}
+
+.card{
+padding:15px;
+border-radius:15px;
+}
+
+.summary{
+grid-template-columns:1fr;
+gap:12px;
+}
+
+.summary-box{
+padding:15px;
+}
+
+.summary-box h1{
+font-size:24px;
+}
+
+.summary-box p{
+font-size:14px;
+}
+
+table{
+font-size:14px;
+}
+
+th,
+td{
+padding:10px;
+}
+
+.back-btn{
+padding:14px;
+font-size:15px;
+}
+
+.bottom-nav{
+height:65px;
+}
+
+.bottom-nav span{
+font-size:20px;
+}
+
+.bottom-nav button{
+font-size:12px;
+}
+
+}
+
+@media screen and (min-width:769px){
+
+.container{
+max-width:1000px;
+}
+
+.summary{
+grid-template-columns:repeat(3,1fr);
+}
+
+}
+
+button{
+transition:.3s ease;
+}
+
+button:hover{
+transform:translateY(-2px);
+}
+
+table tr:hover{
+background:#f5f5f5;
+}
