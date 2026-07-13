@@ -1,6 +1,7 @@
 //==========================================
 // School Connect TN
 // Parent Homework
+// Production Version
 // Part 1
 //==========================================
 
@@ -10,10 +11,23 @@ import {
 doc,
 getDoc,
 collection,
-getDocs
+getDocs,
+query,
+where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const emis = localStorage.getItem("parentEMIS");
+const homeworkTable =
+document.getElementById("homeworkTable");
+
+const emis =
+localStorage.getItem("parentEMIS") ||
+sessionStorage.getItem("parentEMIS");
+
+let student = {};
+
+window.addEventListener("DOMContentLoaded", initialize);
+
+async function initialize(){
 
 if(!emis){
 
@@ -21,15 +35,14 @@ alert("Session Expired");
 
 location.href="login.html";
 
-}
+return;
 
-async function loadHomework(){
+}
 
 try{
 
-const studentSnap = await getDoc(
-doc(db,"students",emis)
-);
+const studentSnap =
+await getDoc(doc(db,"students",emis));
 
 if(!studentSnap.exists()){
 
@@ -39,47 +52,44 @@ return;
 
 }
 
-const student = studentSnap.data();
+student = studentSnap.data();
 
-const studentClass = student.class;
-const studentSection = student.section;
+await loadHomework();
 
-const homeworkSnap = await getDocs(
-collection(db,"homework")
-);
+}catch(error){
 
-let html = "";
-let count = 0;
+console.error(error);
 
-homeworkSnap.forEach((docSnap)=>{
-
-const hw = docSnap.data();
-
-if(
-hw.class == studentClass &&
-hw.section == studentSection
-){
-
-count++;
-
-html += `
-<tr>
-
-<td>${hw.subject || "-"}</td>
-
-<td>${hw.homework || "-"}</td>
-
-<td>${hw.dueDate || "-"}</td>
-
-</tr>
-`;
+alert(error.message);
 
 }
 
-});
-if(count===0){
+}
+//==========================================
+// Load Homework
+//==========================================
 
-document.getElementById("homeworkTable").innerHTML = `
+async function loadHomework(){
+
+try{
+
+homeworkTable.innerHTML=`
+<tr>
+<td colspan="3">Loading...</td>
+</tr>
+`;
+
+const homeworkQuery=query(
+collection(db,"homework"),
+where("className","==",student.class),
+where("section","==",student.section)
+);
+
+const homeworkSnap=await getDocs(homeworkQuery);
+
+if(homeworkSnap.empty){
+
+homeworkTable.innerHTML=`
 <tr>
 <td colspan="3">
 No Homework Available
@@ -87,17 +97,71 @@ No Homework Available
 </tr>
 `;
 
-}else{
-
-document.getElementById("homeworkTable").innerHTML = html;
+return;
 
 }
+
+let html="";
+
+const today=new Date();
+
+homeworkSnap.forEach((docSnap)=>{
+
+const hw=docSnap.data();
+
+let badge="🟢 Pending";
+
+if(hw.dueDate){
+
+const due=new Date(hw.dueDate);
+
+if(due<today){
+
+badge="🔴 Overdue";
+
+}
+
+}
+
+html+=`
+
+<tr>
+
+<td>
+
+<b>${hw.subject}</b>
+
+<br>
+
+<small>${badge}</small>
+
+</td>
+
+<td>
+
+${hw.description}
+
+</td>
+
+<td>
+
+${hw.dueDate}
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+homeworkTable.innerHTML=html;
 
 }catch(error){
 
 console.error(error);
 
-document.getElementById("homeworkTable").innerHTML = `
+homeworkTable.innerHTML=`
 <tr>
 <td colspan="3">
 Unable to Load Homework
@@ -108,9 +172,3 @@ Unable to Load Homework
 }
 
 }
-
-window.addEventListener("DOMContentLoaded",()=>{
-
-loadHomework();
-
-});
