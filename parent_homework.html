@@ -1,1 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Parent Homework</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#eef3f9;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+position:sticky;
+top:0;
+z-index:999;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:15px;
+}
+
+.card{
+background:white;
+border-radius:15px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+
+.card h2{
+color:#1565C0;
+margin-bottom:15px;
+}
+
+.table-box{
+overflow-x:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#1565C0;
+color:white;
+padding:12px;
+text-align:center;
+}
+
+td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+.back-btn{
+width:100%;
+padding:15px;
+margin-top:20px;
+background:#2E7D32;
+color:white;
+border:none;
+border-radius:10px;
+font-size:17px;
+cursor:pointer;
+}
+
+.back-btn:hover{
+background:#1B5E20;
+}
+
+@media(max-width:768px){
+
+.container{
+padding:10px;
+}
+
+table{
+font-size:14px;
+}
+
+th,td{
+padding:10px;
+}
+
+.header{
+font-size:20px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📚 Parent Homework
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Today's Homework</h2>
+
+<div class="table-box">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Subject</th>
+
+<th>Homework</th>
+
+<th>Due Date</th>
+
+</tr>
+
+</thead>
+
+<tbody id="homeworkTable">
+
+<tr>
+
+<td colspan="3">
+
+Loading...
+
+</td>
+
+</tr>
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<button class="back-btn"
+onclick="location.href='parent_dashboard.html'">
+
+🏠 Back to Dashboard
+
+</button>
+
+</div>
+
+<script type="module" src="js/parent_homework.js"></script>
+
+</body>
+
+</html>
