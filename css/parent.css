@@ -189,3 +189,125 @@ cursor:pointer;
 font-size:22px;
 margin-bottom:3px;
 }
+/* ===========================================
+   PART 3 - Responsive Design
+=========================================== */
+
+@media screen and (max-width:768px){
+
+.header{
+font-size:20px;
+padding:16px;
+}
+
+.container{
+padding:10px;
+}
+
+.card{
+padding:15px;
+border-radius:15px;
+}
+
+.profile{
+flex-direction:column;
+text-align:center;
+}
+
+.profile img{
+width:90px;
+height:90px;
+}
+
+.info{
+text-align:center;
+}
+
+.info p{
+font-size:15px;
+}
+
+.summary{
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.summary-box{
+padding:15px;
+}
+
+.summary-box h1{
+font-size:24px;
+}
+
+.summary-box p{
+font-size:14px;
+}
+
+.quickmenu{
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.quickmenu button{
+padding:14px 10px;
+font-size:14px;
+}
+
+.notice-title,
+.homework-sub{
+font-size:16px;
+}
+
+.bottom-nav{
+height:65px;
+}
+
+.bottom-nav span{
+font-size:20px;
+}
+
+.bottom-nav button{
+font-size:12px;
+}
+
+}
+
+@media screen and (min-width:769px){
+
+.container{
+max-width:1100px;
+}
+
+.summary{
+grid-template-columns:repeat(4,1fr);
+}
+
+.quickmenu{
+grid-template-columns:repeat(4,1fr);
+}
+
+.profile{
+flex-direction:row;
+align-items:center;
+}
+
+.info{
+text-align:left;
+}
+
+}
+
+img{
+max-width:100%;
+height:auto;
+display:block;
+}
+
+button{
+transition:0.3s ease;
+}
+
+button:hover{
+transform:translateY(-2px);
+}
