@@ -1,6 +1,7 @@
 //==========================================
 // School Connect TN
 // Parent Dashboard
+// Production Version V2
 // Part 1
 //==========================================
 
@@ -20,25 +21,37 @@ import {
     limit
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const emis = localStorage.getItem("parentEMIS");
+//==========================================
+// Parent Session
+//==========================================
 
-if (!emis) {
+const emis =
+localStorage.getItem("parentEMIS") ||
+sessionStorage.getItem("parentEMIS");
+
+if(!emis){
 
     alert("Session Expired");
 
-    location.href = "login.html";
+    location.href="login.html";
 
 }
 
-async function loadDashboard() {
+//==========================================
+// Load Dashboard
+//==========================================
 
-    try {
+async function loadDashboard(){
 
-        const studentRef = doc(db, "students", emis);
+    try{
 
-        const studentSnap = await getDoc(studentRef);
+        const studentRef =
+        doc(db,"students",emis);
 
-        if (!studentSnap.exists()) {
+        const studentSnap =
+        await getDoc(studentRef);
+
+        if(!studentSnap.exists()){
 
             alert("Student Record Not Found");
 
@@ -46,29 +59,34 @@ async function loadDashboard() {
 
         }
 
-        const student = studentSnap.data();
+        const student =
+        studentSnap.data();
 
         document.getElementById("studentName").textContent =
-            student.name || "-";
+        student.name || "-";
 
         document.getElementById("studentEMIS").textContent =
-            student.emis || emis;
+        student.emis || "-";
 
         document.getElementById("studentClass").textContent =
-            student.class || "-";
+        student.class || "-";
 
         document.getElementById("studentSection").textContent =
-            student.section || "-";
+        student.section || "-";
 
-        if (student.photo && student.photo !== "") {
+        if(student.photo){
 
             document.getElementById("studentPhoto").src =
-                student.photo;
+            student.photo;
 
         }
 
-       await loadAttendance(student.emis);
-await loadHomework(student.class, student.section); 
+        await loadAttendance(student.emis);
+
+        await loadHomework(
+            student.class,
+            student.section
+        );
 
         await loadNotice();
 
@@ -76,7 +94,7 @@ await loadHomework(student.class, student.section);
 
     }
 
-    catch (error) {
+    catch(error){
 
         console.error(error);
 
@@ -86,186 +104,6 @@ await loadHomework(student.class, student.section);
 
 }
 //==========================================
-// School Connect TN
-// Parent Dashboard
-// Part 2 (Final)
-//==========================================
-
-async function loadHomework(studentClass, studentSection){
-
-    try{
-
-        const snap = await getDocs(collection(db,"homework"));
-
-        let html = "";
-        let count = 0;
-
-        snap.forEach((docSnap)=>{
-
-            const hw = docSnap.data();
-
-            if(
-hw.className === studentClass &&
-hw.section === studentSection &&
-(hw.status === "Active" || hw.status === true)
-)
-            ){
-
-                count++;
-
-                html += `
-                <div class="homework-item">
-
-                    <div class="homework-sub">
-                        Homework
-                    </div>
-
-                    <div>${hw.homework || "-"}</div>
-
-                    <small>Due : ${hw.dueDate || "-"}</small>
-
-                </div>
-                `;
-
-            }
-
-        });
-
-        document.getElementById("homeworkCount").textContent = count;
-
-        document.getElementById("todayHomework").innerHTML =
-        count > 0
-        ? html
-        : "<p>No Homework Available</p>";
-
-    }catch(error){
-
-        console.log(error);
-
-        document.getElementById("todayHomework").innerHTML =
-        "<p>Unable to Load Homework</p>";
-
-    }
-
-}
-
-async function loadNotice(){
-
-    try{
-
-        const q = query(
-            collection(db,"notices"),
-            orderBy("createdAt","desc"),
-            limit(3)
-        );
-
-        const snap = await getDocs(q);
-
-        let html = "";
-        let count = 0;
-
-        snap.forEach((docSnap)=>{
-
-            const notice = docSnap.data();
-
-            count++;
-
-            html += `
-            <div class="notice-item">
-
-                <div class="notice-title">
-                    ${notice.title || "Notice"}
-                </div>
-
-                <div>
-                    ${notice.description || "-"}
-                </div>
-
-            </div>
-            `;
-
-        });
-
-        document.getElementById("noticeCount").textContent = count;
-
-        document.getElementById("latestNotice").innerHTML =
-        count > 0
-        ? html
-        : "<p>No Notice Available</p>";
-
-    }catch(error){
-
-        console.log(error);
-
-        document.getElementById("latestNotice").innerHTML =
-        "<p>Unable to Load Notice</p>";
-
-    }
-
-}
-
-async function loadMarks(){
-
-    try{
-
-        const snap = await getDocs(
-            collection(db,"marks","Unit Test","students")
-        );
-
-        
-let average = 0;
-
-snap.forEach((docSnap)=>{
-
-const mark = docSnap.data();
-
-if(mark.emis === emis){
-
-average = Number(mark.percentage || 0);
-
-}
-
-});
-
-document.getElementById("marksAverage").textContent =
-average;
-        document.getElementById("marksAverage").textContent =
-        average;
-
-    }catch(error){
-
-        console.log(error);
-
-        document.getElementById("marksAverage").textContent = "0";
-
-    }
-
-}
-
-window.logoutParent = async function(){
-
-    try{
-
-        await signOut(auth);
-
-        localStorage.removeItem("parentEMIS");
-        localStorage.removeItem("emis");
-        localStorage.removeItem("userRole");
-
-        location.href = "login.html";
-
-    }catch(error){
-
-        alert(error.message);
-
-    }
-
-}
-
-window.addEventListener("DOMContentLoaded",()=>{
-
-    loadDashboard();
-    //==========================================
 // Load Attendance Percentage
 //==========================================
 
@@ -273,7 +111,9 @@ async function loadAttendance(studentEmis){
 
     try{
 
-        const snap = await getDocs(collection(db,"attendance"));
+        const snap = await getDocs(
+            collection(db,"attendance")
+        );
 
         let present = 0;
         let absent = 0;
@@ -282,7 +122,9 @@ async function loadAttendance(studentEmis){
 
             const att = docSnap.data();
 
-            if(String(att.emis) !== String(studentEmis)) return;
+            if(String(att.emis).trim() !== String(studentEmis).trim()){
+                return;
+            }
 
             if(att.status === "Present"){
                 present++;
@@ -302,9 +144,10 @@ async function loadAttendance(studentEmis){
         document.getElementById("attendancePercent").textContent =
         percent + "%";
 
-    }catch(error){
+    }
+    catch(error){
 
-        console.log(error);
+        console.error("Attendance :",error);
 
         document.getElementById("attendancePercent").textContent =
         "0%";
@@ -312,5 +155,191 @@ async function loadAttendance(studentEmis){
     }
 
 }
+//==========================================
+// Load Homework
+//==========================================
 
-});
+async function loadHomework(studentClass, studentSection){
+
+    try{
+
+        const snap = await getDocs(
+            collection(db,"homework")
+        );
+
+        let html = "";
+        let count = 0;
+
+        snap.forEach((docSnap)=>{
+
+            const hw = docSnap.data();
+
+            if(
+                hw.className === studentClass &&
+                hw.section === studentSection &&
+                hw.status === "Active"
+            ){
+
+                count++;
+
+                html += `
+
+<div class="homework-item">
+
+<div class="homework-sub">
+${hw.subject || "Homework"}
+</div>
+
+<div>
+${hw.title || "-"}
+</div>
+
+<small>
+Due : ${hw.dueDate || "-"}
+</small>
+
+</div>
+
+`;
+
+            }
+
+        });
+
+        document.getElementById("homeworkCount").textContent = count;
+
+        document.getElementById("todayHomework").innerHTML =
+        count > 0
+        ? html
+        : "<p>No Homework Available</p>";
+
+    }
+
+    catch(error){
+
+        console.error("Homework :",error);
+
+        document.getElementById("todayHomework").innerHTML =
+        "<p>Unable to Load Homework</p>";
+
+    }
+
+}
+//==========================================
+// Load Latest Notices
+//==========================================
+
+async function loadNotice(){
+
+    try{
+
+        const noticeQuery = query(
+            collection(db,"notices"),
+            orderBy("createdAt","desc"),
+            limit(3)
+        );
+
+        const snap = await getDocs(noticeQuery);
+
+        let html = "";
+        let count = 0;
+
+        snap.forEach((docSnap)=>{
+
+            const notice = docSnap.data();
+
+            count++;
+
+            html += `
+
+<div class="notice-item">
+
+<div class="notice-title">
+${notice.title || "School Notice"}
+</div>
+
+<div>
+${notice.description || "-"}
+</div>
+
+<small>
+${notice.createdAt?.toDate
+? notice.createdAt.toDate().toLocaleDateString()
+: ""}
+</small>
+
+</div>
+
+`;
+
+        });
+
+        document.getElementById("noticeCount").textContent = count;
+
+        document.getElementById("latestNotice").innerHTML =
+            count > 0
+            ? html
+            : "<p>No Notice Available</p>";
+
+    }catch(error){
+
+        console.error("Notice :", error);
+
+        document.getElementById("latestNotice").innerHTML =
+            "<p>Unable to Load Notice</p>";
+
+    }
+
+}
+//==========================================
+// Load Marks Average
+//==========================================
+
+async function loadMarks(){
+
+    try{
+
+        const examName = "Unit Test";
+
+        const snap = await getDocs(
+            collection(db,"marks",examName,"students")
+        );
+
+        let average = 0;
+        let grade = "-";
+
+        snap.forEach((docSnap)=>{
+
+            const mark = docSnap.data();
+
+            if(String(mark.emis).trim() === String(emis).trim()){
+
+                average = Number(mark.percentage || 0);
+                grade = mark.grade || "-";
+
+            }
+
+        });
+
+        document.getElementById("marksAverage").textContent =
+        average + "%";
+
+        if(document.getElementById("studentGrade")){
+
+            document.getElementById("studentGrade").textContent =
+            grade;
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error("Marks :",error);
+
+        document.getElementById("marksAverage").textContent =
+        "0%";
+
+    }
+
+}
