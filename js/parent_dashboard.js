@@ -60,9 +60,6 @@ async function loadDashboard() {
         document.getElementById("studentSection").textContent =
             student.section || "-";
 
-        document.getElementById("attendancePercent").textContent =
-            student.attendance || "0%";
-
         if (student.photo && student.photo !== "") {
 
             document.getElementById("studentPhoto").src =
@@ -70,7 +67,8 @@ async function loadDashboard() {
 
         }
 
-        await loadHomework(student.class);
+       await loadAttendance(student.emis);
+await loadHomework(student.class, student.section); 
 
         await loadNotice();
 
@@ -93,7 +91,7 @@ async function loadDashboard() {
 // Part 2 (Final)
 //==========================================
 
-async function loadHomework(studentClass){
+async function loadHomework(studentClass, studentSection){
 
     try{
 
@@ -107,8 +105,10 @@ async function loadHomework(studentClass){
             const hw = docSnap.data();
 
             if(
-                hw.className === studentClass &&
-                (hw.status === "Active" || hw.status === true)
+hw.className === studentClass &&
+hw.section === studentSection &&
+(hw.status === "Active" || hw.status === true)
+)
             ){
 
                 count++;
@@ -265,5 +265,52 @@ window.logoutParent = async function(){
 window.addEventListener("DOMContentLoaded",()=>{
 
     loadDashboard();
+    //==========================================
+// Load Attendance Percentage
+//==========================================
+
+async function loadAttendance(studentEmis){
+
+    try{
+
+        const snap = await getDocs(collection(db,"attendance"));
+
+        let present = 0;
+        let absent = 0;
+
+        snap.forEach((docSnap)=>{
+
+            const att = docSnap.data();
+
+            if(String(att.emis) !== String(studentEmis)) return;
+
+            if(att.status === "Present"){
+                present++;
+            }else{
+                absent++;
+            }
+
+        });
+
+        const total = present + absent;
+
+        const percent =
+        total === 0
+        ? 0
+        : Math.round((present / total) * 100);
+
+        document.getElementById("attendancePercent").textContent =
+        percent + "%";
+
+    }catch(error){
+
+        console.log(error);
+
+        document.getElementById("attendancePercent").textContent =
+        "0%";
+
+    }
+
+}
 
 });
