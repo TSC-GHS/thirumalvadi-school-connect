@@ -343,3 +343,46 @@ async function loadMarks(){
     }
 
 }
+//==========================================
+// Parent Logout
+//==========================================
+
+window.logoutParent = async function(){
+
+    try{
+
+        await signOut(auth);
+
+        localStorage.removeItem("parentEMIS");
+        localStorage.removeItem("emis");
+        localStorage.removeItem("userRole");
+
+        location.href = "login.html";
+
+    }catch(error){
+
+        alert(error.message);
+
+    }
+
+};
+
+//==========================================
+// Dashboard Initialize
+//==========================================
+
+window.addEventListener("DOMContentLoaded",()=>{
+
+    loadDashboard();
+
+});
+
+//==========================================
+// Version
+//==========================================
+
+console.log("================================");
+console.log("School Connect TN");
+console.log("Parent Dashboard");
+console.log("Production Version V3");
+console.log("================================");
