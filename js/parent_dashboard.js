@@ -107,7 +107,7 @@ async function loadHomework(studentClass){
             const hw = docSnap.data();
 
             if(
-                hw.class === studentClass &&
+                hw.className === studentClass &&
                 (hw.status === "Active" || hw.status === true)
             ){
 
@@ -212,28 +212,23 @@ async function loadMarks(){
             collection(db,"marks","Unit Test","students")
         );
 
-        let total = 0;
-        let subjects = 0;
+        
+let average = 0;
 
-        snap.forEach((docSnap)=>{
+snap.forEach((docSnap)=>{
 
-            const mark = docSnap.data();
+const mark = docSnap.data();
 
-            if(mark.emis === emis){
+if(mark.emis === emis){
 
-                total += Number(mark.total || 0);
+average = Number(mark.percentage || 0);
 
-                subjects++;
+}
 
-            }
+});
 
-        });
-
-        const average =
-        subjects === 0
-        ? 0
-        : Math.round(total / subjects);
-
+document.getElementById("marksAverage").textContent =
+average;
         document.getElementById("marksAverage").textContent =
         average;
 
