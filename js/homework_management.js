@@ -68,8 +68,7 @@ await loadHomework();
 
 }catch(error){
 
-console.error(error);
-
+console.error("Homework Load Error :", error);
 alert(error.message);
 
 }
