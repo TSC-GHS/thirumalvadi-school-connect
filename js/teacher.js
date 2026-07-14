@@ -146,10 +146,19 @@ noticeCount.textContent =
 noticeSnap.size;
 
 // ==============================
-// Attendance
+// Today's Attendance Count
 // ==============================
 
-attendanceCount.textContent="Today";
+const today = new Date().toISOString().split("T")[0];
+
+const attendanceSnap = await getDocs(
+    query(
+        collection(db, "attendance"),
+        where("date", "==", today)
+    )
+);
+
+attendanceCount.textContent = attendanceSnap.size;
 
 // ==============================
 // Leave Count
