@@ -5,9 +5,9 @@ collection,
 query,
 where,
 getDocs,
-addDoc,
 updateDoc,
 doc,
+setDoc,  
 serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
@@ -219,9 +219,11 @@ updatedAt:serverTimestamp()
 
 }else{
 
-await addDoc(
+const attendanceId = `${date}_${cls}_${sec}_${emis}`;
 
-collection(db,"attendance"),
+await setDoc(
+
+doc(db,"attendance",attendanceId),
 
 {
 
