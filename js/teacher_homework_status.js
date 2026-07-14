@@ -93,6 +93,11 @@ snap.forEach((docSnap)=>{
 const hw = docSnap.data();
 
 total++;
+const today = new Date().toISOString().split("T")[0];
+
+if(hw.dueDate < today){
+    return;
+}  
 
 if(hw.status === "Completed"){
 
