@@ -1,1 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student Analytics</title>
+
+<link rel="stylesheet" href="css/student_analytics.css">
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h2>📊 Student Analytics</h2>
+
+<p>School Connect TN</p>
+
+</div>
+
+<div class="container">
+
+<!-- Summary -->
+
+<div class="summaryGrid">
+
+<div class="card blue">
+
+<h3 id="totalStudents">0</h3>
+
+<p>Total Students</p>
+
+</div>
+
+<div class="card green">
+
+<h3 id="boysCount">0</h3>
+
+<p>Boys</p>
+
+</div>
+
+<div class="card pink">
+
+<h3 id="girlsCount">0</h3>
+
+<p>Girls</p>
+
+</div>
+
+<div class="card orange">
+
+<h3 id="classCount">0</h3>
+
+<p>Total Classes</p>
+
+</div>
+
+</div>
+
+<!-- Class Wise -->
+
+<div class="listCard">
+
+<h3>📚 Class Wise Strength</h3>
+
+<div id="classList">
+
+<p style="text-align:center;">
+Loading...
+</p>
+
+</div>
+
+</div>
+
+<button
+class="backBtn"
+onclick="location.href='headmaster.html'">
+
+🏠 Back to Dashboard
+
+</button>
+
+</div>
+
+<script type="module"
+src="js/student_analytics.js"></script>
+
+</body>
+
+</html>
