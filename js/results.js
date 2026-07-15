@@ -154,7 +154,6 @@ resultsContainer.innerHTML = `
 ${html}
 
 `;
-resultsContainer.innerHTML = html;
 
 }catch(error){
 
