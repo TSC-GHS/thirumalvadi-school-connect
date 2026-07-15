@@ -1,192 +1,149 @@
 import { db } from "../firebase.js";
 
 import {
-collection,
-getDocs,
-query,
-where
+  collection,
+  getDocs,
+  query,
+  where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-//============================
 // Elements
-//============================
+const totalStudents = document.getElementById("totalStudents");
+const presentStudents = document.getElementById("presentStudents");
+const absentStudents = document.getElementById("absentStudents");
+const attendancePercent = document.getElementById("attendancePercent");
 
-const totalStudents =
-document.getElementById("totalStudents");
+const classAttendance = document.getElementById("classAttendance");
 
-const presentStudents =
-document.getElementById("presentStudents");
+const highestClass = document.getElementById("highestClass");
+const lowestClass = document.getElementById("lowestClass");
 
-const absentStudents =
-document.getElementById("absentStudents");
-
-const attendancePercent =
-document.getElementById("attendancePercent");
-
-const classAttendance =
-document.getElementById("classAttendance");
-
-const highestClass =
-document.getElementById("highestClass");
-
-const lowestClass =
-document.getElementById("lowestClass");
-
-const boysAttendance =
-document.getElementById("boysAttendance");
-
-const girlsAttendance =
-document.getElementById("girlsAttendance");
-
-//============================
+const boysAttendance = document.getElementById("boysAttendance");
+const girlsAttendance = document.getElementById("girlsAttendance");
 
 loadAttendanceAnalytics();
 
-//============================
+async function loadAttendanceAnalytics() {
 
-async function loadAttendanceAnalytics(){
+  try {
 
-try{
+    // Students
+    const studentSnap = await getDocs(collection(db, "students"));
 
-// Student Count
+    const total = studentSnap.size;
 
-const studentSnap =
-await getDocs(collection(db,"students"));
+    totalStudents.textContent = total;
 
-const total =
-studentSnap.size;
+    const classWise = {};
 
-totalStudents.textContent = total;
+    // Build Class Strength
+    studentSnap.forEach((doc) => {
 
-// Attendance Collection
+      const s = doc.data();
 
-// Today's Date (YYYY-MM-DD)
+      const cls = `${s.class}-${s.section}`;
 
-const today = new Date().toISOString().split("T")[0];
-
-// Load only today's attendance
-
-const attendanceSnap = await getDocs(
-query(
-collection(db,"attendance"),
-where("date","==",today)
-)
-);
-
-let present = 0;
-let absent = 0;
-
-const classWise = {};
-  // Build Class Strength from Students collection
-studentSnap.forEach((doc) => {
-
-    const s = doc.data();
-
-    const cls = `${s.class}-${s.section}`;
-
-    if (!classWise[cls]) {
+      if (!classWise[cls]) {
 
         classWise[cls] = {
-            present: 0,
-            total: 0
+          total: 0,
+          present: 0
         };
 
-    }
+      }
 
-});
+      classWise[cls].total++;
 
-attendanceSnap.forEach((doc)=>{
+    });
 
-const data = doc.data();
+    // Today's Attendance
 
-if(data.status==="Present"){
-    classWise[cls].present++;
-}else{
+    const today = new Date().toISOString().split("T")[0];
 
-absent++;
+    const attendanceSnap = await getDocs(
 
-}
+      query(
+        collection(db, "attendance"),
+        where("date", "==", today)
+      )
 
-const cls =
-`${data.class}-${data.section}`;
+    );
 
-if(!classWise[cls]){
+    let present = 0;
 
-classWise[cls]={
-present:0,
-total:0
-};
+    attendanceSnap.forEach((doc) => {
 
-}
+      const data = doc.data();
 
-classWise[cls].total++;
+      const cls = `${data.class}-${data.section}`;
 
-if(data.status==="Present"){
+      if (data.status === "Present") {
 
-classWise[cls].present++;
+        present++;
 
-}
+        if (classWise[cls]) {
 
-});
+          classWise[cls].present++;
 
-// Summary
+        }
 
-presentStudents.textContent = present;
+      }
 
-absentStudents.textContent = total - present;
+    });
 
-const percent =
-total==0 ? 0 :
-((present/total)*100).toFixed(1);
+    const absent = total - present;
 
-attendancePercent.textContent =
-percent+"%";
+    presentStudents.textContent = present;
+    absentStudents.textContent = absent;
 
-// Boys / Girls
-// V1 Placeholder
+    const percent =
+      total === 0
+        ? 0
+        : ((present / total) * 100).toFixed(1);
 
-boysAttendance.textContent =
-percent+"%";
+    attendancePercent.textContent = percent + "%";
 
-girlsAttendance.textContent =
-percent+"%";
+    // Temporary (Later gender-wise analytics)
 
-// Class Wise
+    boysAttendance.textContent = percent + "%";
+    girlsAttendance.textContent = percent + "%";
 
-let html="";
+    // Class Wise
 
-let highName="-";
-let lowName="-";
+    let html = "";
 
-let high=0;
-let low=101;
+    let high = -1;
+    let low = 101;
 
-Object.keys(classWise)
-.sort()
-.forEach((cls)=>{
+    let highName = "-";
+    let lowName = "-";
 
-const p =
-((classWise[cls].present /
-classWise[cls].total)*100)
-.toFixed(1);
+    Object.keys(classWise)
+      .sort()
+      .forEach((cls) => {
 
-if(Number(p)>high){
+        const item = classWise[cls];
 
-high=Number(p);
+        const p =
+          item.total === 0
+            ? 0
+            : ((item.present / item.total) * 100).toFixed(1);
 
-highName=cls;
+        if (Number(p) > high) {
 
-}
+          high = Number(p);
+          highName = cls;
 
-if(Number(p)<low){
+        }
 
-low=Number(p);
+        if (Number(p) < low) {
 
-lowName=cls;
+          low = Number(p);
+          lowName = cls;
 
-}
+        }
 
-html += `
+        html += `
 
 <div class="classItem">
 
@@ -200,11 +157,7 @@ html += `
 
 <div class="progress">
 
-<div class="progressBar"
-
-style="width:${p}%">
-
-</div>
+<div class="progressBar" style="width:${p}%"></div>
 
 </div>
 
@@ -212,23 +165,23 @@ style="width:${p}%">
 
 `;
 
-});
+      });
 
-classAttendance.innerHTML = html;
+    classAttendance.innerHTML = html;
 
-highestClass.textContent =
-`${highName} (${high}%)`;
+    highestClass.textContent = `${highName} (${high}%)`;
+    lowestClass.textContent = `${lowName} (${low}%)`;
 
-lowestClass.textContent =
-`${lowName} (${low}%)`;
+  }
 
-}catch(error){
+  catch (error) {
 
-console.error(error);
+    console.error(error);
 
-alert(error.message);
+    alert(error.message);
 
-}
+  }
+
 }
 
 console.log("Attendance Analytics Loaded");
