@@ -1,19 +1,24 @@
+//====================================================
+// School Connect TN
+// Headmaster Dashboard V1
+//====================================================
+
 import { db, auth } from "../firebase.js";
 
 import {
-  collection,
-  getDocs,
-  query,
-  where
+collection,
+getDocs,
+query,
+where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 import {
-  signOut
+signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-// ===============================
+//====================================================
 // Dashboard Elements
-// ===============================
+//====================================================
 
 const studentCount =
 document.getElementById("studentCount");
@@ -36,22 +41,55 @@ document.getElementById("passPercentage");
 const failPercentage =
 document.getElementById("failPercentage");
 
-const classCount =
-document.getElementById("classCount");
-
-const homeworkCount =
-document.getElementById("homeworkCount");
+const homeworkPercentage =
+document.getElementById("homeworkPercentage");
 
 const logoutBtn =
 document.getElementById("logoutBtn");
 
-// ===============================
+//====================================================
 // Dashboard Loader
-// ===============================
+//====================================================
 
 async function loadDashboard(){
 
 try{
+
+showLoading();
+
+await loadStudents();
+
+await loadTeachers();
+
+await loadTeacherLeaves();
+
+await loadNotices();
+
+await loadHomework();
+
+await loadAttendance();
+
+await loadResults();
+
+console.log("Dashboard Loaded Successfully");
+
+}catch(error){
+
+console.error(error);
+
+alert("Dashboard Loading Failed");
+
+showError();
+
+}
+
+}
+
+//====================================================
+// Loading State
+//====================================================
+
+function showLoading(){
 
 studentCount.textContent="...";
 
@@ -67,198 +105,290 @@ passPercentage.textContent="...";
 
 failPercentage.textContent="...";
 
-classCount.textContent="5";
+if(homeworkPercentage){
 
-if(homeworkCount){
-homeworkCount.textContent="...";
+homeworkPercentage.textContent="...";
+
 }
 
-// ===============================
-// Student Count
-// ===============================
+}
 
-const studentSnap =
+//====================================================
+// Error State
+//====================================================
+
+function showError(){
+
+studentCount.textContent="-";
+
+teacherCount.textContent="-";
+
+attendanceCount.textContent="-";
+
+leaveCount.textContent="-";
+
+noticeCount.textContent="-";
+
+passPercentage.textContent="-";
+
+failPercentage.textContent="-";
+
+if(homeworkPercentage){
+
+homeworkPercentage.textContent="-";
+
+}
+
+}
+
+//====================================================
+// Student Count
+//====================================================
+
+async function loadStudents(){
+
+const snap =
 await getDocs(collection(db,"students"));
 
-studentCount.textContent =
-studentSnap.size;
+let total=0;
 
-// ===============================
+snap.forEach((doc)=>{
+
+const student=doc.data();
+
+if(student.status!=="TC"){
+
+total++;
+
+}
+
+});
+
+studentCount.textContent=total;
+
+}
+
+//====================================================
 // Teacher Count
-// ===============================
+//====================================================
 
-const teacherSnap =
+async function loadTeachers(){
+
+const snap =
 await getDocs(collection(db,"teachers"));
 
-let activeTeachers=0;
+let total=0;
 
-teacherSnap.forEach((doc)=>{
+snap.forEach((doc)=>{
 
 const teacher=doc.data();
 
 if(teacher.status==="Active"){
 
-activeTeachers++;
+total++;
 
 }
 
 });
 
-teacherCount.textContent=
-activeTeachers;
-  // ===============================
-// Pending Leave Count
-// ===============================
+teacherCount.textContent=total;
 
-const leaveSnap = await getDocs(
+}
+//====================================================
+// Pending Teacher Leave
+//====================================================
 
+async function loadTeacherLeaves(){
+
+try{
+
+const snap = await getDocs(
 query(
-
-collection(db,"leave_requests"),
-
+collection(db,"teacherLeaves"),
 where("status","==","Pending")
-
 )
-
 );
 
-leaveCount.textContent =
-leaveSnap.size;
-
-// ===============================
-// Notice Count
-// ===============================
-
-const noticeSnap =
-await getDocs(collection(db,"notices"));
-
-noticeCount.textContent =
-noticeSnap.size;
-
-// ===============================
-// Homework Count
-// ===============================
-
-const homeworkSnap =
-await getDocs(collection(db,"homework"));
-
-if(homeworkCount){
-
-homeworkCount.textContent =
-homeworkSnap.size;
-
-}
-
-// ===============================
-// Attendance (Temporary)
-// ===============================
-
-attendanceCount.textContent = "95%";
-
-// ===============================
-// Half Yearly Result Analytics
-// ===============================
-
-const resultSnap = await getDocs(
-
-collection(
-db,
-"marks",
-"Half Yearly",
-"students"
-)
-
-);
-
-let totalStudents = 0;
-
-let passedStudents = 0;
-
-resultSnap.forEach((doc)=>{
-
-const mark = doc.data();
-
-totalStudents++;
-
-if((mark.result || "").toUpperCase() === "PASS"){
-
-passedStudents++;
-
-}
-
-});
-  if(totalStudents > 0){
-
-const pass =
-Math.round((passedStudents / totalStudents) * 100);
-
-passPercentage.textContent =
-pass + "%";
-
-failPercentage.textContent =
-(100 - pass) + "%";
-
-}else{
-
-passPercentage.textContent = "0%";
-failPercentage.textContent = "0%";
-
-}
-
-// ===============================
-// Dashboard Loaded
-// ===============================
-
-console.log("Headmaster Dashboard Loaded Successfully");
+leaveCount.textContent = snap.size;
 
 }catch(error){
 
 console.error(error);
 
-alert("Dashboard loading failed.");
-
-studentCount.textContent="-";
-teacherCount.textContent="-";
-attendanceCount.textContent="-";
-leaveCount.textContent="-";
-noticeCount.textContent="-";
-passPercentage.textContent="-";
-failPercentage.textContent="-";
-
-if(homeworkCount){
-homeworkCount.textContent="-";
-}
+leaveCount.textContent="0";
 
 }
 
 }
-// ===============================
+
+//====================================================
+// Notice Count
+//====================================================
+
+async function loadNotices(){
+
+try{
+
+const snap =
+await getDocs(collection(db,"notices"));
+
+noticeCount.textContent =
+snap.size;
+
+}catch(error){
+
+console.error(error);
+
+noticeCount.textContent="0";
+
+}
+
+}
+
+//====================================================
+// Homework Analytics
+//====================================================
+
+async function loadHomework(){
+
+try{
+
+const snap =
+await getDocs(collection(db,"homework"));
+
+const totalHomework = snap.size;
+
+if(totalHomework===0){
+
+homeworkPercentage.textContent="0%";
+
+return;
+
+}
+
+// V1 Placeholder
+homeworkPercentage.textContent="100%";
+
+}catch(error){
+
+console.error(error);
+
+homeworkPercentage.textContent="0%";
+
+}
+
+}
+
+//====================================================
+// Attendance Analytics
+//====================================================
+
+async function loadAttendance(){
+
+try{
+
+// V1 Placeholder
+
+attendanceCount.textContent="95%";
+
+}catch(error){
+
+attendanceCount.textContent="0%";
+
+}
+
+}
+
+//====================================================
+// Result Analytics
+//====================================================
+
+async function loadResults(){
+
+try{
+
+const snap = await getDocs(
+collection(db,"marks","Half Yearly","students")
+);
+
+let total=0;
+
+let pass=0;
+
+snap.forEach((doc)=>{
+
+const data=doc.data();
+
+total++;
+
+if((data.result||"").toUpperCase()==="PASS"){
+
+pass++;
+
+}
+
+});
+
+if(total===0){
+
+passPercentage.textContent="0%";
+
+failPercentage.textContent="0%";
+
+return;
+
+}
+
+const passPer =
+Math.round((pass/total)*100);
+
+passPercentage.textContent=
+passPer+"%";
+
+failPercentage.textContent=
+(100-passPer)+"%";
+
+}catch(error){
+
+console.error(error);
+
+passPercentage.textContent="0%";
+
+failPercentage.textContent="0%";
+
+}
+
+}
+
+//====================================================
 // Logout
-// ===============================
+//====================================================
 
-logoutBtn.addEventListener("click", async ()=>{
+logoutBtn.addEventListener("click",async()=>{
 
-const ok = confirm("Are you sure you want to logout?");
+const ok=confirm("Are you sure you want to logout?");
 
-if(!ok) return;
+if(!ok)return;
 
 try{
 
 await signOut(auth);
 
+location.href="index.html";
+
 }catch(error){
 
 console.error(error);
 
-}
+alert("Logout Failed");
 
-location.href="index.html";
+}
 
 });
 
-// ===============================
-// Auto Refresh Dashboard
-// ===============================
+//====================================================
+// Auto Refresh
+//====================================================
 
 setInterval(()=>{
 
@@ -266,17 +396,13 @@ loadDashboard();
 
 },60000);
 
-// ===============================
-// Initialize Dashboard
-// ===============================
+//====================================================
+// Initialize
+//====================================================
 
 loadDashboard();
 
-// ===============================
-// Version
-// ===============================
-
 console.log("================================");
 console.log("School Connect TN");
-console.log("Headmaster Dashboard V3");
+console.log("Headmaster Dashboard V1");
 console.log("================================");
