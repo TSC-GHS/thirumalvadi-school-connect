@@ -1,1 +1,81 @@
+<div class="header">
+<h2>📊 Result Analytics</h2>
+<p>School Connect TN</p>
+</div>
 
+<div class="container">
+
+<div class="card">
+
+<h3>Result Filters</h3>
+
+<label>Academic Year</label>
+
+<select id="academicYear">
+
+<option value="">Select Academic Year</option>
+
+<option value="2026-2027">2026-2027</option>
+
+<option value="2027-2028">2027-2028</option>
+
+</select>
+
+<label>Exam</label>
+
+<select id="examType">
+
+<option value="">Select Exam</option>
+
+<option value="Unit Test">Unit Test</option>
+
+<option value="Quarterly">Quarterly</option>
+
+<option value="Half Yearly">Half Yearly</option>
+
+<option value="Annual">Annual</option>
+
+</select>
+
+<label>Medium</label>
+
+<select id="medium">
+
+<option value="">Select Medium</option>
+
+<option value="Tamil">Tamil Medium</option>
+
+<option value="English">English Medium</option>
+
+</select>
+
+<button id="showResults">
+📊 Show Results
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Class Wise Results</h3>
+
+<div id="resultsContainer">
+
+<p style="text-align:center;">
+Select filters and click Show Results
+</p>
+
+</div>
+
+</div>
+
+<button
+onclick="location.href='headmaster.html'">
+
+🏠 Back to Dashboard
+
+</button>
+
+</div>
+
+<script type="module" src="js/results.js"></script>
