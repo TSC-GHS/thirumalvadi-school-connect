@@ -1,1 +1,190 @@
+/* ===========================
+   Attendance Analytics
+=========================== */
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4f6fb;
+}
+
+.header{
+background:#6A1B9A;
+color:#fff;
+text-align:center;
+padding:25px 15px;
+box-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+
+.header h2{
+font-size:34px;
+margin-bottom:8px;
+}
+
+.header p{
+font-size:20px;
+opacity:.95;
+}
+
+.container{
+padding:18px;
+}
+
+.summaryGrid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-bottom:20px;
+}
+
+.card{
+background:#fff;
+border-radius:20px;
+padding:22px;
+text-align:center;
+box-shadow:0 4px 12px rgba(0,0,0,.12);
+border-top:8px solid #1976D2;
+}
+
+.card h3{
+font-size:52px;
+color:#333;
+margin-bottom:10px;
+}
+
+.card p{
+font-size:18px;
+font-weight:bold;
+color:#555;
+}
+
+.blue{
+border-color:#1976D2;
+}
+
+.green{
+border-color:#2E7D32;
+}
+
+.red{
+border-color:#D32F2F;
+}
+
+.orange{
+border-color:#F57C00;
+}
+
+.listCard{
+background:#fff;
+padding:20px;
+margin-top:22px;
+border-radius:20px;
+box-shadow:0 4px 12px rgba(0,0,0,.12);
+}
+
+.listCard h3{
+color:#6A1B9A;
+font-size:24px;
+margin-bottom:18px;
+}
+
+.classItem{
+background:#f7f7f7;
+padding:16px;
+border-left:6px solid #6A1B9A;
+border-radius:14px;
+margin-bottom:15px;
+}
+
+.classHeader{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:20px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.progress{
+height:12px;
+background:#ddd;
+border-radius:20px;
+overflow:hidden;
+}
+
+.progressBar{
+height:100%;
+width:0%;
+background:#4CAF50;
+border-radius:20px;
+transition:.5s;
+}
+
+.highlightItem{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px 0;
+border-bottom:1px solid #eee;
+font-size:18px;
+}
+
+.highlightItem:last-child{
+border-bottom:none;
+}
+
+.highlightItem b{
+color:#1976D2;
+}
+
+.backBtn{
+width:100%;
+margin-top:25px;
+padding:16px;
+border:none;
+border-radius:14px;
+background:#1976D2;
+color:#fff;
+font-size:22px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.backBtn:hover{
+background:#1565C0;
+}
+
+/* Mobile */
+
+@media(max-width:600px){
+
+.header h2{
+font-size:28px;
+}
+
+.card h3{
+font-size:42px;
+}
+
+.card p{
+font-size:17px;
+}
+
+.classHeader{
+font-size:18px;
+}
+
+.highlightItem{
+font-size:16px;
+}
+
+.backBtn{
+font-size:20px;
+}
+
+}
