@@ -14,7 +14,9 @@
 
 <body>
 
-<div class="header">
+<!-- HEADER -->
+
+<header class="header">
 
 <div>
 
@@ -25,22 +27,38 @@
 </div>
 
 <button id="logoutBtn">
+
 Logout
+
 </button>
 
-</div>
+</header>
+
+<!-- MAIN -->
 
 <div class="container">
 
-<div class="welcome">
+<!-- Welcome -->
 
-<h2>Welcome Headmaster 👋</h2>
+<section class="welcome">
 
-<p>Thirumalvadi Government High School</p>
+<h2>
 
-</div>
+Welcome Headmaster 👋
 
-<div class="cards">
+</h2>
+
+<p>
+
+Thirumalvadi Government High School
+
+</p>
+
+</section>
+
+<!-- Dashboard Cards -->
+
+<section class="cards">
 
 <div class="card blue">
 
@@ -70,11 +88,13 @@ Logout
 
 <h3 id="leaveCount">0</h3>
 
-<p>Pending Leaves</p>
+<p>Pending Teacher Leaves</p>
 
 </div>
 
-</div>
+</section>
+
+<!-- Quick Actions -->
 
 <h3 class="sectionTitle">
 
@@ -84,19 +104,27 @@ Quick Actions
 
 <div class="menuGrid">
 
-<a href="student.html" class="menuCard">
+<a href="student_analytics.html" class="menuCard">
 
-👨‍🎓
+📊
 
-<span>Students</span>
+<span>
+
+Student Analytics
+
+</span>
 
 </a>
 
-<a href="teachers.html" class="menuCard">
+<a href="teacher_analytics.html" class="menuCard">
 
 👨‍🏫
 
-<span>Teachers</span>
+<span>
+
+Teacher Analytics
+
+</span>
 
 </a>
 
@@ -104,15 +132,35 @@ Quick Actions
 
 📅
 
-<span>Attendance</span>
+<span>
+
+Attendance Analytics
+
+</span>
 
 </a>
 
 <a href="results.html" class="menuCard">
 
-📊
+📈
 
-<span>Results</span>
+<span>
+
+Result Analytics
+
+</span>
+
+</a>
+
+<a href="report_card.html" class="menuCard">
+
+📄
+
+<span>
+
+Report Card
+
+</span>
 
 </a>
 
@@ -120,15 +168,11 @@ Quick Actions
 
 📝
 
-<span>Leave Approval</span>
+<span>
 
-</a>
+Teacher Leave Approval
 
-<a href="notice_board.html" class="menuCard">
-
-📢
-
-<span>Notice Board</span>
+</span>
 
 </a>
 
@@ -136,7 +180,23 @@ Quick Actions
 
 📚
 
-<span>Homework</span>
+<span>
+
+Homework Analytics
+
+</span>
+
+</a>
+
+<a href="notice_board.html" class="menuCard">
+
+📢
+
+<span>
+
+Notice Board
+
+</span>
 
 </a>
 
@@ -144,7 +204,11 @@ Quick Actions
 
 🖼️
 
-<span>Gallery</span>
+<span>
+
+Gallery
+
+</span>
 
 </a>
 
@@ -152,11 +216,17 @@ Quick Actions
 
 ⚙️
 
-<span>Settings</span>
+<span>
+
+Settings
+
+</span>
 
 </a>
 
 </div>
+
+<!-- School Analytics -->
 
 <h3 class="sectionTitle">
 
@@ -168,33 +238,65 @@ School Analytics
 
 <div class="card">
 
-<h4>Pass Percentage</h4>
+<h4>
 
-<h2 id="passPercentage">0%</h2>
+Pass Percentage
 
-</div>
+</h4>
 
-<div class="card">
+<h2 id="passPercentage">
 
-<h4>Fail Percentage</h4>
+0%
 
-<h2 id="failPercentage">0%</h2>
-
-</div>
-
-<div class="card">
-
-<h4>Total Classes</h4>
-
-<h2 id="classCount">5</h2>
+</h2>
 
 </div>
 
 <div class="card">
 
-<h4>Today's Notices</h4>
+<h4>
 
-<h2 id="noticeCount">0</h2>
+Fail Percentage
+
+</h4>
+
+<h2 id="failPercentage">
+
+0%
+
+</h2>
+
+</div>
+
+<div class="card">
+
+<h4>
+
+Homework Completion
+
+</h4>
+
+<h2 id="homeworkPercentage">
+
+0%
+
+</h2>
+
+</div>
+
+<div class="card">
+
+<h4>
+
+Today's Notices
+
+</h4>
+
+<h2 id="noticeCount">
+
+0
+
+</h2>
 
 </div>
 
