@@ -103,7 +103,57 @@ html += `
 `;
 
 });
+const average =
+(totalPercentage / totalStudents).toFixed(2);
 
+const passPercentage =
+((passCount / totalStudents) * 100).toFixed(2);
+
+resultsContainer.innerHTML = `
+
+<div class="summaryCard">
+
+<h2>📊 Overall Summary</h2>
+
+<div class="summaryGrid">
+
+<div class="summaryItem">
+<h3>${totalStudents}</h3>
+<p>Total Students</p>
+</div>
+
+<div class="summaryItem">
+<h3>${passCount}</h3>
+<p>Pass</p>
+</div>
+
+<div class="summaryItem">
+<h3>${failCount}</h3>
+<p>Fail</p>
+</div>
+
+<div class="summaryItem">
+<h3>${passPercentage}%</h3>
+<p>Pass %</p>
+</div>
+
+<div class="summaryItem">
+<h3>${average}%</h3>
+<p>Average</p>
+</div>
+
+<div class="summaryItem">
+<h3>${topperName}</h3>
+<p>Topper (${topperMark})</p>
+</div>
+
+</div>
+
+</div>
+
+${html}
+
+`;
 resultsContainer.innerHTML = html;
 
 }catch(error){
