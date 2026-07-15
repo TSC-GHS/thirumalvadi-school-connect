@@ -57,11 +57,33 @@ return;
 
 }
 
-resultsContainer.innerHTML = `
-<p style="text-align:center;">
-Loading Results...
-</p>
+let html = "";
+
+marksSnap.forEach(doc => {
+
+const data = doc.data();
+
+html += `
+<div class="resultCard">
+
+<h3>Class ${data.class} - ${data.section}</h3>
+
+<p><b>Student :</b> ${data.name}</p>
+
+<p><b>Total :</b> ${data.total}</p>
+
+<p><b>Percentage :</b> ${data.percentage}%</p>
+
+<p><b>Result :</b> ${data.result}</p>
+
+<p><b>Grade :</b> ${data.grade}</p>
+
+</div>
 `;
+
+});
+
+resultsContainer.innerHTML = html;
 
 try{
 
