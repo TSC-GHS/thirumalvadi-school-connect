@@ -57,13 +57,31 @@ resultsContainer.innerHTML =
 return;
 
 }
-
+let totalStudents = 0;
+let passCount = 0;
+let failCount = 0;
+let totalPercentage = 0;
+let topperName = "";
+let topperMark = 0;
 let html = "";
 
 marksSnap.forEach((doc)=>{
 
 const data = doc.data();
+totalStudents++;
 
+totalPercentage += Number(data.percentage);
+
+if(data.result === "PASS"){
+    passCount++;
+}else{
+    failCount++;
+}
+
+if(Number(data.total) > topperMark){
+    topperMark = Number(data.total);
+    topperName = data.name;
+}
 html += `
 
 <div class="resultCard">
