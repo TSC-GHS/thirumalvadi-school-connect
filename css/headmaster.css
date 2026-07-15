@@ -1,150 +1,281 @@
+/*=====================================
+School Connect TN
+Headmaster Dashboard V1
+======================================*/
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
+
 background:#f4f6f9;
+
+color:#333;
+
 }
 
+/* HEADER */
+
 .header{
-background:#1565C0;
+
+background:#6A1B9A;
+
 color:#fff;
-padding:18px 25px;
+
+padding:18px 20px;
+
 display:flex;
+
 justify-content:space-between;
+
 align-items:center;
-box-shadow:0 2px 8px rgba(0,0,0,.2);
+
+box-shadow:0 2px 10px rgba(0,0,0,.15);
+
 }
 
 .header h2{
+
 font-size:24px;
+
 }
 
 .header p{
+
 font-size:14px;
+
+margin-top:4px;
+
 opacity:.9;
+
 }
 
 #logoutBtn{
-background:#D32F2F;
-color:white;
+
+background:#fff;
+
+color:#6A1B9A;
+
 border:none;
+
 padding:10px 18px;
+
 border-radius:8px;
+
+font-weight:bold;
+
 cursor:pointer;
-font-size:15px;
+
 }
+
+/* CONTAINER */
 
 .container{
-max-width:1200px;
-margin:auto;
+
 padding:20px;
+
 }
+
+/* WELCOME */
 
 .welcome{
+
 background:white;
+
 padding:20px;
+
 border-radius:12px;
+
 margin-bottom:20px;
-box-shadow:0 2px 8px rgba(0,0,0,.15);
+
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+
 }
 
+.welcome h2{
+
+margin-bottom:8px;
+
+}
+
+/* DASHBOARD CARDS */
+
 .cards{
+
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
+
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+
+gap:15px;
+
 margin-bottom:25px;
+
 }
 
 .card{
+
 background:white;
-padding:20px;
+
+padding:18px;
+
 border-radius:12px;
+
 text-align:center;
-box-shadow:0 2px 8px rgba(0,0,0,.15);
+
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+
 transition:.3s;
+
 }
 
 .card:hover{
-transform:translateY(-4px);
+
+transform:translateY(-3px);
+
 }
 
 .card h3,
+
 .card h2{
-font-size:30px;
+
 margin-bottom:10px;
+
+font-size:28px;
+
 }
 
 .blue{
-background:#1976D2;
-color:white;
+
+border-top:5px solid #1976D2;
+
 }
 
 .green{
-background:#2E7D32;
-color:white;
+
+border-top:5px solid #2E7D32;
+
 }
 
 .orange{
-background:#EF6C00;
-color:white;
+
+border-top:5px solid #FB8C00;
+
 }
 
 .red{
-background:#C62828;
-color:white;
+
+border-top:5px solid #D32F2F;
+
 }
+
+/* SECTION TITLE */
 
 .sectionTitle{
+
 margin:25px 0 15px;
-color:#1565C0;
+
+font-size:22px;
+
+color:#6A1B9A;
+
 }
 
+/* QUICK MENU */
+
 .menuGrid{
+
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:18px;
+
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+
+gap:15px;
+
+margin-bottom:25px;
+
 }
 
 .menuCard{
+
 background:white;
-border-radius:12px;
-padding:20px;
-text-align:center;
+
+padding:22px;
+
 text-decoration:none;
+
 color:#333;
-font-size:18px;
-font-weight:bold;
-box-shadow:0 2px 8px rgba(0,0,0,.15);
+
+border-radius:12px;
+
+text-align:center;
+
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+
 transition:.3s;
+
 }
 
 .menuCard:hover{
-background:#1565C0;
+
+background:#6A1B9A;
+
 color:white;
-transform:scale(1.03);
+
+transform:translateY(-3px);
+
+}
+
+.menuCard{
+
+font-size:18px;
+
 }
 
 .menuCard span{
+
 display:block;
+
 margin-top:10px;
-font-size:16px;
+
+font-weight:bold;
+
+font-size:15px;
+
 }
+
+/* ANALYTICS */
+
+.card h4{
+
+margin-bottom:12px;
+
+color:#666;
+
+font-size:16px;
+
+}
+
+/* MOBILE */
 
 @media(max-width:768px){
 
 .header{
+
 flex-direction:column;
-gap:10px;
+
+gap:15px;
+
 text-align:center;
+
 }
 
-.cards,
-.menuGrid{
-grid-template-columns:1fr;
+#logoutBtn{
+
+width:100%;
+
 }
 
 }
