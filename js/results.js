@@ -158,7 +158,27 @@ ${html}
 }catch(error){
 
 console.error(error);
+document.getElementById("classSummary").innerHTML = `
 
+<div class="classSummaryCard">
+
+<h3>📚 Class Summary</h3>
+
+<p><b>Class :</b> ${marksSnap.docs[0].data().class} - ${marksSnap.docs[0].data().section}</p>
+
+<p><b>Total Students :</b> ${totalStudents}</p>
+
+<p><b>Pass :</b> ${passCount}</p>
+
+<p><b>Fail :</b> ${failCount}</p>
+
+<p><b>Pass Percentage :</b> ${passPercentage}%</p>
+
+<p><b>Average :</b> ${average}%</p>
+
+</div>
+
+`;
 resultsContainer.innerHTML =
 
 `<p style="color:red;text-align:center;">
