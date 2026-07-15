@@ -2,7 +2,9 @@ import { db } from "../firebase.js";
 
 import {
 collection,
-getDocs
+getDocs,
+query,
+where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //============================
@@ -58,8 +60,18 @@ totalStudents.textContent = total;
 
 // Attendance Collection
 
-const attendanceSnap =
-await getDocs(collection(db,"attendance"));
+// Today's Date (YYYY-MM-DD)
+
+const today = new Date().toISOString().split("T")[0];
+
+// Load only today's attendance
+
+const attendanceSnap = await getDocs(
+query(
+collection(db,"attendance"),
+where("date","==",today)
+)
+);
 
 let present = 0;
 let absent = 0;
