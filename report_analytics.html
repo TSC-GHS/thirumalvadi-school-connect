@@ -1,1 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Report Analytics</title>
+
+<link rel="stylesheet" href="css/report_analytics.css">
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h2>📊 Report Analytics</h2>
+
+<p>School Connect TN</p>
+
+</div>
+
+<div class="container">
+
+<!-- Summary Cards -->
+
+<div class="summaryGrid">
+
+<div class="card blue">
+<h3 id="totalStudents">0</h3>
+<p>Total Students</p>
+</div>
+
+<div class="card green">
+<h3 id="passStudents">0</h3>
+<p>Pass Students</p>
+</div>
+
+<div class="card red">
+<h3 id="failStudents">0</h3>
+<p>Fail Students</p>
+</div>
+
+<div class="card orange">
+<h3 id="passPercentage">0%</h3>
+<p>Pass %</p>
+</div>
+
+</div>
+
+<!-- Subject Wise Performance -->
+
+<div class="listCard">
+
+<h3>📚 Subject Wise Performance</h3>
+
+<div id="subjectPerformance">
+
+<p style="text-align:center;">
+Loading...
+</p>
+
+</div>
+
+</div>
+
+<!-- Class Wise Results -->
+
+<div class="listCard">
+
+<h3>🏫 Class Wise Results</h3>
+
+<div id="classResults">
+
+<p style="text-align:center;">
+Loading...
+</p>
+
+</div>
+
+</div>
+
+<!-- Top Rank Holders -->
+
+<div class="listCard">
+
+<h3>🏆 Top Rank Holders</h3>
+
+<div id="topRankers">
+
+<p style="text-align:center;">
+Loading...
+</p>
+
+</div>
+
+</div>
+
+<!-- School Highlights -->
+
+<div class="listCard">
+
+<h3>📈 School Highlights</h3>
+
+<table class="highlightTable">
+
+<tr>
+<td>🏆 Highest Scorer</td>
+<td id="highestScorer">-</td>
+</tr>
+
+<tr>
+<td>📚 Best Performing Class</td>
+<td id="bestClass">-</td>
+</tr>
+
+<tr>
+<td>📉 Lowest Performing Class</td>
+<td id="lowestClass">-</td>
+</tr>
+
+<tr>
+<td>⭐ School Average</td>
+<td id="schoolAverage">0%</td>
+</tr>
+
+</table>
+
+</div>
+
+<button
+class="backBtn"
+onclick="location.href='headmaster.html'">
+
+🏠 Back to Dashboard
+
+</button>
+
+</div>
+
+<script type="module"
+src="js/report_analytics.js"></script>
+
+</body>
+
+</html>
