@@ -144,6 +144,11 @@ window.saveMarks = async function () {
   }
 
   const examType = document.getElementById("examType").value;
+  const academicYear =
+document.getElementById("academicYear").value;
+
+const medium =
+document.getElementById("medium").value;
 
   let saved = 0;
 
