@@ -149,9 +149,8 @@ pendingCount.textContent = pending;
 
 }catch(error){
 
-console.error(error);
-
-alert(error.message);
+console.error("Teacher Analytics Error:", err);
+alert(err.message);
 
 }
 
