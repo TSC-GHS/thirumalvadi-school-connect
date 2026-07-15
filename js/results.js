@@ -170,4 +170,3 @@ ${error.message}
 }
 
 console.log("Result Analytics Loaded");
-<script type="module" src="js/results.js"></script>
