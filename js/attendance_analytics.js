@@ -7,7 +7,10 @@ import {
   where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
+//============================
 // Elements
+//============================
+
 const totalStudents = document.getElementById("totalStudents");
 const presentStudents = document.getElementById("presentStudents");
 const absentStudents = document.getElementById("absentStudents");
@@ -21,33 +24,56 @@ const lowestClass = document.getElementById("lowestClass");
 const boysAttendance = document.getElementById("boysAttendance");
 const girlsAttendance = document.getElementById("girlsAttendance");
 
+//============================
+
 loadAttendanceAnalytics();
+
+//============================
 
 async function loadAttendanceAnalytics() {
 
   try {
 
     // Students
+
     const studentSnap = await getDocs(collection(db, "students"));
 
     const total = studentSnap.size;
 
     totalStudents.textContent = total;
 
+    const studentGender = {};
+
     const classWise = {};
 
-    // Build Class Strength
+    let totalBoys = 0;
+    let totalGirls = 0;
+
     studentSnap.forEach((doc) => {
 
       const s = doc.data();
+
+      studentGender[s.emis] = (s.gender || "").toLowerCase();
+
+      if (studentGender[s.emis] === "male") {
+
+        totalBoys++;
+
+      } else if (studentGender[s.emis] === "female") {
+
+        totalGirls++;
+
+      }
 
       const cls = `${s.class}-${s.section}`;
 
       if (!classWise[cls]) {
 
         classWise[cls] = {
+
           total: 0,
           present: 0
+
         };
 
       }
@@ -63,23 +89,41 @@ async function loadAttendanceAnalytics() {
     const attendanceSnap = await getDocs(
 
       query(
+
         collection(db, "attendance"),
+
         where("date", "==", today)
+
       )
 
     );
 
     let present = 0;
 
+    let presentBoys = 0;
+    let presentGirls = 0;
+
     attendanceSnap.forEach((doc) => {
 
       const data = doc.data();
 
-      const cls = `${data.class}-${data.section}`;
-
       if (data.status === "Present") {
 
         present++;
+
+        const gender = studentGender[data.emis];
+
+        if (gender === "male") {
+
+          presentBoys++;
+
+        } else if (gender === "female") {
+
+          presentGirls++;
+
+        }
+
+        const cls = `${data.class}-${data.section}`;
 
         if (classWise[cls]) {
 
@@ -91,22 +135,33 @@ async function loadAttendanceAnalytics() {
 
     });
 
-    const absent = total - present;
+    // Summary
 
     presentStudents.textContent = present;
-    absentStudents.textContent = absent;
 
-    const percent =
-      total === 0
-        ? 0
-        : ((present / total) * 100).toFixed(1);
+    absentStudents.textContent = total - present;
 
-    attendancePercent.textContent = percent + "%";
+    const overallPercent = total === 0
+      ? 0
+      : ((present / total) * 100).toFixed(1);
 
-    // Temporary (Later gender-wise analytics)
+    attendancePercent.textContent = overallPercent + "%";
 
-    boysAttendance.textContent = percent + "%";
-    girlsAttendance.textContent = percent + "%";
+    // Boys %
+
+    const boysPercent = totalBoys === 0
+      ? 0
+      : ((presentBoys / totalBoys) * 100).toFixed(1);
+
+    boysAttendance.textContent = boysPercent + "%";
+
+    // Girls %
+
+    const girlsPercent = totalGirls === 0
+      ? 0
+      : ((presentGirls / totalGirls) * 100).toFixed(1);
+
+    girlsAttendance.textContent = girlsPercent + "%";
 
     // Class Wise
 
@@ -118,63 +173,65 @@ async function loadAttendanceAnalytics() {
     let highName = "-";
     let lowName = "-";
 
-    Object.keys(classWise)
-      .sort()
-      .forEach((cls) => {
+    Object.keys(classWise).sort().forEach((cls) => {
 
-        const item = classWise[cls];
+      const item = classWise[cls];
 
-        const p =
-          item.total === 0
-            ? 0
-            : ((item.present / item.total) * 100).toFixed(1);
+      const p = item.total === 0
+        ? 0
+        : ((item.present / item.total) * 100).toFixed(1);
 
-        if (Number(p) > high) {
+      if (Number(p) > high) {
 
-          high = Number(p);
-          highName = cls;
+        high = Number(p);
 
-        }
+        highName = cls;
 
-        if (Number(p) < low) {
+      }
 
-          low = Number(p);
-          lowName = cls;
+      if (Number(p) < low) {
 
-        }
+        low = Number(p);
 
-        html += `
+        lowName = cls;
 
-<div class="classItem">
+      }
 
-<div class="classHeader">
+      html += `
 
-<span>${cls}</span>
+      <div class="classItem">
 
-<span>${p}%</span>
+        <div class="classHeader">
 
-</div>
+          <span>${cls}</span>
 
-<div class="progress">
+          <span>${p}%</span>
 
-<div class="progressBar" style="width:${p}%"></div>
+        </div>
 
-</div>
+        <div class="progress">
 
-</div>
+          <div class="progressBar"
 
-`;
+          style="width:${p}%">
 
-      });
+          </div>
+
+        </div>
+
+      </div>
+
+      `;
+
+    });
 
     classAttendance.innerHTML = html;
 
     highestClass.textContent = `${highName} (${high}%)`;
+
     lowestClass.textContent = `${lowName} (${low}%)`;
 
-  }
-
-  catch (error) {
+  } catch (error) {
 
     console.error(error);
 
