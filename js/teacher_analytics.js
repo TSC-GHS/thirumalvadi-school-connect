@@ -77,10 +77,14 @@ teacherList.innerHTML = html || "<p>No Teachers Found</p>";
 
 }catch(err){
 
-console.error(err);
+console.error("Teacher Analytics Error:", err);
+
+alert(err.message);
 
 teacherList.innerHTML =
-"<p style='color:red'>Unable to load teacher analytics.</p>";
+`<p style="color:red">
+${err.message}
+</p>`;
 
 }
 
