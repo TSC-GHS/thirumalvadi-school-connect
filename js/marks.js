@@ -206,6 +206,9 @@ document.getElementById("medium").value;
         class: student.class,
         section: student.section,
         exam: examType,
+        academicYear: academicYear,
+
+medium: medium,
 
         tamil,
         english,
