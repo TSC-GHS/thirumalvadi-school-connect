@@ -1,1 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Attendance Analytics</title>
+
+<link rel="stylesheet" href="css/attendance_analytics.css">
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h2>📅 Attendance Analytics</h2>
+
+<p>School Connect TN</p>
+
+</div>
+
+<div class="container">
+
+<!-- Summary Cards -->
+
+<div class="summaryGrid">
+
+<div class="card blue">
+<h3 id="totalStudents">0</h3>
+<p>Total Students</p>
+</div>
+
+<div class="card green">
+<h3 id="presentStudents">0</h3>
+<p>Present Today</p>
+</div>
+
+<div class="card red">
+<h3 id="absentStudents">0</h3>
+<p>Absent Today</p>
+</div>
+
+<div class="card orange">
+<h3 id="attendancePercent">0%</h3>
+<p>Attendance %</p>
+</div>
+
+</div>
+
+<!-- Class Wise Attendance -->
+
+<div class="listCard">
+
+<h3>🏫 Class Wise Attendance</h3>
+
+<div id="classAttendance">
+
+<p style="text-align:center;">
+Loading...
+</p>
+
+</div>
+
+</div>
+
+<!-- School Highlights -->
+
+<div class="listCard">
+
+<h3>📊 School Highlights</h3>
+
+<div class="highlightItem">
+<span>🏆 Highest Attendance</span>
+<b id="highestClass">-</b>
+</div>
+
+<div class="highlightItem">
+<span>📉 Lowest Attendance</span>
+<b id="lowestClass">-</b>
+</div>
+
+<div class="highlightItem">
+<span>👦 Boys Attendance</span>
+<b id="boysAttendance">0%</b>
+</div>
+
+<div class="highlightItem">
+<span>👧 Girls Attendance</span>
+<b id="girlsAttendance">0%</b>
+</div>
+
+</div>
+
+<button
+class="backBtn"
+onclick="location.href='headmaster.html'">
+
+🏠 Back to Dashboard
+
+</button>
+
+</div>
+
+<script type="module"
+src="js/attendance_analytics.js"></script>
+
+</body>
+
+</html>
