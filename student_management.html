@@ -202,10 +202,11 @@ alert("Please fill all required fields");
 return;
 
 }
+  
 try{
 
-await setDoc(doc(db,"students",emis),{
-
+await setDoc(doc(db,"students",emis),
+{
 name:name,
 emis:emis,
 class:studentClass,
