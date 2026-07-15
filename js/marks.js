@@ -21,24 +21,33 @@ window.loadStudents = async function () {
   const selectedClass = document.getElementById("classFilter").value;
   const selectedSection = document.getElementById("sectionFilter").value;
   const examType = document.getElementById("examType").value;
+  const medium =
+document.getElementById("medium").value;
 
-  if (!selectedClass || !selectedSection || !examType) {
+ if (
+!selectedClass ||
+!selectedSection ||
+!examType ||
+!medium
+){
 
-    alert("Please select Exam, Class and Section");
+alert("Please select Medium, Exam, Class and Section");
 
-    return;
+return;
 
-  }
+ } 
 
   const q = query(
 
-    collection(db,"students"),
+collection(db,"students"),
 
-    where("class","==",selectedClass),
+where("class","==",selectedClass),
 
-    where("section","==",selectedSection)
+where("section","==",selectedSection),
 
-  );
+where("medium","==",medium)
+
+);
 
   const snap = await getDocs(q);
 
