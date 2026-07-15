@@ -177,13 +177,31 @@ const name = document.getElementById("name").value.trim();
 const emis = document.getElementById("emis").value.trim();
 const studentClass = document.getElementById("class").value.trim();
 const section = document.getElementById("section").value.trim();
+  const medium =
+document.getElementById("medium").value;
+
+const academicYear =
+document.getElementById("academicYear").value;
 const father = document.getElementById("father").value.trim();
 const mother = document.getElementById("mother").value.trim();
 const mobile = document.getElementById("mobile").value.trim();
 const blood = document.getElementById("blood").value.trim();
 const address = document.getElementById("address").value.trim();
 
-if(name=="" || emis=="" || studentClass==""){
+if(
+name=="" ||
+emis=="" ||
+studentClass=="" ||
+section=="" ||
+medium=="" ||
+academicYear==""
+){
+
+alert("Please fill all required fields");
+
+return;
+
+}
 
 alert("Please fill all required fields");
 
