@@ -77,15 +77,30 @@ let present = 0;
 let absent = 0;
 
 const classWise = {};
+  // Build Class Strength from Students collection
+studentSnap.forEach((doc) => {
+
+    const s = doc.data();
+
+    const cls = `${s.class}-${s.section}`;
+
+    if (!classWise[cls]) {
+
+        classWise[cls] = {
+            present: 0,
+            total: 0
+        };
+
+    }
+
+});
 
 attendanceSnap.forEach((doc)=>{
 
 const data = doc.data();
 
 if(data.status==="Present"){
-
-present++;
-
+    classWise[cls].present++;
 }else{
 
 absent++;
@@ -118,7 +133,7 @@ classWise[cls].present++;
 
 presentStudents.textContent = present;
 
-absentStudents.textContent = absent;
+absentStudents.textContent = total - present;
 
 const percent =
 total==0 ? 0 :
