@@ -40,7 +40,7 @@ if((t.status || "").toLowerCase()=="active"){
 active++;
 }
 
-if((t.classTeacher || "").toLowerCase()=="yes"){
+if((t.teacherType || "").toLowerCase().includes("class")){
 classTeacher++;
 }
 
@@ -54,11 +54,11 @@ html += `
 
 <h4>👨‍🏫 ${t.name || "-"}</h4>
 
-<p><b>Teacher ID :</b> ${t.teacherId || "-"}</p>
+<p><b>Teacher ID :</b> ${t.id || "-"}</p>
 
 <p><b>Subject :</b> ${t.subject || "-"}</p>
 
-<p><b>Class Teacher :</b> ${t.class || "-"} ${t.section || ""}</p>
+<p><b>Class Teacher :</b> ${t.className || "-"} ${t.section || ""}</p>
 
 <p><b>Status :</b> ${t.status || "-"}</p>
 
