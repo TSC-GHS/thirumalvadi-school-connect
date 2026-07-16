@@ -1,8 +1,7 @@
 /*==================================================
 School Connect TN
-Parent Dashboard V1
-Professional UI
-Part 1
+Parent Dashboard V2
+CSS Part 1
 ==================================================*/
 
 *{
@@ -12,14 +11,9 @@ box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
 
-html{
-scroll-behavior:smooth;
-}
-
 body{
-background:#eef3f9;
+background:#EEF4FA;
 color:#333;
-overflow-x:hidden;
 padding-bottom:80px;
 }
 
@@ -30,25 +24,35 @@ HEADER
 .header{
 position:sticky;
 top:0;
-z-index:999;
-background:linear-gradient(135deg,#1565C0,#1E88E5);
+background:linear-gradient(135deg,#1565C0,#1976D2);
 color:#fff;
-padding:12px 18px;
+padding:14px 18px;
 display:flex;
 justify-content:space-between;
 align-items:center;
 box-shadow:0 3px 10px rgba(0,0,0,.15);
+z-index:999;
 }
 
 .headerLeft h2{
-font-size:20px;
-font-weight:bold;
+font-size:21px;
+margin-bottom:3px;
 }
 
 .headerLeft p{
 font-size:13px;
-margin-top:3px;
 opacity:.9;
+}
+
+#notificationBtn{
+background:#fff;
+color:#1565C0;
+border:none;
+width:42px;
+height:42px;
+border-radius:50%;
+font-size:20px;
+cursor:pointer;
 }
 
 /*=========================
@@ -56,9 +60,9 @@ CONTAINER
 =========================*/
 
 .container{
-max-width:1200px;
+max-width:500px;
 margin:auto;
-padding:15px;
+padding:14px;
 }
 
 /*=========================
@@ -69,7 +73,7 @@ CARD
 background:#fff;
 border-radius:18px;
 padding:16px;
-margin-bottom:16px;
+margin-bottom:14px;
 box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
 
@@ -80,33 +84,52 @@ PROFILE
 .profile{
 display:flex;
 align-items:center;
-gap:18px;
+gap:15px;
 }
 
 .profile img{
-width:85px;
-height:85px;
+width:75px;
+height:75px;
 border-radius:50%;
-border:4px solid #1565C0;
+border:3px solid #1565C0;
 object-fit:cover;
-background:#fff;
+flex-shrink:0;
 }
 
 .info{
 flex:1;
+display:flex;
+flex-direction:column;
+gap:8px;
 }
 
-.info p{
-margin:8px 0;
-font-size:15px;
-line-height:22px;
+.infoRow{
+display:grid;
+grid-template-columns:80px 1fr;
+align-items:center;
+font-size:14px;
+}
+
+.infoRow label{
+font-weight:bold;
+color:#1565C0;
+}
+
+.infoRow span{
+color:#333;
+font-weight:500;
 }
 
 .card h2{
 color:#1565C0;
-font-size:22px;
+font-size:20px;
 margin-bottom:12px;
 }
+/*==================================================
+School Connect TN
+Parent Dashboard V2
+CSS Part 2
+==================================================*/
 
 /*=========================
 SUMMARY
@@ -115,36 +138,49 @@ SUMMARY
 .summary{
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:12px;
-margin-bottom:18px;
+gap:10px;
+margin-bottom:15px;
 }
 
 .summary-box{
 background:linear-gradient(135deg,#1565C0,#42A5F5);
 color:#fff;
-padding:15px;
 border-radius:16px;
+padding:14px;
 text-align:center;
-min-height:90px;
+min-height:80px;
 display:flex;
 flex-direction:column;
 justify-content:center;
+box-shadow:0 3px 8px rgba(0,0,0,.10);
 }
 
 .summary-box h1{
-font-size:28px;
-margin-bottom:6px;
+font-size:24px;
+margin-bottom:4px;
 }
 
 .summary-box p{
-font-size:14px;
+font-size:13px;
 }
-/*==================================================
-School Connect TN
-Parent Dashboard V1
-Professional UI
-Part 2
-==================================================*/
+
+/*=========================
+SECTION HEADER
+=========================*/
+
+.sectionHeader{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+.sectionHeader a{
+text-decoration:none;
+font-size:12px;
+font-weight:bold;
+color:#1565C0;
+}
 
 /*=========================
 QUICK MENU
@@ -152,40 +188,37 @@ QUICK MENU
 
 .quickmenu{
 display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
 }
 
 .quickmenu button{
 background:#fff;
-color:#1565C0;
 border:none;
-border-radius:16px;
-padding:14px 10px;
-min-height:90px;
-font-size:24px;
-font-weight:bold;
-cursor:pointer;
+border-radius:14px;
+padding:10px 5px;
+min-height:72px;
 box-shadow:0 2px 8px rgba(0,0,0,.10);
-transition:.3s;
+cursor:pointer;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
+font-size:18px;
+font-weight:bold;
+color:#1565C0;
+transition:.3s;
 }
 
 .quickmenu button:hover{
 background:#1565C0;
 color:#fff;
-transform:translateY(-3px);
+transform:translateY(-2px);
 }
 
 .quickmenu button br{
 display:block;
-}
-
-.quickmenu button{
-line-height:20px;
+margin-bottom:4px;
 }
 
 /*=========================
@@ -194,14 +227,14 @@ NOTICE & HOMEWORK
 
 .notice-list,
 .homework-list{
-max-height:220px;
+max-height:160px;
 overflow-y:auto;
 }
 
 .notice-item,
 .homework-item{
-padding:12px;
-border-bottom:1px solid #ececec;
+padding:10px 0;
+border-bottom:1px solid #EEE;
 }
 
 .notice-item:last-child,
@@ -210,18 +243,23 @@ border-bottom:none;
 }
 
 .notice-title{
-font-size:16px;
+font-size:15px;
 font-weight:bold;
 color:#1565C0;
-margin-bottom:5px;
+margin-bottom:4px;
 }
 
 .homework-sub{
-font-size:16px;
+font-size:15px;
 font-weight:bold;
 color:#2E7D32;
-margin-bottom:5px;
+margin-bottom:4px;
 }
+/*==================================================
+School Connect TN
+Parent Dashboard V2
+CSS Part 3 (Final)
+==================================================*/
 
 /*=========================
 BOTTOM NAVIGATION
@@ -232,13 +270,13 @@ position:fixed;
 bottom:0;
 left:0;
 width:100%;
-height:65px;
+height:62px;
 background:#1565C0;
 display:flex;
 justify-content:space-around;
 align-items:center;
 box-shadow:0 -2px 10px rgba(0,0,0,.15);
-z-index:999;
+z-index:1000;
 }
 
 .bottom-nav button{
@@ -248,59 +286,23 @@ color:#fff;
 display:flex;
 flex-direction:column;
 align-items:center;
-font-size:12px;
+justify-content:center;
+font-size:11px;
 cursor:pointer;
+flex:1;
+height:100%;
 }
 
 .bottom-nav span{
-font-size:22px;
+font-size:20px;
 margin-bottom:3px;
 }
-/*==================================================
-School Connect TN
-Parent Dashboard V1
-Professional UI
-Part 3 (Final)
-==================================================*/
 
 /*=========================
-TABLET
+RESPONSIVE
 =========================*/
 
-@media screen and (max-width:992px){
-
-.container{
-padding:12px;
-}
-
-.summary{
-grid-template-columns:repeat(2,1fr);
-}
-
-.quickmenu{
-grid-template-columns:repeat(2,1fr);
-}
-
-}
-
-/*=========================
-MOBILE
-=========================*/
-
-@media screen and (max-width:768px){
-
-.header{
-padding:12px;
-text-align:center;
-}
-
-.headerLeft h2{
-font-size:18px;
-}
-
-.headerLeft p{
-font-size:12px;
-}
+@media(max-width:768px){
 
 .container{
 padding:10px;
@@ -312,35 +314,37 @@ border-radius:16px;
 }
 
 .profile{
-flex-direction:column;
-text-align:center;
+display:flex;
+flex-direction:row;
+align-items:center;
+gap:12px;
 }
 
 .profile img{
-width:80px;
-height:80px;
+width:70px;
+height:70px;
 }
 
 .info{
-text-align:center;
+gap:6px;
 }
 
-.info p{
-font-size:14px;
+.infoRow{
+grid-template-columns:75px 1fr;
+font-size:13px;
 }
 
 .summary{
-grid-template-columns:repeat(2,1fr);
-gap:10px;
+gap:8px;
 }
 
 .summary-box{
 padding:12px;
-min-height:85px;
+min-height:72px;
 }
 
 .summary-box h1{
-font-size:22px;
+font-size:21px;
 }
 
 .summary-box p{
@@ -348,89 +352,66 @@ font-size:12px;
 }
 
 .quickmenu{
-grid-template-columns:repeat(2,1fr);
-gap:10px;
+gap:8px;
 }
 
 .quickmenu button{
-min-height:78px;
-padding:10px;
-font-size:20px;
+min-height:68px;
+padding:8px 4px;
+font-size:16px;
+}
+
+.notice-list,
+.homework-list{
+max-height:130px;
 }
 
 .notice-title,
 .homework-sub{
-font-size:15px;
-}
-
-.bottom-nav{
-height:60px;
-}
-
-.bottom-nav span{
-font-size:20px;
-}
-
-.bottom-nav button{
-font-size:11px;
+font-size:14px;
 }
 
 }
 
 /*=========================
-SMALL MOBILE
+DESKTOP
 =========================*/
 
-@media screen and (max-width:480px){
+@media(min-width:769px){
+
+.container{
+max-width:1100px;
+}
 
 .summary{
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(4,1fr);
 }
 
 .quickmenu{
-grid-template-columns:repeat(2,1fr);
-}
-
-.summary-box h1{
-font-size:20px;
-}
-
-.quickmenu button{
-font-size:18px;
-min-height:72px;
-}
-
-.card h2{
-font-size:18px;
+grid-template-columns:repeat(4,1fr);
 }
 
 }
 
 /*=========================
-ANIMATION
+SMOOTH EFFECT
 =========================*/
 
-button,
 .card,
-.summary-box{
-transition:all .3s ease;
+.summary-box,
+.quickmenu button{
+transition:.25s ease;
 }
 
-.card:hover{
-transform:translateY(-2px);
-}
-
-.summary-box:hover{
-transform:translateY(-2px);
-}
-
+.card:hover,
+.summary-box:hover,
 .quickmenu button:hover{
-transform:translateY(-3px);
+transform:translateY(-2px);
 }
 
 .notice-list::-webkit-scrollbar,
 .homework-list::-webkit-scrollbar{
-width:5px;
+width:4px;
 }
 
 .notice-list::-webkit-scrollbar-thumb,
@@ -438,7 +419,3 @@ width:5px;
 background:#90CAF9;
 border-radius:10px;
 }
-
-/*=========================
-END
-=========================*/
