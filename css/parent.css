@@ -1,71 +1,91 @@
-/* ===========================================
-   SCHOOL CONNECT TN - PARENT DASHBOARD
-   PART 1
-=========================================== */
+/*==================================================
+School Connect TN
+Parent Dashboard V1
+Professional UI
+Part 1
+==================================================*/
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+html{
+scroll-behavior:smooth;
 }
 
 body{
 background:#eef3f9;
 color:#333;
-padding-bottom:85px;
 overflow-x:hidden;
+padding-bottom:80px;
 }
+
+/*=========================
+HEADER
+=========================*/
 
 .header{
 position:sticky;
 top:0;
-left:0;
-width:100%;
-background:#1565C0;
+z-index:999;
+background:linear-gradient(135deg,#1565C0,#1E88E5);
 color:#fff;
-padding:18px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-box-shadow:0 2px 10px rgba(0,0,0,.2);
-z-index:1000;
+padding:12px 18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 3px 10px rgba(0,0,0,.15);
 }
+
+.headerLeft h2{
+font-size:20px;
+font-weight:bold;
+}
+
+.headerLeft p{
+font-size:13px;
+margin-top:3px;
+opacity:.9;
+}
+
+/*=========================
+CONTAINER
+=========================*/
 
 .container{
-width:100%;
-max-width:1000px;
-margin:0 auto;
+max-width:1200px;
+margin:auto;
 padding:15px;
-display:flex;
-flex-direction:column;
-gap:18px;
 }
+
+/*=========================
+CARD
+=========================*/
 
 .card{
-width:100%;
 background:#fff;
 border-radius:18px;
-padding:20px;
-box-shadow:0 4px 12px rgba(0,0,0,.12);
+padding:16px;
+margin-bottom:16px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
 
-.card h2{
-color:#1565C0;
-margin-bottom:15px;
-font-size:24px;
-}
+/*=========================
+PROFILE
+=========================*/
 
 .profile{
 display:flex;
 align-items:center;
-gap:20px;
-flex-wrap:wrap;
+gap:18px;
 }
 
 .profile img{
-width:100px;
-height:100px;
+width:85px;
+height:85px;
 border-radius:50%;
 border:4px solid #1565C0;
 object-fit:cover;
@@ -78,41 +98,110 @@ flex:1;
 
 .info p{
 margin:8px 0;
-font-size:16px;
-line-height:1.5;
+font-size:15px;
+line-height:22px;
 }
-/* ===========================================
-   PART 2
-=========================================== */
+
+.card h2{
+color:#1565C0;
+font-size:22px;
+margin-bottom:12px;
+}
+
+/*=========================
+SUMMARY
+=========================*/
 
 .summary{
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:15px;
-margin-top:20px;
+gap:12px;
+margin-bottom:18px;
 }
 
 .summary-box{
-background:#1565C0;
+background:linear-gradient(135deg,#1565C0,#42A5F5);
 color:#fff;
-padding:18px;
-border-radius:15px;
+padding:15px;
+border-radius:16px;
 text-align:center;
+min-height:90px;
+display:flex;
+flex-direction:column;
+justify-content:center;
 }
 
 .summary-box h1{
-font-size:30px;
-margin-bottom:8px;
+font-size:28px;
+margin-bottom:6px;
 }
 
 .summary-box p{
-font-size:15px;
+font-size:14px;
+}
+/*==================================================
+School Connect TN
+Parent Dashboard V1
+Professional UI
+Part 2
+==================================================*/
+
+/*=========================
+QUICK MENU
+=========================*/
+
+.quickmenu{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+
+.quickmenu button{
+background:#fff;
+color:#1565C0;
+border:none;
+border-radius:16px;
+padding:14px 10px;
+min-height:90px;
+font-size:24px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 2px 8px rgba(0,0,0,.10);
+transition:.3s;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+
+.quickmenu button:hover{
+background:#1565C0;
+color:#fff;
+transform:translateY(-3px);
+}
+
+.quickmenu button br{
+display:block;
+}
+
+.quickmenu button{
+line-height:20px;
+}
+
+/*=========================
+NOTICE & HOMEWORK
+=========================*/
+
+.notice-list,
+.homework-list{
+max-height:220px;
+overflow-y:auto;
 }
 
 .notice-item,
 .homework-item{
-padding:12px 0;
-border-bottom:1px solid #e5e5e5;
+padding:12px;
+border-bottom:1px solid #ececec;
 }
 
 .notice-item:last-child,
@@ -121,56 +210,35 @@ border-bottom:none;
 }
 
 .notice-title{
-font-size:18px;
+font-size:16px;
 font-weight:bold;
 color:#1565C0;
-margin-bottom:6px;
+margin-bottom:5px;
 }
 
 .homework-sub{
-font-size:17px;
-font-weight:bold;
-color:#2E7D32;
-margin-bottom:6px;
-}
-
-.quickmenu{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:15px;
-margin-top:10px;
-}
-
-.quickmenu button{
-width:100%;
-background:#1565C0;
-color:#fff;
-border:none;
-padding:15px;
-border-radius:12px;
 font-size:16px;
 font-weight:bold;
-cursor:pointer;
-transition:.3s;
+color:#2E7D32;
+margin-bottom:5px;
 }
 
-.quickmenu button:hover{
-background:#0D47A1;
-transform:translateY(-2px);
-}
+/*=========================
+BOTTOM NAVIGATION
+=========================*/
 
 .bottom-nav{
 position:fixed;
-left:0;
 bottom:0;
+left:0;
 width:100%;
-height:68px;
+height:65px;
 background:#1565C0;
 display:flex;
 justify-content:space-around;
 align-items:center;
-box-shadow:0 -2px 10px rgba(0,0,0,.2);
-z-index:1000;
+box-shadow:0 -2px 10px rgba(0,0,0,.15);
+z-index:999;
 }
 
 .bottom-nav button{
@@ -180,8 +248,7 @@ color:#fff;
 display:flex;
 flex-direction:column;
 align-items:center;
-justify-content:center;
-font-size:13px;
+font-size:12px;
 cursor:pointer;
 }
 
@@ -189,15 +256,50 @@ cursor:pointer;
 font-size:22px;
 margin-bottom:3px;
 }
-/* ===========================================
-   PART 3 - Responsive Design
-=========================================== */
+/*==================================================
+School Connect TN
+Parent Dashboard V1
+Professional UI
+Part 3 (Final)
+==================================================*/
+
+/*=========================
+TABLET
+=========================*/
+
+@media screen and (max-width:992px){
+
+.container{
+padding:12px;
+}
+
+.summary{
+grid-template-columns:repeat(2,1fr);
+}
+
+.quickmenu{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+/*=========================
+MOBILE
+=========================*/
 
 @media screen and (max-width:768px){
 
 .header{
-font-size:20px;
-padding:16px;
+padding:12px;
+text-align:center;
+}
+
+.headerLeft h2{
+font-size:18px;
+}
+
+.headerLeft p{
+font-size:12px;
 }
 
 .container{
@@ -205,8 +307,8 @@ padding:10px;
 }
 
 .card{
-padding:15px;
-border-radius:15px;
+padding:14px;
+border-radius:16px;
 }
 
 .profile{
@@ -215,8 +317,8 @@ text-align:center;
 }
 
 .profile img{
-width:90px;
-height:90px;
+width:80px;
+height:80px;
 }
 
 .info{
@@ -224,7 +326,7 @@ text-align:center;
 }
 
 .info p{
-font-size:15px;
+font-size:14px;
 }
 
 .summary{
@@ -233,15 +335,16 @@ gap:10px;
 }
 
 .summary-box{
-padding:15px;
+padding:12px;
+min-height:85px;
 }
 
 .summary-box h1{
-font-size:24px;
+font-size:22px;
 }
 
 .summary-box p{
-font-size:14px;
+font-size:12px;
 }
 
 .quickmenu{
@@ -250,17 +353,18 @@ gap:10px;
 }
 
 .quickmenu button{
-padding:14px 10px;
-font-size:14px;
+min-height:78px;
+padding:10px;
+font-size:20px;
 }
 
 .notice-title,
 .homework-sub{
-font-size:16px;
+font-size:15px;
 }
 
 .bottom-nav{
-height:65px;
+height:60px;
 }
 
 .bottom-nav span{
@@ -268,46 +372,73 @@ font-size:20px;
 }
 
 .bottom-nav button{
-font-size:12px;
+font-size:11px;
 }
 
 }
 
-@media screen and (min-width:769px){
+/*=========================
+SMALL MOBILE
+=========================*/
 
-.container{
-max-width:1100px;
-}
+@media screen and (max-width:480px){
 
 .summary{
-grid-template-columns:repeat(4,1fr);
+grid-template-columns:repeat(2,1fr);
 }
 
 .quickmenu{
-grid-template-columns:repeat(4,1fr);
+grid-template-columns:repeat(2,1fr);
 }
 
-.profile{
-flex-direction:row;
-align-items:center;
+.summary-box h1{
+font-size:20px;
 }
 
-.info{
-text-align:left;
+.quickmenu button{
+font-size:18px;
+min-height:72px;
+}
+
+.card h2{
+font-size:18px;
 }
 
 }
 
-img{
-max-width:100%;
-height:auto;
-display:block;
+/*=========================
+ANIMATION
+=========================*/
+
+button,
+.card,
+.summary-box{
+transition:all .3s ease;
 }
 
-button{
-transition:0.3s ease;
-}
-
-button:hover{
+.card:hover{
 transform:translateY(-2px);
 }
+
+.summary-box:hover{
+transform:translateY(-2px);
+}
+
+.quickmenu button:hover{
+transform:translateY(-3px);
+}
+
+.notice-list::-webkit-scrollbar,
+.homework-list::-webkit-scrollbar{
+width:5px;
+}
+
+.notice-list::-webkit-scrollbar-thumb,
+.homework-list::-webkit-scrollbar-thumb{
+background:#90CAF9;
+border-radius:10px;
+}
+
+/*=========================
+END
+=========================*/
