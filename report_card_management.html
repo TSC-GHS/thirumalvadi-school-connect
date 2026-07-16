@@ -1,184 +1,508 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Report Card Management</title>
 
-<style>
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f4f6f9;
-}
-
-.header{
-background:#1565C0;
-color:white;
-padding:18px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-}
-
-.container{
-padding:20px;
-max-width:700px;
-margin:auto;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:12px;
-box-shadow:0 3px 10px rgba(0,0,0,.2);
-}
-
-input{
-width:100%;
-padding:12px;
-margin-top:12px;
-margin-bottom:12px;
-box-sizing:border-box;
-border:1px solid #ccc;
-border-radius:6px;
-font-size:16px;
-}
-
-button{
-width:100%;
-padding:14px;
-margin-top:15px;
-border:none;
-border-radius:8px;
-font-size:18px;
-cursor:pointer;
-color:white;
-background:#1565C0;
-}
-
-.home{
-background:#2E7D32;
-}
-
-</style>
+<link rel="stylesheet"
+href="css/report_card.css">
 
 </head>
 
 <body>
 
-<div class="header">
+<!-- =====================================
+HEADER
+===================================== -->
 
-📄 Report Card Management
+<header class="header">
+
+<div class="header-left">
+
+<h2>📄 Report Card Management</h2>
+
+<p>School Connect TN</p>
 
 </div>
+
+<div class="header-right">
+
+<button
+class="homeBtn"
+onclick="location.href='admin_dashboard.html'">
+
+🏠 Dashboard
+
+</button>
+
+</div>
+
+</header>
+
+<!-- =====================================
+MAIN CONTAINER
+===================================== -->
 
 <div class="container">
 
-<div class="card">
+<!-- =====================================
+STUDENT DETAILS
+===================================== -->
+
+<section class="card">
+
+<h2>👨‍🎓 Student Details</h2>
+
 <label>EMIS Number</label>
-<input id="emis" placeholder="Enter EMIS Number">
 
-<label>Student Name</label>
-<input id="name" placeholder="Enter Student Name">
+<input
+type="text"
+id="emis"
+placeholder="Enter EMIS Number">
 
-<label>Class</label>
-<input id="class" placeholder="Enter Class">
+<button
+class="searchBtn"
+onclick="loadStudent()">
 
-<label>Tamil</label>
-<input id="tamil" type="number" min="0" max="100" placeholder="Marks">
+🔍 Load Student
 
-<label>English</label>
-<input id="english" type="number" min="0" max="100" placeholder="Marks">
-
-<label>Mathematics</label>
-<input id="maths" type="number" min="0" max="100" placeholder="Marks">
-
-<label>Science</label>
-<input id="science" type="number" min="0" max="100" placeholder="Marks">
-
-<label>Social Science</label>
-<input id="social" type="number" min="0" max="100" placeholder="Marks">
-
-<button onclick="saveReportCard()">
-💾 Save Report Card
 </button>
 
-<button class="home"
-onclick="location.href='dashboard.html'">
-🏠 Home
+<label>Admission Number</label>
+
+<input
+type="text"
+id="admissionNo"
+readonly>
+
+<label>Student Name</label>
+
+<input
+type="text"
+id="name"
+readonly>
+
+<label>Class</label>
+
+<input
+type="text"
+id="studentClass"
+readonly>
+
+<label>Section</label>
+
+<input
+type="text"
+id="section"
+readonly>
+
+<label>Medium</label>
+
+<input
+type="text"
+id="medium"
+readonly>
+
+<label>Academic Year</label>
+
+<select id="academicYear">
+
+<option value="">Select Academic Year</option>
+
+<option>2026-2027</option>
+<option>2027-2028</option>
+<option>2028-2029</option>
+
+</select>
+
+<label>Exam</label>
+
+<select id="exam">
+
+<option value="">Select Exam</option>
+
+<option>Quarterly</option>
+<option>Half Yearly</option>
+<option>Annual</option>
+
+</select>
+
+</section>
+<!-- =====================================
+MARK ENTRY
+===================================== -->
+
+<section class="card">
+
+<h2>📝 Subject Marks</h2>
+
+<label>Tamil</label>
+<input
+type="number"
+id="tamil"
+min="0"
+max="100"
+oninput="calculateResult()">
+
+<label>English</label>
+<input
+type="number"
+id="english"
+min="0"
+max="100"
+oninput="calculateResult()">
+
+<label>Mathematics</label>
+<input
+type="number"
+id="maths"
+min="0"
+max="100"
+oninput="calculateResult()">
+
+<label>Science</label>
+<input
+type="number"
+id="science"
+min="0"
+max="100"
+oninput="calculateResult()">
+
+<label>Social Science</label>
+<input
+type="number"
+id="social"
+min="0"
+max="100"
+oninput="calculateResult()">
+
+</section>
+
+<!-- =====================================
+RESULT SUMMARY
+===================================== -->
+
+<section class="summary-grid">
+
+<div class="summary-card">
+
+<h3 id="totalMarks">
+
+0
+
+</h3>
+
+<p>Total</p>
+
+</div>
+
+<div class="summary-card">
+
+<h3 id="percentage">
+
+0%
+
+</h3>
+
+<p>Percentage</p>
+
+</div>
+
+<div class="summary-card">
+
+<h3 id="grade">
+
+-
+
+</h3>
+
+<p>Grade</p>
+
+</div>
+
+<div class="summary-card">
+
+<h3 id="result">
+
+-
+
+</h3>
+
+<p>Result</p>
+
+</div>
+
+</section>
+<!-- =====================================
+ACTION BUTTONS
+===================================== -->
+
+<section class="card">
+
+<div class="action-grid">
+
+<button
+class="saveBtn"
+onclick="saveReportCard()">
+
+💾 Save Report Card
+
+</button>
+
+<button
+class="printBtn"
+onclick="window.print()">
+
+🖨️ Print Report
+
+</button>
+
+<button
+class="viewBtn"
+onclick="viewReportCard()">
+
+👁 View Report Card
+
+</button>
+
+<button
+class="homeBtn2"
+onclick="location.href='admin_dashboard.html'">
+
+🏠 Dashboard
+
 </button>
 
 </div>
+
+</section>
 
 </div>
 
 <script type="module">
-  import { db } from "./firebase.js";
+
+import { db } from "./firebase.js";
 
 import {
 doc,
+getDoc,
 setDoc
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-window.saveReportCard = async function(){
+window.loadStudent = async function(){
 
-const emis = document.getElementById("emis").value.trim();
-const name = document.getElementById("name").value.trim();
-const studentClass = document.getElementById("class").value.trim();
+const emis =
+document.getElementById("emis").value.trim();
 
-const tamil = Number(document.getElementById("tamil").value) || 0;
-const english = Number(document.getElementById("english").value) || 0;
-const maths = Number(document.getElementById("maths").value) || 0;
-const science = Number(document.getElementById("science").value) || 0;
-const social = Number(document.getElementById("social").value) || 0;
+if(emis===""){
 
-if(emis==="" || name==="" || studentClass===""){
-    alert("Please fill all required fields");
-    return;
+alert("Enter EMIS Number");
+
+return;
+
 }
 
-const total = tamil + english + maths + science + social;
-const percentage = (total / 5).toFixed(2);
+try{
+
+const snap =
+await getDoc(doc(db,"students",emis));
+
+if(!snap.exists()){
+
+alert("Student not found");
+
+return;
+
+}
+
+const s = snap.data();
+
+document.getElementById("admissionNo").value =
+s.admissionNo || "";
+
+document.getElementById("name").value =
+s.name || "";
+
+document.getElementById("studentClass").value =
+s.class || "";
+
+document.getElementById("section").value =
+s.section || "";
+
+document.getElementById("medium").value =
+s.medium || "";
+
+}catch(error){
+
+alert(error.message);
+
+}
+
+};
+  /*=====================================
+AUTO CALCULATION
+=====================================*/
+
+window.calculateResult = function(){
+
+const tamil =
+Number(document.getElementById("tamil").value) || 0;
+
+const english =
+Number(document.getElementById("english").value) || 0;
+
+const maths =
+Number(document.getElementById("maths").value) || 0;
+
+const science =
+Number(document.getElementById("science").value) || 0;
+
+const social =
+Number(document.getElementById("social").value) || 0;
+
+const total =
+tamil +
+english +
+maths +
+science +
+social;
+
+const percentage =
+(total/5).toFixed(2);
+
+document.getElementById("totalMarks").innerHTML =
+total;
+
+document.getElementById("percentage").innerHTML =
+percentage + "%";
 
 let grade = "F";
 
 if(percentage >= 90){
-    grade = "A+";
-}else if(percentage >= 80){
-    grade = "A";
-}else if(percentage >= 70){
-    grade = "B";
-}else if(percentage >= 60){
-    grade = "C";
-}else if(percentage >= 50){
-    grade = "D";
+
+grade = "A+";
+
+}
+else if(percentage >= 80){
+
+grade = "A";
+
+}
+else if(percentage >= 70){
+
+grade = "B+";
+
+}
+else if(percentage >= 60){
+
+grade = "B";
+
+}
+else if(percentage >= 50){
+
+grade = "C";
+
+}
+else if(percentage >= 35){
+
+grade = "D";
+
 }
 
-const result = percentage >= 35 ? "PASS" : "FAIL";
+document.getElementById("grade").innerHTML =
+grade;
+
+/* PASS / FAIL */
+
+const result =
+(
+tamil >= 35 &&
+english >= 35 &&
+maths >= 35 &&
+science >= 35 &&
+social >= 35
+)
+? "PASS"
+: "FAIL";
+
+document.getElementById("result").innerHTML =
+result;
+
+};
+  /*=====================================
+SAVE REPORT CARD
+=====================================*/
+
+window.saveReportCard = async function(){
+
+const emis = document.getElementById("emis").value.trim();
+
+if(emis===""){
+
+alert("Load a student first");
+
+return;
+
+}
+
+const reportData={
+
+emis,
+
+admissionNo:document.getElementById("admissionNo").value,
+
+name:document.getElementById("name").value,
+
+class:document.getElementById("studentClass").value,
+
+section:document.getElementById("section").value,
+
+medium:document.getElementById("medium").value,
+
+academicYear:document.getElementById("academicYear").value,
+
+exam:document.getElementById("exam").value,
+
+tamil:Number(document.getElementById("tamil").value)||0,
+
+english:Number(document.getElementById("english").value)||0,
+
+maths:Number(document.getElementById("maths").value)||0,
+
+science:Number(document.getElementById("science").value)||0,
+
+social:Number(document.getElementById("social").value)||0,
+
+total:Number(document.getElementById("totalMarks").innerHTML)||0,
+
+percentage:document.getElementById("percentage").innerHTML,
+
+grade:document.getElementById("grade").innerHTML,
+
+result:document.getElementById("result").innerHTML,
+
+updatedAt:new Date().toISOString()
+
+};
 
 try{
 
-await setDoc(doc(db,"report_cards",emis),{
+await setDoc(
 
-emis,
-name,
-class:studentClass,
-tamil,
-english,
-maths,
-science,
-social,
-total,
-percentage:Number(percentage),
-grade,
-result,
-updatedAt:new Date().toISOString()
+doc(db,"report_cards",emis),
 
-});
+reportData,
+
+{merge:true}
+
+);
 
 alert("✅ Report Card Saved Successfully");
 
@@ -188,8 +512,31 @@ alert(error.message);
 
 }
 
+};
+
+/*=====================================
+VIEW REPORT CARD
+=====================================*/
+
+window.viewReportCard=function(){
+
+const emis=
+document.getElementById("emis").value.trim();
+
+if(emis===""){
+
+alert("Load a student first");
+
+return;
+
 }
-  </script>
+
+location.href=
+"student_report_card.html?emis="+emis;
+
+};
+
+</script>
 
 </body>
 </html>
