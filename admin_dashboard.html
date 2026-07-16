@@ -1,195 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
-<title>Admin Dashboard</title>
+<title>School Connect TN - Admin Dashboard</title>
 
-<style>
-
-body{
-font-family:Arial,sans-serif;
-background:#f4f6f9;
-margin:0;
-}
-
-.header{
-background:#6A1B9A;
-color:white;
-padding:20px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-}
-
-.container{
-padding:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-margin-bottom:20px;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-gap:15px;
-margin-bottom:20px;
-}
-
-.stat{
-background:#F3E5F5;
-padding:20px;
-border-radius:10px;
-text-align:center;
-}
-
-.stat h2{
-margin:0;
-font-size:32px;
-color:#6A1B9A;
-}
-
-.stat p{
-margin-top:10px;
-font-weight:bold;
-}
-
-button{
-width:100%;
-padding:15px;
-margin-top:12px;
-border:none;
-border-radius:8px;
-font-size:17px;
-cursor:pointer;
-background:#6A1B9A;
-color:white;
-}
-
-.home{
-background:#1565C0;
-}
-
-.logout{
-background:#D32F2F;
-}
-
-</style>
+<link rel="stylesheet"
+href="css/admin_dashboard_v3.css">
 
 </head>
 
 <body>
 
-<div class="header">
+<!-- ===========================
+HEADER
+=========================== -->
 
-👨‍💼 Admin Dashboard
+<header class="header">
+
+<div class="header-left">
+
+<h2>🏫 School Connect TN</h2>
+
+<p>Administrator Dashboard</p>
 
 </div>
 
-<div class="container">
+<div class="header-right">
 
-<div class="grid">
+<div class="profile">
 
-<div class="stat">
-<h2 id="studentCount">0</h2>
+👤 Administrator
+
+</div>
+
+</div>
+
+</header>
+
+<!-- ===========================
+WELCOME
+=========================== -->
+
+<section class="welcome-card">
+
+<h1>Welcome Back 👋</h1>
+
+<p>
+
+Manage your school from one professional dashboard.
+
+</p>
+
+</section>
+
+<!-- ===========================
+SUMMARY
+=========================== -->
+
+<section class="summary-grid">
+
+<div class="summary-card">
+
+<h2 id="totalStudents">0</h2>
+
 <p>Students</p>
+
 </div>
 
-<div class="stat">
-<h2 id="teacherCount">0</h2>
+<div class="summary-card">
+
+<h2 id="totalTeachers">0</h2>
+
 <p>Teachers</p>
+
 </div>
 
-<div class="stat">
-<h2 id="noticeCount">0</h2>
+<div class="summary-card">
+
+<h2 id="todayAttendance">0%</h2>
+
+<p>Attendance</p>
+
+</div>
+
+<div class="summary-card">
+
+<h2 id="totalNotices">0</h2>
+
 <p>Notices</p>
-</div>
-
-<div class="stat">
-<h2 id="homeworkCount">0</h2>
-<p>Homework</p>
-</div>
 
 </div>
 
-<div class="card">
+</section>
+
+<!-- ===========================
+QUICK ACTIONS
+=========================== -->
+
+<section class="dashboard-card">
+
+<h2>⚡ Quick Actions</h2>
+
+<div class="quick-grid">
 
 <button onclick="location.href='students.html'">
-👨‍🎓 Student Management
+
+👨‍🎓<br>
+
+Add Student
+
+</button>
+
+<button onclick="location.href='student_management.html'">
+
+📋<br>
+
+Student List
+
 </button>
 
 <button onclick="location.href='manage_teachers.html'">
-👨‍🏫 Teacher Management
+
+👨‍🏫<br>
+
+Add Teacher
+
 </button>
 
-<button onclick="location.href='notice.html'">
-📢 Notice Management
+<button onclick="location.href='teachers.html'">
+
+👥<br>
+
+Teacher List
+
+</button>
+
+<button onclick="location.href='attendance.html'">
+
+📅<br>
+
+Attendance
+
 </button>
 
 <button onclick="location.href='report_card.html'">
-📄 Report Card
+
+📄<br>
+
+Report Card
+
+</button>
+
+<button onclick="location.href='homework.html'">
+
+📚<br>
+
+Homework
+
+</button>
+
+<button onclick="location.href='notice.html'">
+
+📢<br>
+
+Notice Board
+
 </button>
 
 <button onclick="location.href='bulk_upload.html'">
-📥 Bulk Upload
-</button>
-<button class="home"
-onclick="location.href='dashboard.html'">
-🏠 Home
+
+📥<br>
+
+Bulk Upload
+
 </button>
 
-<button class="logout"
-onclick="location.href='login.html'">
-🚪 Logout
+<button onclick="location.href='backup_restore.html'">
+
+💾<br>
+
+Backup
+
 </button>
 
 </div>
 
-<script type="module">
+</section>
+<!-- ===========================
+SCHOOL MANAGEMENT
+=========================== -->
 
-import { db } from "./firebase.js";
+<section class="dashboard-card">
 
-import {
-collection,
-getDocs
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+<h2>🏫 School Management</h2>
 
-async function loadDashboard(){
+<div class="management-grid">
 
-const students = await getDocs(collection(db,"students"));
-document.getElementById("studentCount").textContent = students.size;
+<a href="students.html" class="module-card">
+👨‍🎓
+<h3>Students</h3>
+<p>Manage Students</p>
+</a>
 
-const teachers = await getDocs(collection(db,"teachers"));
-document.getElementById("teacherCount").textContent = teachers.size;
+<a href="manage_teachers.html" class="module-card">
+👨‍🏫
+<h3>Teachers</h3>
+<p>Manage Teachers</p>
+</a>
 
-const homework = await getDocs(collection(db,"homework"));
-document.getElementById("homeworkCount").textContent = homework.size;
+<a href="attendance.html" class="module-card">
+📅
+<h3>Attendance</h3>
+<p>Daily Attendance</p>
+</a>
 
-let noticeCollection = "notice";
+<a href="report_card.html" class="module-card">
+📄
+<h3>Report Cards</h3>
+<p>Exam Results</p>
+</a>
 
-let notices;
+<a href="homework.html" class="module-card">
+📚
+<h3>Homework</h3>
+<p>Homework Management</p>
+</a>
 
-try{
-notices = await getDocs(collection(db, noticeCollection));
-}catch(e){
-noticeCollection = "notices";
-notices = await getDocs(collection(db, noticeCollection));
-}
+<a href="notice.html" class="module-card">
+📢
+<h3>Notice Board</h3>
+<p>School Notices</p>
+</a>
 
-document.getElementById("noticeCount").textContent = notices.size;
+</div>
 
-}
+</section>
 
-loadDashboard();
+<!-- ===========================
+SYSTEM
+=========================== -->
 
-</script>
+<section class="dashboard-card">
+
+<h2>⚙️ System</h2>
+
+<div class="management-grid">
+
+<a href="backup_restore.html" class="module-card">
+💾
+<h3>Backup</h3>
+<p>Database Backup</p>
+</a>
+
+<a href="settings.html" class="module-card">
+⚙️
+<h3>Settings</h3>
+<p>School Settings</p>
+</a>
+
+</div>
+
+</section>
+
+<!-- ===========================
+LOGOUT
+=========================== -->
+
+<section class="dashboard-card">
+
+<button
+class="logoutBtn"
+onclick="logoutAdmin()">
+
+🚪 Logout
+
+</button>
+
+</section>
+
+<footer class="footer">
+
+<p>
+© 2026 School Connect TN
+</p>
+
+<p>
+Powered by <b>VTOOS Software Solution</b>
+</p>
+
+</footer>
+
+<script type="module"
+src="js/admin_dashboard_v3.js"></script>
 
 </body>
 </html>
