@@ -1,209 +1,400 @@
-/* ===========================
-   Parent Dashboard CSS - Part 1
-=========================== */
+/*=========================================
+School Connect TN
+Parent Dashboard V2
+Part 1
+=========================================*/
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',Arial,sans-serif;
 }
 
 body{
-    background:#eef3fb;
-    font-family:Arial,Helvetica,sans-serif;
-    color:#333;
-    padding-bottom:90px;
+background:#F4F8FC;
+color:#333;
+padding-bottom:90px;
 }
 
-.container{
-    width:100%;
-    max-width:500px;
-    margin:auto;
-    padding:15px;
+/*=========================
+HEADER
+=========================*/
+
+.parent-header{
+
+background:linear-gradient(135deg,#1565C0,#1976D2);
+
+padding:18px;
+
+color:#fff;
+
+border-radius:0 0 25px 25px;
+
+box-shadow:0 4px 12px rgba(0,0,0,.15);
+
 }
 
-/* Header */
+.header-top{
 
-.header{
-    background:#1565c0;
-    color:#fff;
-    text-align:center;
-    padding:20px;
-    border-radius:0 0 25px 25px;
-    box-shadow:0 5px 15px rgba(0,0,0,.15);
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
 }
 
-.header h1{
-    font-size:30px;
-    font-weight:bold;
+.header-top h2{
+
+font-size:22px;
+
+margin-bottom:4px;
+
 }
 
-.header p{
-    font-size:17px;
-    margin-top:5px;
+.header-top p{
+
+font-size:13px;
+
+opacity:.9;
+
 }
 
-/* Welcome Card */
+.logout-btn{
+
+background:#fff;
+
+color:#1565C0;
+
+border:none;
+
+padding:8px 16px;
+
+border-radius:20px;
+
+font-weight:600;
+
+cursor:pointer;
+
+}
+
+/*=========================
+MAIN CONTAINER
+=========================*/
+
+.parent-container{
+
+max-width:500px;
+
+margin:auto;
+
+padding:15px;
+
+}
+
+/*=========================
+WELCOME CARD
+=========================*/
 
 .welcome-card{
-    background:#fff;
-    border-radius:22px;
-    margin-top:20px;
-    padding:18px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+background:#1565C0;
+
+color:#fff;
+
+padding:18px;
+
+border-radius:20px;
+
+margin-bottom:15px;
+
+box-shadow:0 4px 10px rgba(0,0,0,.12);
+
 }
 
-.student-info{
-    display:flex;
-    align-items:center;
-    gap:18px;
+.welcome-card h2{
+
+font-size:18px;
+
+margin-bottom:8px;
+
 }
 
-.student-photo img{
-    width:90px;
-    height:90px;
-    border-radius:50%;
-    object-fit:cover;
-    border:4px solid #1565c0;
+.welcome-card h3{
+
+font-size:24px;
+
+margin-bottom:6px;
+
 }
 
-.student-details h2{
-    color:#1565c0;
-    margin-bottom:10px;
-    font-size:28px;
+.welcome-card p{
+
+font-size:15px;
+
+margin-bottom:4px;
+
 }
 
-.student-details p{
-    font-size:16px;
-    margin:6px 0;
+.welcome-card span{
+
+font-size:13px;
+
+opacity:.9;
+
 }
 
-.student-details strong{
-    color:#222;
-}
-/* ===========================
-   Parent Dashboard CSS - Part 2
-=========================== */
+/*=========================
+STUDENT INFO
+=========================*/
 
-/* Statistics */
+.student-info-card{
 
-.stats-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
-    margin:18px 0;
-}
+background:#fff;
 
-.stat-box{
-    background:#fff;
-    border-radius:18px;
-    padding:18px;
-    text-align:center;
-    box-shadow:0 5px 12px rgba(0,0,0,.08);
-    border-top:5px solid #1565c0;
+border-radius:18px;
+
+padding:16px;
+
+margin-bottom:16px;
+
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+
 }
 
-.stat-box h1{
-    color:#1565c0;
-    font-size:28px;
-    margin-bottom:6px;
+.student-row{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:10px 0;
+
+border-bottom:1px solid #EEE;
+
+font-size:15px;
+
 }
 
-.stat-box span{
-    color:#666;
-    font-size:14px;
+.student-row:last-child{
+
+border-bottom:none;
+
+}
+/*=========================================
+Parent Dashboard
+CSS - Part 2
+=========================================*/
+
+/* SUMMARY CARDS */
+
+.summary-grid{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:12px;
+
+margin-bottom:18px;
+
 }
 
-/* Section Title */
+.summary-card{
+
+background:#fff;
+
+padding:18px;
+
+border-radius:18px;
+
+text-align:center;
+
+box-shadow:0 4px 10px rgba(0,0,0,.08);
+
+border-top:5px solid #1565C0;
+
+transition:.3s;
+
+}
+
+.summary-card:hover{
+
+transform:translateY(-3px);
+
+}
+
+.summary-card h2{
+
+font-size:28px;
+
+color:#1565C0;
+
+margin-bottom:5px;
+
+}
+
+.summary-card p{
+
+font-size:13px;
+
+color:#666;
+
+}
+
+/* SECTION TITLE */
 
 .section-title{
-    font-size:22px;
-    font-weight:bold;
-    color:#1565c0;
-    margin:20px 0 12px;
+
+font-size:19px;
+
+font-weight:700;
+
+color:#1565C0;
+
+margin:18px 0 12px;
+
 }
 
-/* Quick Actions */
+/* QUICK SERVICES */
 
 .quick-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:12px;
+
+margin-bottom:20px;
+
 }
 
 .quick-card{
-    background:#fff;
-    border-radius:16px;
-    padding:15px 8px;
-    text-align:center;
-    box-shadow:0 5px 12px rgba(0,0,0,.08);
-    transition:.25s;
-    cursor:pointer;
+
+background:#fff;
+
+border-radius:18px;
+
+padding:14px 8px;
+
+text-align:center;
+
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+
+transition:.3s;
+
+cursor:pointer;
+
 }
 
 .quick-card:hover{
-    transform:translateY(-3px);
+
+background:#1565C0;
+
+color:#fff;
+
+transform:translateY(-3px);
+
 }
 
 .quick-card .icon{
-    font-size:26px;
-    margin-bottom:8px;
+
+font-size:24px;
+
+margin-bottom:8px;
+
 }
 
 .quick-card span{
-    display:block;
-    font-size:11px;
-    font-weight:600;
-    line-height:15px;
+
+display:block;
+
+font-size:11px;
+
+font-weight:600;
+
+line-height:15px;
+
 }
 
-.logout{
-    color:#d32f2f;
-}
-/*=========================================
-PARENT DASHBOARD
-PART 3
-=========================================*/
-
-/* NOTICE & HOMEWORK */
+/* HOMEWORK & NOTICE */
 
 .list-card{
+
 background:#fff;
-border-radius:18px;
+
 padding:15px;
-box-shadow:0 4px 12px rgba(0,0,0,.08);
-margin-bottom:18px;
+
+border-radius:18px;
+
+margin-bottom:12px;
+
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+
 }
 
-.list-item{
-display:flex;
-justify-content:space-between;
-align-items:flex-start;
-padding:12px 0;
-border-bottom:1px solid #eee;
-gap:10px;
-}
+.list-card h3{
 
-.list-item:last-child{
-border-bottom:none;
-}
+font-size:16px;
 
-.list-item h4{
-font-size:15px;
 color:#1565C0;
-margin-bottom:4px;
+
+margin-bottom:6px;
+
 }
 
-.list-item p{
+.list-card p{
+
+font-size:13px;
+
+color:#555;
+
+line-height:18px;
+
+margin-bottom:6px;
+
+}
+
+.list-card small{
+
+color:#888;
+
+font-size:11px;
+
+}
+/*=========================================
+Parent Dashboard
+CSS - Part 3 (Final)
+=========================================*/
+
+/* EVENTS */
+
+.events-grid{
+display:grid;
+grid-template-columns:1fr;
+gap:12px;
+margin-bottom:20px;
+}
+
+.event-card{
+background:#fff;
+border-left:5px solid #1565C0;
+padding:16px;
+border-radius:18px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.event-card h3{
+font-size:16px;
+color:#1565C0;
+margin-bottom:6px;
+}
+
+.event-card p{
 font-size:13px;
 color:#666;
-line-height:18px;
-}
-
-.list-item span{
-font-size:11px;
-color:#888;
-white-space:nowrap;
 }
 
 /* BOTTOM NAVIGATION */
@@ -213,32 +404,38 @@ position:fixed;
 bottom:0;
 left:0;
 width:100%;
-height:65px;
+height:68px;
 background:#fff;
 display:flex;
 justify-content:space-around;
 align-items:center;
-box-shadow:0 -2px 10px rgba(0,0,0,.12);
+box-shadow:0 -3px 12px rgba(0,0,0,.10);
 z-index:999;
 }
 
 .bottom-nav a{
 flex:1;
-text-align:center;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
 text-decoration:none;
 color:#666;
 font-size:11px;
 font-weight:600;
-padding:8px 0;
+height:100%;
+transition:.3s;
 }
 
-.bottom-nav a small{
-display:block;
+.bottom-nav a span{
 margin-top:4px;
 font-size:10px;
 }
 
-.bottom-nav a:hover,
+.bottom-nav a:hover{
+color:#1565C0;
+}
+
 .bottom-nav a.active{
 color:#1565C0;
 }
@@ -247,37 +444,37 @@ color:#1565C0;
 
 @media(max-width:768px){
 
-.container{
+.parent-container{
 padding:12px;
 }
 
-.student-info{
-gap:12px;
-}
-
-.student-photo img{
-width:70px;
-height:70px;
-}
-
-.student-details h2{
+.header-top h2{
 font-size:20px;
 }
 
-.student-details p{
-font-size:13px;
+.logout-btn{
+padding:7px 14px;
+font-size:12px;
 }
 
-.stats-grid{
+.welcome-card{
+padding:16px;
+}
+
+.welcome-card h3{
+font-size:22px;
+}
+
+.summary-grid{
 grid-template-columns:repeat(2,1fr);
 gap:10px;
 }
 
-.stat-box{
+.summary-card{
 padding:14px;
 }
 
-.stat-box h1{
+.summary-card h2{
 font-size:22px;
 }
 
@@ -287,8 +484,8 @@ gap:8px;
 }
 
 .quick-card{
-padding:10px 4px;
-min-height:75px;
+padding:10px 5px;
+min-height:78px;
 }
 
 .quick-card .icon{
@@ -297,15 +494,16 @@ font-size:20px;
 
 .quick-card span{
 font-size:10px;
-line-height:12px;
+line-height:13px;
 }
 
 .section-title{
 font-size:18px;
 }
 
-.list-card{
-padding:12px;
+.list-card,
+.event-card{
+padding:14px;
 }
 
 }
@@ -314,11 +512,11 @@ padding:12px;
 
 @media(min-width:769px){
 
-.container{
+.parent-container{
 max-width:1100px;
 }
 
-.stats-grid{
+.summary-grid{
 grid-template-columns:repeat(4,1fr);
 }
 
@@ -326,17 +524,23 @@ grid-template-columns:repeat(4,1fr);
 grid-template-columns:repeat(4,1fr);
 }
 
+.events-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
 }
 
 /* EFFECTS */
 
+.summary-card,
 .quick-card,
-.stat-box,
-.list-card{
+.list-card,
+.event-card{
 transition:.25s ease;
 }
 
+.summary-card:hover,
 .quick-card:hover,
-.stat-box:hover{
-transform:translateY(-2px);
+.event-card:hover{
+transform:translateY(-3px);
 }
