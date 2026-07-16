@@ -1,1 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Backup & Restore</title>
+
+<link rel="stylesheet"
+href="../css/backup_restore.css">
+
+</head>
+
+<body>
+
+<!-- =====================================
+HEADER
+===================================== -->
+
+<header class="header">
+
+<div class="header-left">
+
+<h2>💾 Backup & Restore</h2>
+
+<p>School Connect TN</p>
+
+</div>
+
+<div class="header-right">
+
+<button
+class="backBtn"
+onclick="location.href='../admin_dashboard.html'">
+
+🏠 Dashboard
+
+</button>
+
+</div>
+
+</header>
+
+<!-- =====================================
+MAIN CONTAINER
+===================================== -->
+
+<div class="container">
+
+<!-- =====================================
+BACKUP STATUS
+===================================== -->
+
+<section class="card">
+
+<h2>📊 Backup Status</h2>
+
+<div class="summary-grid">
+
+<div class="summary-card">
+
+<h3 id="lastBackup">
+
+Never
+
+</h3>
+
+<p>Last Backup</p>
+
+</div>
+
+<div class="summary-card">
+
+<h3 id="backupVersion">
+
+V1.0
+
+</h3>
+
+<p>Version</p>
+
+</div>
+
+<div class="summary-card">
+
+<h3 id="totalCollections">
+
+7
+
+</h3>
+
+<p>Collections</p>
+
+</div>
+
+<div class="summary-card">
+
+<h3 id="backupSize">
+
+0 KB
+
+</h3>
+
+<p>Backup Size</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =====================================
+BACKUP SECTION
+===================================== -->
+
+<section class="card">
+
+<h2>💾 Manual Backup</h2>
+
+<p>
+
+Backup will include:
+
+</p>
+
+<ul class="backup-list">
+
+<li>👨‍🎓 Students</li>
+
+<li>👨‍🏫 Teachers</li>
+
+<li>👨‍👩‍👧 Parents</li>
+
+<li>📅 Attendance</li>
+
+<li>📄 Report Cards</li>
+
+<li>📚 Homework</li>
+
+<li>📢 Notices</li>
+
+</ul>
+
+<button
+class="backupBtn"
+onclick="createBackup()">
+
+⬇ Create Full Backup
+
+</button>
+
+</section>
+<!-- =====================================
+RESTORE SECTION
+===================================== -->
+
+<section class="card">
+
+<h2>🔄 Restore Backup</h2>
+
+<p>
+
+Select a previously downloaded backup (.json) file.
+
+</p>
+
+<input
+type="file"
+id="restoreFile"
+accept=".json">
+
+<button
+class="restoreBtn"
+onclick="restoreBackup()">
+
+📂 Restore Backup
+
+</button>
+
+<p class="warning">
+
+⚠️ Restoring a backup will overwrite existing data.
+Please create a backup before restoring.
+
+</p>
+
+</section>
+
+<!-- =====================================
+BACKUP HISTORY
+===================================== -->
+
+<section class="card">
+
+<h2>📜 Backup History</h2>
+
+<table class="history-table">
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Version</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="historyTable">
+
+<tr>
+
+<td colspan="3">
+
+No Backup History
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</section>
+
+</div>
+
+<script type="module"
+src="../js/backup_restore.js">
+
+</script>
+
+</body>
+
+</html>
