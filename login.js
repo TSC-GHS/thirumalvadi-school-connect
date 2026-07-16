@@ -77,21 +77,22 @@ window.loginUser = async function () {
 
     switch (user.role) {
 
-      case "Admin":
+      case "Headmaster":
 
-        localStorage.setItem("userRole", "Admin");
+localStorage.setItem("userRole","Headmaster");
 
-        window.location.href = "admin_dashboard_v3.html";
+window.location.href="headmaster.html";
 
-        break;
+break;
 
       case "Headmaster":
 
-        localStorage.setItem("userRole", "Headmaster");
+localStorage.setItem("headmasterLogin","true");
+localStorage.setItem("userRole","Headmaster");
 
-        window.location.href = "headmaster.html";
+window.location.href="splash.html";
 
-        break;
+break;
 
       case "Teacher":
 
@@ -106,8 +107,10 @@ window.loginUser = async function () {
         sessionStorage.setItem("teacherName", user.name || "");
 
         sessionStorage.setItem("userRole", "Teacher");
+        localStorage.setItem("teacherLogin","true");
 
         window.location.href = "teacher.html";
+        window.location.href="splash.html";
 
         break;
               case "Parent":
@@ -119,8 +122,10 @@ window.loginUser = async function () {
         sessionStorage.setItem("parentEMIS", user.emis || "");
         sessionStorage.setItem("emis", user.emis || "");
         sessionStorage.setItem("userRole", "Parent");
+        localStorage.setItem("parentLogin","true");
 
         window.location.href = "parent_dashboard.html";
+        window.location.href="splash.html";
 
         break;
 
