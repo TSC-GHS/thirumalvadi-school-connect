@@ -1,1 +1,218 @@
+/*==================================================
+School Connect TN
+Splash Screen V2
+CSS - Part 1
+==================================================*/
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+
+width:100%;
+height:100vh;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+background:linear-gradient(135deg,#1565C0,#42A5F5);
+
+overflow:hidden;
+
+}
+
+.splash-container{
+
+width:100%;
+max-width:500px;
+
+text-align:center;
+
+padding:20px;
+
+animation:fadeIn 1s ease-in-out;
+
+}
+
+.banner{
+
+margin-bottom:25px;
+
+}
+
+.banner-img{
+
+width:100%;
+max-width:420px;
+
+border-radius:18px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.25);
+
+}
+
+.loading-area{
+
+margin:25px 0;
+
+}
+
+.loader{
+
+width:60px;
+height:60px;
+
+margin:auto;
+
+border:6px solid rgba(255,255,255,.3);
+
+border-top:6px solid #fff;
+
+border-radius:50%;
+
+animation:spin 1s linear infinite;
+
+}
+
+.loading-text{
+
+margin-top:15px;
+
+font-size:20px;
+
+font-weight:bold;
+
+color:#fff;
+
+letter-spacing:1px;
+
+}
+/*==================================================
+School Connect TN
+Splash Screen V2
+CSS - Part 2
+==================================================*/
+
+/*=========================
+DEVELOPER
+=========================*/
+
+.developer{
+
+margin-top:30px;
+opacity:0;
+animation:fadeDeveloper 1.5s ease forwards;
+animation-delay:1s;
+
+}
+
+.developer p{
+
+font-size:15px;
+color:#fff;
+margin-bottom:10px;
+letter-spacing:.5px;
+
+}
+
+.vtoos-logo{
+
+width:90px;
+height:90px;
+border-radius:50%;
+background:#fff;
+padding:8px;
+box-shadow:0 4px 15px rgba(0,0,0,.25);
+
+}
+
+.developer h3{
+
+margin-top:12px;
+font-size:22px;
+color:#FFD54F;
+font-weight:bold;
+
+}
+
+/*=========================
+ANIMATIONS
+=========================*/
+
+@keyframes spin{
+
+0%{
+transform:rotate(0deg);
+}
+
+100%{
+transform:rotate(360deg);
+}
+
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+@keyframes fadeDeveloper{
+
+from{
+opacity:0;
+transform:translateY(15px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/*=========================
+RESPONSIVE
+=========================*/
+
+@media(max-width:768px){
+
+.banner-img{
+
+max-width:340px;
+
+}
+
+.loading-text{
+
+font-size:18px;
+
+}
+
+.vtoos-logo{
+
+width:75px;
+height:75px;
+
+}
+
+.developer h3{
+
+font-size:18px;
+
+}
+
+}
