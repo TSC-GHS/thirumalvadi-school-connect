@@ -1,1 +1,439 @@
+/*==================================================
+School Connect TN
+Student Profile V4
+CSS - Part 1
+==================================================*/
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#EEF4FA;
+color:#333;
+padding-bottom:80px;
+overflow-x:hidden;
+}
+
+/*=========================
+HEADER
+=========================*/
+
+.header{
+position:sticky;
+top:0;
+z-index:999;
+background:linear-gradient(135deg,#1565C0,#1E88E5);
+color:#fff;
+padding:16px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 3px 12px rgba(0,0,0,.15);
+}
+
+.header-left h2{
+font-size:24px;
+margin-bottom:4px;
+}
+
+.header-left p{
+font-size:13px;
+opacity:.9;
+}
+
+.backBtn{
+background:#fff;
+color:#1565C0;
+border:none;
+padding:10px 18px;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+}
+
+.backBtn:hover{
+background:#E3F2FD;
+}
+
+/*=========================
+CONTAINER
+=========================*/
+
+.container{
+max-width:1000px;
+margin:20px auto;
+padding:15px;
+}
+
+/*=========================
+PROFILE CARD
+=========================*/
+
+.profile-card{
+background:#fff;
+border-radius:20px;
+padding:25px;
+margin-bottom:20px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.photo-section{
+text-align:center;
+margin-bottom:25px;
+}
+
+.photo-section img{
+width:130px;
+height:130px;
+border-radius:50%;
+border:5px solid #1565C0;
+object-fit:cover;
+background:#fff;
+}
+
+.photo-section h2{
+margin-top:15px;
+font-size:28px;
+color:#1565C0;
+}
+
+.photo-section p{
+margin-top:6px;
+font-size:16px;
+color:#666;
+}
+
+.details-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+}
+
+.detail-box{
+background:#F5F9FF;
+padding:18px;
+border-radius:15px;
+border-left:5px solid #1565C0;
+}
+
+.detail-box span{
+display:block;
+font-size:14px;
+color:#666;
+margin-bottom:8px;
+}
+
+.detail-box h3{
+font-size:20px;
+color:#1565C0;
+}
+/*==================================================
+School Connect TN
+Student Profile V4
+CSS - Part 2
+==================================================*/
+
+/*=========================
+INFO CARD
+=========================*/
+
+.info-card{
+background:#fff;
+border-radius:20px;
+padding:25px;
+margin-bottom:20px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.info-card h2{
+color:#1565C0;
+margin-bottom:20px;
+font-size:24px;
+}
+
+.info-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+}
+
+.info-item{
+background:#F8FBFF;
+padding:16px;
+border-radius:14px;
+border-left:5px solid #42A5F5;
+}
+
+.info-item label{
+display:block;
+font-size:13px;
+font-weight:bold;
+color:#666;
+margin-bottom:8px;
+}
+
+.info-item p{
+font-size:17px;
+font-weight:bold;
+color:#1565C0;
+word-break:break-word;
+}
+
+.full-width{
+grid-column:1 / -1;
+}
+
+/*=========================
+SUMMARY CARD
+=========================*/
+
+.summary-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:20px;
+}
+
+.summary-card{
+background:linear-gradient(135deg,#1565C0,#42A5F5);
+color:#fff;
+padding:22px;
+border-radius:18px;
+text-align:center;
+box-shadow:0 4px 12px rgba(0,0,0,.12);
+transition:.3s;
+}
+
+.summary-card:hover{
+transform:translateY(-3px);
+}
+
+.summary-card h3{
+font-size:30px;
+margin-bottom:8px;
+}
+
+.summary-card p{
+font-size:14px;
+}
+
+/*=========================
+ACTION BUTTONS
+=========================*/
+
+.action-card{
+background:#fff;
+padding:22px;
+border-radius:20px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.action-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+}
+
+.btn{
+padding:15px;
+border:none;
+border-radius:12px;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+color:#fff;
+transition:.3s;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+}
+
+.blue{
+background:#1565C0;
+}
+
+.green{
+background:#2E7D32;
+}
+
+.orange{
+background:#FB8C00;
+}
+
+.purple{
+background:#6A1B9A;
+}
+/*==================================================
+School Connect TN
+Student Profile V4
+CSS - Part 3 (Final)
+==================================================*/
+
+/*=========================
+TABLET
+=========================*/
+
+@media screen and (max-width:992px){
+
+.container{
+padding:12px;
+}
+
+.details-grid,
+.info-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.summary-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.action-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+/*=========================
+MOBILE
+=========================*/
+
+@media screen and (max-width:768px){
+
+.header{
+flex-direction:column;
+align-items:flex-start;
+gap:12px;
+padding:15px;
+}
+
+.header-left h2{
+font-size:20px;
+}
+
+.backBtn{
+width:100%;
+}
+
+.profile-card,
+.info-card,
+.action-card{
+padding:18px;
+}
+
+.photo-section img{
+width:110px;
+height:110px;
+}
+
+.photo-section h2{
+font-size:22px;
+}
+
+.photo-section p{
+font-size:14px;
+}
+
+.details-grid,
+.info-grid,
+.summary-grid,
+.action-grid{
+grid-template-columns:1fr;
+}
+
+.detail-box h3,
+.info-item p{
+font-size:16px;
+}
+
+.summary-card{
+padding:18px;
+}
+
+.summary-card h3{
+font-size:26px;
+}
+
+.btn{
+width:100%;
+font-size:15px;
+padding:14px;
+}
+
+}
+
+/*=========================
+ANIMATIONS
+=========================*/
+
+.profile-card,
+.info-card,
+.action-card,
+.detail-box,
+.info-item,
+.summary-card{
+transition:all .3s ease;
+}
+
+.profile-card:hover,
+.info-card:hover,
+.action-card:hover{
+transform:translateY(-2px);
+}
+
+.detail-box:hover,
+.info-item:hover,
+.summary-card:hover{
+transform:translateY(-3px);
+box-shadow:0 6px 16px rgba(0,0,0,.12);
+}
+
+/*=========================
+SCROLLBAR
+=========================*/
+
+::-webkit-scrollbar{
+width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#90CAF9;
+border-radius:10px;
+}
+
+::-webkit-scrollbar-track{
+background:#EEF4FA;
+}
+
+/*=========================
+PRINT
+=========================*/
+
+@media print{
+
+.header,
+.action-card{
+display:none;
+}
+
+body{
+background:#fff;
+}
+
+.profile-card,
+.info-card{
+box-shadow:none;
+border:1px solid #ccc;
+}
+
+}
+
+/*=========================
+END
+=========================*/
