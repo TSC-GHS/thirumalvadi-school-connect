@@ -1,7 +1,9 @@
-/*=====================================
+/*==================================================
 School Connect TN
 Headmaster Dashboard V1
-======================================*/
+Professional UI
+Part 2A
+==================================================*/
 
 *{
 margin:0;
@@ -10,298 +12,62 @@ box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
 
+html{
+scroll-behavior:smooth;
+}
+
 body{
-
-background:#f4f6f9;
-
+background:#f4f6fb;
 color:#333;
-
+overflow-x:hidden;
 }
 
-/* HEADER */
-
-.header{
-
-background:#6A1B9A;
-
-color:#fff;
-
-padding:18px 20px;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-box-shadow:0 2px 10px rgba(0,0,0,.15);
-
-}
-
-.header h2{
-
-font-size:24px;
-
-}
-
-.header p{
-
-font-size:14px;
-
-margin-top:4px;
-
-opacity:.9;
-
-}
-
-#logoutBtn{
-
-background:#fff;
-
-color:#6A1B9A;
-
-border:none;
-
-padding:10px 18px;
-
-border-radius:8px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-}
-
-/* CONTAINER */
-
-.container{
-
-padding:20px;
-
-}
-
-/* WELCOME */
-
-.welcome{
-
-background:white;
-
-padding:20px;
-
-border-radius:12px;
-
-margin-bottom:20px;
-
-box-shadow:0 2px 8px rgba(0,0,0,.08);
-
-}
-
-.welcome h2{
-
-margin-bottom:8px;
-
-}
-
-/* DASHBOARD CARDS */
-
-.cards{
-
-display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
-
-gap:15px;
-
-margin-bottom:25px;
-
-}
-
-.card{
-
-background:white;
-
-padding:18px;
-
-border-radius:12px;
-
-text-align:center;
-
-box-shadow:0 2px 8px rgba(0,0,0,.08);
-
-transition:.3s;
-
-}
-
-.card:hover{
-
-transform:translateY(-3px);
-
-}
-
-.card h3,
-
-.card h2{
-
-margin-bottom:10px;
-
-font-size:28px;
-
-}
-
-.blue{
-
-border-top:5px solid #1976D2;
-
-}
-
-.green{
-
-border-top:5px solid #2E7D32;
-
-}
-
-.orange{
-
-border-top:5px solid #FB8C00;
-
-}
-
-.red{
-
-border-top:5px solid #D32F2F;
-
-}
-
-/* SECTION TITLE */
-
-.sectionTitle{
-
-margin:25px 0 15px;
-
-font-size:22px;
-
-color:#6A1B9A;
-
-}
-
-/* QUICK MENU */
-
-.menuGrid{
-
-display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-
-gap:15px;
-
-margin-bottom:25px;
-
-}
-
-.menuCard{
-
-background:white;
-
-padding:22px;
-
-text-decoration:none;
-
-color:#333;
-
-border-radius:12px;
-
-text-align:center;
-
-box-shadow:0 2px 8px rgba(0,0,0,.08);
-
-transition:.3s;
-
-}
-
-.menuCard:hover{
-
-background:#6A1B9A;
-
-color:white;
-
-transform:translateY(-3px);
-
-}
-
-.menuCard{
-
-font-size:18px;
-
-}
-
-.menuCard span{
-
-display:block;
-
-margin-top:10px;
-
-font-weight:bold;
-
-font-size:15px;
-
-}
-
-/* ANALYTICS */
-
-.card h4{
-
-margin-bottom:12px;
-
-color:#666;
-
-font-size:16px;
-
-}
-
-/* MOBILE */
-
-@media(max-width:768px){
-
-.header{
-
-flex-direction:column;
-
-gap:15px;
-
-text-align:center;
-
-}
-
-#logoutBtn{
-
-width:100%;
-
-}
-
-}
-/*=====================================
-School Connect TN V1 UI Upgrade
-======================================*/
-
-/* Header */
+/* ==========================
+HEADER
+========================== */
 
 .header{
 position:sticky;
 top:0;
 z-index:999;
+display:flex;
+justify-content:space-between;
+align-items:center;
 padding:12px 18px;
 background:linear-gradient(135deg,#6A1B9A,#8E24AA);
+color:#fff;
+box-shadow:0 3px 10px rgba(0,0,0,.15);
 }
 
-.header h2{
+.headerLeft h2{
 font-size:20px;
+font-weight:700;
 }
 
-.header p{
+.headerLeft p{
 font-size:13px;
+opacity:.9;
+margin-top:4px;
 }
 
-/* Container */
+#logoutBtn{
+background:#fff;
+color:#6A1B9A;
+border:none;
+padding:9px 16px;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+}
+
+#logoutBtn:hover{
+background:#f2f2f2;
+}
+
+/* ==========================
+CONTAINER
+========================== */
 
 .container{
 max-width:1200px;
@@ -309,16 +75,23 @@ margin:auto;
 padding:15px;
 }
 
-/* Welcome */
+/* ==========================
+WELCOME CARD
+========================== */
 
 .welcome{
+background:#fff;
 padding:16px;
 border-radius:18px;
 border-left:6px solid #6A1B9A;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+margin-bottom:16px;
 }
 
 .welcome h2{
 font-size:22px;
+margin-bottom:6px;
+color:#6A1B9A;
 }
 
 .welcome p{
@@ -326,18 +99,30 @@ font-size:14px;
 color:#666;
 }
 
-/* Dashboard Cards */
+/* ==========================
+SUMMARY CARDS
+========================== */
 
 .cards{
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
 gap:12px;
+margin-bottom:20px;
 }
 
 .card{
-padding:15px;
+background:#fff;
+padding:14px;
 border-radius:16px;
-overflow:hidden;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
 position:relative;
+overflow:hidden;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-3px);
 }
 
 .card::before{
@@ -355,49 +140,275 @@ background:rgba(0,0,0,.03);
 .card h3{
 font-size:26px;
 margin-bottom:6px;
+font-weight:bold;
 }
 
 .card p,
 .card h4{
 font-size:13px;
+font-weight:600;
+color:#555;
 }
 
-/* Quick Actions */
+.blue{
+border-top:5px solid #1976D2;
+}
+
+.green{
+border-top:5px solid #2E7D32;
+}
+
+.orange{
+border-top:5px solid #FB8C00;
+}
+
+.red{
+border-top:5px solid #D32F2F;
+}
+
+/* ==========================
+SECTION TITLE
+========================== */
+
+.sectionTitle{
+margin:20px 0 12px;
+font-size:20px;
+font-weight:bold;
+color:#6A1B9A;
+}
+/*==================================================
+School Connect TN
+Headmaster Dashboard V1
+Professional UI
+Part 2B
+==================================================*/
+
+/* ==========================
+Quick Actions
+========================== */
 
 .menuGrid{
+display:grid;
 grid-template-columns:repeat(2,1fr);
 gap:12px;
+margin-bottom:20px;
 }
 
 .menuCard{
-padding:16px 10px;
+background:#fff;
 border-radius:16px;
-min-height:95px;
+padding:15px 10px;
+text-decoration:none;
+text-align:center;
+color:#333;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+transition:.3s;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
+min-height:90px;
+}
+
+.menuCard:hover{
+background:#6A1B9A;
+color:#fff;
+transform:translateY(-3px);
+box-shadow:0 6px 14px rgba(0,0,0,.15);
+}
+
+.menuCard{
 font-size:28px;
 }
 
 .menuCard span{
+display:block;
+margin-top:8px;
 font-size:13px;
-margin-top:6px;
+font-weight:600;
 }
 
-/* List Card */
+/* ==========================
+Latest Notice & Homework
+========================== */
 
 .listCard{
 background:#fff;
-padding:15px;
 border-radius:16px;
+padding:15px;
 margin-bottom:18px;
 box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
-/* Mobile */
+.listCard div{
+max-height:180px;
+overflow-y:auto;
+}
 
-@media(max-width:768px){
+.listCard div::-webkit-scrollbar{
+width:5px;
+}
+
+.listCard div::-webkit-scrollbar-thumb{
+background:#b39ddb;
+border-radius:20px;
+}
+
+.listItem{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 0;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+.listItem:last-child{
+border-bottom:none;
+}
+
+.listTitle{
+font-weight:600;
+color:#333;
+}
+
+.listDate{
+font-size:12px;
+color:#777;
+}
+
+/* ==========================
+Analytics Cards
+========================== */
+
+.cards .card h4{
+font-size:14px;
+margin-bottom:8px;
+color:#666;
+}
+
+.cards .card h2{
+font-size:24px;
+color:#6A1B9A;
+}
+/*==================================================
+School Connect TN
+Headmaster Dashboard V1
+Professional UI
+Part 2C
+==================================================*/
+
+/* ==========================
+Tablet
+========================== */
+
+@media screen and (max-width:992px){
+
+.cards{
+grid-template-columns:repeat(2,1fr);
+}
+
+.menuGrid{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+/* ==========================
+Mobile
+========================== */
+
+@media screen and (max-width:768px){
+
+.header{
+flex-direction:column;
+align-items:center;
+text-align:center;
+gap:10px;
+padding:12px;
+}
+
+.headerLeft h2{
+font-size:18px;
+}
+
+.headerLeft p{
+font-size:12px;
+}
+
+#logoutBtn{
+width:160px;
+padding:8px;
+}
+
+.container{
+padding:10px;
+}
+
+.welcome{
+padding:14px;
+}
+
+.welcome h2{
+font-size:20px;
+}
+
+.welcome p{
+font-size:13px;
+}
+
+.cards{
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.card{
+padding:12px;
+min-height:90px;
+}
+
+.card h2,
+.card h3{
+font-size:22px;
+}
+
+.card p,
+.card h4{
+font-size:12px;
+}
+
+.menuGrid{
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.menuCard{
+min-height:80px;
+padding:12px 8px;
+font-size:24px;
+}
+
+.menuCard span{
+font-size:11px;
+margin-top:5px;
+}
+
+.listCard{
+padding:12px;
+}
+
+.sectionTitle{
+font-size:18px;
+margin:15px 0 10px;
+}
+
+}
+
+/* ==========================
+Small Mobile
+========================== */
+
+@media screen and (max-width:480px){
 
 .cards{
 grid-template-columns:repeat(2,1fr);
@@ -408,29 +419,36 @@ grid-template-columns:repeat(2,1fr);
 }
 
 .card{
-padding:12px;
+min-height:85px;
 }
 
 .card h2,
 .card h3{
-font-size:22px;
+font-size:20px;
 }
 
 .menuCard{
-min-height:85px;
-font-size:24px;
-}
-
-.menuCard span{
-font-size:12px;
-}
-
-.welcome{
-padding:14px;
-}
-
-.sectionTitle{
-font-size:18px;
+font-size:22px;
 }
 
 }
+
+/* ==========================
+Animation
+========================== */
+
+button,
+a,
+.card,
+.menuCard{
+transition:all .3s ease;
+}
+
+.card:hover,
+.menuCard:hover{
+transform:translateY(-3px);
+}
+
+/* ==========================
+End
+========================== */
