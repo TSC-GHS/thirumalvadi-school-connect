@@ -14,11 +14,13 @@
 
 <body>
 
-<!-- HEADER -->
+<!-- ===========================
+HEADER
+=========================== -->
 
 <header class="header">
 
-<div>
+<div class="headerLeft">
 
 <h2>🏫 School Connect TN</h2>
 
@@ -34,25 +36,19 @@ Logout
 
 </header>
 
-<!-- MAIN -->
+<!-- ===========================
+MAIN CONTAINER
+=========================== -->
 
 <div class="container">
 
-<!-- Welcome -->
+<!-- Welcome Card -->
 
 <section class="welcome">
 
-<h2>
+<h2>👋 Welcome Headmaster</h2>
 
-Welcome Headmaster 👋
-
-</h2>
-
-<p>
-
-Thirumalvadi Government High School
-
-</p>
+<p>Thirumalvadi Government High School</p>
 
 </section>
 
@@ -64,7 +60,7 @@ Thirumalvadi Government High School
 
 <h3 id="studentCount">0</h3>
 
-<p>Total Students</p>
+<p>Students</p>
 
 </div>
 
@@ -72,7 +68,7 @@ Thirumalvadi Government High School
 
 <h3 id="teacherCount">0</h3>
 
-<p>Total Teachers</p>
+<p>Teachers</p>
 
 </div>
 
@@ -80,7 +76,7 @@ Thirumalvadi Government High School
 
 <h3 id="attendanceCount">0%</h3>
 
-<p>Today's Attendance</p>
+<p>Attendance</p>
 
 </div>
 
@@ -88,17 +84,19 @@ Thirumalvadi Government High School
 
 <h3 id="leaveCount">0</h3>
 
-<p>Pending Teacher Leaves</p>
+<p>Pending Leaves</p>
 
 </div>
 
 </section>
 
-<!-- Quick Actions -->
+<!-- ===========================
+Quick Actions
+=========================== -->
 
 <h3 class="sectionTitle">
 
-Quick Actions
+⚡ Quick Actions
 
 </h3>
 
@@ -108,11 +106,7 @@ Quick Actions
 
 📊
 
-<span>
-
-Student Analytics
-
-</span>
+<span>Students</span>
 
 </a>
 
@@ -120,11 +114,7 @@ Student Analytics
 
 👨‍🏫
 
-<span>
-
-Teacher Analytics
-
-</span>
+<span>Teachers</span>
 
 </a>
 
@@ -132,11 +122,7 @@ Teacher Analytics
 
 📅
 
-<span>
-
-Attendance Analytics
-
-</span>
+<span>Attendance</span>
 
 </a>
 
@@ -144,11 +130,7 @@ Attendance Analytics
 
 📈
 
-<span>
-
-Result Analytics
-
-</span>
+<span>Results</span>
 
 </a>
 
@@ -156,11 +138,7 @@ Result Analytics
 
 📄
 
-<span>
-
-Report Analytics
-
-</span>
+<span>Reports</span>
 
 </a>
 
@@ -168,11 +146,7 @@ Report Analytics
 
 📝
 
-<span>
-
-Teacher Leave Approval
-
-</span>
+<span>Leaves</span>
 
 </a>
 
@@ -180,11 +154,7 @@ Teacher Leave Approval
 
 📚
 
-<span>
-
-Homework Analytics
-
-</span>
+<span>Homework</span>
 
 </a>
 
@@ -192,11 +162,7 @@ Homework Analytics
 
 📢
 
-<span>
-
-Notice Board
-
-</span>
+<span>Notices</span>
 
 </a>
 
@@ -204,11 +170,7 @@ Notice Board
 
 🖼️
 
-<span>
-
-Gallery
-
-</span>
+<span>Gallery</span>
 
 </a>
 
@@ -216,21 +178,59 @@ Gallery
 
 ⚙️
 
-<span>
-
-Settings
-
-</span>
+<span>Settings</span>
 
 </a>
 
 </div>
 
-<!-- School Analytics -->
+<!-- ===========================
+Latest Notice
+=========================== -->
 
 <h3 class="sectionTitle">
 
+📢 Latest Notices
+
+</h3>
+
+<div class="listCard">
+
+<div id="latestNotices">
+
+<p>Loading notices...</p>
+
+</div>
+
+</div>
+
+<!-- ===========================
+Recent Homework
+=========================== -->
+
+<h3 class="sectionTitle">
+
+📚 Recent Homework
+
+</h3>
+
+<div class="listCard">
+
+<div id="recentHomework">
+
+<p>Loading homework...</p>
+
+</div>
+
+</div>
+
+<!-- ===========================
 School Analytics
+=========================== -->
+
+<h3 class="sectionTitle">
+
+📊 School Analytics
 
 </h3>
 
@@ -238,65 +238,33 @@ School Analytics
 
 <div class="card">
 
-<h4>
+<h4>Pass %</h4>
 
-Pass Percentage
-
-</h4>
-
-<h2 id="passPercentage">
-
-0%
-
-</h2>
+<h2 id="passPercentage">0%</h2>
 
 </div>
 
 <div class="card">
 
-<h4>
+<h4>Fail %</h4>
 
-Fail Percentage
-
-</h4>
-
-<h2 id="failPercentage">
-
-0%
-
-</h2>
+<h2 id="failPercentage">0%</h2>
 
 </div>
 
 <div class="card">
 
-<h4>
+<h4>Homework</h4>
 
-Homework Completion
-
-</h4>
-
-<h2 id="homeworkPercentage">
-
-0%
-
-</h2>
+<h2 id="homeworkPercentage">0%</h2>
 
 </div>
 
 <div class="card">
 
-<h4>
+<h4>Notices</h4>
 
-Today's Notices
-
-</h4>
-
-<h2 id="noticeCount">
-
-0
-
-</h2>
+<h2 id="noticeCount">0</h2>
 
 </div>
 
