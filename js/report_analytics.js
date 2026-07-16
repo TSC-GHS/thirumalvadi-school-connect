@@ -301,6 +301,12 @@ console.error(error);
 
 alert(error.message);
 
+document.body.innerHTML = `
+<h2 style="color:red;text-align:center;">
+${error.message}
+</h2>
+`;
+
 }
 
 }
