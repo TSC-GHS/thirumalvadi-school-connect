@@ -1,273 +1,228 @@
 //==================================================
 // School Connect TN
 // Headmaster Homework Analytics
-// Part 3A
+// Part 1
 //==================================================
 
 import { db } from "../firebase.js";
 
 import {
-collection,
-getDocs,
-orderBy,
-query
+  collection,
+  getDocs,
+  orderBy,
+  query
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==================================================
 // Elements
 //==================================================
 
-const totalHomework =
-document.getElementById("totalHomework");
+const totalHomework = document.getElementById("totalHomework");
+const todayHomework = document.getElementById("todayHomework");
+const teacherCount = document.getElementById("teacherCount");
+const classCount = document.getElementById("classCount");
 
-const todayHomework =
-document.getElementById("todayHomework");
+const teacherWise = document.getElementById("teacherWise");
+const classWise = document.getElementById("classWise");
+const latestHomework = document.getElementById("latestHomework");
 
-const teacherCount =
-document.getElementById("teacherCount");
-
-const classCount =
-document.getElementById("classCount");
-
-const teacherWise =
-document.getElementById("teacherWise");
-
-const classWise =
-document.getElementById("classWise");
-
-const latestHomework =
-document.getElementById("latestHomework");
-
+//==================================================
+// Load
 //==================================================
 
 loadHomeworkAnalytics();
 
-//==================================================
+async function loadHomeworkAnalytics() {
 
-async function loadHomeworkAnalytics(){
+  try {
 
-try{
+    const snap = await getDocs(
+      query(
+        collection(db, "homework"),
+        orderBy("createdAt", "desc")
+      )
+    );
 
-const snap = await getDocs(
+    if (snap.empty) {
 
-query(
-collection(db,"homework"),
-orderBy("createdAt","desc")
-)
+      totalHomework.textContent = "0";
+      todayHomework.textContent = "0";
+      teacherCount.textContent = "0";
+      classCount.textContent = "0";
 
-);
+      teacherWise.innerHTML =
+        "<p style='text-align:center'>No Homework Available</p>";
 
-if(snap.empty){
+      classWise.innerHTML =
+        "<p style='text-align:center'>No Homework Available</p>";
 
-teacherWise.innerHTML =
-"<p>No Homework Available</p>";
+      latestHomework.innerHTML =
+        "<p style='text-align:center'>No Homework Available</p>";
 
-classWise.innerHTML =
-"<p>No Homework Available</p>";
+      return;
+    }
 
-latestHomework.innerHTML =
-"<p>No Homework Available</p>";
+    const homework = [];
 
-return;
+    snap.forEach((doc) => {
 
-}
+      homework.push(doc.data());
 
-const homework=[];
+    });
 
-snap.forEach(doc=>{
+    //====================================
+    // Summary
+    //====================================
 
-homework.push(doc.data());
+    totalHomework.textContent = homework.length;
 
-});
-//==================================================
-// Teacher Wise Analytics
-//==================================================
+    const today =
+      new Date().toISOString().split("T")[0];
 
-const teacherWiseData = {};
+    let todayCount = 0;
 
-students.forEach((hw)=>{
+    const teacherMap = {};
+    const classMap = {};
 
-const teacher = hw.teacherName || "Unknown";
+    homework.forEach((hw) => {
 
-if(!teacherWiseData[teacher]){
+      const hwDate =
+        hw.dueDate || hw.date || "";
 
-teacherWiseData[teacher]=0;
+      if (hwDate === today) {
 
-}
+        todayCount++;
 
-teacherWiseData[teacher]++;
+      }
 
-});
+      const teacher =
+        hw.teacherName || "Unknown";
 
-teacherCount.textContent =
-Object.keys(teacherWiseData).length;
+      teacherMap[teacher] =
+        (teacherMap[teacher] || 0) + 1;
 
-let teacherHTML="";
+      const cls =
+        `${hw.className || hw.class || "-"}-${hw.section || "-"}`;
 
-Object.keys(teacherWiseData)
-.sort()
-.forEach((teacher)=>{
+      classMap[cls] =
+        (classMap[cls] || 0) + 1;
 
-teacherHTML += `
+    });
 
+    todayHomework.textContent = todayCount;
+    teacherCount.textContent = Object.keys(teacherMap).length;
+    classCount.textContent = Object.keys(classMap).length;
+
+    //====================================
+    // Teacher Wise
+    //====================================
+
+    let teacherHTML = "";
+
+    Object.keys(teacherMap)
+      .sort()
+      .forEach((teacher) => {
+
+        teacherHTML += `
 <div class="item">
-
 <span>👨‍🏫 ${teacher}</span>
-
-<span>${teacherWiseData[teacher]} Homework</span>
-
-</div>
-
-`;
-
-});
-
-teacherWise.innerHTML = teacherHTML;
-
-//==================================================
-// Class Wise Analytics
-//==================================================
-
-const classWiseData = {};
-
-students.forEach((hw)=>{
-
-const cls =
-`${hw.class}-${hw.section}`;
-
-if(!classWiseData[cls]){
-
-classWiseData[cls]=0;
-
-}
-
-classWiseData[cls]++;
-
-});
-
-classCount.textContent =
-Object.keys(classWiseData).length;
-
-let classHTML="";
-
-Object.keys(classWiseData)
-.sort()
-.forEach((cls)=>{
-
-classHTML += `
-
-<div class="item">
-
-<span>🏫 ${cls}</span>
-
-<span>${classWiseData[cls]} Homework</span>
-
-</div>
-
-`;
-
-});
-
-classWise.innerHTML = classHTML;
-  //==================================================
-// Summary Analytics
-//==================================================
-
-totalHomework.textContent = homework.length;
-
-const today = new Date().toISOString().split("T")[0];
-
-let todayCount = 0;
-
-const teacherMap = {};
-const classMap = {};
-
-let teacherHTML = "";
-let classHTML = "";
-let latestHTML = "";
-
-homework.forEach((hw)=>{
-
-// Today's Homework
-
-if(hw.date === today){
-
-todayCount++;
-
-}
-
-// Teacher Count
-
-const teacher =
-hw.teacherName || "Unknown";
-
-teacherMap[teacher] =
-(teacherMap[teacher] || 0) + 1;
-
-// Class Count
-
-const cls =
-`${hw.class}-${hw.section}`;
-
-classMap[cls] =
-(classMap[cls] || 0) + 1;
-
-});
-
-// Cards
-
-todayHomework.textContent = todayCount;
-
-teacherCount.textContent =
-Object.keys(teacherMap).length;
-
-classCount.textContent =
-Object.keys(classMap).length;
-
-//==================================================
-// Teacher Wise
-//==================================================
-
-Object.keys(teacherMap)
-.sort()
-.forEach((teacher)=>{
-
-teacherHTML += `
-
-<div class="item">
-
-<span>${teacher}</span>
-
 <span>${teacherMap[teacher]} Homework</span>
-
 </div>
-
 `;
 
-});
+      });
 
-teacherWise.innerHTML = teacherHTML;
+    teacherWise.innerHTML = teacherHTML;
+    //====================================
+    // Class Wise
+    //====================================
 
-//==================================================
-// Class Wise
-//==================================================
+    let classHTML = "";
 
-Object.keys(classMap)
-.sort()
-.forEach((cls)=>{
+    Object.keys(classMap)
+      .sort()
+      .forEach((cls) => {
 
-classHTML += `
+        classHTML += `
+<div class="item">
+<span>🏫 ${cls}</span>
+<span>${classMap[cls]} Homework</span>
+</div>
+`;
 
+      });
+
+    classWise.innerHTML = classHTML;
+
+    //====================================
+    // Latest Homework
+    //====================================
+
+    let latestHTML = "";
+
+    homework
+      .sort((a, b) => {
+
+        const t1 = a.createdAt?.seconds || 0;
+        const t2 = b.createdAt?.seconds || 0;
+
+        return t2 - t1;
+
+      });
+
+    homework.slice(0, 10).forEach((hw) => {
+
+      latestHTML += `
 <div class="item">
 
-<span>${cls}</span>
+<div>
+<b>${hw.subject || "-"}</b><br>
 
-<span>${classMap[cls]} Homework</span>
+Class : ${hw.className || hw.class || "-"}-${hw.section || "-"}<br>
 
+${hw.title || hw.description || "-"}
 </div>
 
+<div>
+${hw.dueDate || hw.date || "-"}
+</div>
+
+</div>
 `;
 
-});
+    });
 
-classWise.innerHTML = classHTML;
+    latestHomework.innerHTML = latestHTML;
+
+    console.log("Homework Analytics Loaded Successfully");
+
+  } catch (error) {
+
+    console.error("Homework Analytics Error :", error);
+
+    totalHomework.textContent = "0";
+    todayHomework.textContent = "0";
+    teacherCount.textContent = "0";
+    classCount.textContent = "0";
+
+    teacherWise.innerHTML =
+      "<p style='text-align:center;color:red;'>Failed to load data</p>";
+
+    classWise.innerHTML =
+      "<p style='text-align:center;color:red;'>Failed to load data</p>";
+
+    latestHomework.innerHTML =
+      "<p style='text-align:center;color:red;'>Failed to load data</p>";
+
+  }
+
+}
+
+//==================================================
+// End
+//==================================================
+
+console.log("================================");
+console.log("School Connect TN");
+console.log("Headmaster Homework Analytics");
+console.log("================================");
