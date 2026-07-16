@@ -4,13 +4,11 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Parent Dashboard</title>
 
-<link rel="stylesheet"
-href="css/parent.css">
+<link rel="stylesheet" href="css/parent.css">
 
 </head>
 
@@ -27,6 +25,16 @@ HEADER
 <h2>🏫 School Connect TN</h2>
 
 <p>Parent Dashboard</p>
+
+</div>
+
+<div class="headerRight">
+
+<button id="notificationBtn">
+
+🔔
+
+</button>
 
 </div>
 
@@ -55,11 +63,9 @@ alt="Student">
 
 <div class="info">
 
-<p>
+<div class="infoRow">
 
-<b>Student Name</b>
-
-<br>
+<label>👤 Student</label>
 
 <span id="studentName">
 
@@ -67,13 +73,11 @@ Loading...
 
 </span>
 
-</p>
+</div>
 
-<p>
+<div class="infoRow">
 
-<b>EMIS Number</b>
-
-<br>
+<label>🆔 EMIS</label>
 
 <span id="studentEMIS">
 
@@ -81,13 +85,13 @@ Loading...
 
 </span>
 
-</p>
+</div>
 
-<p>
+<div class="infoRow">
 
-<b>Class</b>
+<label>🎓 Class</label>
 
-<br>
+<span>
 
 <span id="studentClass">
 
@@ -95,7 +99,29 @@ Loading...
 
 </span>
 
-</p>
+-
+
+<span id="studentSection">
+
+A
+
+</span>
+
+</span>
+
+</div>
+
+<div class="infoRow">
+
+<label>🏫 School</label>
+
+<span>
+
+Thirumalvadi Govt High School
+
+</span>
+
+</div>
 
 </div>
 
@@ -158,119 +184,81 @@ SUMMARY
 </div>
 
 </section>
-
 <!-- =====================================
 QUICK ACTIONS
 ===================================== -->
 
 <section class="card">
 
-<h2>
-
-⚡ Quick Actions
-
-</h2>
+<h2>⚡ Quick Actions</h2>
 
 <div class="quickmenu">
 
-<button
-onclick="location.href='parent_dashboard.html'">
-
-👨‍🎓
-
+<button onclick="location.href='student_profile.html'">
+👤
 <br>
-
-My Child
-
+Profile
 </button>
 
-<button
-onclick="location.href='notice_board.html'">
-
-📢
-
-<br>
-
-Notice
-
-</button>
-
-<button
-onclick="location.href='parent_dashboard.html'">
-
+<button onclick="location.href='attendance.html'">
 📅
-
 <br>
-
 Attendance
-
 </button>
 
-<button
-onclick="location.href='parent_dashboard.html'">
+<button onclick="location.href='parent_report_card.html?emis='+localStorage.getItem('parentEMIS')">
+📊
+<br>
+Report
+</button>
 
+<button onclick="location.href='homework.html'">
 📚
-
 <br>
-
-Marks
-
-</button>
-
-<button
-onclick="location.href='parent_dashboard.html'">
-
-📝
-
-<br>
-
 Homework
-
 </button>
 
-<button
-onclick="location.href='parent_report_card.html?emis='+localStorage.getItem('parentEMIS')">
-
-📄
-
+<button onclick="location.href='notice_board.html'">
+📢
 <br>
-
-Report Card
-
+Notice
 </button>
 
-<button
-onclick="location.href='leave_request.html?emis='+localStorage.getItem('parentEMIS')">
-
+<button onclick="location.href='leave_request.html?emis='+localStorage.getItem('parentEMIS')">
 📝
-
 <br>
-
-Apply Leave
-
+Leave
 </button>
 
-<button
-onclick="location.href='leave_status.html?emis='+localStorage.getItem('parentEMIS')">
-
+<button onclick="location.href='leave_status.html?emis='+localStorage.getItem('parentEMIS')">
 📋
-
 <br>
+Status
+</button>
 
-Leave Status
-
+<button onclick="location.href='index.html'">
+🚪
+<br>
+Logout
 </button>
 
 </div>
 
 </section>
+
 <!-- =====================================
-LATEST NOTICES
+LATEST NOTICE
 ===================================== -->
 
 <section class="card">
 
-<h2>📢 Latest Notices</h2>
+<div class="sectionHeader">
+
+<h2>📢 Latest Notice</h2>
+
+<a href="notice_board.html">View All</a>
+
+</div>
 
 <div class="notice-list" id="latestNotices">
 
@@ -294,7 +282,13 @@ RECENT HOMEWORK
 
 <section class="card">
 
-<h2>📚 Recent Homework</h2>
+<div class="sectionHeader">
+
+<h2>📚 Today's Homework</h2>
+
+<a href="homework.html">View All</a>
+
+</div>
 
 <div class="homework-list" id="recentHomework">
 
@@ -311,6 +305,47 @@ Loading Homework...
 </div>
 
 </section>
+<!-- =====================================
+UPCOMING EVENTS
+===================================== -->
+
+<section class="card">
+
+<div class="sectionHeader">
+
+<h2>📅 Upcoming Events</h2>
+
+</div>
+
+<div class="notice-list">
+
+<div class="notice-item">
+
+<div class="notice-title">
+
+🎯 Parent Meeting
+
+</div>
+
+<p>Friday - 10:00 AM</p>
+
+</div>
+
+<div class="notice-item">
+
+<div class="notice-title">
+
+📝 Quarterly Exam
+
+</div>
+
+<p>Starts Next Week</p>
+
+</div>
+
+</div>
+
+</section>
 
 </div>
 
@@ -318,10 +353,9 @@ Loading Homework...
 BOTTOM NAVIGATION
 ===================================== -->
 
-<div class="bottom-nav">
+<nav class="bottom-nav">
 
-<button
-onclick="location.href='parent_dashboard.html'">
+<button onclick="location.href='parent_dashboard.html'">
 
 <span>🏠</span>
 
@@ -329,8 +363,15 @@ Home
 
 </button>
 
-<button
-onclick="location.href='notice_board.html'">
+<button onclick="location.href='attendance.html'">
+
+<span>📅</span>
+
+Attendance
+
+</button>
+
+<button onclick="location.href='notice_board.html'">
 
 <span>📢</span>
 
@@ -338,25 +379,17 @@ Notice
 
 </button>
 
-<button
-onclick="location.href='parent_report_card.html?emis='+localStorage.getItem('parentEMIS')">
+<button onclick="location.href='student_profile.html'">
 
-<span>📄</span>
+<span>👤</span>
 
-Report
-
-</button>
-
-<button
-onclick="location.href='index.html'">
-
-<span>🚪</span>
-
-Logout
+Profile
 
 </button>
 
-</div>
+</nav>
+
+<script type="module" src="js/parent.js"></script>
 
 </body>
 
