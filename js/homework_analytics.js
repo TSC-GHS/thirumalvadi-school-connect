@@ -177,7 +177,7 @@ ${item.dueDate||"-"}
 });
 
 latestHomework.innerHTML=latestHTML;
-
+}
 catch(error){
 
 console.error(error);
