@@ -1,105 +1,198 @@
+//==================================================
+// School Connect TN
+// Headmaster Report Analytics V1
+//==================================================
+
 import { db } from "../firebase.js";
 
 import {
 collection,
-getDocs
+getDocs,
+query,
+where
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-//=====================================
-// Elements
-//=====================================
+//==================================================
+// Dashboard Elements
+//==================================================
 
-const totalStudents=document.getElementById("totalStudents");
-const passStudents=document.getElementById("passStudents");
-const failStudents=document.getElementById("failStudents");
-const passPercentage=document.getElementById("passPercentage");
+const totalStudents =
+document.getElementById("totalStudents");
 
-const subjectPerformance=document.getElementById("subjectPerformance");
-const classResults=document.getElementById("classResults");
-const topRankers=document.getElementById("topRankers");
+const passStudents =
+document.getElementById("passStudents");
 
-const highestScorer=document.getElementById("highestScorer");
-const bestClass=document.getElementById("bestClass");
-const lowestClass=document.getElementById("lowestClass");
-const schoolAverage=document.getElementById("schoolAverage");
+const failStudents =
+document.getElementById("failStudents");
 
-//=====================================
+const passPercentage =
+document.getElementById("passPercentage");
 
-loadReportAnalytics();
+const subjectPerformance =
+document.getElementById("subjectPerformance");
 
-//=====================================
+const classResults =
+document.getElementById("classResults");
 
-async function loadReportAnalytics(){
+const topRankers =
+document.getElementById("topRankers");
+
+const highestScorer =
+document.getElementById("highestScorer");
+
+const bestClass =
+document.getElementById("bestClass");
+
+const lowestClass =
+document.getElementById("lowestClass");
+
+const schoolAverage =
+document.getElementById("schoolAverage");
+
+//==================================================
+// Default Settings
+//==================================================
+
+const selectedExam = "Half Yearly";
+
+//==================================================
+
+loadAnalytics();
+
+//==================================================
+
+async function loadAnalytics(){
 
 try{
 
-const exams=[
-"Unit Test",
-"Quarterly",
-"Half Yearly",
-"Annual"
-];
+showLoading();
 
-let allStudents=[];
+//==================================
+// Read Marks
+//==================================
 
-// Load all exams
+const snap = await getDocs(
 
-for(const exam of exams){
+collection(
+db,
+"marks",
+selectedExam,
+"students"
+)
 
-const snap=await getDocs(
-collection(db,"marks",exam,"students")
 );
 
-snap.forEach(doc=>{
+if(snap.empty){
 
-const data=doc.data();
-
-data.exam=exam;
-
-allStudents.push(data);
-
-});
-
-}
-
-if(allStudents.length===0){
-
-alert("No Results Available");
+showNoData();
 
 return;
 
 }
 
-//=====================================
+const students = [];
+
+snap.forEach((doc)=>{
+
+students.push(doc.data());
+
+});
+
+//
+
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+}
+
+//==================================================
+// Loading
+//==================================================
+
+function showLoading(){
+
+totalStudents.textContent="...";
+
+passStudents.textContent="...";
+
+failStudents.textContent="...";
+
+passPercentage.textContent="...";
+
+schoolAverage.textContent="...";
+
+highestScorer.textContent="Loading...";
+
+bestClass.textContent="Loading...";
+
+lowestClass.textContent="Loading...";
+
+subjectPerformance.innerHTML=
+"<p style='text-align:center'>Loading...</p>";
+
+classResults.innerHTML=
+"<p style='text-align:center'>Loading...</p>";
+
+topRankers.innerHTML=
+"<p style='text-align:center'>Loading...</p>";
+
+}
+
+//==================================================
+// No Data
+//==================================================
+
+function showNoData(){
+
+subjectPerformance.innerHTML=
+"<p style='text-align:center'>No Results Found</p>";
+
+classResults.innerHTML=
+"<p style='text-align:center'>No Results Found</p>";
+
+topRankers.innerHTML=
+"<p style='text-align:center'>No Results Found</p>";
+
+}
+//==================================================
 // Overall Summary
-//=====================================
+//==================================================
 
-const total=allStudents.length;
+let total = students.length;
 
-let pass=0;
-let fail=0;
+let pass = 0;
+let fail = 0;
 
-let totalPercentage=0;
+let totalPercentage = 0;
 
-let topper="";
-
-let topperMark=0;
+let topperName = "-";
+let topperMark = 0;
 
 // Subject Totals
 
-let tamil=0;
-let english=0;
-let maths=0;
-let science=0;
-let social=0;
+let tamilTotal = 0;
+let englishTotal = 0;
+let mathsTotal = 0;
+let scienceTotal = 0;
+let socialTotal = 0;
 
-// Class Wise
+// Class Analytics
 
-const classWise={};
+let classWise = {};
 
-allStudents.forEach(s=>{
+students.forEach((s)=>{
 
-if((s.result||"").toUpperCase()=="PASS"){
+const percentage =
+Number(s.percentage || 0);
+
+totalPercentage += percentage;
+
+if((s.result || "").toUpperCase() === "PASS"){
 
 pass++;
 
@@ -109,31 +202,38 @@ fail++;
 
 }
 
-totalPercentage+=Number(s.percentage||0);
+// Topper
 
-tamil+=Number(s.tamil||0);
-english+=Number(s.english||0);
-maths+=Number(s.maths||0);
-science+=Number(s.science||0);
-social+=Number(s.social||0);
+if(Number(s.total || 0) > topperMark){
 
-if(Number(s.total)>topperMark){
+topperMark = Number(s.total);
 
-topperMark=Number(s.total);
-
-topper=s.name;
+topperName = s.name;
 
 }
 
-const cls=`${s.class}-${s.section}`;
+// Subject Totals
+
+tamilTotal += Number(s.tamil || 0);
+
+englishTotal += Number(s.english || 0);
+
+mathsTotal += Number(s.maths || 0);
+
+scienceTotal += Number(s.science || 0);
+
+socialTotal += Number(s.social || 0);
+
+// Class Wise
+
+const cls =
+`${s.class}-${s.section}`;
 
 if(!classWise[cls]){
 
 classWise[cls]={
 
 students:0,
-
-pass:0,
 
 percentage:0
 
@@ -143,103 +243,83 @@ percentage:0
 
 classWise[cls].students++;
 
-classWise[cls].percentage+=Number(s.percentage||0);
-
-if((s.result||"").toUpperCase()=="PASS"){
-
-classWise[cls].pass++;
-
-}
+classWise[cls].percentage += percentage;
 
 });
 
-//=====================================
-// Summary Cards
-//=====================================
+//==================================================
+// Dashboard Cards
+//==================================================
 
-totalStudents.textContent=total;
-passStudents.textContent=pass;
-failStudents.textContent=fail;
+totalStudents.textContent = total;
 
-passPercentage.textContent=
+passStudents.textContent = pass;
+
+failStudents.textContent = fail;
+
+passPercentage.textContent =
 ((pass/total)*100).toFixed(1)+"%";
 
-schoolAverage.textContent=
+schoolAverage.textContent =
 (totalPercentage/total).toFixed(1)+"%";
 
-highestScorer.textContent=
-`${topper} (${topperMark})`;
+highestScorer.textContent =
+`${topperName} (${topperMark})`;
 
-//=====================================
-// Subject Performance
-//=====================================
+//==================================================
+// Subject Analytics
+//==================================================
 
-subjectPerformance.innerHTML=`
+subjectPerformance.innerHTML = `
 
 <div class="item">
-<span>Tamil</span>
-<span>${(tamil/total).toFixed(1)}%</span>
+<span>📘 Tamil</span>
+<span>${(tamilTotal/total).toFixed(1)}%</span>
 </div>
 
 <div class="item">
-<span>English</span>
-<span>${(english/total).toFixed(1)}%</span>
+<span>📗 English</span>
+<span>${(englishTotal/total).toFixed(1)}%</span>
 </div>
 
 <div class="item">
-<span>Maths</span>
-<span>${(maths/total).toFixed(1)}%</span>
+<span>📙 Maths</span>
+<span>${(mathsTotal/total).toFixed(1)}%</span>
 </div>
 
 <div class="item">
-<span>Science</span>
-<span>${(science/total).toFixed(1)}%</span>
+<span>📕 Science</span>
+<span>${(scienceTotal/total).toFixed(1)}%</span>
 </div>
 
 <div class="item">
-<span>Social</span>
-<span>${(social/total).toFixed(1)}%</span>
+<span>📒 Social</span>
+<span>${(socialTotal/total).toFixed(1)}%</span>
 </div>
 
 `;
 
-//=====================================
-// Class Wise
-//=====================================
+//==================================================
+// Class Wise Analytics
+//==================================================
 
-let classHTML="";
+let classHTML = "";
 
-let best="-";
-let low="-";
+let bestClassName = "-";
+let lowestClassName = "-";
 
-let bestValue=0;
-let lowValue=101;
+let bestAverage = -1;
+let lowestAverage = 101;
 
-Object.keys(classWise).sort().forEach(cls=>{
+Object.keys(classWise)
+.sort()
+.forEach((cls)=>{
 
-const avg=
-
-classWise[cls].percentage/
-
+const avg =
+classWise[cls].percentage /
 classWise[cls].students;
 
-if(avg>bestValue){
-
-bestValue=avg;
-
-best=cls;
-
-}
-
-if(avg<lowValue){
-
-lowValue=avg;
-
-low=cls;
-
-}
-
-classHTML+=`
+classHTML += `
 
 <div class="item">
 
@@ -251,39 +331,59 @@ classHTML+=`
 
 `;
 
+if(avg > bestAverage){
+
+bestAverage = avg;
+bestClassName = cls;
+
+}
+
+if(avg < lowestAverage){
+
+lowestAverage = avg;
+lowestClassName = cls;
+
+}
+
 });
 
-classResults.innerHTML=classHTML;
+classResults.innerHTML = classHTML;
 
-bestClass.textContent=
-`${best} (${bestValue.toFixed(1)}%)`;
+//==================================================
+// School Highlights
+//==================================================
 
-lowestClass.textContent=
-`${low} (${lowValue.toFixed(1)}%)`;
+bestClass.textContent =
+`${bestClassName} (${bestAverage.toFixed(1)}%)`;
 
-//=====================================
-// Top Rankers
-//=====================================
+lowestClass.textContent =
+`${lowestClassName} (${lowestAverage.toFixed(1)}%)`;
 
-allStudents.sort((a,b)=>b.total-a.total);
+//==================================================
+// Top Rank Holders
+//==================================================
 
-let rankHTML="";
+students.sort((a,b)=>
+Number(b.total||0)-Number(a.total||0)
+);
 
-allStudents.slice(0,10).forEach((s,index)=>{
+let rankHTML = "";
 
-rankHTML+=`
+students.slice(0,10).forEach((student,index)=>{
+
+rankHTML += `
 
 <div class="item">
 
 <span>
 
-${index+1}. ${s.name}
+${index+1}. ${student.name}
 
 </span>
 
 <span>
 
-${s.total}
+${student.total}
 
 </span>
 
@@ -293,22 +393,10 @@ ${s.total}
 
 });
 
-topRankers.innerHTML=rankHTML;
+topRankers.innerHTML = rankHTML;
 
-}catch(error){
+//==================================================
+// End
+//==================================================
 
-console.error(error);
-
-alert(error.message);
-
-document.body.innerHTML = `
-<h2 style="color:red;text-align:center;">
-${error.message}
-</h2>
-`;
-
-}
-
-}
-
-console.log("Report Analytics Loaded");
+console.log("Report Analytics Loaded Successfully");
