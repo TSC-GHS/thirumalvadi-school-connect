@@ -1,1 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<link rel="stylesheet"
+href="css/admin_dashboard_v3.css">
+
+</head>
+
+<body>
+
+<!--====================================
+HEADER
+=====================================-->
+
+<header class="header">
+
+<div class="header-left">
+
+<h2>🏫 School Connect TN</h2>
+
+<p>Admin Dashboard</p>
+
+</div>
+
+<div class="header-right">
+
+<div class="admin-info">
+
+👤 Administrator
+
+</div>
+
+</div>
+
+</header>
+
+<!--====================================
+WELCOME
+=====================================-->
+
+<div class="welcome-card">
+
+<h2>
+
+Welcome Back 👋
+
+</h2>
+
+<p>
+
+Manage your entire school from one dashboard.
+
+</p>
+
+</div>
+
+<!--====================================
+SUMMARY
+=====================================-->
+
+<section class="summary-grid">
+
+<div class="summary-card">
+
+<h3 id="totalStudents">
+
+0
+
+</h3>
+
+<p>Students</p>
+
+</div>
+
+<div class="summary-card">
+
+<h3 id="totalTeachers">
+
+0
+
+</h3>
+
+<p>Teachers</p>
+
+</div>
+
+<div class="summary-card">
+
+<h3 id="todayAttendance">
+
+0%
+
+</h3>
+
+<p>Attendance</p>
+
+</div>
+
+<div class="summary-card">
+
+<h3 id="totalNotices">
+
+0
+
+</h3>
+
+<p>Notices</p>
+
+</div>
+
+</section>
+<!--====================================
+QUICK ACTIONS
+=====================================-->
+
+<section class="dashboard-card">
+
+<h2>⚡ Quick Actions</h2>
+
+<div class="quick-grid">
+
+<button onclick="location.href='student_management.html'">
+
+➕
+<span>Add Student</span>
+
+</button>
+
+<button onclick="location.href='teacher_management.html'">
+
+👨‍🏫
+<span>Add Teacher</span>
+
+</button>
+
+<button onclick="location.href='management/attendance_management.html'">
+
+📅
+<span>Attendance</span>
+
+</button>
+
+<button onclick="location.href='report_card_management.html'">
+
+📄
+<span>Report Card</span>
+
+</button>
+
+<button onclick="location.href='homework_management.html'">
+
+📚
+<span>Homework</span>
+
+</button>
+
+<button onclick="location.href='notice_management.html'">
+
+📢
+<span>Notice</span>
+
+</button>
+
+</div>
+
+</section>
+
+<!--====================================
+MANAGEMENT MODULES
+=====================================-->
+
+<section class="dashboard-card">
+
+<h2>🏫 School Management</h2>
+
+<div class="management-grid">
+
+<a href="students.html" class="module-card">
+
+👨‍🎓
+
+<h3>Students</h3>
+
+<p>Manage Student Records</p>
+
+</a>
+
+<a href="management/teacher_management.html" class="module-card">
+
+👨‍🏫
+
+<h3>Teachers</h3>
+
+<p>Manage Teachers</p>
+
+</a>
+
+<a href="parent_management.html" class="module-card">
+
+👨‍👩‍👧
+
+<h3>Parents</h3>
+
+<p>Manage Parents</p>
+
+</a>
+
+<a href="management/attendance_management.html" class="module-card">
+
+📅
+
+<h3>Attendance</h3>
+
+<p>Daily Attendance</p>
+
+</a>
+
+<a href="report_card_management.html" class="module-card">
+
+📄
+
+<h3>Report Cards</h3>
+
+<p>Exam Results</p>
+
+</a>
+
+<a href="bulk_upload.html" class="module-card">
+
+📥
+
+<h3>Bulk Upload</h3>
+
+<p>Import CSV Data</p>
+
+</a>
+
+</div>
+
+</section>
+<!--====================================
+SYSTEM MODULES
+=====================================-->
+
+<section class="dashboard-card">
+
+<h2>⚙️ System</h2>
+
+<div class="management-grid">
+
+<a href="management/backup_restore.html" class="module-card">
+
+💾
+
+<h3>Backup & Restore</h3>
+
+<p>Backup School Database</p>
+
+</a>
+
+<a href="settings.html" class="module-card">
+
+⚙️
+
+<h3>Settings</h3>
+
+<p>School Configuration</p>
+
+</a>
+
+<a href="management/timetable_management.html" class="module-card">
+
+🗓️
+
+<h3>Timetable</h3>
+
+<p>Manage Timetable</p>
+
+</a>
+
+<a href="management/exam_management.html" class="module-card">
+
+📝
+
+<h3>Exam Management</h3>
+
+<p>Manage Exams</p>
+
+</a>
+
+<a href="management/leave_management.html" class="module-card">
+
+📝
+
+<h3>Leave Management</h3>
+
+<p>Approve Leave Requests</p>
+
+</a>
+
+<a href="management/analytics_dashboard.html" class="module-card">
+
+📊
+
+<h3>Analytics</h3>
+
+<p>School Reports</p>
+
+</a>
+
+</div>
+
+</section>
+
+<!--====================================
+LOGOUT
+=====================================-->
+
+<section class="dashboard-card">
+
+<button
+class="logoutBtn"
+onclick="logoutAdmin()">
+
+🚪 Logout
+
+</button>
+
+</section>
+
+<footer class="footer">
+
+<p>
+
+© 2026 School Connect TN
+
+</p>
+
+</footer>
+
+<script type="module"
+src="js/admin_dashboard_v3.js">
+
+</script>
+
+</body>
+
+</html>
