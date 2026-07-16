@@ -46,7 +46,15 @@ document.getElementById("leaveCard");
 
 const logoutBtn =
 document.getElementById("logoutBtn");
+// New Dashboard Elements
+const latestNotice =
+document.getElementById("latestNotice");
 
+const recentHomework =
+document.getElementById("recentHomework");
+
+const teacherWelcome =
+document.getElementById("teacherWelcome");
 let currentTeacher = null;
 
 // =====================================
@@ -95,7 +103,22 @@ currentTeacher.name ?? "Teacher";
 
 teacherRole.textContent =
 currentTeacher.teacherType ?? "Teacher";
+const hour = new Date().getHours();
 
+let greet = "Good Evening";
+
+if(hour < 12){
+
+greet = "Good Morning";
+
+}else if(hour < 17){
+
+greet = "Good Afternoon";
+
+}
+
+teacherWelcome.textContent =
+`${greet}, ${currentTeacher.name}`;
 if(currentTeacher.teacherType==="Subject Teacher"){
 
 leaveMenu.style.display="none";
@@ -144,7 +167,47 @@ await getDocs(collection(db,"notices"));
 
 noticeCount.textContent =
 noticeSnap.size;
+// Latest Notices
 
+let noticeHTML = "";
+
+noticeSnap.docs
+.slice(0,5)
+.forEach(doc=>{
+
+const data = doc.data();
+
+noticeHTML += `
+<div style="padding:10px;border-bottom:1px solid #eee;">
+📢 ${data.title || "Notice"}
+</div>
+`;
+
+});
+
+latestNotice.innerHTML =
+noticeHTML || "<p>No Notices</p>";
+
+// Recent Homework
+
+let hwHTML = "";
+
+homeworkSnap.docs
+.slice(0,5)
+.forEach(doc=>{
+
+const data = doc.data();
+
+hwHTML += `
+<div style="padding:10px;border-bottom:1px solid #eee;">
+📚 ${data.subject || "-"} - Class ${data.className || data.class || "-"}
+</div>
+`;
+
+});
+
+recentHomework.innerHTML =
+hwHTML || "<p>No Homework</p>";
 // ==============================
 // Today's Attendance Count
 // ==============================
