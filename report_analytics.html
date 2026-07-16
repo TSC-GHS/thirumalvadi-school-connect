@@ -14,13 +14,13 @@
 
 <body>
 
-<div class="header">
+<header class="header">
 
-<h2>📊 Report Analytics</h2>
+<h1>📊 Report Analytics</h1>
 
-<p>School Connect TN</p>
+<p>Thirumalvadi Government High School</p>
 
-</div>
+</header>
 
 <div class="container">
 
@@ -29,100 +29,52 @@
 <div class="summaryGrid">
 
 <div class="card blue">
-<h3 id="totalStudents">0</h3>
+<h2 id="totalStudents">0</h2>
 <p>Total Students</p>
 </div>
 
 <div class="card green">
-<h3 id="passStudents">0</h3>
+<h2 id="passStudents">0</h2>
 <p>Pass Students</p>
 </div>
 
 <div class="card red">
-<h3 id="failStudents">0</h3>
+<h2 id="failStudents">0</h2>
 <p>Fail Students</p>
 </div>
 
 <div class="card orange">
-<h3 id="passPercentage">0%</h3>
-<p>Pass %</p>
-</div>
-
-</div>
-
-<!-- Subject Wise Performance -->
-
-<div class="listCard">
-
-<h3>📚 Subject Wise Performance</h3>
-
-<div id="subjectPerformance">
-
-<p style="text-align:center;">
-Loading...
-</p>
-
-</div>
-
-</div>
-
-<!-- Class Wise Results -->
-
-<div class="listCard">
-
-<h3>🏫 Class Wise Results</h3>
-
-<div id="classResults">
-
-<p style="text-align:center;">
-Loading...
-</p>
-
-</div>
-
-</div>
-
-<!-- Top Rank Holders -->
-
-<div class="listCard">
-
-<h3>🏆 Top Rank Holders</h3>
-
-<div id="topRankers">
-
-<p style="text-align:center;">
-Loading...
-</p>
-
+<h2 id="passPercentage">0%</h2>
+<p>Pass Percentage</p>
 </div>
 
 </div>
 
 <!-- School Highlights -->
 
-<div class="listCard">
+<div class="section">
 
-<h3>📈 School Highlights</h3>
+<h3>🏆 School Highlights</h3>
 
 <table class="highlightTable">
 
 <tr>
-<td>🏆 Highest Scorer</td>
+<td>Highest Scorer</td>
 <td id="highestScorer">-</td>
 </tr>
 
 <tr>
-<td>📚 Best Performing Class</td>
+<td>Best Performing Class</td>
 <td id="bestClass">-</td>
 </tr>
 
 <tr>
-<td>📉 Lowest Performing Class</td>
+<td>Lowest Performing Class</td>
 <td id="lowestClass">-</td>
 </tr>
 
 <tr>
-<td>⭐ School Average</td>
+<td>School Average</td>
 <td id="schoolAverage">0%</td>
 </tr>
 
@@ -130,18 +82,75 @@ Loading...
 
 </div>
 
-<button
-class="backBtn"
+<!-- Subject Performance -->
+
+<div class="section">
+
+<h3>📚 Subject Wise Average</h3>
+
+<div id="subjectPerformance">
+
+<p class="loading">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+<!-- Class Performance -->
+
+<div class="section">
+
+<h3>🏫 Class Wise Performance</h3>
+
+<div id="classResults">
+
+<p class="loading">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+<!-- Rank Holders -->
+
+<div class="section">
+
+<h3>🥇 Top 10 Rank Holders</h3>
+
+<div id="topRankers">
+
+<p class="loading">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+<button class="backBtn"
+
 onclick="location.href='headmaster.html'">
 
-🏠 Back to Dashboard
+⬅ Back to Dashboard
 
 </button>
 
 </div>
 
 <script type="module"
-src="js/report_analytics.js"></script>
+
+src="js/report_analytics.js">
+
+</script>
 
 </body>
 
