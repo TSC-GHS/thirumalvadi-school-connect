@@ -6,166 +6,63 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+content="width=device-width, initial-scale=1.0">
 
 <title>Student Profile</title>
 
-<link rel="stylesheet" href="style.css">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:#f2f5fa;
-padding-bottom:90px;
-}
-
-.header{
-
-background:#1565C0;
-color:white;
-padding:18px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-
-}
-
-.container{
-
-max-width:900px;
-margin:auto;
-padding:15px;
-
-}
-
-.card{
-
-background:white;
-border-radius:15px;
-padding:20px;
-box-shadow:0 2px 8px rgba(0,0,0,.15);
-
-}
-
-.profile{
-
-text-align:center;
-
-}
-
-.profile img{
-
-width:120px;
-height:120px;
-border-radius:50%;
-border:4px solid #1565C0;
-object-fit:cover;
-margin-bottom:15px;
-
-}
-
-.profile h2{
-
-color:#1565C0;
-margin-bottom:5px;
-
-}
-
-.profile p{
-
-color:#555;
-
-}
-
-.details{
-
-margin-top:20px;
-
-}
-
-.row{
-
-display:flex;
-justify-content:space-between;
-padding:12px;
-border-bottom:1px solid #eee;
-
-}
-
-.row:last-child{
-
-border:none;
-
-}
-
-.title{
-
-font-weight:bold;
-color:#1565C0;
-
-}
-
-.value{
-
-color:#444;
-
-}
-
-.action{
-
-margin-top:25px;
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-
-}
-
-.action button{
-
-padding:15px;
-border:none;
-border-radius:10px;
-background:#1565C0;
-color:white;
-font-size:16px;
-cursor:pointer;
-
-}
-
-.action button:hover{
-
-background:#0D47A1;
-
-}
-
-</style>
+<link rel="stylesheet"
+href="css/student_profile.css">
 
 </head>
 
 <body>
 
-<div class="header">
+<!-- =====================================
+HEADER
+===================================== -->
 
-👦 Student Profile
+<header class="header">
+
+<div class="header-left">
+
+<h2>👨‍🎓 Student Profile</h2>
+
+<p>School Connect TN</p>
 
 </div>
 
+<div class="header-right">
+
+<button
+class="backBtn"
+onclick="location.href='students.html'">
+
+⬅ Back
+
+</button>
+
+</div>
+
+</header>
+
+<!-- =====================================
+MAIN CONTAINER
+===================================== -->
+
 <div class="container">
 
-<div class="card">
+<!-- =====================================
+PROFILE CARD
+===================================== -->
 
-<div class="profile">
+<section class="profile-card">
+
+<div class="photo-section">
 
 <img
-id="photo"
-src="assets/student.png">
+id="studentPhoto"
+src="images/student.png"
+alt="Student Photo">
 
 <h2 id="studentName">
 
@@ -181,257 +78,305 @@ Loading...
 
 </div>
 
-<div class="details">
+<div class="details-grid">
 
-<div class="row">
+<div class="detail-box">
 
-<div class="title">
+<span>🎓 Admission No</span>
 
-EMIS Number
-
-</div>
-
-<div
-class="value"
-id="emis">
+<h3 id="admissionNo">
 
 Loading...
 
-</div>
+</h3>
 
 </div>
 
-<div class="row">
+<div class="detail-box">
 
-<div class="title">
+<span>🆔 EMIS Number</span>
 
-Father
-
-</div>
-
-<div
-class="value"
-id="father">
+<h3 id="emis">
 
 Loading...
 
-</div>
+</h3>
 
 </div>
 
-<div class="row">
+<div class="detail-box">
 
-<div class="title">
+<span>📅 Date of Birth</span>
 
-Mother
-
-</div>
-
-<div
-class="value"
-id="mother">
+<h3 id="dob">
 
 Loading...
 
-</div>
-
-</div>
-<div class="row">
-
-<div class="title">
-
-Mobile
+</h3>
 
 </div>
 
-<div
-class="value"
-id="mobile">
+<div class="detail-box">
+
+<span>🩸 Blood Group</span>
+
+<h3 id="blood">
 
 Loading...
 
-</div>
-
-</div>
-
-<div class="row">
-
-<div class="title">
-
-Blood Group
-
-</div>
-
-<div
-class="value"
-id="blood">
-
-Loading...
+</h3>
 
 </div>
 
 </div>
 
-<div class="row">
+</section>
+<!-- =====================================
+PARENT & STUDENT DETAILS
+===================================== -->
 
-<div class="title">
+<section class="info-card">
 
-Date of Birth
+<h2>👨‍👩‍👦 Student Information</h2>
+
+<div class="info-grid">
+
+<div class="info-item">
+<label>👨 Father Name</label>
+<p id="father">Loading...</p>
+</div>
+
+<div class="info-item">
+<label>👩 Mother Name</label>
+<p id="mother">Loading...</p>
+</div>
+
+<div class="info-item">
+<label>📱 Parent Mobile</label>
+<p id="mobile">Loading...</p>
+</div>
+
+<div class="info-item">
+<label>📚 Medium</label>
+<p id="medium">Loading...</p>
+</div>
+
+<div class="info-item">
+<label>🏫 Academic Year</label>
+<p id="academicYear">Loading...</p>
+</div>
+
+<div class="info-item full-width">
+<label>🏠 Address</label>
+<p id="address">Loading...</p>
+</div>
 
 </div>
 
-<div
-class="value"
-id="dob">
+</section>
 
-Loading...
+<!-- =====================================
+ACADEMIC SUMMARY
+===================================== -->
 
-</div>
+<section class="summary-grid">
 
-</div>
+<div class="summary-card">
 
-<div class="row">
+<h3 id="attendancePercent">0%</h3>
 
-<div class="title">
-
-Address
+<p>Attendance</p>
 
 </div>
 
-<div
-class="value"
-id="address">
+<div class="summary-card">
 
-Loading...
+<h3 id="averageMark">0%</h3>
 
-</div>
+<p>Average Marks</p>
 
 </div>
 
+<div class="summary-card">
+
+<h3 id="studentRank">-</h3>
+
+<p>Rank</p>
+
 </div>
 
-<div class="action">
+<div class="summary-card">
+
+<h3 id="studentResult">-</h3>
+
+<p>Result</p>
+
+</div>
+
+</section>
+<!-- =====================================
+ACTION BUTTONS
+===================================== -->
+
+<section class="action-card">
+
+<div class="action-grid">
 
 <button
-onclick="location.href='parent_dashboard.html'">
+class="btn blue"
+onclick="window.print()">
 
-🏠 Dashboard
+🖨️ Print Profile
 
 </button>
 
 <button
-onclick="location.href='parent_attendance.html'">
+class="btn green"
+onclick="downloadIDCard()">
 
-📅 Attendance
-
-</button>
-
-<button
-onclick="location.href='parent_report_card.html'">
-
-📊 Report Card
+🪪 Download ID Card
 
 </button>
 
 <button
-onclick="location.href='leave_request.html'">
+class="btn orange"
+onclick="editStudent()">
 
-📝 Apply Leave
-
-</button>
-
-<button
-onclick="location.href='leave_status.html'">
-
-📋 Leave Status
+✏️ Edit Student
 
 </button>
 
 <button
-onclick="logoutParent()">
+class="btn purple"
+onclick="location.href='students.html'">
 
-🚪 Logout
+👨‍🎓 Students List
 
 </button>
 
 </div>
 
-</div>
+</section>
 
 </div>
 
 <script type="module">
 
-import { auth, db } from "./firebase.js";
-
-import {
-signOut
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+import { db } from "./firebase.js";
 
 import {
 doc,
 getDoc
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+const params =
+new URLSearchParams(window.location.search);
 
 const emis =
-localStorage.getItem("parentEMIS");
+params.get("emis");
 
 if(!emis){
 
-location.href="parent_login.html";
+alert("Student EMIS not found");
+
+location.href="students.html";
 
 }
+
+async function loadStudent(){
+
+try{
 
 const snap =
 await getDoc(doc(db,"students",emis));
 
 if(snap.exists()){
 
-const s=snap.data();
+const s = snap.data();
 
-document.getElementById("studentName").innerHTML=s.name||"-";
+document.getElementById("studentName").innerHTML =
+s.name || "-";
 
-document.getElementById("studentClass").innerHTML=
-(s.class||"-")+" - "+(s.section||"-");
+document.getElementById("studentClass").innerHTML =
+`${s.class || "-"} - ${s.section || "-"}`;
 
-document.getElementById("emis").innerHTML=s.emis||emis;
+document.getElementById("admissionNo").innerHTML =
+s.admissionNo || "-";
 
-document.getElementById("father").innerHTML=s.father||"-";
+document.getElementById("emis").innerHTML =
+s.emis || emis;
 
-document.getElementById("mother").innerHTML=s.mother||"-";
+document.getElementById("dob").innerHTML =
+s.dob || "-";
 
-document.getElementById("mobile").innerHTML=s.mobile||"-";
+document.getElementById("blood").innerHTML =
+s.blood || "-";
 
-document.getElementById("blood").innerHTML=s.blood||"-";
+document.getElementById("father").innerHTML =
+s.father || "-";
 
-document.getElementById("dob").innerHTML=s.dob||"-";
+document.getElementById("mother").innerHTML =
+s.mother || "-";
 
-document.getElementById("address").innerHTML=s.address||"-";
+document.getElementById("mobile").innerHTML =
+s.mobile || "-";
+
+document.getElementById("medium").innerHTML =
+s.medium || "-";
+
+document.getElementById("academicYear").innerHTML =
+s.academicYear || "-";
+
+document.getElementById("address").innerHTML =
+s.address || "-";
 
 if(s.photo){
 
-document.getElementById("photo").src=s.photo;
+document.getElementById("studentPhoto").src =
+s.photo;
 
 }
 
 }
-  window.logoutParent = async function(){
+  const attendance =
+s.attendance || "0%";
 
-try{
+document.getElementById("attendancePercent").innerHTML =
+attendance;
 
-await signOut(auth);
+document.getElementById("averageMark").innerHTML =
+s.average || "0%";
 
-localStorage.removeItem("parentEMIS");
+document.getElementById("studentRank").innerHTML =
+s.rank || "-";
 
-location.href="parent_login.html";
+document.getElementById("studentResult").innerHTML =
+s.result || "-";
 
 }catch(error){
 
 alert(error.message);
+console.log(error);
 
 }
 
 }
+
+window.downloadIDCard=function(){
+
+alert("🪪 Student ID Card download will be added in the next version.");
+
+};
+
+window.editStudent=function(){
+
+location.href=
+"student_management.html?emis="+emis;
+
+};
+
+loadStudent();
 
 </script>
 
