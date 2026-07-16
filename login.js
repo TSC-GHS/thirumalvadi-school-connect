@@ -27,7 +27,6 @@ window.loginUser = async function () {
   }
 
   // Parent Login
-
   if (selectedRole === "Parent") {
 
     loginId += "@schoolconnecttn.app";
@@ -35,7 +34,6 @@ window.loginUser = async function () {
   }
 
   // Student Login
-
   if (selectedRole === "Student") {
 
     loginId += "@student.schoolconnecttn.app";
@@ -65,7 +63,8 @@ window.loginUser = async function () {
     }
 
     const user = userSnap.data();
-        if (user.role !== selectedRole) {
+
+    if (user.role !== selectedRole) {
 
       alert("Selected Role is Incorrect");
 
@@ -75,57 +74,60 @@ window.loginUser = async function () {
 
     }
 
+    // Clear previous login flags
+    localStorage.removeItem("adminLogin");
+    localStorage.removeItem("headmasterLogin");
+    localStorage.removeItem("teacherLogin");
+    localStorage.removeItem("parentLogin");
+    localStorage.removeItem("studentLogin");
+
     switch (user.role) {
 
+      case "Admin":
+
+        localStorage.setItem("adminLogin","true");
+        localStorage.setItem("userRole","Admin");
+
+        window.location.href = "admin_dashboard_v3.html";
+
+        break;
+
       case "Headmaster":
 
-localStorage.setItem("userRole","Headmaster");
+        localStorage.setItem("headmasterLogin","true");
+        localStorage.setItem("userRole","Headmaster");
 
-window.location.href="headmaster.html";
+        window.location.href = "headmaster.html";
 
-break;
-
-      case "Headmaster":
-
-localStorage.setItem("headmasterLogin","true");
-localStorage.setItem("userRole","Headmaster");
-
-window.location.href="splash.html";
-
-break;
+        break;
 
       case "Teacher":
 
-        localStorage.setItem("teacherId", user.teacherId);
-
+        localStorage.setItem("teacherId", user.teacherId || "");
         localStorage.setItem("teacherName", user.name || "");
-
-        localStorage.setItem("userRole", "Teacher");
-
-        sessionStorage.setItem("teacherId", user.teacherId);
-
-        sessionStorage.setItem("teacherName", user.name || "");
-
-        sessionStorage.setItem("userRole", "Teacher");
+        localStorage.setItem("userRole","Teacher");
         localStorage.setItem("teacherLogin","true");
 
+        sessionStorage.setItem("teacherId", user.teacherId || "");
+        sessionStorage.setItem("teacherName", user.name || "");
+        sessionStorage.setItem("userRole","Teacher");
+
         window.location.href = "teacher.html";
-        window.location.href="splash.html";
 
         break;
-              case "Parent":
+
+      case "Parent":
 
         localStorage.setItem("parentEMIS", user.emis || "");
         localStorage.setItem("emis", user.emis || "");
-        localStorage.setItem("userRole", "Parent");
+        localStorage.setItem("userRole","Parent");
+        localStorage.setItem("parentLogin","true");
 
         sessionStorage.setItem("parentEMIS", user.emis || "");
         sessionStorage.setItem("emis", user.emis || "");
-        sessionStorage.setItem("userRole", "Parent");
-        localStorage.setItem("parentLogin","true");
+        sessionStorage.setItem("userRole","Parent");
 
         window.location.href = "parent_dashboard.html";
-        window.location.href="splash.html";
 
         break;
 
@@ -133,11 +135,12 @@ break;
 
         localStorage.setItem("studentEMIS", user.emis || "");
         localStorage.setItem("emis", user.emis || "");
-        localStorage.setItem("userRole", "Student");
+        localStorage.setItem("userRole","Student");
+        localStorage.setItem("studentLogin","true");
 
         sessionStorage.setItem("studentEMIS", user.emis || "");
         sessionStorage.setItem("emis", user.emis || "");
-        sessionStorage.setItem("userRole", "Student");
+        sessionStorage.setItem("userRole","Student");
 
         window.location.href = "student_dashboard.html";
 
