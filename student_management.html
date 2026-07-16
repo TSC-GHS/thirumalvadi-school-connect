@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -7,163 +8,331 @@
 
 <title>Student Management</title>
 
-<style>
-
-body{
-font-family:Arial,sans-serif;
-background:#f4f6f9;
-margin:0;
-}
-
-.header{
-background:#6A1B9A;
-color:white;
-padding:20px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-}
-
-.container{
-padding:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,.2);
-margin-bottom:20px;
-}
-
-label{
-display:block;
-margin-top:12px;
-font-weight:bold;
-}
-
-input,textarea,select{
-width:100%;
-padding:12px;
-margin-top:6px;
-border:1px solid #ccc;
-border-radius:8px;
-box-sizing:border-box;
-font-size:16px;
-}
-
-textarea{
-height:80px;
-resize:none;
-}
-
-button{
-width:100%;
-padding:15px;
-margin-top:15px;
-border:none;
-border-radius:8px;
-background:#6A1B9A;
-color:white;
-font-size:17px;
-cursor:pointer;
-}
-
-.home{
-background:#2E7D32;
-}
-
-</style>
+<link rel="stylesheet" href="css/student_management.css">
 
 </head>
 
 <body>
 
-<div class="header">
+<!-- =====================================
+HEADER
+===================================== -->
 
-👨‍🎓 Student Management
+<header class="header">
+
+<div class="header-left">
+
+<h2>🏫 School Connect TN</h2>
+
+<p>Student Management</p>
 
 </div>
+
+<div class="header-right">
+
+<button onclick="location.href='admin_dashboard.html'">
+
+🏠
+
+</button>
+
+</div>
+
+</header>
+
+<!-- =====================================
+MAIN CONTAINER
+===================================== -->
 
 <div class="container">
 
-<div class="card">
+<!-- =====================================
+STUDENT INFORMATION
+===================================== -->
 
-<label>Student Name</label>
-<input id="name">
+<section class="card">
 
-<label>EMIS Number</label>
-<input id="emis">
+<h2>👨‍🎓 Student Information</h2>
 
-<label>Class</label>
-<input id="class">
+<div class="photo-section">
 
-<label>Section</label>
-<input id="section">
-  <label>Medium</label>
+<img
+id="photoPreview"
+src="images/student.png"
+alt="Student Photo">
+
+<input
+type="file"
+id="photo"
+accept="image/*">
+
+</div>
+
+<label>Student Name <span>*</span></label>
+
+<input
+type="text"
+id="name"
+placeholder="Enter Student Name">
+
+<div class="row">
+
+<div class="col">
+
+<label>Admission No <span>*</span></label>
+
+<input
+type="text"
+id="admissionNo"
+placeholder="Admission No">
+
+</div>
+
+<div class="col">
+
+<label>EMIS No <span>*</span></label>
+
+<input
+type="text"
+id="emis"
+placeholder="EMIS Number">
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col">
+
+<label>Class <span>*</span></label>
+
+<input
+type="text"
+id="studentClass"
+placeholder="Class">
+
+</div>
+
+<div class="col">
+
+<label>Section <span>*</span></label>
+
+<input
+type="text"
+id="section"
+placeholder="Section">
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col">
+
+<label>Medium <span>*</span></label>
 
 <select id="medium">
 
-<option value="">Select Medium</option>
+<option value="">Select</option>
 
-<option value="Tamil">Tamil Medium</option>
+<option>Tamil</option>
 
-<option value="English">English Medium</option>
+<option>English</option>
 
 </select>
 
-<label>Academic Year</label>
+</div>
+
+<div class="col">
+
+<label>Academic Year <span>*</span></label>
 
 <select id="academicYear">
 
-<option value="">Select Academic Year</option>
+<option value="">Select</option>
 
-<option value="2026-2027">2026-2027</option>
+<option>2026-2027</option>
 
-<option value="2027-2028">2027-2028</option>
+<option>2027-2028</option>
 
-<option value="2028-2029">2028-2029</option>
+<option>2028-2029</option>
 
 </select>
 
-<label>Father Name</label>
-<input id="father">
+</div>
 
-<label>Mother Name</label>
-<input id="mother">
+</div>
 
-<label>Parent Mobile</label>
-<input id="mobile">
+<label>Date of Birth</label>
+
+<input
+type="date"
+id="dob">
+<!-- =====================================
+PARENT & PERSONAL INFORMATION
+===================================== -->
+
+<div class="row">
+
+<div class="col">
+
+<label>Father Name <span>*</span></label>
+
+<input
+type="text"
+id="father"
+placeholder="Enter Father Name">
+
+</div>
+
+<div class="col">
+
+<label>Mother Name <span>*</span></label>
+
+<input
+type="text"
+id="mother"
+placeholder="Enter Mother Name">
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col">
+
+<label>Parent Mobile <span>*</span></label>
+
+<input
+type="tel"
+id="mobile"
+placeholder="10 Digit Mobile Number"
+maxlength="10">
+
+</div>
+
+<div class="col">
+
+<label>Alternate Mobile</label>
+
+<input
+type="tel"
+id="altMobile"
+placeholder="Optional"
+maxlength="10">
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col">
+
+<label>Gender <span>*</span></label>
+
+<select id="gender">
+
+<option value="">Select</option>
+
+<option>Male</option>
+
+<option>Female</option>
+
+<option>Other</option>
+
+</select>
+
+</div>
+
+<div class="col">
 
 <label>Blood Group</label>
-<input id="blood">
+
+<select id="blood">
+
+<option value="">Select</option>
+
+<option>A+</option>
+<option>A-</option>
+<option>B+</option>
+<option>B-</option>
+<option>AB+</option>
+<option>AB-</option>
+<option>O+</option>
+<option>O-</option>
+
+</select>
+
+</div>
+
+</div>
+
+<label>Aadhaar Number (Optional)</label>
+
+<input
+type="text"
+id="aadhaar"
+placeholder="12 Digit Aadhaar Number"
+maxlength="12">
 
 <label>Address</label>
-<textarea id="address"></textarea>
 
-<button onclick="saveStudent()">
+<textarea
+id="address"
+rows="4"
+placeholder="Enter Full Address"></textarea>
 
-💾 Save / Update Student
+</section>
+
+<!-- =====================================
+ACTION BUTTONS
+===================================== -->
+
+<section class="card">
+
+<div class="button-grid">
+
+<button
+class="save-btn"
+onclick="saveStudent()">
+
+💾 Save Student
 
 </button>
 
-<button class="home"
+<button
+class="reset-btn"
+onclick="resetForm()">
+
+🔄 Reset
+
+</button>
+
+<button
+class="list-btn"
 onclick="location.href='students.html'">
 
-👨‍🎓 Students List
+📋 Student List
 
 </button>
 
-<button class="home"
-onclick="location.href='dashboard.html'">
+<button
+class="home-btn"
+onclick="location.href='admin_dashboard.html'">
 
-🏠 Home
+🏠 Dashboard
 
 </button>
 
 </div>
 
+</section>
 <script type="module">
+
 import { db } from "./firebase.js";
 
 import {
@@ -174,51 +343,55 @@ setDoc
 window.saveStudent = async function(){
 
 const name = document.getElementById("name").value.trim();
+const admissionNo = document.getElementById("admissionNo").value.trim();
 const emis = document.getElementById("emis").value.trim();
-const studentClass = document.getElementById("class").value.trim();
+const studentClass = document.getElementById("studentClass").value.trim();
 const section = document.getElementById("section").value.trim();
-  const medium =
-document.getElementById("medium").value;
-
-const academicYear =
-document.getElementById("academicYear").value;
+const medium = document.getElementById("medium").value;
+const academicYear = document.getElementById("academicYear").value;
+const dob = document.getElementById("dob").value;
 const father = document.getElementById("father").value.trim();
 const mother = document.getElementById("mother").value.trim();
 const mobile = document.getElementById("mobile").value.trim();
-const blood = document.getElementById("blood").value.trim();
+const altMobile = document.getElementById("altMobile").value.trim();
+const gender = document.getElementById("gender").value;
+const blood = document.getElementById("blood").value;
+const aadhaar = document.getElementById("aadhaar").value.trim();
 const address = document.getElementById("address").value.trim();
 
 if(
 name=="" ||
+admissionNo=="" ||
 emis=="" ||
 studentClass=="" ||
 section=="" ||
 medium=="" ||
 academicYear==""
 ){
-
 alert("Please fill all required fields");
-
 return;
-
 }
-  
+
 try{
 
-await setDoc(doc(db,"students",emis),
-{
-name:name,
-emis:emis,
-class:studentClass,
-section:section,
-medium: medium,
+await setDoc(doc(db,"students",emis),{
 
-academicYear: academicYear,  
-father:father,
-mother:mother,
-mobile:mobile,
-blood:blood,
-address:address,
+name,
+admissionNo,
+emis,
+class:studentClass,
+section,
+medium,
+academicYear,
+dob,
+father,
+mother,
+mobile,
+altMobile,
+gender,
+blood,
+aadhaar,
+address,
 attendance:"0%",
 createdAt:new Date().toISOString()
 
@@ -226,17 +399,7 @@ createdAt:new Date().toISOString()
 
 alert("✅ Student Saved Successfully");
 
-document.getElementById("name").value="";
-document.getElementById("emis").value="";
-document.getElementById("class").value="";
-document.getElementById("section").value="";
-document.getElementById("father").value="";
-document.getElementById("medium").value="";
-document.getElementById("academicYear").value="";  
-document.getElementById("mother").value="";
-document.getElementById("mobile").value="";
-document.getElementById("blood").value="";
-document.getElementById("address").value="";
+resetForm();
 
 }catch(error){
 
@@ -245,7 +408,27 @@ alert(error.message);
 }
 
 };
-  </script>
 
-</body>
-</html>
+window.resetForm=function(){
+
+document.getElementById("photo").value="";
+document.getElementById("name").value="";
+document.getElementById("admissionNo").value="";
+document.getElementById("emis").value="";
+document.getElementById("studentClass").value="";
+document.getElementById("section").value="";
+document.getElementById("medium").value="";
+document.getElementById("academicYear").value="";
+document.getElementById("dob").value="";
+document.getElementById("father").value="";
+document.getElementById("mother").value="";
+document.getElementById("mobile").value="";
+document.getElementById("altMobile").value="";
+document.getElementById("gender").value="";
+document.getElementById("blood").value="";
+document.getElementById("aadhaar").value="";
+document.getElementById("address").value="";
+
+};
+
+</script>
