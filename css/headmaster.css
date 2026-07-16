@@ -279,3 +279,158 @@ width:100%;
 }
 
 }
+/*=====================================
+School Connect TN V1 UI Upgrade
+======================================*/
+
+/* Header */
+
+.header{
+position:sticky;
+top:0;
+z-index:999;
+padding:12px 18px;
+background:linear-gradient(135deg,#6A1B9A,#8E24AA);
+}
+
+.header h2{
+font-size:20px;
+}
+
+.header p{
+font-size:13px;
+}
+
+/* Container */
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:15px;
+}
+
+/* Welcome */
+
+.welcome{
+padding:16px;
+border-radius:18px;
+border-left:6px solid #6A1B9A;
+}
+
+.welcome h2{
+font-size:22px;
+}
+
+.welcome p{
+font-size:14px;
+color:#666;
+}
+
+/* Dashboard Cards */
+
+.cards{
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:12px;
+}
+
+.card{
+padding:15px;
+border-radius:16px;
+overflow:hidden;
+position:relative;
+}
+
+.card::before{
+content:"";
+position:absolute;
+right:-35px;
+top:-35px;
+width:90px;
+height:90px;
+border-radius:50%;
+background:rgba(0,0,0,.03);
+}
+
+.card h2,
+.card h3{
+font-size:26px;
+margin-bottom:6px;
+}
+
+.card p,
+.card h4{
+font-size:13px;
+}
+
+/* Quick Actions */
+
+.menuGrid{
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+
+.menuCard{
+padding:16px 10px;
+border-radius:16px;
+min-height:95px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+font-size:28px;
+}
+
+.menuCard span{
+font-size:13px;
+margin-top:6px;
+}
+
+/* List Card */
+
+.listCard{
+background:#fff;
+padding:15px;
+border-radius:16px;
+margin-bottom:18px;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+.cards{
+grid-template-columns:repeat(2,1fr);
+}
+
+.menuGrid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.card{
+padding:12px;
+}
+
+.card h2,
+.card h3{
+font-size:22px;
+}
+
+.menuCard{
+min-height:85px;
+font-size:24px;
+}
+
+.menuCard span{
+font-size:12px;
+}
+
+.welcome{
+padding:14px;
+}
+
+.sectionTitle{
+font-size:18px;
+}
+
+}
