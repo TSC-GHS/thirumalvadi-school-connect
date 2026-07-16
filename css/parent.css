@@ -1,14 +1,13 @@
-/* ==========================================
-   SCHOOL CONNECT TN
-   PARENT DASHBOARD UI
-   PART 1
-========================================== */
+/*=========================================
+PARENT DASHBOARD UI
+PART 1
+=========================================*/
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:'Segoe UI',sans-serif;
 }
 
 body{
@@ -17,436 +16,408 @@ color:#222;
 padding-bottom:90px;
 }
 
-/* =========================
-HEADER
-========================= */
+.container{
+width:100%;
+max-width:480px;
+margin:auto;
+padding:15px;
+}
 
-.topbar{
-position:sticky;
-top:0;
-z-index:1000;
-background:linear-gradient(90deg,#0D47A1,#1565C0);
+/* HEADER */
+
+.top-bar{
+background:linear-gradient(135deg,#1565c0,#0d47a1);
 color:#fff;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:16px 18px;
-box-shadow:0 3px 12px rgba(0,0,0,.18);
+padding:18px;
+border-radius:0 0 20px 20px;
+box-shadow:0 6px 18px rgba(0,0,0,.15);
 }
 
-.header-left{
-display:flex;
-align-items:center;
-gap:12px;
-}
-
-.header-icon{
-font-size:34px;
-}
-
-.header-left h1{
+.top-bar h1{
 font-size:28px;
-font-weight:bold;
+font-weight:700;
 }
 
-.header-left p{
+.top-bar p{
 font-size:15px;
 opacity:.9;
-margin-top:3px;
+margin-top:4px;
 }
 
-.notify-btn{
-background:none;
-border:none;
-color:#fff;
-font-size:28px;
-cursor:pointer;
-}
-
-/* =========================
-CONTAINER
-========================= */
-
-.container{
-max-width:1200px;
-margin:auto;
-padding:18px;
-}
-
-/* =========================
-PROFILE CARD
-========================= */
-
-.profile-card{
-background:#fff;
-border-radius:20px;
-padding:22px;
-display:flex;
-align-items:center;
-gap:25px;
-box-shadow:0 5px 18px rgba(0,0,0,.10);
-margin-bottom:20px;
-}
-
-
-.profile-details h2{
-font-size:22px;
-color:#0D47A1;
-margin-bottom:14px;
-}
-
-.info-row{
-display:flex;
-align-items:center;
-gap:10px;
-margin:8px 0;
-font-size:15px;
-}
-
-.info-row span:first-child{
-font-size:18px;
-}
-.profile-details{
-flex:1;
-}
-
-.profile-details h2{
-font-size:40px;
-color:#0D47A1;
-margin-bottom:20px;
-}
-
-.info-row{
-display:flex;
-align-items:center;
-gap:12px;
-margin:12px 0;
-font-size:22px;
-}
-
-.info-row span:first-child{
-font-size:28px;
-}
-/* =========================
-SUMMARY CARDS
-========================= */
-
-.summary-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-margin-bottom:18px;
-}
-
-.summary-card{
-background:linear-gradient(135deg,#1565C0,#42A5F5);
-color:#fff;
-padding:16px;
-border-radius:16px;
-text-align:center;
-box-shadow:0 3px 10px rgba(0,0,0,.12);
-}
-
-.summary-icon{
-font-size:24px;
-margin-bottom:6px;
-}
-
-.summary-card h2{
-font-size:24px;
-margin-bottom:4px;
-}
-
-.summary-card p{
-font-size:13px;
-}
-
-/* =========================
-COMMON CARD
-========================= */
+/* CARD */
 
 .card{
 background:#fff;
-padding:16px;
-border-radius:18px;
-margin-bottom:16px;
-box-shadow:0 3px 10px rgba(0,0,0,.08);
+border-radius:20px;
+padding:18px;
+margin-top:18px;
+box-shadow:0 6px 20px rgba(0,0,0,.08);
 }
 
-.card-header{
+/* WELCOME */
+
+.welcome-card{
 display:flex;
-justify-content:space-between;
 align-items:center;
-margin-bottom:14px;
+gap:18px;
 }
 
-.card-header h2{
-font-size:18px;
-color:#1565C0;
+.student-photo{
+width:95px;
+height:95px;
+border-radius:50%;
+object-fit:cover;
+border:4px solid #1565c0;
 }
 
-.card-header a{
-text-decoration:none;
-font-size:13px;
-font-weight:bold;
-color:#1565C0;
+.student-info{
+flex:1;
 }
 
-/* =========================
-QUICK ACTIONS
-========================= */
+.student-info h2{
+color:#1565c0;
+font-size:26px;
+margin-bottom:12px;
+}
+
+.student-info p{
+font-size:16px;
+margin:7px 0;
+}
+
+/* STATS */
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-top:18px;
+}
+
+.stat-card{
+background:#fff;
+border-top:5px solid #1565c0;
+border-radius:18px;
+padding:18px;
+text-align:center;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.stat-card h3{
+font-size:34px;
+color:#1565c0;
+margin-bottom:8px;
+}
+
+.stat-card span{
+font-size:15px;
+color:#666;
+font-weight:600;
+}
+/*=========================================
+PARENT DASHBOARD UI
+PART 2
+=========================================*/
+
+/* SECTION TITLE */
+
+.section-title{
+font-size:22px;
+font-weight:700;
+color:#1565c0;
+margin-bottom:15px;
+}
+
+/* QUICK ACTIONS */
 
 .quick-grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:10px;
+gap:12px;
 }
 
-.quick-grid button{
+.quick-card{
 background:#fff;
-border:1px solid #E3EAF5;
-border-radius:14px;
-padding:12px 6px;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-font-size:22px;
+border-radius:16px;
+padding:14px 8px;
+text-align:center;
+text-decoration:none;
+color:#1565c0;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+transition:.3s;
 cursor:pointer;
-box-shadow:0 2px 8px rgba(0,0,0,.08);
-transition:.25s;
 }
 
-.quick-grid button:hover{
-background:#1565C0;
+.quick-card:hover{
+transform:translateY(-3px);
+background:#1565c0;
 color:#fff;
 }
 
-.quick-grid button span{
-font-size:11px;
-margin-top:5px;
-font-weight:bold;
-text-align:center;
+.quick-card .icon{
+font-size:26px;
+margin-bottom:8px;
 }
-/* ==========================================
-   NOTICE & HOMEWORK
-========================================== */
+
+.quick-card span{
+display:block;
+font-size:12px;
+font-weight:600;
+line-height:16px;
+}
+
+/* NOTICE */
+
+.notice-card,
+.homework-card{
+background:#fff;
+border-radius:18px;
+padding:18px;
+margin-top:18px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.notice-header,
+.homework-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.notice-header h3,
+.homework-header h3{
+font-size:20px;
+color:#1565c0;
+}
+
+.notice-header a,
+.homework-header a{
+text-decoration:none;
+font-size:14px;
+font-weight:600;
+color:#1565c0;
+}
 
 .notice-item,
 .homework-item{
+padding:12px 0;
+border-bottom:1px solid #ececec;
+}
 
-background:#F8FAFD;
-
-padding:12px;
-
-border-left:4px solid #1565C0;
-
-border-radius:12px;
-
-margin-bottom:10px;
-
-box-shadow:0 2px 6px rgba(0,0,0,.08);
-
+.notice-item:last-child,
+.homework-item:last-child{
+border-bottom:none;
 }
 
 .notice-item h4,
 .homework-item h4{
-
-font-size:15px;
-
-color:#1565C0;
-
-margin-bottom:5px;
-
+font-size:16px;
+margin-bottom:4px;
+color:#1565c0;
 }
 
 .notice-item p,
 .homework-item p{
-
-font-size:13px;
-
-color:#555;
-
-line-height:18px;
-
+font-size:14px;
+color:#666;
+line-height:20px;
 }
+/*=========================================
+PARENT DASHBOARD UI
+PART 3
+=========================================*/
 
-/* =========================
-BOTTOM NAVIGATION
-========================= */
+/* BOTTOM NAVIGATION */
 
 .bottom-nav{
-
 position:fixed;
-
 bottom:0;
-
 left:0;
-
 width:100%;
-
-height:65px;
-
+height:68px;
 background:#fff;
-
 display:flex;
-
 justify-content:space-around;
-
 align-items:center;
-
-box-shadow:0 -2px 10px rgba(0,0,0,.15);
-
+box-shadow:0 -3px 12px rgba(0,0,0,.12);
+z-index:999;
 }
 
-.bottom-nav button{
-
-background:none;
-
-border:none;
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
-font-size:20px;
-
-color:#1565C0;
-
-cursor:pointer;
-
-}
-
-.bottom-nav button span{
-
+.bottom-nav a{
+flex:1;
+text-align:center;
+text-decoration:none;
+color:#666;
 font-size:11px;
+font-weight:600;
+padding:10px 0;
+transition:.3s;
+}
 
-margin-top:3px;
+.bottom-nav a i,
+.bottom-nav a span:first-child{
+display:block;
+font-size:22px;
+margin-bottom:4px;
+}
 
-font-weight:bold;
+.bottom-nav a.active{
+color:#1565C0;
+}
+
+/* TABLET */
+
+@media(max-width:992px){
+
+.container{
+max-width:700px;
+}
 
 }
 
-/* =========================
-MOBILE
-========================= */
+/* MOBILE */
 
 @media(max-width:768px){
 
+.top-bar{
+padding:15px;
+border-radius:0 0 16px 16px;
+}
+
+.top-bar h1{
+font-size:22px;
+}
+
+.top-bar p{
+font-size:13px;
+}
+
 .container{
-
-padding:10px;
-
-}
-
-.profile-card{
-
-flex-direction:column;
-
-text-align:center;
-
-padding:16px;
-
-}
-
-.profile-image img{
-
-width:75px;
-
-height:75px;
-
-}
-
-.profile-details h2{
-
-font-size:20px;
-
-}
-
-.info-row{
-
-font-size:14px;
-
-justify-content:flex-start;
-
-}
-
-.summary-grid{
-
-grid-template-columns:repeat(2,1fr);
-
-gap:10px;
-
-}
-
-.summary-card{
-
 padding:12px;
-
 }
 
-.summary-card h2{
-
-font-size:20px;
-
-}
-
-.quick-grid{
-
-grid-template-columns:repeat(4,1fr);
-
-gap:8px;
-
-}
-
-.quick-grid button{
-
-padding:10px 4px;
-
-min-height:72px;
-
-font-size:18px;
-
-}
-
-.quick-grid button span{
-
-font-size:10px;
-
-}
-
-.card{
-
-padding:14px;
-
-}
-
-}
-
-/* =========================
-DESKTOP
-========================= */
-
-@media(min-width:769px){
-
-.summary-grid{
-
-grid-template-columns:repeat(4,1fr);
-
-}
-
-.quick-grid{
-
-grid-template-columns:repeat(4,1fr);
-
-}
-
-.profile-card{
-
+.welcome-card{
+flex-direction:row;
 align-items:center;
+gap:12px;
+}
+
+.student-photo{
+width:70px;
+height:70px;
+}
+
+.student-info h2{
+font-size:18px;
+margin-bottom:8px;
+}
+
+.student-info p{
+font-size:13px;
+margin:4px 0;
+}
+
+.stats-grid{
+gap:10px;
+}
+
+.stat-card{
+padding:12px;
+border-radius:14px;
+}
+
+.stat-card h3{
+font-size:24px;
+}
+
+.stat-card span{
+font-size:12px;
+}
+
+.quick-grid{
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+}
+
+.quick-card{
+padding:10px 4px;
+border-radius:12px;
+}
+
+.quick-card .icon{
+font-size:20px;
+margin-bottom:5px;
+}
+
+.quick-card span{
+font-size:10px;
+line-height:12px;
+}
+
+.notice-card,
+.homework-card{
+padding:14px;
+border-radius:14px;
+}
+
+.notice-header h3,
+.homework-header h3{
+font-size:17px;
+}
+
+.notice-item h4,
+.homework-item h4{
+font-size:14px;
+}
+
+.notice-item p,
+.homework-item p{
+font-size:12px;
+}
+
+.bottom-nav{
+height:62px;
+}
+
+.bottom-nav a{
+font-size:10px;
+}
+
+.bottom-nav a span:first-child{
+font-size:18px;
+}
 
 }
 
+/* DESKTOP */
+
+@media(min-width:993px){
+
+.container{
+max-width:1100px;
+}
+
+.stats-grid{
+grid-template-columns:repeat(4,1fr);
+}
+
+.quick-grid{
+grid-template-columns:repeat(4,1fr);
+}
+
+}
+
+/* EFFECTS */
+
+.card,
+.quick-card,
+.stat-card{
+transition:.3s;
+}
+
+.card:hover,
+.stat-card:hover,
+.quick-card:hover{
+transform:translateY(-2px);
 }
