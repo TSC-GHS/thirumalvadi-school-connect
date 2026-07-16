@@ -335,7 +335,7 @@ topRankers.innerHTML = rankHTML;
 // End
 //==================================================
 
-console.log("Report Analytics Loaded Successfully"});
+console.log("Report Analytics Loaded Successfully");
 //
 
 }catch(error){
@@ -405,3 +405,4 @@ classResults.innerHTML=
 
 topRankers.innerHTML=
 "<p style='text-align:center'>No Results Found</p>";
+}
