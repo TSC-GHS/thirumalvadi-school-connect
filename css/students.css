@@ -1,1 +1,460 @@
+/*==================================================
+School Connect TN
+Students Management
+CSS - Part 1
+==================================================*/
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#EEF4FA;
+color:#333;
+padding-bottom:90px;
+overflow-x:hidden;
+}
+
+/*=========================
+HEADER
+=========================*/
+
+.header{
+position:sticky;
+top:0;
+z-index:999;
+background:linear-gradient(135deg,#1565C0,#1976D2);
+color:#fff;
+padding:15px 18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+
+.header-left h2{
+font-size:22px;
+margin-bottom:4px;
+}
+
+.header-left p{
+font-size:13px;
+opacity:.9;
+}
+
+.header-right button{
+width:42px;
+height:42px;
+border:none;
+border-radius:50%;
+background:#fff;
+color:#1565C0;
+font-size:22px;
+cursor:pointer;
+}
+
+/*=========================
+CONTAINER
+=========================*/
+
+.container{
+max-width:700px;
+margin:auto;
+padding:15px;
+}
+
+/*=========================
+SUMMARY
+=========================*/
+
+.summary{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+margin-bottom:16px;
+}
+
+.summary-box{
+background:linear-gradient(135deg,#1565C0,#42A5F5);
+color:#fff;
+padding:16px;
+border-radius:16px;
+text-align:center;
+box-shadow:0 3px 10px rgba(0,0,0,.10);
+}
+
+.summary-box h2{
+font-size:28px;
+margin-bottom:5px;
+}
+
+.summary-box p{
+font-size:13px;
+}
+
+/*=========================
+CARD
+=========================*/
+
+.card{
+background:#fff;
+padding:16px;
+border-radius:16px;
+margin-bottom:16px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+/*=========================
+SEARCH
+=========================*/
+
+#search{
+width:100%;
+padding:12px;
+border:1px solid #D6E4F5;
+border-radius:10px;
+font-size:15px;
+margin-bottom:12px;
+outline:none;
+}
+
+#search:focus{
+border-color:#1565C0;
+}
+
+.filter-row{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+}
+
+.filter-row select{
+padding:11px;
+border:1px solid #D6E4F5;
+border-radius:10px;
+font-size:14px;
+background:#fff;
+outline:none;
+}
+/*==================================================
+School Connect TN
+Students Management
+CSS - Part 2
+==================================================*/
+
+/*=========================
+STUDENT CARD
+=========================*/
+
+.student-card{
+display:flex;
+align-items:center;
+gap:14px;
+background:#fff;
+border-radius:18px;
+padding:15px;
+margin-bottom:14px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+border-left:5px solid #1565C0;
+transition:.3s;
+}
+
+.student-card:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 16px rgba(0,0,0,.12);
+}
+
+.student-photo img{
+width:75px;
+height:75px;
+border-radius:50%;
+border:3px solid #1565C0;
+object-fit:cover;
+background:#fff;
+}
+
+.student-details{
+flex:1;
+}
+
+.student-details h3{
+color:#1565C0;
+font-size:18px;
+margin-bottom:8px;
+}
+
+.student-details p{
+font-size:13px;
+margin:4px 0;
+color:#555;
+}
+
+/*=========================
+ACTION BUTTONS
+=========================*/
+
+.student-actions{
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.student-actions button{
+width:42px;
+height:42px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-size:18px;
+color:#fff;
+transition:.3s;
+}
+
+.view-btn{
+background:#1565C0;
+}
+
+.edit-btn{
+background:#FB8C00;
+}
+
+.delete-btn{
+background:#D32F2F;
+}
+
+.student-actions button:hover{
+transform:scale(1.08);
+}
+
+/*=========================
+BOTTOM BUTTONS
+=========================*/
+
+.button-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+
+.button-grid button{
+padding:14px;
+border:none;
+border-radius:12px;
+font-size:15px;
+font-weight:bold;
+cursor:pointer;
+color:#fff;
+transition:.3s;
+}
+
+.add-btn{
+background:#1565C0;
+}
+
+.bulk-btn{
+background:#6A1B9A;
+}
+
+.export-btn{
+background:#2E7D32;
+}
+
+.print-btn{
+background:#EF6C00;
+}
+
+.dashboard-btn{
+background:#455A64;
+}
+
+.button-grid button:hover{
+transform:translateY(-2px);
+opacity:.95;
+}
+/*==================================================
+School Connect TN
+Students Management
+CSS - Part 3 (Final)
+==================================================*/
+
+/*=========================
+MOBILE
+=========================*/
+
+@media screen and (max-width:768px){
+
+.container{
+padding:10px;
+}
+
+.header{
+padding:12px 15px;
+}
+
+.header-left h2{
+font-size:18px;
+}
+
+.header-left p{
+font-size:12px;
+}
+
+.summary{
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.summary-box{
+padding:12px;
+}
+
+.summary-box h2{
+font-size:22px;
+}
+
+.filter-row{
+grid-template-columns:1fr;
+}
+
+.student-card{
+flex-direction:column;
+text-align:center;
+}
+
+.student-photo img{
+width:85px;
+height:85px;
+}
+
+.student-details{
+width:100%;
+}
+
+.student-details h3{
+font-size:18px;
+margin-top:8px;
+}
+
+.student-details p{
+font-size:13px;
+}
+
+.student-actions{
+width:100%;
+flex-direction:row;
+justify-content:center;
+margin-top:12px;
+}
+
+.student-actions button{
+width:48px;
+height:48px;
+font-size:20px;
+}
+
+.button-grid{
+grid-template-columns:1fr;
+}
+
+.button-grid button{
+font-size:14px;
+padding:13px;
+}
+
+}
+
+/*=========================
+TABLET
+=========================*/
+
+@media screen and (min-width:769px) and (max-width:1024px){
+
+.container{
+max-width:900px;
+}
+
+}
+
+/*=========================
+DESKTOP
+=========================*/
+
+@media screen and (min-width:1025px){
+
+.container{
+max-width:1200px;
+}
+
+.summary{
+grid-template-columns:repeat(4,1fr);
+}
+
+}
+
+/*=========================
+ANIMATION
+=========================*/
+
+.student-card,
+.summary-box,
+.card,
+.button-grid button{
+transition:all .3s ease;
+}
+
+.student-card:hover{
+transform:translateY(-3px);
+}
+
+.summary-box:hover{
+transform:translateY(-3px);
+}
+
+.button-grid button:hover{
+transform:translateY(-2px);
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+/*=========================
+SCROLLBAR
+=========================*/
+
+::-webkit-scrollbar{
+width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#90CAF9;
+border-radius:10px;
+}
+
+::-webkit-scrollbar-track{
+background:#EEF4FA;
+}
+
+/*=========================
+PRINT
+=========================*/
+
+@media print{
+
+.header,
+.button-grid,
+.student-actions{
+display:none;
+}
+
+body{
+background:#fff;
+}
+
+.student-card{
+box-shadow:none;
+border:1px solid #ccc;
+break-inside:avoid;
+}
+
+}
