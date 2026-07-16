@@ -337,7 +337,7 @@ topRankers.innerHTML = rankHTML;
 // End
 //==================================================
 
-console.log("Report Analytics Loaded Successfully");
+console.log("Report Analytics Loaded Successfully"});
 //
 
 }catch(error){
