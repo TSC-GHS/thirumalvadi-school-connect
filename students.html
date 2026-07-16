@@ -294,6 +294,173 @@ deleteDoc,
 doc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
+const studentList =
+document.getElementById("studentList");
+
+const totalStudents =
+document.getElementById("totalStudents");
+
+const boysCount =
+document.getElementById("boysCount");
+
+const girlsCount =
+document.getElementById("girlsCount");
+
+const todayCount =
+document.getElementById("todayCount");
+
+let allStudents=[];
+
+async function loadStudents(){
+
+studentList.innerHTML="";
+
+const snap =
+await getDocs(
+collection(db,"students")
+);
+
+allStudents=[];
+
+let boys=0;
+let girls=0;
+let today=0;
+
+const todayDate =
+new Date()
+.toISOString()
+.substring(0,10);
+
+snap.forEach(studentDoc=>{
+
+const student=
+studentDoc.data();
+
+student.id=
+studentDoc.id;
+
+allStudents.push(student);
+
+if(student.gender==="Male"){
+boys++;
+}
+
+if(student.gender==="Female"){
+girls++;
+}
+
+if(
+student.createdAt &&
+student.createdAt.substring(0,10)
+===todayDate
+){
+today++;
+}
+
+});
+
+renderStudents(allStudents);
+
+totalStudents.innerText=
+allStudents.length;
+
+boysCount.innerText=
+boys;
+
+girlsCount.innerText=
+girls;
+
+todayCount.innerText=
+today;
+
+}
+
+function renderStudents(list){
+
+studentList.innerHTML="";
+
+list.forEach(student=>{
+
+const emis =
+student.emis || student.id;
+
+studentList.innerHTML += `
+
+<div class="student-card">
+
+<div class="student-left">
+
+<img
+src="images/student.png"
+alt="Student">
+
+</div>
+
+<div class="student-right">
+
+<h3>${student.name || "-"}</h3>
+
+<p><b>Admission :</b>
+${student.admissionNo || "-"}</p>
+
+<p><b>EMIS :</b>
+${emis}</p>
+
+<p><b>Class :</b>
+${student.class || "-"}
+-
+${student.section || "-"}</p>
+
+<p><b>Mobile :</b>
+${student.mobile || "-"}</p>
+
+</div>
+
+</div>
+
+<div class="student-actions">
+
+<button
+class="view-btn"
+onclick="location.href='student_profile_v2.html?emis=${emis}'">
+
+👁 View
+
+</button>
+
+<button
+class="edit-btn"
+onclick="location.href='student_management.html?emis=${emis}'">
+
+✏ Edit
+
+</button>
+
+<button
+class="delete-btn"
+onclick="deleteStudent('${student.id}')">
+
+🗑 Delete
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+import { db } from "./firebase.js";
+
+import {
+collection,
+getDocs,
+deleteDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
 const studentList = document.getElementById("studentList");
 const totalStudents = document.getElementById("totalStudents");
 const boysCount = document.getElementById("boysCount");
