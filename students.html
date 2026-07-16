@@ -4,189 +4,255 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Students Management</title>
 
-<title>Students List</title>
-
-<style>
-
-body{
-
-margin:0;
-
-font-family:Arial,sans-serif;
-
-background:#f4f6f9;
-
-}
-
-.header{
-
-background:#1565C0;
-
-color:white;
-
-padding:18px;
-
-text-align:center;
-
-font-size:26px;
-
-font-weight:bold;
-
-}
-
-.container{
-
-padding:15px;
-
-}
-
-#search{
-
-width:100%;
-
-padding:12px;
-
-font-size:16px;
-
-border-radius:8px;
-
-border:1px solid #ccc;
-
-margin-bottom:20px;
-
-box-sizing:border-box;
-
-}
-
-.card{
-
-background:white;
-
-border-radius:12px;
-
-padding:15px;
-
-margin-bottom:15px;
-
-box-shadow:0 3px 8px rgba(0,0,0,.15);
-
-}
-
-.card h3{
-
-margin:0;
-
-color:#1565C0;
-
-}
-
-.card p{
-
-margin:6px 0;
-
-}
-
-.actions{
-
-display:flex;
-
-gap:10px;
-
-flex-wrap:wrap;
-
-margin-top:15px;
-
-}
-
-.actions button{
-
-flex:1;
-
-min-width:90px;
-
-padding:10px;
-
-border:none;
-
-border-radius:8px;
-
-color:white;
-
-cursor:pointer;
-
-font-size:15px;
-
-}
-
-.profile{
-
-background:#1976D2;
-
-}
-
-.edit{
-
-background:#FB8C00;
-
-}
-
-.delete{
-
-background:#D32F2F;
-
-}
-
-.home{
-
-width:100%;
-
-padding:14px;
-
-margin-top:15px;
-
-background:#2E7D32;
-
-color:white;
-
-font-size:17px;
-
-border:none;
-
-border-radius:8px;
-
-cursor:pointer;
-
-}
-
-</style>
+<link rel="stylesheet" href="css/students.css">
 
 </head>
 
 <body>
 
-<div class="header">
+<!-- =====================================
+HEADER
+===================================== -->
 
-👨‍🎓 Students List
+<header class="header">
+
+<div class="header-left">
+
+<h2>👨‍🎓 Students Management</h2>
+
+<p>School Connect TN</p>
 
 </div>
 
+<div class="header-right">
+
+<button onclick="location.href='student_management.html'">
+
+➕
+
+</button>
+
+</div>
+
+</header>
+
+<!-- =====================================
+MAIN CONTAINER
+===================================== -->
+
 <div class="container">
 
+<!-- =====================================
+SUMMARY
+===================================== -->
+
+<section class="summary">
+
+<div class="summary-box">
+
+<h2 id="totalStudents">0</h2>
+
+<p>Total Students</p>
+
+</div>
+
+<div class="summary-box">
+
+<h2 id="boysCount">0</h2>
+
+<p>Boys</p>
+
+</div>
+
+<div class="summary-box">
+
+<h2 id="girlsCount">0</h2>
+
+<p>Girls</p>
+
+</div>
+
+<div class="summary-box">
+
+<h2 id="todayCount">0</h2>
+
+<p>Today Added</p>
+
+</div>
+
+</section>
+
+<!-- =====================================
+SEARCH & FILTER
+===================================== -->
+
+<section class="card">
+
 <input
-
 id="search"
-
-placeholder="Search by Name or EMIS"
-
+type="text"
+placeholder="🔍 Search Student Name / EMIS"
 onkeyup="searchStudent()">
 
-<div id="studentList"></div>
- 
+<div class="filter-row">
+
+<select id="filterClass">
+
+<option value="">All Classes</option>
+
+<option>6</option>
+<option>7</option>
+<option>8</option>
+<option>9</option>
+<option>10</option>
+
+</select>
+
+<select id="filterSection">
+
+<option value="">All Sections</option>
+
+<option>A</option>
+<option>B</option>
+<option>C</option>
+
+</select>
+
+<select id="filterMedium">
+
+<option value="">All Medium</option>
+
+<option>Tamil</option>
+<option>English</option>
+
+</select>
+
+</div>
+
+</section>
+
+<!-- =====================================
+STUDENTS LIST
+===================================== -->
+
+<div id="studentList">
+<!-- =====================================
+STUDENT CARD TEMPLATE
+===================================== -->
+
+<div class="student-card">
+
+<div class="student-left">
+
+<img
+id="studentPhoto"
+src="images/student.png"
+alt="Student">
+
+</div>
+
+<div class="student-right">
+
+<h3 id="studentName">
+
+Loading...
+
+</h3>
+
+<p>
+
+<b>Admission No :</b>
+
+<span id="studentAdmission">
+
+---</span>
+
+</p>
+
+<p>
+
+<b>EMIS :</b>
+
+<span id="studentEMIS">
+
+---</span>
+
+</p>
+
+<p>
+
+<b>Class :</b>
+
+<span id="studentClass">
+
+---</span>
+
+-
+
+<span id="studentSection">
+
+A
+
+</span>
+
+</p>
+
+<p>
+
+<b>Parent :</b>
+
+<span id="studentMobile">
+
+---</span>
+
+</p>
+
+</div>
+
+</div>
+
+<div class="student-actions">
+
 <button
-class="home"
+class="view-btn">
+
+👁 View
+
+</button>
+
+<button
+class="edit-btn">
+
+✏ Edit
+
+</button>
+
+<button
+class="delete-btn">
+
+🗑 Delete
+
+</button>
+
+</div>
+
+<!-- Student cards will be loaded dynamically here -->
+
+</div>
+
+<!-- =====================================
+BOTTOM BUTTONS
+===================================== -->
+
+<section class="card">
+
+<div class="bottom-buttons">
+
+<button
 onclick="location.href='student_management.html'">
 
 ➕ Add Student
@@ -194,13 +260,29 @@ onclick="location.href='student_management.html'">
 </button>
 
 <button
-class="home"
-onclick="location.href='admin_dashboard_v2.html'">
+onclick="location.href='bulk_upload.html'">
 
-🏠 Admin Dashboard
+📥 Bulk Upload
 
 </button>
 
+<button
+onclick="location.href='export_students.html'">
+
+📤 Export
+
+</button>
+
+<button
+onclick="location.href='admin_dashboard.html'">
+
+🏠 Dashboard
+
+</button>
+
+</div>
+
+</section>
 <script type="module">
 
 import { db } from "./firebase.js";
@@ -213,58 +295,106 @@ doc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 const studentList = document.getElementById("studentList");
+const totalStudents = document.getElementById("totalStudents");
+const boysCount = document.getElementById("boysCount");
+const girlsCount = document.getElementById("girlsCount");
+const todayCount = document.getElementById("todayCount");
+
+let allStudents = [];
 
 async function loadStudents(){
 
 studentList.innerHTML="";
 
-try{
-
 const snap = await getDocs(collection(db,"students"));
 
-snap.forEach((studentDoc)=>{
+allStudents=[];
 
-const student = studentDoc.data();
+let boys=0;
+let girls=0;
+let today=0;
 
-/* ✅ EMIS Fix */
-const emis = student.emis || studentDoc.id;
- studentList.innerHTML += `
+const todayDate=new Date().toISOString().substring(0,10);
 
-<div class="card">
+snap.forEach(studentDoc=>{
+
+const student=studentDoc.data();
+
+student.id=studentDoc.id;
+
+allStudents.push(student);
+
+if(student.gender==="Male") boys++;
+if(student.gender==="Female") girls++;
+
+if(student.createdAt &&
+student.createdAt.substring(0,10)===todayDate){
+today++;
+}
+
+});
+
+renderStudents(allStudents);
+
+totalStudents.innerText=allStudents.length;
+boysCount.innerText=boys;
+girlsCount.innerText=girls;
+todayCount.innerText=today;
+
+}
+
+function renderStudents(list){
+
+studentList.innerHTML="";
+
+list.forEach(student=>{
+
+const emis=student.emis || student.id;
+
+studentList.innerHTML+=`
+
+<div class="student-card">
+
+<div class="student-left">
+
+<img src="images/student.png">
+
+</div>
+
+<div class="student-right">
 
 <h3>${student.name || "-"}</h3>
+
+<p><b>Admission :</b> ${student.admissionNo || "-"}</p>
 
 <p><b>EMIS :</b> ${emis}</p>
 
 <p><b>Class :</b> ${student.class || "-"} - ${student.section || "-"}</p>
 
-<p><b>Father :</b> ${student.father || "-"}</p>
-
 <p><b>Mobile :</b> ${student.mobile || "-"}</p>
 
-<p><b>Blood Group :</b> ${student.blood || "-"}</p>
+</div>
 
-<div class="actions">
+</div>
 
-<button
-class="profile"
+<div class="student-actions">
+
+<button class="view-btn"
 onclick="location.href='student_profile_v2.html?emis=${emis}'">
 
-👁 Profile
+👁 View
 
 </button>
 
-<button
-class="edit"
+<button class="edit-btn"
 onclick="location.href='student_management.html?emis=${emis}'">
 
 ✏ Edit
 
 </button>
 
-<button
-class="delete"
-onclick="deleteStudent('${studentDoc.id}')">
+<button class="delete-btn"
+onclick="deleteStudent('${student.id}')">
 
 🗑 Delete
 
@@ -272,64 +402,65 @@ onclick="deleteStudent('${studentDoc.id}')">
 
 </div>
 
-</div>
-
 `;
 
 });
 
-}catch(error){
-
-alert(error.message);
-console.log(error);
-
 }
 
-}
- window.deleteStudent = async function(documentId){
+window.deleteStudent=async function(id){
 
 if(confirm("Delete this student?")){
 
-try{
-
-await deleteDoc(doc(db,"students",documentId));
-
-alert("✅ Student Deleted Successfully");
+await deleteDoc(doc(db,"students",id));
 
 loadStudents();
 
-}catch(error){
-
-alert(error.message);
-console.log(error);
-
 }
 
 }
 
-}
+window.searchStudent=function(){
 
-window.searchStudent = function(){
+const value=document
+.getElementById("search")
+.value
+.toLowerCase();
 
-const value = document.getElementById("search").value.toLowerCase();
+const classFilter=document.getElementById("filterClass").value;
+const sectionFilter=document.getElementById("filterSection").value;
+const mediumFilter=document.getElementById("filterMedium").value;
 
-document.querySelectorAll(".card").forEach(card=>{
+const filtered=allStudents.filter(student=>{
 
-card.style.display =
-card.innerText.toLowerCase().includes(value)
-? "block"
-: "none";
+const searchMatch=
+(student.name || "").toLowerCase().includes(value) ||
+(student.emis || "").toLowerCase().includes(value);
+
+const classMatch=
+!classFilter || student.class==classFilter;
+
+const sectionMatch=
+!sectionFilter || student.section==sectionFilter;
+
+const mediumMatch=
+!mediumFilter || student.medium==mediumFilter;
+
+return searchMatch &&
+classMatch &&
+sectionMatch &&
+mediumMatch;
 
 });
 
-}
+renderStudents(filtered);
+
+};
+
+document.getElementById("filterClass").onchange=searchStudent;
+document.getElementById("filterSection").onchange=searchStudent;
+document.getElementById("filterMedium").onchange=searchStudent;
 
 loadStudents();
 
 </script>
-
-</div>
-
-</body>
-
-</html>
