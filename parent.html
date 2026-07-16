@@ -10,46 +10,33 @@ content="width=device-width, initial-scale=1.0">
 
 <title>Parent Dashboard</title>
 
-<link rel="stylesheet"
-href="css/parent.css">
+<link rel="stylesheet" href="css/parent.css">
 
 </head>
 
 <body>
 
-<!-- =====================================
+<!-- ===========================
 HEADER
-===================================== -->
+=========================== -->
 
 <header class="header">
 
 <div class="headerLeft">
 
-<h2>
+<h1>👨‍👩‍👧 Parent Dashboard</h1>
 
-👨‍👩‍👧 Parent Dashboard
-
-</h2>
-
-<p>
-
-School Connect TN
-
-</p>
+<p>School Connect TN</p>
 
 </div>
 
 <div class="headerRight">
 
-<button class="notifyBtn">
+<button id="notifyBtn">
 
 🔔
 
-<span id="notificationBadge">
-
-0
-
-</span>
+<span id="notificationBadge">0</span>
 
 </button>
 
@@ -57,31 +44,28 @@ School Connect TN
 
 </header>
 
-<!-- =====================================
+<!-- ===========================
 MAIN CONTAINER
-===================================== -->
+=========================== -->
 
 <div class="container">
 
-<!-- =====================================
+<!-- ===========================
 PROFILE CARD
-===================================== -->
+=========================== -->
 
-<section class="card profileCard">
+<section class="profileCard">
 
 <div class="profileImage">
 
 <img
-
 id="studentPhoto"
-
 src="images/logo.png"
-
 alt="Student">
 
 </div>
 
-<div class="profileDetails">
+<div class="profileContent">
 
 <h2>
 
@@ -89,63 +73,43 @@ alt="Student">
 
 </h2>
 
-<div class="detailRow">
+<div class="profileRow">
 
-<span class="label">
+<span>👤 Name</span>
 
-👤 Name
-
-</span>
-
-<span id="studentName">
+<b id="studentName">
 
 Loading...
 
-</span>
+</b>
 
 </div>
 
-<div class="detailRow">
+<div class="profileRow">
 
-<span class="label">
+<span>🆔 EMIS</span>
 
-🆔 EMIS
-
-</span>
-
-<span id="studentEmis">
+<b id="studentEmis">
 
 Loading...
 
-</span>
+</b>
 
 </div>
 
-<div class="detailRow">
+<div class="profileRow">
 
-<span class="label">
+<span>🎓 Class</span>
 
-🎓 Class
+<b>
 
-</span>
-
-<span>
-
-<span id="studentClass">
+<span id="studentClass">-</span>
 
 -
 
-</span>
+<span id="studentSection">-</span>
 
--
-
-<span id="studentSection">
-
--
-
-</span>
-
-</span>
+</b>
 
 </div>
 
@@ -153,104 +117,88 @@ Loading...
 
 </section>
 
-<!-- =====================================
-SUMMARY CARDS
-===================================== -->
+<!-- ===========================
+SUMMARY
+=========================== -->
 
-<section class="summary">
+<section class="summaryGrid">
 
 <div class="summaryCard">
 
-<div class="summaryIcon">
+<div class="icon">
 
 👥
 
 </div>
 
-<h1 id="attendanceValue">
+<h2 id="attendanceValue">
 
 0%
 
-</h1>
+</h2>
 
-<p>
-
-Attendance
-
-</p>
+<p>Attendance</p>
 
 </div>
 
 <div class="summaryCard">
 
-<div class="summaryIcon">
+<div class="icon">
 
 ⭐
 
 </div>
 
-<h1 id="averageValue">
+<h2 id="averageValue">
 
 0%
 
-</h1>
+</h2>
 
-<p>
-
-Average
-
-</p>
+<p>Average</p>
 
 </div>
 
 <div class="summaryCard">
 
-<div class="summaryIcon">
+<div class="icon">
 
 📚
 
 </div>
 
-<h1 id="homeworkCount">
+<h2 id="homeworkCount">
 
 0
 
-</h1>
+</h2>
 
-<p>
-
-Homework
-
-</p>
+<p>Homework</p>
 
 </div>
 
 <div class="summaryCard">
 
-<div class="summaryIcon">
+<div class="icon">
 
 📢
 
 </div>
 
-<h1 id="noticeCount">
+<h2 id="noticeCount">
 
 0
 
-</h1>
+</h2>
 
-<p>
-
-Notice
-
-</p>
+<p>Notice</p>
 
 </div>
 
 </section>
-<!-- =====================================
+<!-- ===========================
 QUICK ACTIONS
-===================================== -->
+=========================== -->
 
 <section class="card">
 
@@ -264,51 +212,51 @@ QUICK ACTIONS
 
 <a href="parent_profile.html" class="quickCard">
 <div class="quickIcon">👤</div>
-<p>My Child</p>
+<span>My Child</span>
 </a>
 
 <a href="attendance.html" class="quickCard">
 <div class="quickIcon">📅</div>
-<p>Attendance</p>
+<span>Attendance</span>
 </a>
 
-<a href="parent_report_card.html?emis="+localStorage.getItem("parentEMIS") class="quickCard">
+<a href="parent_report_card.html" class="quickCard">
 <div class="quickIcon">📊</div>
-<p>Marks</p>
+<span>Marks</span>
 </a>
 
 <a href="homework.html" class="quickCard">
 <div class="quickIcon">📚</div>
-<p>Homework</p>
+<span>Homework</span>
 </a>
 
-<a href="parent_report_card.html?emis="+localStorage.getItem("parentEMIS") class="quickCard">
+<a href="parent_report_card.html" class="quickCard">
 <div class="quickIcon">📄</div>
-<p>Report Card</p>
+<span>Report Card</span>
 </a>
 
 <a href="notice_board.html" class="quickCard">
 <div class="quickIcon">📢</div>
-<p>Notice</p>
+<span>Notice</span>
 </a>
 
-<a href="leave_request.html?emis="+localStorage.getItem("parentEMIS") class="quickCard">
+<a href="leave_request.html" class="quickCard">
 <div class="quickIcon">📝</div>
-<p>Apply Leave</p>
+<span>Apply Leave</span>
 </a>
 
-<a href="leave_status.html?emis="+localStorage.getItem("parentEMIS") class="quickCard">
+<a href="leave_status.html" class="quickCard">
 <div class="quickIcon">📋</div>
-<p>Leave Status</p>
+<span>Leave Status</span>
 </a>
 
 </div>
 
 </section>
 
-<!-- =====================================
-LATEST NOTICE
-===================================== -->
+<!-- ===========================
+LATEST NOTICES
+=========================== -->
 
 <section class="card">
 
@@ -316,31 +264,21 @@ LATEST NOTICE
 
 <h2>📢 Latest Notices</h2>
 
-<a href="notice_board.html">
-
-View All
-
-</a>
+<a href="notice_board.html">View All</a>
 
 </div>
 
-<div
-id="latestNotices"
-class="noticeList">
+<div id="latestNotices">
 
-<p>
-
-Loading Notices...
-
-</p>
+Loading notices...
 
 </div>
 
 </section>
 
-<!-- =====================================
+<!-- ===========================
 TODAY HOMEWORK
-===================================== -->
+=========================== -->
 
 <section class="card">
 
@@ -348,30 +286,20 @@ TODAY HOMEWORK
 
 <h2>📚 Today's Homework</h2>
 
-<a href="homework.html">
-
-View All
-
-</a>
+<a href="homework.html">View All</a>
 
 </div>
 
-<div
-id="recentHomework"
-class="homeworkList">
+<div id="recentHomework">
 
-<p>
-
-Loading Homework...
-
-</p>
+Loading homework...
 
 </div>
 
 </section>
-<!-- =====================================
+<!-- ===========================
 BOTTOM NAVIGATION
-===================================== -->
+=========================== -->
 
 <nav class="bottomNav">
 
@@ -409,14 +337,13 @@ BOTTOM NAVIGATION
 
 </nav>
 
-<!-- =====================================
+<!-- ===========================
 JAVASCRIPT
-===================================== -->
+=========================== -->
 
-<script type="module"
-src="js/parent.js">
+<script type="module" src="js/parent.js"></script>
 
-</script>
+</div>
 
 </body>
 
