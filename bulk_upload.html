@@ -1,137 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- =========================
+HEADER
+========================= -->
 
-<head>
+<header class="header">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div class="header-left">
 
-<title>Bulk Upload</title>
+<h1>📥 Bulk Upload</h1>
 
-<style>
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f4f6f9;
-}
-
-.header{
-background:#1565C0;
-color:white;
-padding:20px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
-}
-
-.container{
-max-width:700px;
-margin:20px auto;
-padding:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,.2);
-margin-bottom:20px;
-}
-
-h3{
-color:#1565C0;
-margin-top:0;
-}
-
-select,
-input[type=file]{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:1px solid #ccc;
-border-radius:8px;
-box-sizing:border-box;
-}
-
-button{
-width:100%;
-padding:14px;
-margin-top:15px;
-border:none;
-border-radius:8px;
-font-size:17px;
-cursor:pointer;
-background:#1565C0;
-color:white;
-}
-
-button:hover{
-background:#0D47A1;
-}
-
-.downloadBtn{
-background:#2E7D32;
-}
-
-.downloadBtn:hover{
-background:#1B5E20;
-}
-
-.home{
-background:#455A64;
-}
-
-.home:hover{
-background:#263238;
-}
-
-.status{
-margin-top:15px;
-font-weight:bold;
-text-align:center;
-color:#1565C0;
-}
-
-.note{
-margin-top:15px;
-padding:12px;
-background:#FFF8E1;
-border-left:5px solid orange;
-border-radius:6px;
-font-size:14px;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="header">
-
-📥 School Connect TN - Bulk Upload
+<p>School Connect TN - Admin Panel</p>
 
 </div>
 
+<div class="header-right">
+
+<button
+class="homeBtn"
+onclick="location.href='admin_dashboard.html'">
+
+🏠 Dashboard
+
+</button>
+
+</div>
+
+</header>
+
+<!-- =========================
+MAIN CONTAINER
+========================= -->
+
 <div class="container">
 
-<div class="card">
+<!-- =========================
+UPLOAD CARD
+========================= -->
 
-<h3>Select Upload Type</h3>
+<section class="card">
+
+<h2>Select Upload Type</h2>
 
 <select id="uploadType">
 
-<option value="students">👨‍🎓 Students</option>
-<option value="teachers">👨‍🏫 Teachers</option>
-<option value="attendance">📅 Attendance</option>
-<option value="marks">📝 Marks</option>
+<option value="students">
+👨‍🎓 Students
+</option>
+
+<option value="teachers">
+👨‍🏫 Teachers
+</option>
+
+<option value="parents">
+👨‍👩‍👧 Parents
+</option>
+
+<option value="attendance">
+📅 Attendance
+</option>
+
+<option value="marks">
+📝 Marks
+</option>
 
 </select>
 
 <button
-class="downloadBtn"
-id="downloadTemplateBtn">
+id="downloadTemplateBtn"
+class="downloadBtn">
 
 ⬇ Download CSV Template
 
@@ -143,57 +78,128 @@ id="csvFile"
 accept=".csv">
 
 <button
-id="uploadBtn">
+id="uploadBtn"
+class="uploadBtn">
 
 📤 Upload CSV
 
 </button>
 
+</section>
+
+<!-- =========================
+UPLOAD STATUS
+========================= -->
+
+<section class="card">
+
+<h2>Upload Progress</h2>
+
+<div class="progress">
+
+<div
+id="progressBar"
+class="progress-bar">
+
+0%
+
+</div>
+
+</div>
+
 <p
-class="status"
-id="status">
+id="status"
+class="status">
 
 Waiting for upload...
 
 </p>
 
-<div class="note">
+</section>
+<!-- =========================
+IMPORT SUMMARY
+========================= -->
 
-<b>CSV Format</b><br><br>
+<section class="card">
 
-Students :
-EMIS,Name,Class,Section,Father,Mother,Mobile
+<h2>📊 Import Summary</h2>
 
-<br><br>
+<div class="summary-grid">
 
-Teachers :
-ID,Name,Subject,Email,Mobile
+<div class="summary-box">
+<h3 id="totalRecords">0</h3>
+<p>Total Records</p>
+</div>
 
-<br><br>
+<div class="summary-box success">
+<h3 id="successRecords">0</h3>
+<p>Imported</p>
+</div>
 
-Attendance :
-EMIS,Date,Status
+<div class="summary-box warning">
+<h3 id="updatedRecords">0</h3>
+<p>Updated</p>
+</div>
 
-<br><br>
-
-Marks :
-EMIS,Exam,Tamil,English,Maths,Science,Social
-
+<div class="summary-box danger">
+<h3 id="failedRecords">0</h3>
+<p>Failed</p>
 </div>
 
 </div>
 
-<button
-class="home"
-onclick="location.href='admin_dashboard.html'"
+</section>
 
-🏠 Back to Dashboard
+<!-- =========================
+TEMPLATE DETAILS
+========================= -->
 
-</button>
+<section class="card">
+
+<h2>📋 Download Templates</h2>
+
+<p>
+Choose an upload type and click
+<b>Download CSV Template</b>.
+</p>
+
+<ul class="template-list">
+
+<li>👨‍🎓 Students Template</li>
+
+<li>👨‍🏫 Teachers Template</li>
+
+<li>👨‍👩‍👧 Parents Template</li>
+
+<li>📅 Attendance Template</li>
+
+<li>📝 Marks Template</li>
+
+</ul>
+
+<div class="info-box">
+
+<b>Instructions</b>
+
+<ol>
+
+<li>Download the required CSV template.</li>
+
+<li>Fill the data in Excel.</li>
+
+<li>Save the file as <b>CSV (*.csv)</b>.</li>
+
+<li>Select the file and click <b>Upload CSV</b>.</li>
+
+</ol>
 
 </div>
 
-<script type="module" src="bulk_upload.js"></script>
+</section>
+
+</div>
+
+<script type="module" src="js/bulk_upload.js"></script>
 
 </body>
 
