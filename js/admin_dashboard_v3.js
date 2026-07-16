@@ -1,166 +1,99 @@
-/*==================================================
-School Connect TN
-Admin Dashboard V3
-JavaScript - Part 1
-==================================================*/
+//==================================================
+// School Connect TN
+// Admin Dashboard V3
+// Part 1
+//==================================================
 
-import { db } from "../firebase.js";
+import { db, auth } from "../firebase.js";
 
 import {
 collection,
 getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-/*====================================
-ELEMENTS
-====================================*/
+import {
+signOut
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-const totalStudents =
-document.getElementById("totalStudents");
+//==================================================
+// Session Check
+//==================================================
 
-const totalTeachers =
-document.getElementById("totalTeachers");
+const role = localStorage.getItem("userRole");
 
-const todayAttendance =
-document.getElementById("todayAttendance");
+if(role !== "Admin"){
 
-const totalNotices =
-document.getElementById("totalNotices");
+window.location.href="login.html";
 
-/*====================================
-LOAD DASHBOARD
-====================================*/
+}
+
+//==================================================
+// Dashboard Counts
+//==================================================
 
 async function loadDashboard(){
 
 try{
 
-/* Students */
+const students =
+await getDocs(collection(db,"students"));
 
-const studentSnap =
-await getDocs(
-collection(db,"students")
-);
+document.getElementById("studentCount").textContent =
+students.size;
 
-totalStudents.innerHTML =
-studentSnap.size;
+const teachers =
+await getDocs(collection(db,"teachers"));
 
-/* Teachers */
+document.getElementById("teacherCount").textContent =
+teachers.size;
 
-const teacherSnap =
-await getDocs(
-collection(db,"teachers")
-);
+const notices =
+await getDocs(collection(db,"notices"));
 
-totalTeachers.innerHTML =
-teacherSnap.size;
+document.getElementById("noticeCount").textContent =
+notices.size;
+const attendance =
+"100%";
 
-/* Notices */
+document.getElementById("attendanceCount").textContent =
+attendance;
 
-const noticeSnap =
-await getDocs(
-collection(db,"notices")
-);
+}catch(error){
 
-totalNotices.innerHTML =
-noticeSnap.size;
-/*====================================
-TODAY ATTENDANCE
-====================================*/
+console.error("Dashboard Error :",error);
 
-const today =
-new Date().toISOString().split("T")[0];
+}
+
+}
+
+//==================================================
+// Logout
+//==================================================
+
+window.logoutAdmin = async function(){
 
 try{
 
-const attendanceSnap =
-await getDocs(
-collection(db,"attendance",today,"students")
-);
-
-const totalAttendance =
-attendanceSnap.size;
-
-const totalStudentCount =
-studentSnap.size;
-
-const attendancePercent =
-totalStudentCount > 0
-? ((totalAttendance / totalStudentCount) * 100).toFixed(1)
-: "0";
-
-todayAttendance.innerHTML =
-attendancePercent + "%";
-
-}catch(error){
-
-todayAttendance.innerHTML = "--";
-
-}
-
-}catch(error){
-
-console.error(error);
-
-alert(error.message);
-
-}
-
-}
-
-/*====================================
-WELCOME MESSAGE
-====================================*/
-
-const hour =
-new Date().getHours();
-
-let greeting =
-"Welcome";
-
-if(hour < 12){
-
-greeting =
-"🌅 Good Morning";
-
-}else if(hour < 17){
-
-greeting =
-"☀️ Good Afternoon";
-
-}else{
-
-greeting =
-"🌙 Good Evening";
-
-}
-
-console.log(greeting);
-
-/*====================================
-LOGOUT
-====================================*/
-
-window.logoutAdmin=function(){
-
-if(confirm("Do you want to logout?")){
+await signOut(auth);
 
 localStorage.clear();
 
 sessionStorage.clear();
 
-location.href="index.html";
+window.location.href="login.html";
+
+}catch(error){
+
+console.error(error);
+
+alert("Logout Failed");
 
 }
 
 };
 
-/*====================================
-START
-====================================*/
+//==================================================
+// Load Dashboard
+//==================================================
 
 loadDashboard();
-
-console.log(
-"Admin Dashboard V3 Loaded Successfully"
-);
