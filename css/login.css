@@ -1,8 +1,8 @@
-/*=====================================
+/*=========================================
 School Connect TN
 Professional Login UI
 Part 1
-======================================*/
+=========================================*/
 
 *{
 margin:0;
@@ -25,9 +25,10 @@ padding:20px;
 
 }
 
-.login-bg{
+.login-container{
 
 width:100%;
+
 display:flex;
 justify-content:center;
 align-items:center;
@@ -37,28 +38,29 @@ align-items:center;
 .login-card{
 
 width:100%;
-max-width:430px;
+max-width:420px;
 
 background:#ffffff;
 
 border-radius:20px;
 
-padding:30px 25px;
+padding:30px;
 
-box-shadow:0 10px 30px rgba(0,0,0,.20);
+box-shadow:0 12px 30px rgba(0,0,0,.20);
 
 animation:fadeIn .8s ease;
 
 }
 
-.logo-area{
+.logo-section{
 
 text-align:center;
+
 margin-bottom:25px;
 
 }
 
-.tn-logo{
+.school-logo{
 
 width:90px;
 height:90px;
@@ -69,10 +71,12 @@ margin-bottom:12px;
 
 }
 
-.logo-area h1{
+.logo-section h1{
 
 font-size:30px;
+
 color:#1565C0;
+
 margin-bottom:8px;
 
 }
@@ -80,20 +84,38 @@ margin-bottom:8px;
 .subtitle{
 
 font-size:15px;
+
 color:#666;
 
 }
-/*=====================================
-FORM ELEMENTS
-======================================*/
 
-.form-area select,
-.form-area input{
+.form-group{
+
+margin-bottom:18px;
+
+}
+
+.form-group label{
+
+display:block;
+
+margin-bottom:8px;
+
+font-weight:bold;
+
+color:#1565C0;
+
+}
+/*=========================================
+FORM CONTROLS
+=========================================*/
+
+.form-group input,
+.form-group select{
 
 width:100%;
-padding:14px;
 
-margin-bottom:16px;
+padding:14px;
 
 border:2px solid #E3F2FD;
 
@@ -105,10 +127,12 @@ outline:none;
 
 transition:.3s;
 
+background:#fff;
+
 }
 
-.form-area select:focus,
-.form-area input:focus{
+.form-group input:focus,
+.form-group select:focus{
 
 border-color:#1565C0;
 
@@ -116,7 +140,78 @@ box-shadow:0 0 10px rgba(21,101,192,.20);
 
 }
 
-.form-area button{
+/*=========================================
+PASSWORD
+=========================================*/
+
+.password-box{
+
+display:flex;
+
+align-items:center;
+
+border:2px solid #E3F2FD;
+
+border-radius:12px;
+
+overflow:hidden;
+
+}
+
+.password-box input{
+
+border:none;
+
+flex:1;
+
+box-shadow:none;
+
+}
+
+.password-box button{
+
+width:55px;
+
+border:none;
+
+background:white;
+
+cursor:pointer;
+
+font-size:18px;
+
+}
+
+/*=========================================
+REMEMBER
+=========================================*/
+
+.remember{
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+margin:15px 0;
+
+font-size:15px;
+
+}
+
+.remember input{
+
+width:18px;
+height:18px;
+
+}
+
+/*=========================================
+LOGIN BUTTON
+=========================================*/
+
+.login-btn{
 
 width:100%;
 
@@ -126,9 +221,9 @@ border:none;
 
 border-radius:12px;
 
-background:linear-gradient(135deg,#1565C0,#1E88E5);
+background:#28A745;
 
-color:#fff;
+color:white;
 
 font-size:18px;
 
@@ -140,17 +235,17 @@ transition:.3s;
 
 }
 
-.form-area button:hover{
+.login-btn:hover{
+
+background:#218838;
 
 transform:translateY(-2px);
 
-box-shadow:0 8px 18px rgba(0,0,0,.20);
-
 }
 
-/*=====================================
+/*=========================================
 MESSAGE
-======================================*/
+=========================================*/
 
 #msg{
 
@@ -164,26 +259,29 @@ color:#D32F2F;
 
 }
 
-/*=====================================
-FOOTER BRANDING
-======================================*/
+/*=========================================
+FOOTER
+=========================================*/
 
-.footer-brand{
+.footer-section{
 
-margin-top:30px;
+margin-top:25px;
 
 text-align:center;
 
+border-top:1px solid #ddd;
+
+padding-top:18px;
+
 }
 
-.vtoos-logo{
+.version{
 
-width:70px;
-height:70px;
+font-size:14px;
 
-object-fit:contain;
+color:#666;
 
-margin-bottom:10px;
+margin-bottom:8px;
 
 }
 
@@ -191,55 +289,43 @@ margin-bottom:10px;
 
 font-size:14px;
 
-color:#666;
+color:#555;
 
 }
 
-.footer-brand h3{
-
-margin-top:6px;
-
-font-size:20px;
+.powered b{
 
 color:#1565C0;
 
 }
 
-.version{
-
-margin-top:10px;
-
-font-size:13px;
-
-color:#888;
-
-}
-
-/*=====================================
+/*=========================================
 ANIMATION
-======================================*/
+=========================================*/
 
 @keyframes fadeIn{
 
 from{
 
 opacity:0;
-transform:translateY(20px);
+
+transform:translateY(25px);
 
 }
 
 to{
 
 opacity:1;
+
 transform:translateY(0);
 
 }
 
 }
 
-/*=====================================
-RESPONSIVE
-======================================*/
+/*=========================================
+MOBILE
+=========================================*/
 
 @media(max-width:480px){
 
@@ -249,29 +335,22 @@ padding:22px;
 
 }
 
-.logo-area h1{
+.logo-section h1{
 
 font-size:24px;
 
 }
 
-.subtitle{
-
-font-size:14px;
-
-}
-
-.tn-logo{
+.school-logo{
 
 width:70px;
 height:70px;
 
 }
 
-.vtoos-logo{
+.subtitle{
 
-width:60px;
-height:60px;
+font-size:14px;
 
 }
 
