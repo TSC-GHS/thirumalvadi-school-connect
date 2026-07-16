@@ -1,1 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<link rel="stylesheet" href="css/admin.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+<div class="header-left">
+<h2>🏫 School Connect TN</h2>
+<p>Administrator Dashboard</p>
+</div>
+
+<div class="header-right">
+<span class="icon">🔔</span>
+<span class="icon">👤</span>
+</div>
+
+</header>
+
+<div class="container">
+
+<section class="card">
+
+<h2>👨‍💼 Welcome Admin</h2>
+
+<div class="summary">
+
+<div class="summary-box">
+<h1 id="studentCount">0</h1>
+<p>Students</p>
+</div>
+
+<div class="summary-box">
+<h1 id="teacherCount">0</h1>
+<p>Teachers</p>
+</div>
+
+<div class="summary-box">
+<h1 id="parentCount">0</h1>
+<p>Parents</p>
+</div>
+
+<div class="summary-box">
+<h1 id="noticeCount">0</h1>
+<p>Notices</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="card">
+
+<h2>🛠 Management</h2>
+
+<div class="quickmenu">
+<button onclick="location.href='add_student.html'">
+👨‍🎓<br>Add Student
+</button>
+
+<button onclick="location.href='student_list.html'">
+📋<br>Students
+</button>
+
+<button onclick="location.href='add_teacher.html'">
+👨‍🏫<br>Add Teacher
+</button>
+
+<button onclick="location.href='teacher_list.html'">
+👨‍💼<br>Teachers
+</button>
+
+<button onclick="location.href='parent_list.html'">
+👨‍👩‍👧<br>Parents
+</button>
+
+<button onclick="location.href='notice_board.html'">
+📢<br>Notices
+</button>
+
+<button onclick="location.href='homework.html'">
+📚<br>Homework
+</button>
+
+<button onclick="location.href='report_card.html'">
+📄<br>Report Card
+</button>
+
+<button onclick="location.href='bulk_upload.html'">
+📥<br>Bulk Upload
+</button>
+
+<button onclick="location.href='bulk_attendance.html'">
+✅<br>Bulk Attendance
+</button>
+
+<button onclick="location.href='settings.html'">
+⚙️<br>Settings
+</button>
+
+<button onclick="location.href='analytics.html'">
+📊<br>Reports
+</button>
+
+</div>
+
+</section>
+<!-- =====================================
+RECENT ACTIVITIES
+===================================== -->
+
+<section class="card">
+
+<h2>📋 Recent Activities</h2>
+
+<div class="activity-list">
+
+<div class="activity-item">
+✅ New Student Added
+</div>
+
+<div class="activity-item">
+📢 Notice Published
+</div>
+
+<div class="activity-item">
+📚 Homework Uploaded
+</div>
+
+<div class="activity-item">
+👨‍🏫 Teacher Updated
+</div>
+
+</div>
+
+</section>
+
+<!-- =====================================
+SYSTEM STATUS
+===================================== -->
+
+<section class="card">
+
+<h2>🖥️ System Status</h2>
+
+<div class="status-list">
+
+<p>🟢 Firebase Connected</p>
+
+<p>🟢 Database Online</p>
+
+<p>🟢 Storage Available</p>
+
+<p>🟢 Backup Completed</p>
+
+</div>
+
+</section>
+
+</div>
+
+<!-- =====================================
+BOTTOM NAVIGATION
+===================================== -->
+
+<nav class="bottom-nav">
+
+<button onclick="location.href='admin_dashboard.html'">
+
+<span>🏠</span>
+
+Dashboard
+
+</button>
+
+<button onclick="location.href='student_list.html'">
+
+<span>👥</span>
+
+Users
+
+</button>
+
+<button onclick="location.href='analytics.html'">
+
+<span>📊</span>
+
+Reports
+
+</button>
+
+<button onclick="location.href='settings.html'">
+
+<span>⚙️</span>
+
+Settings
+
+</button>
+
+</nav>
+
+<script type="module" src="js/admin.js"></script>
+
+</body>
+
+</html>
