@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Homework Analytics</title>
+
+<link rel="stylesheet" href="css/homework_analytics.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+<h1>📚 Homework Analytics</h1>
+
+<p>School Connect TN</p>
+
+</header>
+
+<div class="container">
+
+<div class="cards">
+
+<div class="card blue">
+<h2 id="totalHomework">0</h2>
+<p>Total Homework</p>
+</div>
+
+<div class="card green">
+<h2 id="todayHomework">0</h2>
+<p>Today's Homework</p>
+</div>
+
+<div class="card orange">
+<h2 id="teacherCount">0</h2>
+<p>Teachers Submitted</p>
+</div>
+
+<div class="card red">
+<h2 id="classCount">0</h2>
+<p>Classes Covered</p>
+</div>
+
+</div>
+
+<div class="listCard">
+
+<h3>👨‍🏫 Teacher Wise Homework</h3>
+
+<div id="teacherWise">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="listCard">
+
+<h3>🏫 Class Wise Homework</h3>
+
+<div id="classWise">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="listCard">
+
+<h3>📝 Latest Homework</h3>
+
+<div id="latestHomework">
+
+Loading...
+
+</div>
+
+</div>
+
+<button
+class="backBtn"
+onclick="location.href='headmaster.html'">
+
+🏠 Back to Dashboard
+
+</button>
+
+</div>
+
+<script type="module"
+src="js/homework_analytics.js"></script>
+
+</body>
+</html>
