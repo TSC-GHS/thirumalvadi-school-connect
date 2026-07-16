@@ -1,1 +1,394 @@
+/*==================================================
+School Connect TN
+Admin Dashboard V3
+CSS - Part 1
+==================================================*/
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#EEF4FA;
+color:#333;
+}
+
+/*=========================
+HEADER
+=========================*/
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 22px;
+background:linear-gradient(135deg,#1565C0,#1E88E5);
+color:#fff;
+box-shadow:0 3px 12px rgba(0,0,0,.15);
+position:sticky;
+top:0;
+z-index:999;
+}
+
+.header-left h2{
+font-size:26px;
+margin-bottom:5px;
+}
+
+.header-left p{
+font-size:14px;
+opacity:.9;
+}
+
+.admin-info{
+background:rgba(255,255,255,.2);
+padding:10px 16px;
+border-radius:12px;
+font-weight:bold;
+}
+
+/*=========================
+WELCOME
+=========================*/
+
+.welcome-card{
+margin:20px;
+padding:22px;
+background:linear-gradient(135deg,#42A5F5,#1565C0);
+color:#fff;
+border-radius:18px;
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.welcome-card h2{
+font-size:28px;
+margin-bottom:8px;
+}
+
+.welcome-card p{
+font-size:15px;
+opacity:.95;
+}
+
+/*=========================
+SUMMARY
+=========================*/
+
+.summary-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:18px;
+padding:0 20px;
+margin-bottom:20px;
+}
+
+.summary-card{
+background:#fff;
+border-radius:18px;
+padding:20px;
+text-align:center;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+border-top:5px solid #1565C0;
+transition:.3s;
+}
+
+.summary-card:hover{
+transform:translateY(-4px);
+}
+
+.summary-card h3{
+font-size:30px;
+color:#1565C0;
+margin-bottom:8px;
+}
+
+.summary-card p{
+font-size:15px;
+color:#666;
+}
+/*==================================================
+School Connect TN
+Admin Dashboard V3
+CSS - Part 2
+==================================================*/
+
+/*=========================
+DASHBOARD CARDS
+=========================*/
+
+.dashboard-card{
+margin:20px;
+padding:22px;
+background:#fff;
+border-radius:18px;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.dashboard-card h2{
+color:#1565C0;
+margin-bottom:20px;
+font-size:24px;
+}
+
+/*=========================
+QUICK ACTIONS
+=========================*/
+
+.quick-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+}
+
+.quick-grid button{
+
+border:none;
+border-radius:16px;
+padding:22px;
+background:linear-gradient(135deg,#1565C0,#42A5F5);
+color:white;
+cursor:pointer;
+font-size:17px;
+font-weight:bold;
+transition:.3s;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:10px;
+
+}
+
+.quick-grid button span{
+
+font-size:15px;
+
+}
+
+.quick-grid button:hover{
+
+transform:translateY(-4px);
+box-shadow:0 6px 18px rgba(0,0,0,.18);
+
+}
+
+/*=========================
+MANAGEMENT GRID
+=========================*/
+
+.management-grid{
+
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+
+}
+
+.module-card{
+
+background:#F8FBFF;
+border-radius:18px;
+padding:22px;
+text-align:center;
+text-decoration:none;
+color:#333;
+
+border-left:5px solid #1565C0;
+
+transition:.3s;
+
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+
+}
+
+.module-card:hover{
+
+transform:translateY(-5px);
+
+background:#E3F2FD;
+
+box-shadow:0 6px 18px rgba(0,0,0,.15);
+
+}
+
+.module-card{
+
+font-size:40px;
+
+}
+
+.module-card h3{
+
+margin-top:10px;
+margin-bottom:8px;
+color:#1565C0;
+font-size:20px;
+
+}
+
+.module-card p{
+
+font-size:14px;
+color:#666;
+line-height:1.5;
+
+}
+/*==================================================
+School Connect TN
+Admin Dashboard V3
+CSS - Part 3 (Final)
+==================================================*/
+
+/*=========================
+LOGOUT BUTTON
+=========================*/
+
+.logoutBtn{
+
+width:100%;
+padding:16px;
+border:none;
+border-radius:14px;
+background:#D32F2F;
+color:#fff;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+
+}
+
+.logoutBtn:hover{
+
+background:#B71C1C;
+transform:translateY(-2px);
+
+}
+
+/*=========================
+FOOTER
+=========================*/
+
+.footer{
+
+margin-top:30px;
+padding:20px;
+text-align:center;
+color:#666;
+font-size:14px;
+
+}
+
+/*=========================
+RESPONSIVE
+=========================*/
+
+@media(max-width:992px){
+
+.summary-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.quick-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.management-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:768px){
+
+.header{
+flex-direction:column;
+align-items:flex-start;
+gap:12px;
+padding:16px;
+}
+
+.admin-info{
+width:100%;
+text-align:center;
+}
+
+.welcome-card,
+.dashboard-card{
+margin:12px;
+}
+
+.summary-grid,
+.quick-grid,
+.management-grid{
+grid-template-columns:1fr;
+padding:0 12px;
+}
+
+.quick-grid button{
+padding:18px;
+}
+
+.module-card{
+padding:18px;
+}
+
+.module-card h3{
+font-size:18px;
+}
+
+}
+
+/*=========================
+SCROLLBAR
+=========================*/
+
+::-webkit-scrollbar{
+width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#90CAF9;
+border-radius:10px;
+}
+
+::-webkit-scrollbar-track{
+background:#EEF4FA;
+}
+
+/*=========================
+PRINT
+=========================*/
+
+@media print{
+
+.header,
+.logoutBtn{
+
+display:none;
+
+}
+
+body{
+
+background:#fff;
+
+}
+
+.dashboard-card,
+.summary-card{
+
+box-shadow:none;
+border:1px solid #ddd;
+
+}
+
+}
+
+/*=========================
+END
+=========================*/
