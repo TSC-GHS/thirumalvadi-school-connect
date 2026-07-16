@@ -178,17 +178,30 @@ ${item.dueDate||"-"}
 
 latestHomework.innerHTML=latestHTML;
 
-}catch(error){
+catch(error){
 
 console.error(error);
 
-teacherWise.innerHTML="<p>"+error.message+"</p>";
+totalHomework.textContent = "ERR";
+todayHomework.textContent = "ERR";
+teacherCount.textContent = "ERR";
+classCount.textContent = "ERR";
 
-classWise.innerHTML="<p>"+error.message+"</p>";
+teacherWise.innerHTML = `
+<div style="color:red;padding:10px">
+<b>Error:</b><br>
+${error.message}
+</div>`;
 
-latestHomework.innerHTML="<p>"+error.message+"</p>";
+classWise.innerHTML = `
+<div style="color:red;padding:10px">
+${error.message}
+</div>`;
 
-}
+latestHomework.innerHTML = `
+<div style="color:red;padding:10px">
+${error.message}
+</div>`;
 
 }
 
