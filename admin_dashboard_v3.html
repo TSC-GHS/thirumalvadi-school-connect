@@ -4,22 +4,19 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+<title>School Connect TN - Admin Dashboard</title>
 
-<title>Admin Dashboard</title>
-
-<link rel="stylesheet"
-href="css/admin_dashboard_v3.css">
+<link rel="stylesheet" href="css/admin_dashboard_v3.css">
 
 </head>
 
 <body>
 
-<!--====================================
+<!-- ===========================
 HEADER
-=====================================-->
+=========================== -->
 
 <header class="header">
 
@@ -27,13 +24,13 @@ HEADER
 
 <h2>🏫 School Connect TN</h2>
 
-<p>Admin Dashboard</p>
+<p>Administrator Dashboard</p>
 
 </div>
 
 <div class="header-right">
 
-<div class="admin-info">
+<div class="admin-profile">
 
 👤 Administrator
 
@@ -43,63 +40,47 @@ HEADER
 
 </header>
 
-<!--====================================
+<!-- ===========================
 WELCOME
-=====================================-->
+=========================== -->
 
-<div class="welcome-card">
+<section class="welcome-card">
 
-<h2>
-
-Welcome Back 👋
-
-</h2>
+<h2>Welcome Back 👋</h2>
 
 <p>
 
-Manage your entire school from one dashboard.
+Manage your school from one professional dashboard.
 
 </p>
 
-</div>
+</section>
 
-<!--====================================
+<!-- ===========================
 SUMMARY
-=====================================-->
+=========================== -->
 
 <section class="summary-grid">
 
 <div class="summary-card">
 
-<h3 id="totalStudents">
+<h3 id="studentCount">0</h3>
 
-0
-
-</h3>
-
-<p>Students</p>
+<p>Total Students</p>
 
 </div>
 
 <div class="summary-card">
 
-<h3 id="totalTeachers">
+<h3 id="teacherCount">0</h3>
 
-0
-
-</h3>
-
-<p>Teachers</p>
+<p>Total Teachers</p>
 
 </div>
 
 <div class="summary-card">
 
-<h3 id="todayAttendance">
-
-0%
-
-</h3>
+<h3 id="attendanceCount">0%</h3>
 
 <p>Attendance</p>
 
@@ -107,20 +88,17 @@ SUMMARY
 
 <div class="summary-card">
 
-<h3 id="totalNotices">
-
-0
-
-</h3>
+<h3 id="noticeCount">0</h3>
 
 <p>Notices</p>
 
 </div>
 
 </section>
-<!--====================================
+
+<!-- ===========================
 QUICK ACTIONS
-=====================================-->
+=========================== -->
 
 <section class="dashboard-card">
 
@@ -128,55 +106,92 @@ QUICK ACTIONS
 
 <div class="quick-grid">
 
-<button onclick="location.href='student_management.html'">
+<button onclick="location.href='add_student.html'">
 
-➕
+👨‍🎓
+
 <span>Add Student</span>
 
 </button>
 
-<button onclick="location.href='teacher_management.html'">
+<button onclick="location.href='student_list.html'">
+
+📋
+
+<span>Student List</span>
+
+</button>
+
+<button onclick="location.href='add_teacher.html'">
 
 👨‍🏫
+
 <span>Add Teacher</span>
 
 </button>
 
-<button onclick="location.href='management/attendance_management.html'">
+<button onclick="location.href='teacher_list.html'">
+
+👥
+
+<span>Teacher List</span>
+
+</button>
+
+<button onclick="location.href='attendance_management.html'">
 
 📅
+
 <span>Attendance</span>
 
 </button>
 
-<button onclick="location.href='report_card_management.html'">
+<button onclick="location.href='report_card.html'">
 
 📄
+
 <span>Report Card</span>
 
 </button>
 
-<button onclick="location.href='homework_management.html'">
+<button onclick="location.href='homework.html'">
 
 📚
+
 <span>Homework</span>
 
 </button>
 
-<button onclick="location.href='notice_management.html'">
+<button onclick="location.href='notice_board.html'">
 
 📢
-<span>Notice</span>
+
+<span>Notice Board</span>
+
+</button>
+
+<button onclick="location.href='bulk_upload.html'">
+
+📥
+
+<span>Bulk Upload</span>
+
+</button>
+
+<button onclick="location.href='management/backup_restore.html'">
+
+💾
+
+<span>Backup</span>
 
 </button>
 
 </div>
 
 </section>
-
-<!--====================================
-MANAGEMENT MODULES
-=====================================-->
+<!-- ===========================
+SCHOOL MANAGEMENT
+=========================== -->
 
 <section class="dashboard-card">
 
@@ -194,7 +209,7 @@ MANAGEMENT MODULES
 
 </a>
 
-<a href="management/teacher_management.html" class="module-card">
+<a href="teacher_list.html" class="module-card">
 
 👨‍🏫
 
@@ -204,17 +219,17 @@ MANAGEMENT MODULES
 
 </a>
 
-<a href="parent_management.html" class="module-card">
+<a href="parent_list.html" class="module-card">
 
 👨‍👩‍👧
 
 <h3>Parents</h3>
 
-<p>Manage Parents</p>
+<p>Manage Parent Accounts</p>
 
 </a>
 
-<a href="management/attendance_management.html" class="module-card">
+<a href="attendance_management.html" class="module-card">
 
 📅
 
@@ -224,13 +239,13 @@ MANAGEMENT MODULES
 
 </a>
 
-<a href="report_card_management.html" class="module-card">
+<a href="report_card.html" class="module-card">
 
 📄
 
 <h3>Report Cards</h3>
 
-<p>Exam Results</p>
+<p>Student Results</p>
 
 </a>
 
@@ -240,16 +255,17 @@ MANAGEMENT MODULES
 
 <h3>Bulk Upload</h3>
 
-<p>Import CSV Data</p>
+<p>Import Student Data</p>
 
 </a>
 
 </div>
 
 </section>
-<!--====================================
-SYSTEM MODULES
-=====================================-->
+
+<!-- ===========================
+SYSTEM
+=========================== -->
 
 <section class="dashboard-card">
 
@@ -261,9 +277,9 @@ SYSTEM MODULES
 
 💾
 
-<h3>Backup & Restore</h3>
+<h3>Backup</h3>
 
-<p>Backup School Database</p>
+<p>Backup & Restore</p>
 
 </a>
 
@@ -273,41 +289,11 @@ SYSTEM MODULES
 
 <h3>Settings</h3>
 
-<p>School Configuration</p>
+<p>Application Settings</p>
 
 </a>
 
-<a href="management/timetable_management.html" class="module-card">
-
-🗓️
-
-<h3>Timetable</h3>
-
-<p>Manage Timetable</p>
-
-</a>
-
-<a href="management/exam_management.html" class="module-card">
-
-📝
-
-<h3>Exam Management</h3>
-
-<p>Manage Exams</p>
-
-</a>
-
-<a href="management/leave_management.html" class="module-card">
-
-📝
-
-<h3>Leave Management</h3>
-
-<p>Approve Leave Requests</p>
-
-</a>
-
-<a href="management/analytics_dashboard.html" class="module-card">
+<a href="analytics.html" class="module-card">
 
 📊
 
@@ -317,19 +303,27 @@ SYSTEM MODULES
 
 </a>
 
+<a href="notice_board.html" class="module-card">
+
+📢
+
+<h3>Notice Board</h3>
+
+<p>School Announcements</p>
+
+</a>
+
 </div>
 
 </section>
 
-<!--====================================
+<!-- ===========================
 LOGOUT
-=====================================-->
+=========================== -->
 
 <section class="dashboard-card">
 
-<button
-class="logoutBtn"
-onclick="logoutAdmin()">
+<button class="logoutBtn" onclick="logoutAdmin()">
 
 🚪 Logout
 
@@ -345,12 +339,17 @@ onclick="logoutAdmin()">
 
 </p>
 
+<p>
+
+Developed & Maintained by
+
+<b>VTOOS Software Solution</b>
+
+</p>
+
 </footer>
 
-<script type="module"
-src="js/admin_dashboard_v3.js">
-
-</script>
+<script type="module" src="js/admin_dashboard_v3.js"></script>
 
 </body>
 
