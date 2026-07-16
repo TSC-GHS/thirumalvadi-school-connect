@@ -1,243 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- ========================= -->
+<!-- Welcome Parent Card -->
+<!-- ========================= -->
 
-<head>
+<div class="welcome-card">
 
-<meta charset="UTF-8">
+    <div class="student-info">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+        <div class="student-photo">
+            <img src="images/student.png" alt="Student">
+        </div>
 
-<title>Parent Dashboard</title>
+        <div class="student-details">
 
-<link rel="stylesheet" href="parent.css">
+            <h2>👋 Welcome Parent</h2>
 
-</head>
+            <p><strong>Name :</strong> Amul</p>
+            <p><strong>EMIS :</strong> 610000020</p>
+            <p><strong>Class :</strong> 7</p>
+            <p><strong>Section :</strong> A</p>
 
-<body>
+        </div>
 
-<!-- ===========================
-HEADER
-=========================== -->
-
-<div class="top-bar">
-
-<div>
-
-<h1>👨‍👩‍👧 Parent Dashboard</h1>
-
-<p>School Connect TN</p>
+    </div>
 
 </div>
 
-</div>
-
-<div class="container">
-
-<!-- ===========================
-WELCOME CARD
-=========================== -->
-
-<div class="card welcome-card">
-
-<img
-id="studentPhoto"
-class="student-photo"
-src="school_logo.png"
-alt="Student">
-
-<div class="student-info">
-
-<h2>👋 Welcome Parent</h2>
-
-<p><b>Name :</b>
-<span id="studentName">Loading...</span>
-</p>
-
-<p><b>EMIS :</b>
-<span id="studentEmis">Loading...</span>
-</p>
-
-<p><b>Class :</b>
-<span id="studentClass">Loading...</span>
-</p>
-
-<p><b>Section :</b>
-<span id="studentSection">Loading...</span>
-</p>
-
-</div>
-
-</div>
-
-<!-- ===========================
-STATISTICS
-=========================== -->
+<!-- ========================= -->
+<!-- Statistics -->
+<!-- ========================= -->
 
 <div class="stats-grid">
 
-<div class="stat-card">
+    <div class="stat-box">
+        <h1>50%</h1>
+        <span>Attendance</span>
+    </div>
 
-<h3 id="attendancePercent">0%</h3>
+    <div class="stat-box">
+        <h1>67%</h1>
+        <span>Average</span>
+    </div>
 
-<span>Attendance</span>
+    <div class="stat-box">
+        <h1>5</h1>
+        <span>Homework</span>
+    </div>
 
-</div>
-
-<div class="stat-card">
-
-<h3 id="averageMark">0%</h3>
-
-<span>Average</span>
-
-</div>
-
-<div class="stat-card">
-
-<h3 id="homeworkCount">0</h3>
-
-<span>Homework</span>
+    <div class="stat-box">
+        <h1>3</h1>
+        <span>Notice</span>
+    </div>
 
 </div>
+<!-- ========================= -->
+<!-- Quick Actions -->
+<!-- ========================= -->
 
-<div class="stat-card">
-
-<h3 id="noticeCount">0</h3>
-
-<span>Notice</span>
-
+<div class="section-title">
+    ⚡ Quick Actions
 </div>
-
-</div>
-<!-- =====================================
-QUICK ACTIONS
-===================================== -->
-
-<div class="card">
-
-<h2 class="section-title">⚡ Quick Actions</h2>
 
 <div class="quick-grid">
 
-<button onclick="location.href='student_profile.html'" class="quick-card">
-<div class="icon">👤</div>
-<span>Student<br>Profile</span>
-</button>
+    <div class="quick-card">
+        <div class="icon">👤</div>
+        <span>Student Profile</span>
+    </div>
 
-<button onclick="location.href='attendance.html'" class="quick-card">
-<div class="icon">📅</div>
-<span>Attendance</span>
-</button>
+    <div class="quick-card">
+        <div class="icon">📅</div>
+        <span>Attendance</span>
+    </div>
 
-<button onclick="location.href='parent_report_card.html'" class="quick-card">
-<div class="icon">📊</div>
-<span>Report<br>Card</span>
-</button>
+    <div class="quick-card">
+        <div class="icon">📊</div>
+        <span>Report Card</span>
+    </div>
 
-<button onclick="location.href='homework.html'" class="quick-card">
-<div class="icon">📚</div>
-<span>Homework</span>
-</button>
+    <div class="quick-card">
+        <div class="icon">📚</div>
+        <span>Homework</span>
+    </div>
 
-<button onclick="location.href='notice_board.html'" class="quick-card">
-<div class="icon">📢</div>
-<span>Notice<br>Board</span>
-</button>
+    <div class="quick-card">
+        <div class="icon">📢</div>
+        <span>Notice</span>
+    </div>
 
-<button onclick="location.href='leave_request.html'" class="quick-card">
-<div class="icon">📝</div>
-<span>Apply<br>Leave</span>
-</button>
+    <div class="quick-card">
+        <div class="icon">📝</div>
+        <span>Apply Leave</span>
+    </div>
 
-<button onclick="location.href='leave_status.html'" class="quick-card">
-<div class="icon">📋</div>
-<span>Leave<br>Status</span>
-</button>
+    <div class="quick-card">
+        <div class="icon">📋</div>
+        <span>Leave Status</span>
+    </div>
 
-<button onclick="logout()" class="quick-card">
-<div class="icon">🚪</div>
-<span>Logout</span>
-</button>
-
-</div>
+    <div class="quick-card logout">
+        <div class="icon">🚪</div>
+        <span>Logout</span>
+    </div>
 
 </div>
-<!-- =====================================
-LATEST NOTICE
-===================================== -->
-
-<div class="card">
-
-<div class="notice-header">
-
-<h2 class="section-title">📢 Latest Notice</h2>
-
-</div>
-
-<div id="latestNotices">
-
-Loading notices...
-
-</div>
-
-</div>
-
-<!-- =====================================
-TODAY HOMEWORK
-===================================== -->
-
-<div class="card">
-
-<div class="homework-header">
-
-<h2 class="section-title">📚 Today's Homework</h2>
-
-</div>
-
-<div id="todayHomework">
-
-Loading homework...
-
-</div>
-
-</div>
-
-<!-- =====================================
-BOTTOM NAVIGATION
-===================================== -->
-
-<div class="bottom-nav">
-
-<a href="parent.html" class="active">
-🏠
-<br>
-Home
-</a>
-
-<a href="attendance.html">
-📅
-<br>
-Attendance
-</a>
-
-<a href="parent_report_card.html">
-📊
-<br>
-Report
-</a>
-
-<a href="student_profile.html">
-👤
-<br>
-Profile
-</a>
-
-</div>
-
-</div>
-
-<script src="parent.js"></script>
-
-</body>
-
-</html>
