@@ -1,292 +1,210 @@
-/*=========================================
-School Connect TN
-Parent Dashboard V2
-Part 1
-=========================================*/
+/* ===========================
+   Parent Dashboard CSS - Part 1
+=========================== */
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 body{
-background:#f4f7fc;
-color:#333;
-padding-bottom:80px;
+    background:#eef3fb;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#333;
+    padding-bottom:90px;
 }
-
-/*=========================
-HEADER
-=========================*/
-
-.top-bar{
-background:linear-gradient(135deg,#1565C0,#1976D2);
-color:#fff;
-padding:15px 18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 2px 10px rgba(0,0,0,.15);
-position:sticky;
-top:0;
-z-index:999;
-}
-
-.top-bar h1{
-font-size:22px;
-margin-bottom:4px;
-}
-
-.top-bar p{
-font-size:13px;
-opacity:.9;
-}
-
-/*=========================
-CONTAINER
-=========================*/
 
 .container{
-max-width:480px;
-margin:auto;
-padding:15px;
+    width:100%;
+    max-width:500px;
+    margin:auto;
+    padding:15px;
 }
 
-/*=========================
-COMMON CARD
-=========================*/
+/* Header */
 
-.card{
-background:#fff;
-border-radius:18px;
-padding:16px;
-margin-bottom:16px;
-box-shadow:0 2px 10px rgba(0,0,0,.08);
+.header{
+    background:#1565c0;
+    color:#fff;
+    text-align:center;
+    padding:20px;
+    border-radius:0 0 25px 25px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
 }
 
-/*=========================
-WELCOME CARD
-=========================*/
+.header h1{
+    font-size:30px;
+    font-weight:bold;
+}
+
+.header p{
+    font-size:17px;
+    margin-top:5px;
+}
+
+/* Welcome Card */
 
 .welcome-card{
-display:flex;
-align-items:center;
-gap:15px;
-}
-
-.student-photo{
-width:80px;
-height:80px;
-border-radius:50%;
-border:3px solid #1565C0;
-object-fit:cover;
-flex-shrink:0;
+    background:#fff;
+    border-radius:22px;
+    margin-top:20px;
+    padding:18px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
 }
 
 .student-info{
-flex:1;
+    display:flex;
+    align-items:center;
+    gap:18px;
 }
 
-.student-info h2{
-font-size:20px;
-color:#1565C0;
-margin-bottom:10px;
+.student-photo img{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid #1565c0;
 }
 
-.student-info p{
-font-size:14px;
-margin:6px 0;
+.student-details h2{
+    color:#1565c0;
+    margin-bottom:10px;
+    font-size:28px;
 }
 
-/*=========================
-SUMMARY
-=========================*/
+.student-details p{
+    font-size:16px;
+    margin:6px 0;
+}
+
+.student-details strong{
+    color:#222;
+}
+/* ===========================
+   Parent Dashboard CSS - Part 2
+=========================== */
+
+/* Statistics */
 
 .stats-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-margin-bottom:16px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    margin:18px 0;
 }
 
-.stat-card{
-background:#fff;
-border-top:5px solid #1565C0;
-border-radius:16px;
-padding:16px;
-text-align:center;
-box-shadow:0 2px 10px rgba(0,0,0,.08);
+.stat-box{
+    background:#fff;
+    border-radius:18px;
+    padding:18px;
+    text-align:center;
+    box-shadow:0 5px 12px rgba(0,0,0,.08);
+    border-top:5px solid #1565c0;
 }
 
-.stat-card h3{
-font-size:28px;
-color:#1565C0;
-margin-bottom:6px;
+.stat-box h1{
+    color:#1565c0;
+    font-size:28px;
+    margin-bottom:6px;
 }
 
-.stat-card span{
-font-size:13px;
-color:#666;
+.stat-box span{
+    color:#666;
+    font-size:14px;
 }
-/*=========================================
-PART 2
-Quick Actions + Notice + Homework
-=========================================*/
 
-/* SECTION TITLE */
+/* Section Title */
 
 .section-title{
-
-font-size:18px;
-
-font-weight:bold;
-
-color:#1565C0;
-
-margin-bottom:15px;
-
+    font-size:22px;
+    font-weight:bold;
+    color:#1565c0;
+    margin:20px 0 12px;
 }
 
-/* QUICK GRID */
+/* Quick Actions */
 
 .quick-grid{
-
-display:grid;
-
-grid-template-columns:repeat(4,1fr);
-
-gap:10px;
-
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
 }
 
 .quick-card{
-
-background:#fff;
-
-border:none;
-
-border-radius:16px;
-
-padding:12px 6px;
-
-box-shadow:0 2px 8px rgba(0,0,0,.08);
-
-cursor:pointer;
-
-transition:.3s;
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
-justify-content:center;
-
-text-decoration:none;
-
-color:#1565C0;
-
-min-height:85px;
-
+    background:#fff;
+    border-radius:16px;
+    padding:15px 8px;
+    text-align:center;
+    box-shadow:0 5px 12px rgba(0,0,0,.08);
+    transition:.25s;
+    cursor:pointer;
 }
 
 .quick-card:hover{
-
-background:#1565C0;
-
-color:#fff;
-
-transform:translateY(-2px);
-
+    transform:translateY(-3px);
 }
 
 .quick-card .icon{
-
-font-size:24px;
-
-margin-bottom:6px;
-
+    font-size:26px;
+    margin-bottom:8px;
 }
 
 .quick-card span{
-
-font-size:11px;
-
-font-weight:600;
-
-text-align:center;
-
-line-height:15px;
-
+    display:block;
+    font-size:11px;
+    font-weight:600;
+    line-height:15px;
 }
 
-/* NOTICE */
-
-.notice-header,
-.homework-header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:12px;
-
-}
-
-.notice-header h2,
-.homework-header h2{
-
-font-size:18px;
-
-color:#1565C0;
-
-}
-
-.notice-item,
-.homework-item{
-
-padding:12px;
-
-background:#F8FAFD;
-
-border-left:4px solid #1565C0;
-
-border-radius:12px;
-
-margin-bottom:10px;
-
-}
-
-.notice-item h4,
-.homework-item h4{
-
-font-size:15px;
-
-color:#1565C0;
-
-margin-bottom:5px;
-
-}
-
-.notice-item p,
-.homework-item p{
-
-font-size:13px;
-
-color:#666;
-
-line-height:18px;
-
+.logout{
+    color:#d32f2f;
 }
 /*=========================================
+PARENT DASHBOARD
 PART 3
-Bottom Navigation + Responsive
 =========================================*/
+
+/* NOTICE & HOMEWORK */
+
+.list-card{
+background:#fff;
+border-radius:18px;
+padding:15px;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+margin-bottom:18px;
+}
+
+.list-item{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+padding:12px 0;
+border-bottom:1px solid #eee;
+gap:10px;
+}
+
+.list-item:last-child{
+border-bottom:none;
+}
+
+.list-item h4{
+font-size:15px;
+color:#1565C0;
+margin-bottom:4px;
+}
+
+.list-item p{
+font-size:13px;
+color:#666;
+line-height:18px;
+}
+
+.list-item span{
+font-size:11px;
+color:#888;
+white-space:nowrap;
+}
 
 /* BOTTOM NAVIGATION */
 
@@ -300,7 +218,7 @@ background:#fff;
 display:flex;
 justify-content:space-around;
 align-items:center;
-box-shadow:0 -2px 12px rgba(0,0,0,.10);
+box-shadow:0 -2px 10px rgba(0,0,0,.12);
 z-index:999;
 }
 
@@ -308,18 +226,20 @@ z-index:999;
 flex:1;
 text-align:center;
 text-decoration:none;
-color:#777;
+color:#666;
 font-size:11px;
 font-weight:600;
 padding:8px 0;
-transition:.3s;
 }
 
+.bottom-nav a small{
+display:block;
+margin-top:4px;
+font-size:10px;
+}
+
+.bottom-nav a:hover,
 .bottom-nav a.active{
-color:#1565C0;
-}
-
-.bottom-nav a:hover{
 color:#1565C0;
 }
 
@@ -331,22 +251,20 @@ color:#1565C0;
 padding:12px;
 }
 
-.welcome-card{
-flex-direction:row;
-align-items:center;
+.student-info{
 gap:12px;
 }
 
-.student-photo{
-width:72px;
-height:72px;
+.student-photo img{
+width:70px;
+height:70px;
 }
 
-.student-info h2{
-font-size:18px;
+.student-details h2{
+font-size:20px;
 }
 
-.student-info p{
+.student-details p{
 font-size:13px;
 }
 
@@ -355,11 +273,11 @@ grid-template-columns:repeat(2,1fr);
 gap:10px;
 }
 
-.stat-card{
+.stat-box{
 padding:14px;
 }
 
-.stat-card h3{
+.stat-box h1{
 font-size:22px;
 }
 
@@ -369,8 +287,8 @@ gap:8px;
 }
 
 .quick-card{
-min-height:75px;
 padding:10px 4px;
+min-height:75px;
 }
 
 .quick-card .icon{
@@ -379,21 +297,20 @@ font-size:20px;
 
 .quick-card span{
 font-size:10px;
-line-height:13px;
+line-height:12px;
 }
 
-.card{
-padding:14px;
+.section-title{
+font-size:18px;
 }
 
-.notice-item,
-.homework-item{
-padding:10px;
+.list-card{
+padding:12px;
 }
 
 }
 
-/* TABLET & DESKTOP */
+/* DESKTOP */
 
 @media(min-width:769px){
 
@@ -413,14 +330,13 @@ grid-template-columns:repeat(4,1fr);
 
 /* EFFECTS */
 
-.card,
 .quick-card,
-.stat-card{
+.stat-box,
+.list-card{
 transition:.25s ease;
 }
 
-.card:hover,
 .quick-card:hover,
-.stat-card:hover{
+.stat-box:hover{
 transform:translateY(-2px);
 }
