@@ -1,1 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Teacher Leave Approval</title>
+
+<link rel="stylesheet"
+href="css/leave_approval.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+<h2>📝 Teacher Leave Approval</h2>
+
+<p>School Connect TN</p>
+
+</header>
+
+<div class="container">
+
+<!-- Summary -->
+
+<div class="summaryGrid">
+
+<div class="card blue">
+
+<h2 id="pendingCount">0</h2>
+
+<p>Pending</p>
+
+</div>
+
+<div class="card green">
+
+<h2 id="approvedCount">0</h2>
+
+<p>Approved</p>
+
+</div>
+
+<div class="card red">
+
+<h2 id="rejectedCount">0</h2>
+
+<p>Rejected</p>
+
+</div>
+
+</div>
+
+<!-- Leave List -->
+
+<div class="section">
+
+<h3>Pending Leave Requests</h3>
+
+<div id="leaveList">
+
+<p class="loading">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+<button
+class="backBtn"
+onclick="location.href='headmaster.html'">
+
+⬅ Back to Dashboard
+
+</button>
+
+</div>
+
+<script type="module"
+src="js/leave_approval.js">
+
+</script>
+
+</body>
+
+</html>
