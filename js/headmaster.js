@@ -46,7 +46,15 @@ document.getElementById("homeworkPercentage");
 
 const logoutBtn =
 document.getElementById("logoutBtn");
+//====================================================
+// New Dashboard Elements
+//====================================================
 
+const latestNotices =
+document.getElementById("latestNotices");
+
+const recentHomework =
+document.getElementById("recentHomework");
 //====================================================
 // Dashboard Loader
 //====================================================
@@ -220,11 +228,6 @@ leaveCount.textContent="0";
 }
 
 }
-
-//====================================================
-// Notice Count
-//====================================================
-
 async function loadNotices(){
 
 try{
@@ -232,14 +235,37 @@ try{
 const snap =
 await getDocs(collection(db,"notices"));
 
-noticeCount.textContent =
-snap.size;
+noticeCount.textContent = snap.size;
+
+let html = "";
+
+snap.docs
+.slice(0,5)
+.forEach(doc=>{
+
+const data = doc.data();
+
+html += `
+<div class="listItem">
+<div class="listTitle">
+📢 ${data.title || "Notice"}
+</div>
+</div>
+`;
+
+});
+
+latestNotices.innerHTML =
+html || "<p>No Notices Available</p>";
 
 }catch(error){
 
 console.error(error);
 
-noticeCount.textContent="0";
+noticeCount.textContent = "0";
+
+latestNotices.innerHTML =
+"<p>No Notices Available</p>";
 
 }
 
@@ -268,7 +294,32 @@ return;
 
 // V1 Placeholder
 homeworkPercentage.textContent="100%";
+let html = "";
 
+snap.docs
+.slice(0,5)
+.forEach(doc=>{
+
+const hw = doc.data();
+
+html += `
+<div class="listItem">
+
+<div class="listTitle">
+📚 ${hw.subject || "-"}
+</div>
+
+<div class="listDate">
+Class ${hw.className || hw.class || "-"}
+</div>
+
+</div>
+`;
+
+});
+
+recentHomework.innerHTML =
+html || "<p>No Homework Available</p>";
 }catch(error){
 
 console.error(error);
