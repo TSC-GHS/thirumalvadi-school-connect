@@ -1,1 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Homework Analytics</title>
+
+<link rel="stylesheet" href="css/headmaster_homework.css">
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h2>📚 Homework Analytics</h2>
+
+<p>School Connect TN</p>
+
+</div>
+
+<div class="container">
+
+<!-- Summary -->
+
+<div class="summaryGrid">
+
+<div class="card blue">
+
+<h3 id="totalHomework">0</h3>
+
+<p>Total Homework</p>
+
+</div>
+
+<div class="card green">
+
+<h3 id="todayHomework">0</h3>
+
+<p>Today's Homework</p>
+
+</div>
+
+<div class="card orange">
+
+<h3 id="teacherCount">0</h3>
+
+<p>Teachers Submitted</p>
+
+</div>
+
+<div class="card red">
+
+<h3 id="classCount">0</h3>
+
+<p>Classes Covered</p>
+
+</div>
+
+</div>
+
+<!-- Teacher Wise -->
+
+<div class="listCard">
+
+<h3>👨‍🏫 Teacher Wise Homework</h3>
+
+<div id="teacherWise">
+
+<p style="text-align:center;">Loading...</p>
+
+</div>
+
+</div>
+
+<!-- Class Wise -->
+
+<div class="listCard">
+
+<h3>🏫 Class Wise Homework</h3>
+
+<div id="classWise">
+
+<p style="text-align:center;">Loading...</p>
+
+</div>
+
+</div>
+
+<!-- Latest Homework -->
+
+<div class="listCard">
+
+<h3>📄 Latest Homework</h3>
+
+<div id="latestHomework">
+
+<p style="text-align:center;">Loading...</p>
+
+</div>
+
+</div>
+
+<button
+class="backBtn"
+onclick="location.href='headmaster.html'">
+
+🏠 Back to Dashboard
+
+</button>
+
+</div>
+
+<script
+type="module"
+src="js/headmaster_homework.js">
+
+</script>
+
+</body>
+
+</html>
