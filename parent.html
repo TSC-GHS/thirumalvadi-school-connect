@@ -1,357 +1,173 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- ==========================
+WELCOME CARD
+========================== -->
 
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div class="card welcome-card">
 
-<title>Parent Dashboard</title>
+    <img id="studentPhoto"
+         src="images/logo.png"
+         class="student-photo">
 
-<link rel="stylesheet" href="parent.css">
+    <div class="student-info">
 
-<script type="module" src="parent.js" defer></script>
+        <h2>👋 Welcome Parent</h2>
 
-</head>
+        <p><b>Name :</b>
+            <span id="studentName">Loading...</span>
+        </p>
 
-<body>
+        <p><b>EMIS :</b>
+            <span id="studentEmis">Loading...</span>
+        </p>
 
-<!-- ===========================
-HEADER
-=========================== -->
+        <p><b>Class :</b>
+            <span id="studentClass">Loading...</span>
+        </p>
 
-<header class="topbar">
+        <p><b>Section :</b>
+            <span id="studentSection">Loading...</span>
+        </p>
 
-<div class="header-left">
-
-<div class="header-icon">👨‍👩‍👧</div>
-
-<div>
-
-<h1>Parent Dashboard</h1>
-
-<p>School Connect TN</p>
-
-</div>
+    </div>
 
 </div>
 
-<div class="header-right">
+<!-- ==========================
+STATISTICS
+========================== -->
 
-<button class="notify-btn">
+<div class="stats-grid">
 
-🔔
-
-</button>
-
+<div class="stat-card">
+<h3 id="attendancePercent">0%</h3>
+<span>Attendance</span>
 </div>
 
-</header>
-
-<!-- ===========================
-MAIN CONTAINER
-=========================== -->
-
-<div class="container">
-
-<!-- ===========================
-PROFILE CARD
-=========================== -->
-
-<div class="profile-card">
-
-<div class="profile-image">
-
-<img id="studentPhoto"
-src="images/logo.png"
-alt="Student">
-
+<div class="stat-card">
+<h3 id="averageMark">0%</h3>
+<span>Average</span>
 </div>
 
-<div class="profile-details">
-
-<h2>👋 Welcome Parent</h2>
-
-<div class="info-row">
-
-<span>👤</span>
-
-<p><strong>Name :</strong>
-<span id="studentName">Loading...</span></p>
-
+<div class="stat-card">
+<h3 id="homeworkCount">0</h3>
+<span>Homework</span>
 </div>
 
-<div class="info-row">
-
-<span>🆔</span>
-
-<p><strong>EMIS :</strong>
-<span id="studentEmis">Loading...</span></p>
-
-</div>
-
-<div class="info-row">
-
-<span>🎓</span>
-
-<p><strong>Class :</strong>
-<span id="studentClass">Loading...</span></p>
-
-</div>
-
-<div class="info-row">
-
-<span>📘</span>
-
-<p><strong>Section :</strong>
-<span id="studentSection">Loading...</span></p>
-
+<div class="stat-card">
+<h3 id="noticeCount">0</h3>
+<span>Notice</span>
 </div>
 
 </div>
-
-</div>
-
-<!-- ===========================
-SUMMARY CARDS
-=========================== -->
-
-<div class="summary-grid">
-
-<div class="summary-card">
-
-<div class="summary-icon">👥</div>
-
-<h2 id="attendancePercent">0%</h2>
-
-<p>Attendance</p>
-
-</div>
-
-<div class="summary-card">
-
-<div class="summary-icon">⭐</div>
-
-<h2 id="averageMark">0%</h2>
-
-<p>Average</p>
-
-</div>
-
-<div class="summary-card">
-
-<div class="summary-icon">📚</div>
-
-<h2 id="homeworkCount">0</h2>
-
-<p>Homework</p>
-
-</div>
-
-<div class="summary-card">
-
-<div class="summary-icon">📢</div>
-
-<h2 id="noticeCount">0</h2>
-
-<p>Notice</p>
-
-</div>
-
-</div>
-<!-- ===========================
-QUICK ACTIONS
-=========================== -->
+<!-- ==========================
+⚡ QUICK ACTIONS
+========================== -->
 
 <div class="card">
 
-<div class="card-header">
-
-<h2>⚡ Quick Actions</h2>
-
-</div>
+<h2 class="section-title">⚡ Quick Actions</h2>
 
 <div class="quick-grid">
 
-<button onclick="location.href='student_profile.html'">
-👤
-<span>My Child</span>
-</button>
+<a class="quick-card" href="student_profile.html">
+<div class="icon">👤</div>
+<span>Student Profile</span>
+</a>
 
-<button onclick="location.href='attendance.html'">
-📅
+<a class="quick-card" href="attendance.html">
+<div class="icon">📅</div>
 <span>Attendance</span>
-</button>
+</a>
 
-<button onclick="location.href='marks.html'">
-📊
-<span>Marks</span>
-</button>
-
-<button onclick="location.href='homework.html'">
-📚
-<span>Homework</span>
-</button>
-
-<button onclick="location.href='report_card.html'">
-📄
+<a class="quick-card" href="parent_report_card.html">
+<div class="icon">📊</div>
 <span>Report Card</span>
-</button>
+</a>
 
-<button onclick="location.href='notice_board.html'">
-📢
-<span>Notice</span>
-</button>
+<a class="quick-card" href="homework.html">
+<div class="icon">📚</div>
+<span>Homework</span>
+</a>
 
-<button onclick="location.href='leave_request.html'">
-📝
+<a class="quick-card" href="notice_board.html">
+<div class="icon">📢</div>
+<span>Notice Board</span>
+</a>
+
+<a class="quick-card" href="leave_request.html">
+<div class="icon">📝</div>
 <span>Apply Leave</span>
-</button>
+</a>
 
-<button onclick="location.href='leave_status.html'">
-📋
+<a class="quick-card" href="leave_status.html">
+<div class="icon">📋</div>
 <span>Leave Status</span>
-</button>
+</a>
+
+<a class="quick-card" href="login.html">
+<div class="icon">🚪</div>
+<span>Logout</span>
+</a>
 
 </div>
 
 </div>
+<!-- ==========================
+📢 LATEST NOTICE
+========================== -->
 
-<!-- ===========================
-LATEST NOTICE
-=========================== -->
+<div class="notice-card">
 
-<div class="card">
+    <div class="notice-header">
+        <h3>📢 Latest Notice</h3>
+    </div>
 
-<div class="card-header">
-
-<h2>📢 Latest Notices</h2>
-
-<a href="notice_board.html">View All</a>
-
-</div>
-
-<div id="latestNotices">
-
-<div class="notice-item">
-
-Loading notices...
+    <div id="latestNotices">
+        Loading notices...
+    </div>
 
 </div>
 
-</div>
+<!-- ==========================
+📚 TODAY'S HOMEWORK
+========================== -->
 
-</div>
-<!-- ===========================
-TODAY'S HOMEWORK
-=========================== -->
+<div class="homework-card">
 
-<div class="card">
+    <div class="homework-header">
+        <h3>📚 Today's Homework</h3>
+    </div>
 
-<div class="card-header">
-
-<h2>📚 Today's Homework</h2>
-
-<a href="homework.html">View All</a>
-
-</div>
-
-<div id="recentHomework">
-
-<div class="homework-item">
-
-Loading homework...
+    <div id="todayHomework">
+        Loading homework...
+    </div>
 
 </div>
 
-</div>
-
-</div>
-
-</div>
-<!-- End Container -->
-
-<!-- ===========================
+<!-- ==========================
 BOTTOM NAVIGATION
-=========================== -->
+========================== -->
 
-<nav class="bottom-nav">
-
-<button onclick="location.href='parent.html'">
-🏠
-<span>Home</span>
-</button>
-
-<button onclick="location.href='attendance.html'">
-📅
-<span>Attendance</span>
-</button>
-
-<button onclick="location.href='report_card.html'">
-📊
-<span>Report</span>
-</button>
-
-<button onclick="location.href='student_profile.html'">
-👤
-<span>Profile</span>
-</button>
-
-</nav>
-
-</body>
-
-</html>
-<!-- ===========================
-TODAY'S HOMEWORK
-=========================== -->
-
-<div class="card">
-
-<div class="card-header">
-
-<h2>📚 Today's Homework</h2>
-
-<a href="homework.html">View All</a>
-
-</div>
-
-<div id="todayHomework">
-
-Loading homework...
-
-</div>
-
-</div>
-
-<!-- ===========================
-BOTTOM NAVIGATION
-=========================== -->
-
-<nav class="bottom-nav">
+<div class="bottom-nav">
 
 <a href="parent.html" class="active">
-🏠
-<span>Home</span>
+<span>🏠</span>
+Home
 </a>
 
 <a href="attendance.html">
-📅
-<span>Attendance</span>
+<span>📅</span>
+Attendance
 </a>
 
-<a href="report_card.html">
-📊
-<span>Report</span>
+<a href="parent_report_card.html">
+<span>📊</span>
+Report
 </a>
 
-<a href="profile.html">
-👤
-<span>Profile</span>
+<a href="student_profile.html">
+<span>👤</span>
+Profile
 </a>
 
-</nav>
-
-<script type="module" src="js/parent.js"></script>
-
-</body>
-</html>
+</div>
