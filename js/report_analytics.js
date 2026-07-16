@@ -97,68 +97,6 @@ snap.forEach((doc)=>{
 students.push(doc.data());
 
 });
-
-//
-
-}catch(error){
-
-console.error(error);
-
-alert(error.message);
-
-}
-
-}
-
-//==================================================
-// Loading
-//==================================================
-
-function showLoading(){
-
-totalStudents.textContent="...";
-
-passStudents.textContent="...";
-
-failStudents.textContent="...";
-
-passPercentage.textContent="...";
-
-schoolAverage.textContent="...";
-
-highestScorer.textContent="Loading...";
-
-bestClass.textContent="Loading...";
-
-lowestClass.textContent="Loading...";
-
-subjectPerformance.innerHTML=
-"<p style='text-align:center'>Loading...</p>";
-
-classResults.innerHTML=
-"<p style='text-align:center'>Loading...</p>";
-
-topRankers.innerHTML=
-"<p style='text-align:center'>Loading...</p>";
-
-}
-
-//==================================================
-// No Data
-//==================================================
-
-function showNoData(){
-
-subjectPerformance.innerHTML=
-"<p style='text-align:center'>No Results Found</p>";
-
-classResults.innerHTML=
-"<p style='text-align:center'>No Results Found</p>";
-
-topRankers.innerHTML=
-"<p style='text-align:center'>No Results Found</p>";
-
-}
 //==================================================
 // Overall Summary
 //==================================================
@@ -400,3 +338,62 @@ topRankers.innerHTML = rankHTML;
 //==================================================
 
 console.log("Report Analytics Loaded Successfully");
+//
+
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+}
+
+//==================================================
+// Loading
+//==================================================
+
+function showLoading(){
+
+totalStudents.textContent="...";
+
+passStudents.textContent="...";
+
+failStudents.textContent="...";
+
+passPercentage.textContent="...";
+
+schoolAverage.textContent="...";
+
+highestScorer.textContent="Loading...";
+
+bestClass.textContent="Loading...";
+
+lowestClass.textContent="Loading...";
+
+subjectPerformance.innerHTML=
+"<p style='text-align:center'>Loading...</p>";
+
+classResults.innerHTML=
+"<p style='text-align:center'>Loading...</p>";
+
+topRankers.innerHTML=
+"<p style='text-align:center'>Loading...</p>";
+
+}
+
+//==================================================
+// No Data
+//==================================================
+
+function showNoData(){
+
+subjectPerformance.innerHTML=
+"<p style='text-align:center'>No Results Found</p>";
+
+classResults.innerHTML=
+"<p style='text-align:center'>No Results Found</p>";
+
+topRankers.innerHTML=
+"<p style='text-align:center'>No Results Found</p>";
