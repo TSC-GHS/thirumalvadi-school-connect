@@ -1,1 +1,428 @@
+/*==================================================
+School Connect TN
+Bulk Upload V2
+CSS - Part 1
+==================================================*/
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#EEF4FA;
+color:#333;
+padding-bottom:80px;
+}
+
+/*=========================
+HEADER
+=========================*/
+
+.header{
+position:sticky;
+top:0;
+background:linear-gradient(135deg,#1565C0,#1E88E5);
+color:#fff;
+padding:16px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 3px 10px rgba(0,0,0,.15);
+z-index:999;
+}
+
+.header-left h1{
+font-size:24px;
+}
+
+.header-left p{
+font-size:13px;
+margin-top:4px;
+opacity:.9;
+}
+
+.homeBtn{
+background:#fff;
+color:#1565C0;
+border:none;
+padding:10px 18px;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+}
+
+/*=========================
+CONTAINER
+=========================*/
+
+.container{
+max-width:750px;
+margin:20px auto;
+padding:15px;
+}
+
+/*=========================
+CARD
+=========================*/
+
+.card{
+background:#fff;
+border-radius:18px;
+padding:20px;
+margin-bottom:18px;
+box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.card h2{
+color:#1565C0;
+margin-bottom:15px;
+font-size:22px;
+}
+
+/*=========================
+FORM
+=========================*/
+
+select,
+input[type=file]{
+width:100%;
+padding:13px;
+margin-top:12px;
+border:1px solid #D6E4F5;
+border-radius:10px;
+font-size:15px;
+outline:none;
+}
+
+select:focus,
+input[type=file]:focus{
+border-color:#1565C0;
+}
+
+/*=========================
+BUTTONS
+=========================*/
+
+.downloadBtn,
+.uploadBtn{
+width:100%;
+border:none;
+padding:14px;
+margin-top:15px;
+border-radius:10px;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+color:#fff;
+}
+
+.downloadBtn{
+background:#2E7D32;
+}
+
+.uploadBtn{
+background:#1565C0;
+}
+
+.downloadBtn:hover{
+background:#1B5E20;
+}
+
+.uploadBtn:hover{
+background:#0D47A1;
+}
+/*==================================================
+School Connect TN
+Bulk Upload V2
+CSS - Part 2
+==================================================*/
+
+/*=========================
+PROGRESS BAR
+=========================*/
+
+.progress{
+width:100%;
+height:28px;
+background:#E3F2FD;
+border-radius:20px;
+overflow:hidden;
+margin:15px 0;
+}
+
+.progress-bar{
+width:0%;
+height:100%;
+background:linear-gradient(135deg,#1565C0,#42A5F5);
+color:#fff;
+font-weight:bold;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:width .4s ease;
+}
+
+.status{
+text-align:center;
+font-weight:bold;
+color:#1565C0;
+margin-top:10px;
+}
+
+/*=========================
+SUMMARY
+=========================*/
+
+.summary-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+margin-top:15px;
+}
+
+.summary-box{
+background:#F5F9FF;
+border-left:5px solid #1565C0;
+border-radius:14px;
+padding:18px;
+text-align:center;
+}
+
+.summary-box h3{
+font-size:28px;
+color:#1565C0;
+margin-bottom:6px;
+}
+
+.summary-box p{
+font-size:14px;
+color:#555;
+}
+
+.summary-box.success{
+border-left-color:#2E7D32;
+}
+
+.summary-box.success h3{
+color:#2E7D32;
+}
+
+.summary-box.warning{
+border-left-color:#FB8C00;
+}
+
+.summary-box.warning h3{
+color:#FB8C00;
+}
+
+.summary-box.danger{
+border-left-color:#D32F2F;
+}
+
+.summary-box.danger h3{
+color:#D32F2F;
+}
+
+/*=========================
+TEMPLATE LIST
+=========================*/
+
+.template-list{
+margin-top:15px;
+padding-left:20px;
+}
+
+.template-list li{
+margin-bottom:10px;
+font-size:15px;
+}
+
+.info-box{
+margin-top:18px;
+padding:16px;
+background:#FFF8E1;
+border-left:5px solid #FB8C00;
+border-radius:12px;
+}
+
+.info-box b{
+display:block;
+margin-bottom:10px;
+color:#E65100;
+}
+
+.info-box ol{
+padding-left:18px;
+}
+
+.info-box li{
+margin-bottom:8px;
+line-height:22px;
+}
+/*==================================================
+School Connect TN
+Bulk Upload V2
+CSS - Part 3 (Final)
+==================================================*/
+
+/*=========================
+MOBILE RESPONSIVE
+=========================*/
+
+@media screen and (max-width:768px){
+
+.container{
+padding:10px;
+}
+
+.header{
+padding:14px;
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
+}
+
+.header-left h1{
+font-size:20px;
+}
+
+.header-left p{
+font-size:12px;
+}
+
+.homeBtn{
+width:100%;
+}
+
+.card{
+padding:15px;
+border-radius:16px;
+}
+
+.summary-grid{
+grid-template-columns:1fr;
+gap:10px;
+}
+
+.downloadBtn,
+.uploadBtn{
+font-size:15px;
+padding:13px;
+}
+
+.progress{
+height:24px;
+}
+
+.progress-bar{
+font-size:13px;
+}
+
+.template-list li{
+font-size:14px;
+}
+
+.info-box{
+padding:14px;
+}
+
+}
+
+/*=========================
+TABLET
+=========================*/
+
+@media screen and (min-width:769px) and (max-width:1024px){
+
+.container{
+max-width:900px;
+}
+
+}
+
+/*=========================
+DESKTOP
+=========================*/
+
+@media screen and (min-width:1025px){
+
+.container{
+max-width:1000px;
+}
+
+.summary-grid{
+grid-template-columns:repeat(4,1fr);
+}
+
+}
+
+/*=========================
+ANIMATIONS
+=========================*/
+
+.card,
+.summary-box,
+.downloadBtn,
+.uploadBtn{
+transition:all .3s ease;
+}
+
+.card:hover{
+transform:translateY(-2px);
+}
+
+.summary-box:hover{
+transform:translateY(-3px);
+box-shadow:0 6px 15px rgba(0,0,0,.12);
+}
+
+.downloadBtn:hover,
+.uploadBtn:hover,
+.homeBtn:hover{
+transform:translateY(-2px);
+}
+
+/*=========================
+SCROLLBAR
+=========================*/
+
+::-webkit-scrollbar{
+width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#90CAF9;
+border-radius:10px;
+}
+
+::-webkit-scrollbar-track{
+background:#EEF4FA;
+}
+
+/*=========================
+PRINT
+=========================*/
+
+@media print{
+
+.header,
+.downloadBtn,
+.uploadBtn,
+.homeBtn{
+display:none;
+}
+
+body{
+background:#fff;
+}
+
+.card{
+box-shadow:none;
+border:1px solid #ccc;
+}
+
+}
