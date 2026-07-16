@@ -81,7 +81,7 @@ window.loginUser = async function () {
 
         localStorage.setItem("userRole", "Admin");
 
-        window.location.href = "admin_dashboard.html";
+        window.location.href = "admin_dashboard_v3.html";
 
         break;
 
