@@ -4,8 +4,9 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+content="width=device-width, initial-scale=1.0">
 
 <title>Parent Dashboard</title>
 
@@ -24,9 +25,33 @@ HEADER
 
 <div class="headerLeft">
 
-<h2>🏫 School Connect TN</h2>
+<h2>
 
-<p>Parent Dashboard</p>
+👨‍👩‍👧 Parent Dashboard
+
+</h2>
+
+<p>
+
+School Connect TN
+
+</p>
+
+</div>
+
+<div class="headerRight">
+
+<button class="notifyBtn">
+
+🔔
+
+<span id="notificationBadge">
+
+0
+
+</span>
+
+</button>
 
 </div>
 
@@ -39,27 +64,38 @@ MAIN CONTAINER
 <div class="container">
 
 <!-- =====================================
-WELCOME CARD
+PROFILE CARD
 ===================================== -->
 
-<section class="card">
+<section class="card profileCard">
 
-<h2>👋 Welcome Parent</h2>
-
-<div class="profile">
+<div class="profileImage">
 
 <img
-src="images/student.png"
+
 id="studentPhoto"
+
+src="images/logo.png"
+
 alt="Student">
 
-<div class="info">
+</div>
 
-<p>
+<div class="profileDetails">
 
-<b>Student Name</b>
+<h2>
 
-<br>
+👋 Welcome Parent
+
+</h2>
+
+<div class="detailRow">
+
+<span class="label">
+
+👤 Name
+
+</span>
 
 <span id="studentName">
 
@@ -67,35 +103,49 @@ Loading...
 
 </span>
 
-</p>
+</div>
 
-<p>
+<div class="detailRow">
 
-<b>EMIS Number</b>
+<span class="label">
 
-<br>
+🆔 EMIS
 
-<span id="studentEMIS">
+</span>
+
+<span id="studentEmis">
 
 Loading...
 
 </span>
 
-</p>
+</div>
 
-<p>
+<div class="detailRow">
 
-<b>Class</b>
+<span class="label">
 
-<br>
+🎓 Class
+
+</span>
+
+<span>
 
 <span id="studentClass">
 
-Loading...
+-
 
 </span>
 
-</p>
+-
+
+<span id="studentSection">
+
+-
+
+</span>
+
+</span>
 
 </div>
 
@@ -104,36 +154,62 @@ Loading...
 </section>
 
 <!-- =====================================
-SUMMARY
+SUMMARY CARDS
 ===================================== -->
 
 <section class="summary">
 
-<div class="summary-box">
+<div class="summaryCard">
 
-<h1 id="attendanceCount">
+<div class="summaryIcon">
+
+👥
+
+</div>
+
+<h1 id="attendanceValue">
 
 0%
 
 </h1>
 
-<p>Attendance</p>
+<p>
+
+Attendance
+
+</p>
 
 </div>
 
-<div class="summary-box">
+<div class="summaryCard">
 
-<h1 id="resultCount">
+<div class="summaryIcon">
+
+⭐
+
+</div>
+
+<h1 id="averageValue">
 
 0%
 
 </h1>
 
-<p>Average</p>
+<p>
+
+Average
+
+</p>
 
 </div>
 
-<div class="summary-box">
+<div class="summaryCard">
+
+<div class="summaryIcon">
+
+📚
+
+</div>
 
 <h1 id="homeworkCount">
 
@@ -141,11 +217,21 @@ SUMMARY
 
 </h1>
 
-<p>Homework</p>
+<p>
+
+Homework
+
+</p>
 
 </div>
 
-<div class="summary-box">
+<div class="summaryCard">
+
+<div class="summaryIcon">
+
+📢
+
+</div>
 
 <h1 id="noticeCount">
 
@@ -153,210 +239,184 @@ SUMMARY
 
 </h1>
 
-<p>Notices</p>
+<p>
+
+Notice
+
+</p>
 
 </div>
 
 </section>
-
 <!-- =====================================
 QUICK ACTIONS
 ===================================== -->
 
 <section class="card">
 
-<h2>
+<div class="sectionHeader">
 
-⚡ Quick Actions
+<h2>⚡ Quick Actions</h2>
 
-</h2>
+</div>
 
-<div class="quickmenu">
+<div class="quickGrid">
 
-<button
-onclick="location.href='parent_dashboard.html'">
+<a href="parent_profile.html" class="quickCard">
+<div class="quickIcon">👤</div>
+<p>My Child</p>
+</a>
 
-👨‍🎓
+<a href="attendance.html" class="quickCard">
+<div class="quickIcon">📅</div>
+<p>Attendance</p>
+</a>
 
-<br>
+<a href="parent_report_card.html?emis="+localStorage.getItem("parentEMIS") class="quickCard">
+<div class="quickIcon">📊</div>
+<p>Marks</p>
+</a>
 
-My Child
+<a href="homework.html" class="quickCard">
+<div class="quickIcon">📚</div>
+<p>Homework</p>
+</a>
 
-</button>
+<a href="parent_report_card.html?emis="+localStorage.getItem("parentEMIS") class="quickCard">
+<div class="quickIcon">📄</div>
+<p>Report Card</p>
+</a>
 
-<button
-onclick="location.href='notice_board.html'">
+<a href="notice_board.html" class="quickCard">
+<div class="quickIcon">📢</div>
+<p>Notice</p>
+</a>
 
-📢
+<a href="leave_request.html?emis="+localStorage.getItem("parentEMIS") class="quickCard">
+<div class="quickIcon">📝</div>
+<p>Apply Leave</p>
+</a>
 
-<br>
-
-Notice
-
-</button>
-
-<button
-onclick="location.href='parent_dashboard.html'">
-
-📅
-
-<br>
-
-Attendance
-
-</button>
-
-<button
-onclick="location.href='parent_dashboard.html'">
-
-📚
-
-<br>
-
-Marks
-
-</button>
-
-<button
-onclick="location.href='parent_dashboard.html'">
-
-📝
-
-<br>
-
-Homework
-
-</button>
-
-<button
-onclick="location.href='parent_report_card.html?emis='+localStorage.getItem('parentEMIS')">
-
-📄
-
-<br>
-
-Report Card
-
-</button>
-
-<button
-onclick="location.href='leave_request.html?emis='+localStorage.getItem('parentEMIS')">
-
-📝
-
-<br>
-
-Apply Leave
-
-</button>
-
-<button
-onclick="location.href='leave_status.html?emis='+localStorage.getItem('parentEMIS')">
-
-📋
-
-<br>
-
-Leave Status
-
-</button>
+<a href="leave_status.html?emis="+localStorage.getItem("parentEMIS") class="quickCard">
+<div class="quickIcon">📋</div>
+<p>Leave Status</p>
+</a>
 
 </div>
 
 </section>
+
 <!-- =====================================
-LATEST NOTICES
+LATEST NOTICE
 ===================================== -->
 
 <section class="card">
+
+<div class="sectionHeader">
 
 <h2>📢 Latest Notices</h2>
 
-<div class="notice-list" id="latestNotices">
+<a href="notice_board.html">
 
-<div class="notice-item">
+View All
 
-<div class="notice-title">
+</a>
+
+</div>
+
+<div
+id="latestNotices"
+class="noticeList">
+
+<p>
 
 Loading Notices...
 
-</div>
-
-</div>
+</p>
 
 </div>
 
 </section>
 
 <!-- =====================================
-RECENT HOMEWORK
+TODAY HOMEWORK
 ===================================== -->
 
 <section class="card">
 
-<h2>📚 Recent Homework</h2>
+<div class="sectionHeader">
 
-<div class="homework-list" id="recentHomework">
+<h2>📚 Today's Homework</h2>
 
-<div class="homework-item">
+<a href="homework.html">
 
-<div class="homework-sub">
+View All
+
+</a>
+
+</div>
+
+<div
+id="recentHomework"
+class="homeworkList">
+
+<p>
 
 Loading Homework...
 
-</div>
-
-</div>
+</p>
 
 </div>
 
 </section>
-
-</div>
-
 <!-- =====================================
 BOTTOM NAVIGATION
 ===================================== -->
 
-<div class="bottom-nav">
+<nav class="bottomNav">
 
-<button
-onclick="location.href='parent_dashboard.html'">
+<a href="parent.html" class="navItem active">
 
-<span>🏠</span>
+🏠
 
-Home
+<span>Home</span>
 
-</button>
+</a>
 
-<button
-onclick="location.href='notice_board.html'">
+<a href="attendance.html" class="navItem">
 
-<span>📢</span>
+📅
 
-Notice
+<span>Attendance</span>
 
-</button>
+</a>
 
-<button
-onclick="location.href='parent_report_card.html?emis='+localStorage.getItem('parentEMIS')">
+<a href="parent_report_card.html" class="navItem">
 
-<span>📄</span>
+📊
 
-Report
+<span>Report</span>
 
-</button>
+</a>
 
-<button
-onclick="location.href='index.html'">
+<a href="parent_profile.html" class="navItem">
 
-<span>🚪</span>
+👤
 
-Logout
+<span>Profile</span>
 
-</button>
+</a>
 
-</div>
+</nav>
+
+<!-- =====================================
+JAVASCRIPT
+===================================== -->
+
+<script type="module"
+src="js/parent.js">
+
+</script>
 
 </body>
 
