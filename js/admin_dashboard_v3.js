@@ -1,7 +1,6 @@
 //==================================================
 // School Connect TN
 // Admin Dashboard V3
-// Part 1
 //==================================================
 
 import { db, auth } from "../firebase.js";
@@ -16,7 +15,7 @@ signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 //==================================================
-// Session Check
+// Admin Session Check
 //==================================================
 
 const role = localStorage.getItem("userRole");
@@ -38,36 +37,57 @@ try{
 const students =
 await getDocs(collection(db,"students"));
 
-document.getElementById("studentCount").textContent =
+document.getElementById("totalStudents").textContent =
 students.size;
 
 const teachers =
 await getDocs(collection(db,"teachers"));
 
-document.getElementById("teacherCount").textContent =
+document.getElementById("totalTeachers").textContent =
 teachers.size;
 
-const notices =
+let notices = 0;
+
+try{
+
+const noticeData =
 await getDocs(collection(db,"notices"));
 
-document.getElementById("noticeCount").textContent =
-notices.size;
-const attendance =
-"100%";
+notices = noticeData.size;
 
-document.getElementById("attendanceCount").textContent =
-attendance;
+}catch(e){
+
+try{
+
+const noticeData =
+await getDocs(collection(db,"notice"));
+
+notices = noticeData.size;
+
+}catch(err){
+
+notices = 0;
+
+}
+
+}
+
+document.getElementById("totalNotices").textContent =
+notices;
+  document.getElementById("todayAttendance").textContent = "100%";
 
 }catch(error){
 
-console.error("Dashboard Error :",error);
+console.error("Dashboard Error :", error);
+
+alert("Unable to load dashboard data.");
 
 }
 
 }
 
 //==================================================
-// Logout
+// Logout Function
 //==================================================
 
 window.logoutAdmin = async function(){
@@ -76,11 +96,17 @@ try{
 
 await signOut(auth);
 
-localStorage.clear();
+localStorage.removeItem("userRole");
+
+localStorage.removeItem("teacherId");
+localStorage.removeItem("teacherName");
+
+localStorage.removeItem("parentEMIS");
+localStorage.removeItem("studentEMIS");
 
 sessionStorage.clear();
 
-window.location.href="login.html";
+window.location.href = "login.html";
 
 }catch(error){
 
@@ -96,4 +122,8 @@ alert("Logout Failed");
 // Load Dashboard
 //==================================================
 
+document.addEventListener("DOMContentLoaded",()=>{
+
 loadDashboard();
+
+});
