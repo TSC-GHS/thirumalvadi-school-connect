@@ -4,11 +4,14 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
 <title>Students Management</title>
 
-<link rel="stylesheet" href="css/students.css">
+<link rel="stylesheet"
+href="css/students.css">
 
 </head>
 
@@ -30,7 +33,8 @@ HEADER
 
 <div class="header-right">
 
-<button onclick="location.href='student_management.html'">
+<button
+onclick="location.href='student_management.html'">
 
 ➕
 
@@ -54,7 +58,11 @@ SUMMARY
 
 <div class="summary-box">
 
-<h2 id="totalStudents">0</h2>
+<h2 id="totalStudents">
+
+0
+
+</h2>
 
 <p>Total Students</p>
 
@@ -62,7 +70,11 @@ SUMMARY
 
 <div class="summary-box">
 
-<h2 id="boysCount">0</h2>
+<h2 id="boysCount">
+
+0
+
+</h2>
 
 <p>Boys</p>
 
@@ -70,7 +82,11 @@ SUMMARY
 
 <div class="summary-box">
 
-<h2 id="girlsCount">0</h2>
+<h2 id="girlsCount">
+
+0
+
+</h2>
 
 <p>Girls</p>
 
@@ -78,7 +94,11 @@ SUMMARY
 
 <div class="summary-box">
 
-<h2 id="todayCount">0</h2>
+<h2 id="todayCount">
+
+0
+
+</h2>
 
 <p>Today Added</p>
 
@@ -104,11 +124,15 @@ onkeyup="searchStudent()">
 
 <option value="">All Classes</option>
 
-<option>6</option>
-<option>7</option>
-<option>8</option>
-<option>9</option>
-<option>10</option>
+<option value="6">Class 6</option>
+
+<option value="7">Class 7</option>
+
+<option value="8">Class 8</option>
+
+<option value="9">Class 9</option>
+
+<option value="10">Class 10</option>
 
 </select>
 
@@ -116,9 +140,11 @@ onkeyup="searchStudent()">
 
 <option value="">All Sections</option>
 
-<option>A</option>
-<option>B</option>
-<option>C</option>
+<option value="A">A</option>
+
+<option value="B">B</option>
+
+<option value="C">C</option>
 
 </select>
 
@@ -126,8 +152,9 @@ onkeyup="searchStudent()">
 
 <option value="">All Medium</option>
 
-<option>Tamil</option>
-<option>English</option>
+<option value="Tamil">Tamil</option>
+
+<option value="English">English</option>
 
 </select>
 
@@ -140,119 +167,20 @@ STUDENTS LIST
 ===================================== -->
 
 <div id="studentList">
-<!-- =====================================
-STUDENT CARD TEMPLATE
-===================================== -->
-
-<div class="student-card">
-
-<div class="student-left">
-
-<img
-id="studentPhoto"
-src="images/student.png"
-alt="Student">
-
-</div>
-
-<div class="student-right">
-
-<h3 id="studentName">
-
-Loading...
-
-</h3>
-
-<p>
-
-<b>Admission No :</b>
-
-<span id="studentAdmission">
-
----</span>
-
-</p>
-
-<p>
-
-<b>EMIS :</b>
-
-<span id="studentEMIS">
-
----</span>
-
-</p>
-
-<p>
-
-<b>Class :</b>
-
-<span id="studentClass">
-
----</span>
-
--
-
-<span id="studentSection">
-
-A
-
-</span>
-
-</p>
-
-<p>
-
-<b>Parent :</b>
-
-<span id="studentMobile">
-
----</span>
-
-</p>
-
-</div>
-
-</div>
-
-<div class="student-actions">
-
-<button
-class="view-btn">
-
-👁 View
-
-</button>
-
-<button
-class="edit-btn">
-
-✏ Edit
-
-</button>
-
-<button
-class="delete-btn">
-
-🗑 Delete
-
-</button>
-
-</div>
-
-<!-- Student cards will be loaded dynamically here -->
+  <!-- Student Cards will be loaded here -->
 
 </div>
 
 <!-- =====================================
-BOTTOM BUTTONS
+ACTION BUTTONS
 ===================================== -->
 
 <section class="card">
 
-<div class="bottom-buttons">
+<div class="button-grid">
 
 <button
+class="add-btn"
 onclick="location.href='student_management.html'">
 
 ➕ Add Student
@@ -260,6 +188,7 @@ onclick="location.href='student_management.html'">
 </button>
 
 <button
+class="bulk-btn"
 onclick="location.href='bulk_upload.html'">
 
 📥 Bulk Upload
@@ -267,13 +196,23 @@ onclick="location.href='bulk_upload.html'">
 </button>
 
 <button
-onclick="location.href='export_students.html'">
+class="export-btn"
+onclick="exportStudents()">
 
-📤 Export
+📤 Export Excel
 
 </button>
 
 <button
+class="print-btn"
+onclick="window.print()">
+
+🖨 Print
+
+</button>
+
+<button
+class="dashboard-btn"
 onclick="location.href='admin_dashboard.html'">
 
 🏠 Dashboard
@@ -283,6 +222,11 @@ onclick="location.href='admin_dashboard.html'">
 </div>
 
 </section>
+
+<!-- =====================================
+SCRIPT
+===================================== -->
+
 <script type="module">
 
 import { db } from "./firebase.js";
@@ -292,7 +236,8 @@ collection,
 getDocs,
 deleteDoc,
 doc
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 const studentList =
 document.getElementById("studentList");
@@ -309,167 +254,8 @@ document.getElementById("girlsCount");
 const todayCount =
 document.getElementById("todayCount");
 
-let allStudents=[];
-
-async function loadStudents(){
-
-studentList.innerHTML="";
-
-const snap =
-await getDocs(
-collection(db,"students")
-);
-
-allStudents=[];
-
-let boys=0;
-let girls=0;
-let today=0;
-
-const todayDate =
-new Date()
-.toISOString()
-.substring(0,10);
-
-snap.forEach(studentDoc=>{
-
-const student=
-studentDoc.data();
-
-student.id=
-studentDoc.id;
-
-allStudents.push(student);
-
-if(student.gender==="Male"){
-boys++;
-}
-
-if(student.gender==="Female"){
-girls++;
-}
-
-if(
-student.createdAt &&
-student.createdAt.substring(0,10)
-===todayDate
-){
-today++;
-}
-
-});
-
-renderStudents(allStudents);
-
-totalStudents.innerText=
-allStudents.length;
-
-boysCount.innerText=
-boys;
-
-girlsCount.innerText=
-girls;
-
-todayCount.innerText=
-today;
-
-}
-
-function renderStudents(list){
-
-studentList.innerHTML="";
-
-list.forEach(student=>{
-
-const emis =
-student.emis || student.id;
-
-studentList.innerHTML += `
-
-<div class="student-card">
-
-<div class="student-left">
-
-<img
-src="images/student.png"
-alt="Student">
-
-</div>
-
-<div class="student-right">
-
-<h3>${student.name || "-"}</h3>
-
-<p><b>Admission :</b>
-${student.admissionNo || "-"}</p>
-
-<p><b>EMIS :</b>
-${emis}</p>
-
-<p><b>Class :</b>
-${student.class || "-"}
--
-${student.section || "-"}</p>
-
-<p><b>Mobile :</b>
-${student.mobile || "-"}</p>
-
-</div>
-
-</div>
-
-<div class="student-actions">
-
-<button
-class="view-btn"
-onclick="location.href='student_profile_v2.html?emis=${emis}'">
-
-👁 View
-
-</button>
-
-<button
-class="edit-btn"
-onclick="location.href='student_management.html?emis=${emis}'">
-
-✏ Edit
-
-</button>
-
-<button
-class="delete-btn"
-onclick="deleteStudent('${student.id}')">
-
-🗑 Delete
-
-</button>
-
-</div>
-
-`;
-
-});
-
-}
-
-import { db } from "./firebase.js";
-
-import {
-collection,
-getDocs,
-deleteDoc,
-doc
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
-const studentList = document.getElementById("studentList");
-const totalStudents = document.getElementById("totalStudents");
-const boysCount = document.getElementById("boysCount");
-const girlsCount = document.getElementById("girlsCount");
-const todayCount = document.getElementById("todayCount");
-
 let allStudents = [];
-
-async function loadStudents(){
+  async function loadStudents(){
 
 studentList.innerHTML="";
 
@@ -481,32 +267,38 @@ let boys=0;
 let girls=0;
 let today=0;
 
-const todayDate=new Date().toISOString().substring(0,10);
+const todayDate = new Date().toISOString().substring(0,10);
 
 snap.forEach(studentDoc=>{
 
-const student=studentDoc.data();
+const student = studentDoc.data();
 
-student.id=studentDoc.id;
+student.id = studentDoc.id;
 
 allStudents.push(student);
 
 if(student.gender==="Male") boys++;
+
 if(student.gender==="Female") girls++;
 
-if(student.createdAt &&
-student.createdAt.substring(0,10)===todayDate){
+if(
+student.createdAt &&
+student.createdAt.substring(0,10)===todayDate
+){
 today++;
 }
 
 });
 
-renderStudents(allStudents);
+totalStudents.innerText = allStudents.length;
 
-totalStudents.innerText=allStudents.length;
-boysCount.innerText=boys;
-girlsCount.innerText=girls;
-todayCount.innerText=today;
+boysCount.innerText = boys;
+
+girlsCount.innerText = girls;
+
+todayCount.innerText = today;
+
+renderStudents(allStudents);
 
 }
 
@@ -516,19 +308,21 @@ studentList.innerHTML="";
 
 list.forEach(student=>{
 
-const emis=student.emis || student.id;
+const emis = student.emis || student.id;
 
-studentList.innerHTML+=`
+studentList.innerHTML += `
 
 <div class="student-card">
 
-<div class="student-left">
+<div class="student-photo">
 
-<img src="images/student.png">
+<img
+src="${student.photo || 'images/student.png'}"
+alt="Student">
 
 </div>
 
-<div class="student-right">
+<div class="student-details">
 
 <h3>${student.name || "-"}</h3>
 
@@ -540,32 +334,37 @@ studentList.innerHTML+=`
 
 <p><b>Mobile :</b> ${student.mobile || "-"}</p>
 
-</div>
+<p><b>Medium :</b> ${student.medium || "-"}</p>
 
 </div>
 
 <div class="student-actions">
 
-<button class="view-btn"
+<button
+class="view-btn"
 onclick="location.href='student_profile_v2.html?emis=${emis}'">
 
-👁 View
+👁
 
 </button>
 
-<button class="edit-btn"
+<button
+class="edit-btn"
 onclick="location.href='student_management.html?emis=${emis}'">
 
-✏ Edit
+✏️
 
 </button>
 
-<button class="delete-btn"
+<button
+class="delete-btn"
 onclick="deleteStudent('${student.id}')">
 
-🗑 Delete
+🗑
 
 </button>
+
+</div>
 
 </div>
 
@@ -574,44 +373,69 @@ onclick="deleteStudent('${student.id}')">
 });
 
 }
-
-window.deleteStudent=async function(id){
+  window.deleteStudent = async function(id){
 
 if(confirm("Delete this student?")){
 
+try{
+
 await deleteDoc(doc(db,"students",id));
+
+alert("✅ Student Deleted Successfully");
 
 loadStudents();
 
-}
+}catch(error){
+
+alert(error.message);
 
 }
 
-window.searchStudent=function(){
+}
 
-const value=document
-.getElementById("search")
+};
+
+window.searchStudent = function(){
+
+const value =
+document.getElementById("search")
 .value
 .toLowerCase();
 
-const classFilter=document.getElementById("filterClass").value;
-const sectionFilter=document.getElementById("filterSection").value;
-const mediumFilter=document.getElementById("filterMedium").value;
+const classFilter =
+document.getElementById("filterClass").value;
 
-const filtered=allStudents.filter(student=>{
+const sectionFilter =
+document.getElementById("filterSection").value;
 
-const searchMatch=
-(student.name || "").toLowerCase().includes(value) ||
-(student.emis || "").toLowerCase().includes(value);
+const mediumFilter =
+document.getElementById("filterMedium").value;
 
-const classMatch=
-!classFilter || student.class==classFilter;
+const filtered = allStudents.filter(student=>{
 
-const sectionMatch=
-!sectionFilter || student.section==sectionFilter;
+const searchMatch =
 
-const mediumMatch=
-!mediumFilter || student.medium==mediumFilter;
+(student.name || "")
+.toLowerCase()
+.includes(value)
+
+||
+
+(student.emis || "")
+.toLowerCase()
+.includes(value);
+
+const classMatch =
+!classFilter ||
+student.class == classFilter;
+
+const sectionMatch =
+!sectionFilter ||
+student.section == sectionFilter;
+
+const mediumMatch =
+!mediumFilter ||
+student.medium == mediumFilter;
 
 return searchMatch &&
 classMatch &&
@@ -624,10 +448,22 @@ renderStudents(filtered);
 
 };
 
-document.getElementById("filterClass").onchange=searchStudent;
-document.getElementById("filterSection").onchange=searchStudent;
-document.getElementById("filterMedium").onchange=searchStudent;
+document.getElementById("filterClass").onchange = searchStudent;
+
+document.getElementById("filterSection").onchange = searchStudent;
+
+document.getElementById("filterMedium").onchange = searchStudent;
+
+window.exportStudents=function(){
+
+alert("📤 Excel Export will be added in Version 2");
+
+};
 
 loadStudents();
 
 </script>
+
+</body>
+
+</html>
