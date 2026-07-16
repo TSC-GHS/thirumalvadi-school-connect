@@ -1,1 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Attendance Management</title>
+
+<link rel="stylesheet"
+href="../css/attendance_management.css">
+
+</head>
+
+<body>
+
+<!-- =====================================
+HEADER
+===================================== -->
+
+<header class="header">
+
+<div class="header-left">
+
+<h2>📅 Attendance Management</h2>
+
+<p>School Connect TN</p>
+
+</div>
+
+<div class="header-right">
+
+<button
+class="backBtn"
+onclick="location.href='../admin_dashboard.html'">
+
+🏠 Dashboard
+
+</button>
+
+</div>
+
+</header>
+
+<!-- =====================================
+MAIN CONTAINER
+===================================== -->
+
+<div class="container">
+
+<section class="card">
+
+<h2>Attendance Details</h2>
+
+<label>Select Date</label>
+
+<input
+type="date"
+id="attendanceDate">
+
+<label>Select Class</label>
+
+<select id="studentClass">
+
+<option value="">Select Class</option>
+
+<option>6</option>
+<option>7</option>
+<option>8</option>
+<option>9</option>
+<option>10</option>
+
+</select>
+
+<label>Select Section</label>
+
+<select id="section">
+
+<option value="">Select Section</option>
+
+<option>A</option>
+<option>B</option>
+<option>C</option>
+
+</select>
+
+<button
+class="loadBtn"
+onclick="loadStudents()">
+
+👨‍🎓 Load Students
+
+</button>
+
+</section>
+
+<section class="card">
+
+<h2>Attendance Summary</h2>
+
+<div class="summary-grid">
+
+<div class="summary-card">
+
+<h3 id="totalStudents">0</h3>
+
+<p>Total Students</p>
+
+</div>
+
+<div class="summary-card">
+
+<h3 id="presentCount">0</h3>
+
+<p>Present</p>
+
+</div>
+
+<div class="summary-card">
+
+<h3 id="absentCount">0</h3>
+
+<p>Absent</p>
+
+</div>
+
+<div class="summary-card">
+
+<h3 id="leaveCount">0</h3>
+
+<p>Leave</p>
+
+</div>
+
+</div>
+
+</section>
+<!-- =====================================
+STUDENT ATTENDANCE LIST
+===================================== -->
+
+<section class="card">
+
+<div class="card-header">
+
+<h2>👨‍🎓 Student Attendance</h2>
+
+<div>
+
+<button
+class="presentAllBtn"
+onclick="markAllPresent()">
+
+✅ Present All
+
+</button>
+
+<button
+class="absentAllBtn"
+onclick="markAllAbsent()">
+
+❌ Absent All
+
+</button>
+
+</div>
+
+</div>
+
+<input
+type="text"
+id="searchStudent"
+placeholder="🔍 Search Student Name / EMIS"
+onkeyup="searchStudent()">
+
+<div
+id="studentList"
+class="student-list">
+
+<!-- Students will load here -->
+
+</div>
+
+<div class="button-area">
+
+<button
+class="saveBtn"
+onclick="saveAttendance()">
+
+💾 Save Attendance
+
+</button>
+
+<button
+class="dashboardBtn"
+onclick="location.href='../admin_dashboard.html'">
+
+🏠 Dashboard
+
+</button>
+
+</div>
+
+</section>
+
+</div>
+
+<script type="module"
+src="../js/attendance_management.js">
+
+</script>
+
+</body>
+
+</html>
