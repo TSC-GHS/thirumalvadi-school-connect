@@ -1,1 +1,356 @@
+/*==================================================
+School Connect TN
+Admin Dashboard V2
+CSS Part 1
+==================================================*/
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#EEF4FA;
+color:#333;
+padding-bottom:80px;
+overflow-x:hidden;
+}
+
+/*=========================
+HEADER
+=========================*/
+
+.header{
+position:sticky;
+top:0;
+background:linear-gradient(135deg,#1565C0,#1976D2);
+color:#fff;
+padding:15px 18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 3px 10px rgba(0,0,0,.15);
+z-index:1000;
+}
+
+.header-left h2{
+font-size:22px;
+margin-bottom:4px;
+}
+
+.header-left p{
+font-size:13px;
+opacity:.9;
+}
+
+.header-right{
+display:flex;
+gap:15px;
+align-items:center;
+}
+
+.header-right .icon{
+font-size:22px;
+cursor:pointer;
+}
+
+/*=========================
+CONTAINER
+=========================*/
+
+.container{
+max-width:500px;
+margin:auto;
+padding:15px;
+}
+
+/*=========================
+COMMON CARD
+=========================*/
+
+.card{
+background:#fff;
+border-radius:18px;
+padding:16px;
+margin-bottom:16px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.card h2{
+font-size:20px;
+color:#1565C0;
+margin-bottom:14px;
+}
+
+/*=========================
+SUMMARY
+=========================*/
+
+.summary{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+
+.summary-box{
+background:linear-gradient(135deg,#1565C0,#42A5F5);
+color:#fff;
+padding:16px;
+border-radius:16px;
+text-align:center;
+box-shadow:0 3px 8px rgba(0,0,0,.10);
+}
+
+.summary-box h1{
+font-size:28px;
+margin-bottom:5px;
+}
+
+.summary-box p{
+font-size:13px;
+}
+/*==================================================
+School Connect TN
+Admin Dashboard V2
+CSS Part 2
+==================================================*/
+
+/*=========================
+MANAGEMENT GRID
+=========================*/
+
+.quickmenu{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:10px;
+}
+
+.quickmenu button{
+background:#fff;
+border:none;
+border-radius:16px;
+padding:12px 8px;
+min-height:85px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+font-size:13px;
+font-weight:600;
+color:#1565C0;
+cursor:pointer;
+box-shadow:0 3px 8px rgba(0,0,0,.10);
+transition:.3s;
+line-height:18px;
+}
+
+.quickmenu button:hover{
+background:#1565C0;
+color:#fff;
+transform:translateY(-3px);
+}
+
+.quickmenu button br{
+display:block;
+margin-bottom:6px;
+}
+
+/*=========================
+RECENT ACTIVITIES
+=========================*/
+
+.activity-list{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.activity-item{
+padding:12px;
+background:#F5F9FF;
+border-left:4px solid #1565C0;
+border-radius:12px;
+font-size:14px;
+}
+
+/*=========================
+SYSTEM STATUS
+=========================*/
+
+.status-list{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.status-list p{
+padding:12px;
+background:#F8FCF8;
+border-left:4px solid #4CAF50;
+border-radius:12px;
+font-size:14px;
+}
+
+/*=========================
+SECTION GAP
+=========================*/
+
+.card + .card{
+margin-top:15px;
+}
+/*==================================================
+School Connect TN
+Admin Dashboard V2
+CSS Part 3 (Final)
+==================================================*/
+
+/*=========================
+BOTTOM NAVIGATION
+=========================*/
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:65px;
+background:#1565C0;
+display:flex;
+justify-content:space-around;
+align-items:center;
+box-shadow:0 -2px 10px rgba(0,0,0,.15);
+z-index:999;
+}
+
+.bottom-nav button{
+flex:1;
+height:100%;
+background:none;
+border:none;
+color:#fff;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+font-size:11px;
+cursor:pointer;
+}
+
+.bottom-nav span{
+font-size:20px;
+margin-bottom:4px;
+}
+
+/*=========================
+RESPONSIVE
+=========================*/
+
+@media(max-width:768px){
+
+.container{
+padding:10px;
+}
+
+.card{
+padding:14px;
+border-radius:16px;
+}
+
+.summary{
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.summary-box{
+padding:12px;
+min-height:80px;
+}
+
+.summary-box h1{
+font-size:22px;
+}
+
+.summary-box p{
+font-size:12px;
+}
+
+.quickmenu{
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+.quickmenu button{
+min-height:78px;
+padding:10px 5px;
+font-size:11px;
+line-height:15px;
+}
+
+.activity-item,
+.status-list p{
+padding:10px;
+font-size:13px;
+}
+
+.bottom-nav{
+height:60px;
+}
+
+.bottom-nav span{
+font-size:18px;
+}
+
+}
+
+/*=========================
+TABLET & DESKTOP
+=========================*/
+
+@media(min-width:769px){
+
+.container{
+max-width:1200px;
+}
+
+.summary{
+grid-template-columns:repeat(4,1fr);
+}
+
+.quickmenu{
+grid-template-columns:repeat(4,1fr);
+}
+
+}
+
+/*=========================
+HOVER EFFECTS
+=========================*/
+
+.card,
+.summary-box,
+.quickmenu button,
+.activity-item{
+transition:all .25s ease;
+}
+
+.summary-box:hover,
+.quickmenu button:hover,
+.activity-item:hover{
+transform:translateY(-3px);
+}
+
+/*=========================
+SCROLLBAR
+=========================*/
+
+::-webkit-scrollbar{
+width:5px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#90CAF9;
+border-radius:10px;
+}
