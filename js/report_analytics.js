@@ -344,7 +344,17 @@ console.log("Report Analytics Loaded Successfully"});
 
 console.error(error);
 
-alert(error.message);
+document.body.innerHTML = `
+<div style="
+padding:20px;
+font-size:18px;
+color:red;
+white-space:pre-wrap;
+font-family:monospace;
+">
+${error.stack}
+</div>
+`;
 
 }
 
