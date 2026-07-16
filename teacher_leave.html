@@ -1,1 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Teacher Leave Apply</title>
+
+<link rel="stylesheet"
+href="css/teacher_leave.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+<h2>📝 Apply Leave</h2>
+
+<p>School Connect TN</p>
+
+</header>
+
+<div class="container">
+
+<div class="formCard">
+
+<label>Teacher Name</label>
+
+<input
+type="text"
+id="teacherName"
+readonly>
+
+<label>Teacher ID</label>
+
+<input
+type="text"
+id="teacherId"
+readonly>
+
+<label>Leave Type</label>
+
+<select id="leaveType">
+
+<option value="">Select Leave Type</option>
+
+<option>Casual Leave</option>
+
+<option>Medical Leave</option>
+
+<option>Earned Leave</option>
+
+<option>On Duty</option>
+
+<option>Permission</option>
+
+<option>Other</option>
+
+</select>
+
+<label>From Date</label>
+
+<input
+type="date"
+id="fromDate">
+
+<label>To Date</label>
+
+<input
+type="date"
+id="toDate">
+
+<label>Reason</label>
+
+<textarea
+id="reason"
+rows="5"
+placeholder="Enter Leave Reason"></textarea>
+
+<button id="submitLeave">
+
+📤 Submit Leave Request
+
+</button>
+
+</div>
+
+<!-- Leave History -->
+
+<div class="historyCard">
+
+<h3>📋 My Leave History</h3>
+
+<div id="leaveHistory">
+
+<p class="loading">
+
+No Leave Records
+
+</p>
+
+</div>
+
+</div>
+
+<button
+class="backBtn"
+onclick="location.href='teacher.html'">
+
+⬅ Back to Dashboard
+
+</button>
+
+</div>
+
+<script
+type="module"
+src="js/teacher_leave.js">
+
+</script>
+
+</body>
+
+</html>
