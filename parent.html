@@ -4,51 +4,62 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
 <title>Parent Dashboard</title>
 
-<link rel="stylesheet" href="css/parent.css">
+<link rel="stylesheet"
+href="css/parent.css">
 
 </head>
 
 <body>
 
-<!-- =========================
+<!-- =====================================
 HEADER
-========================= -->
+===================================== -->
 
 <header class="header">
 
-<div>
+<div class="headerLeft">
 
-🏫 School Connect TN
+<h2>🏫 School Connect TN</h2>
+
+<p>Parent Dashboard</p>
 
 </div>
 
 </header>
 
-<!-- =========================
+<!-- =====================================
 MAIN CONTAINER
-========================= -->
+===================================== -->
 
 <div class="container">
 
-<!-- Welcome Card -->
+<!-- =====================================
+WELCOME CARD
+===================================== -->
 
-<div class="card">
+<section class="card">
 
 <h2>👋 Welcome Parent</h2>
 
 <div class="profile">
 
-<img src="images/student.png"
+<img
+src="images/student.png"
 id="studentPhoto"
 alt="Student">
 
 <div class="info">
 
-<p><b>Name :</b>
+<p>
+
+<b>Student Name</b>
+
+<br>
 
 <span id="studentName">
 
@@ -58,21 +69,29 @@ Loading...
 
 </p>
 
-<p><b>Class :</b>
+<p>
 
-<span id="studentClass">
+<b>EMIS Number</b>
 
--
-
-</span>
-
-</p>
-
-<p><b>EMIS :</b>
+<br>
 
 <span id="studentEMIS">
 
--
+Loading...
+
+</span>
+
+</p>
+
+<p>
+
+<b>Class</b>
+
+<br>
+
+<span id="studentClass">
+
+Loading...
 
 </span>
 
@@ -82,11 +101,13 @@ Loading...
 
 </div>
 
-</div>
+</section>
 
-<!-- Summary -->
+<!-- =====================================
+SUMMARY
+===================================== -->
 
-<div class="summary">
+<section class="summary">
 
 <div class="summary-box">
 
@@ -97,6 +118,18 @@ Loading...
 </h1>
 
 <p>Attendance</p>
+
+</div>
+
+<div class="summary-box">
+
+<h1 id="resultCount">
+
+0%
+
+</h1>
+
+<p>Average</p>
 
 </div>
 
@@ -124,23 +157,13 @@ Loading...
 
 </div>
 
-<div class="summary-box">
+</section>
 
-<h1 id="resultCount">
+<!-- =====================================
+QUICK ACTIONS
+===================================== -->
 
-0%
-
-</h1>
-
-<p>Average</p>
-
-</div>
-
-</div>
-
-<!-- Quick Menu -->
-
-<div class="card">
+<section class="card">
 
 <h2>
 
@@ -150,78 +173,102 @@ Loading...
 
 <div class="quickmenu">
 
-<button onclick="location.href='parent_dashboard.html'">
+<button
+onclick="location.href='parent_dashboard.html'">
 
-👨‍🎓<br>
+👨‍🎓
+
+<br>
 
 My Child
 
 </button>
 
-<button onclick="location.href='notice_board.html'">
+<button
+onclick="location.href='notice_board.html'">
 
-📢<br>
+📢
+
+<br>
 
 Notice
 
 </button>
 
-<button onclick="location.href='parent_dashboard.html'">
+<button
+onclick="location.href='parent_dashboard.html'">
 
-📅<br>
+📅
+
+<br>
 
 Attendance
 
 </button>
 
-<button onclick="location.href='parent_dashboard.html'">
+<button
+onclick="location.href='parent_dashboard.html'">
 
-📚<br>
+📚
+
+<br>
 
 Marks
 
 </button>
 
-<button onclick="location.href='parent_dashboard.html'">
+<button
+onclick="location.href='parent_dashboard.html'">
 
-📝<br>
+📝
+
+<br>
 
 Homework
 
 </button>
 
-<button onclick="location.href='parent_report_card.html?emis='+localStorage.getItem('parentEMIS')">
+<button
+onclick="location.href='parent_report_card.html?emis='+localStorage.getItem('parentEMIS')">
 
-📄<br>
+📄
 
-Report
+<br>
 
-</button>
-
-<button onclick="location.href='leave_request.html?emis='+localStorage.getItem('parentEMIS')">
-
-📝<br>
-
-Leave
+Report Card
 
 </button>
 
-<button onclick="location.href='leave_status.html?emis='+localStorage.getItem('parentEMIS')">
+<button
+onclick="location.href='leave_request.html?emis='+localStorage.getItem('parentEMIS')">
 
-📋<br>
+📝
 
-Status
+<br>
+
+Apply Leave
+
+</button>
+
+<button
+onclick="location.href='leave_status.html?emis='+localStorage.getItem('parentEMIS')">
+
+📋
+
+<br>
+
+Leave Status
 
 </button>
 
 </div>
 
-</div>
-<!-- =========================
-Latest Notices
-========================= -->
+</section>
+<!-- =====================================
+LATEST NOTICES
+===================================== -->
 
-<div class="card">
+<section class="card">
 
 <h2>📢 Latest Notices</h2>
 
@@ -231,7 +278,7 @@ Latest Notices
 
 <div class="notice-title">
 
-Loading notices...
+Loading Notices...
 
 </div>
 
@@ -239,13 +286,13 @@ Loading notices...
 
 </div>
 
-</div>
+</section>
 
-<!-- =========================
-Recent Homework
-========================= -->
+<!-- =====================================
+RECENT HOMEWORK
+===================================== -->
 
-<div class="card">
+<section class="card">
 
 <h2>📚 Recent Homework</h2>
 
@@ -255,7 +302,7 @@ Recent Homework
 
 <div class="homework-sub">
 
-Loading homework...
+Loading Homework...
 
 </div>
 
@@ -263,17 +310,18 @@ Loading homework...
 
 </div>
 
-</div>
+</section>
 
 </div>
 
-<!-- =========================
-Bottom Navigation
-========================= -->
+<!-- =====================================
+BOTTOM NAVIGATION
+===================================== -->
 
 <div class="bottom-nav">
 
-<button onclick="location.href='dashboard.html'">
+<button
+onclick="location.href='parent_dashboard.html'">
 
 <span>🏠</span>
 
@@ -281,7 +329,8 @@ Home
 
 </button>
 
-<button onclick="location.href='notice_board.html'">
+<button
+onclick="location.href='notice_board.html'">
 
 <span>📢</span>
 
@@ -289,7 +338,8 @@ Notice
 
 </button>
 
-<button onclick="location.href='parent_report_card.html?emis='+localStorage.getItem('parentEMIS')">
+<button
+onclick="location.href='parent_report_card.html?emis='+localStorage.getItem('parentEMIS')">
 
 <span>📄</span>
 
@@ -297,7 +347,8 @@ Report
 
 </button>
 
-<button onclick="location.href='index.html'">
+<button
+onclick="location.href='index.html'">
 
 <span>🚪</span>
 
