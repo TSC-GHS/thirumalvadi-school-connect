@@ -1,228 +1,363 @@
-<!-- ========================= -->
-<!-- Parent Dashboard - Part 1 -->
-<!-- ========================= -->
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="parent-header">
+<head>
 
-    <div class="header-top">
-        <div>
-            <h2>👨‍👩‍👧 Parent Dashboard</h2>
-            <p>School Connect TN</p>
-        </div>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
-        <button class="logout-btn" onclick="logout()">
-            Logout
-        </button>
-    </div>
+<title>Parent Dashboard</title>
 
-</div>
+<link rel="stylesheet"
+href="css/parent.css">
 
-<div class="parent-container">
+</head>
 
-    <!-- Welcome Card -->
+<body>
 
-    <div class="welcome-card">
+<!-- =====================================
+HEADER
+===================================== -->
 
-        <div class="welcome-text">
+<header class="header">
 
-            <h2>👋 Welcome Back</h2>
+<div class="headerLeft">
 
-            <h3 id="studentName">
-                Amul
-            </h3>
+<h2>🏫 School Connect TN</h2>
 
-            <p>
-                Class 7 - A
-            </p>
-
-            <span>
-                Thirumalvadi Government High School
-            </span>
-
-        </div>
-
-    </div>
-
-    <!-- Student Info -->
-
-    <div class="student-info-card">
-
-        <div class="student-row">
-            <span>Name</span>
-            <strong>Amul</strong>
-        </div>
-
-        <div class="student-row">
-            <span>EMIS</span>
-            <strong>610000020</strong>
-        </div>
-
-        <div class="student-row">
-            <span>Class</span>
-            <strong>7 - A</strong>
-        </div>
-
-    </div>
-
-    <!-- Summary Cards -->
-
-    <div class="summary-grid">
-
-        <div class="summary-card">
-            <h2>95%</h2>
-            <p>Attendance</p>
-        </div>
-
-        <div class="summary-card">
-            <h2>82%</h2>
-            <p>Average</p>
-        </div>
-
-        <div class="summary-card">
-            <h2>5</h2>
-            <p>Homework</p>
-        </div>
-
-        <div class="summary-card">
-            <h2>3</h2>
-            <p>Notices</p>
-        </div>
-
-    </div>
-        <!-- Quick Services -->
-
-    <h2 class="section-title">⚡ Quick Services</h2>
-
-    <div class="quick-grid">
-
-        <div class="quick-card">
-            <div class="icon">👤</div>
-            <span>Profile</span>
-        </div>
-
-        <div class="quick-card">
-            <div class="icon">📅</div>
-            <span>Attendance</span>
-        </div>
-
-        <div class="quick-card">
-            <div class="icon">📊</div>
-            <span>Report Card</span>
-        </div>
-
-        <div class="quick-card">
-            <div class="icon">📚</div>
-            <span>Homework</span>
-        </div>
-
-        <div class="quick-card">
-            <div class="icon">📢</div>
-            <span>Notices</span>
-        </div>
-
-        <div class="quick-card">
-            <div class="icon">📝</div>
-            <span>Apply Leave</span>
-        </div>
-
-        <div class="quick-card">
-            <div class="icon">📄</div>
-            <span>Leave Status</span>
-        </div>
-
-        <div class="quick-card">
-            <div class="icon">⚙️</div>
-            <span>Settings</span>
-        </div>
-
-    </div>
-
-    <!-- Today's Homework -->
-
-    <h2 class="section-title">📚 Today's Homework</h2>
-
-    <div class="homework-list">
-
-        <div class="list-card">
-            <h3>English</h3>
-            <p>Read Lesson 5 and write Question & Answer.</p>
-            <small>📅 Due : 15-07-2026</small>
-        </div>
-
-        <div class="list-card">
-            <h3>Mathematics</h3>
-            <p>Complete Exercise 4.2</p>
-            <small>📅 Due : 15-07-2026</small>
-        </div>
-
-    </div>
-        <!-- Latest Notices -->
-
-    <h2 class="section-title">📢 Latest Notices</h2>
-
-    <div class="notice-list">
-
-        <div class="list-card">
-            <h3>Parent Meeting</h3>
-            <p>Parents meeting will be conducted on Friday at 10:00 AM.</p>
-            <small>📅 14-07-2026</small>
-        </div>
-
-        <div class="list-card">
-            <h3>Quarterly Examination</h3>
-            <p>Quarterly exams will start from next week.</p>
-            <small>📅 18-07-2026</small>
-        </div>
-
-    </div>
-
-    <!-- Upcoming Events -->
-
-    <h2 class="section-title">📅 Upcoming Events</h2>
-
-    <div class="events-grid">
-
-        <div class="event-card">
-            <h3>🎯 PTA Meeting</h3>
-            <p>Friday - 10:00 AM</p>
-        </div>
-
-        <div class="event-card">
-            <h3>📝 Quarterly Exam</h3>
-            <p>Next Week</p>
-        </div>
-
-    </div>
+<p>Parent Dashboard</p>
 
 </div>
 
-<!-- Bottom Navigation -->
+</header>
 
-<nav class="bottom-nav">
+<!-- =====================================
+MAIN CONTAINER
+===================================== -->
 
-    <a href="parent_dashboard.html">
-        🏠
-        <span>Home</span>
-    </a>
+<div class="container">
 
-    <a href="attendance.html">
-        📅
-        <span>Attendance</span>
-    </a>
+<!-- =====================================
+WELCOME CARD
+===================================== -->
 
-    <a href="notice_board.html">
-        📢
-        <span>Notice</span>
-    </a>
+<section class="card">
 
-    <a href="student_profile.html">
-        👤
-        <span>Profile</span>
-    </a>
+<h2>👋 Welcome Parent</h2>
 
-</nav>
+<div class="profile">
 
-<script type="module" src="js/parent.js"></script>
+<img
+src="images/student.png"
+id="studentPhoto"
+alt="Student">
+
+<div class="info">
+
+<p>
+
+<b>Student Name</b>
+
+<br>
+
+<span id="studentName">
+
+Loading...
+
+</span>
+
+</p>
+
+<p>
+
+<b>EMIS Number</b>
+
+<br>
+
+<span id="studentEMIS">
+
+Loading...
+
+</span>
+
+</p>
+
+<p>
+
+<b>Class</b>
+
+<br>
+
+<span id="studentClass">
+
+Loading...
+
+</span>
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =====================================
+SUMMARY
+===================================== -->
+
+<section class="summary">
+
+<div class="summary-box">
+
+<h1 id="attendanceCount">
+
+0%
+
+</h1>
+
+<p>Attendance</p>
+
+</div>
+
+<div class="summary-box">
+
+<h1 id="resultCount">
+
+0%
+
+</h1>
+
+<p>Average</p>
+
+</div>
+
+<div class="summary-box">
+
+<h1 id="homeworkCount">
+
+0
+
+</h1>
+
+<p>Homework</p>
+
+</div>
+
+<div class="summary-box">
+
+<h1 id="noticeCount">
+
+0
+
+</h1>
+
+<p>Notices</p>
+
+</div>
+
+</section>
+
+<!-- =====================================
+QUICK ACTIONS
+===================================== -->
+
+<section class="card">
+
+<h2>
+
+⚡ Quick Actions
+
+</h2>
+
+<div class="quickmenu">
+
+<button
+onclick="location.href='parent_dashboard.html'">
+
+👨‍🎓
+
+<br>
+
+My Child
+
+</button>
+
+<button
+onclick="location.href='notice_board.html'">
+
+📢
+
+<br>
+
+Notice
+
+</button>
+
+<button
+onclick="location.href='parent_dashboard.html'">
+
+📅
+
+<br>
+
+Attendance
+
+</button>
+
+<button
+onclick="location.href='parent_dashboard.html'">
+
+📚
+
+<br>
+
+Marks
+
+</button>
+
+<button
+onclick="location.href='parent_dashboard.html'">
+
+📝
+
+<br>
+
+Homework
+
+</button>
+
+<button
+onclick="location.href='parent_report_card.html?emis='+localStorage.getItem('parentEMIS')">
+
+📄
+
+<br>
+
+Report Card
+
+</button>
+
+<button
+onclick="location.href='leave_request.html?emis='+localStorage.getItem('parentEMIS')">
+
+📝
+
+<br>
+
+Apply Leave
+
+</button>
+
+<button
+onclick="location.href='leave_status.html?emis='+localStorage.getItem('parentEMIS')">
+
+📋
+
+<br>
+
+Leave Status
+
+</button>
+
+</div>
+
+</section>
+<!-- =====================================
+LATEST NOTICES
+===================================== -->
+
+<section class="card">
+
+<h2>📢 Latest Notices</h2>
+
+<div class="notice-list" id="latestNotices">
+
+<div class="notice-item">
+
+<div class="notice-title">
+
+Loading Notices...
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =====================================
+RECENT HOMEWORK
+===================================== -->
+
+<section class="card">
+
+<h2>📚 Recent Homework</h2>
+
+<div class="homework-list" id="recentHomework">
+
+<div class="homework-item">
+
+<div class="homework-sub">
+
+Loading Homework...
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+<!-- =====================================
+BOTTOM NAVIGATION
+===================================== -->
+
+<div class="bottom-nav">
+
+<button
+onclick="location.href='parent_dashboard.html'">
+
+<span>🏠</span>
+
+Home
+
+</button>
+
+<button
+onclick="location.href='notice_board.html'">
+
+<span>📢</span>
+
+Notice
+
+</button>
+
+<button
+onclick="location.href='parent_report_card.html?emis='+localStorage.getItem('parentEMIS')">
+
+<span>📄</span>
+
+Report
+
+</button>
+
+<button
+onclick="location.href='index.html'">
+
+<span>🚪</span>
+
+Logout
+
+</button>
+
+</div>
 
 </body>
+
 </html>
