@@ -1,108 +1,53 @@
-//==================================================
-// School Connect TN
-// Homework Analytics
-//==================================================
+//====================================
+// Teacher Wise Analytics
+//====================================
 
-import { db } from "../firebase.js";
+const teacherMap = {};
+const classMap = {};
 
-import {
-collection,
-getDocs
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+list.forEach(hw=>{
 
-//==================================================
-// Elements
-//==================================================
-
-const totalHomework=document.getElementById("totalHomework");
-const todayHomework=document.getElementById("todayHomework");
-const teacherCount=document.getElementById("teacherCount");
-const classCount=document.getElementById("classCount");
-
-const teacherWise=document.getElementById("teacherWise");
-const classWise=document.getElementById("classWise");
-const latestHomework=document.getElementById("latestHomework");
-
-//==================================================
-
-loadHomeworkAnalytics();
-
-async function loadHomeworkAnalytics(){
-
-try{
-
-const snap=await getDocs(collection(db,"homework"));
-
-if(snap.empty){
-
-totalHomework.textContent="0";
-todayHomework.textContent="0";
-teacherCount.textContent="0";
-classCount.textContent="0";
-
-teacherWise.innerHTML="<p>No Homework Found</p>";
-classWise.innerHTML="<p>No Homework Found</p>";
-latestHomework.innerHTML="<p>No Homework Found</p>";
-
-return;
-
+if(hw.dueDate===today){
+todayCount++;
 }
 
-const list=[];
+const teacher = hw.teacherName || "Unknown";
 
-snap.forEach(doc=>{
+teacherMap[teacher] =
+(teacherMap[teacher] || 0) + 1;
 
-list.push(doc.data());
+const cls =
+`${hw.className || "-"}-${hw.section || "-"}`;
 
-});
-
-totalHomework.textContent=list.length;
-
-// Today's Homework
-
-const today=new Date().toISOString().split("T")[0];
-
-const todayCount=list.filter(item=>item.dueDate===today).length;
-
-todayHomework.textContent=todayCount;
-
-// Teacher Wise
-
-const teacherMap={};
-
-// Class Wise
-
-const classMap={};
-
-list.forEach(item=>{
-
-const teacher=item.teacherName || "Unknown";
-
-teacherMap[teacher]=(teacherMap[teacher]||0)+1;
-
-const cls=`${item.className||"-"}-${item.section||"-"}`;
-
-classMap[cls]=(classMap[cls]||0)+1;
+classMap[cls] =
+(classMap[cls] || 0) + 1;
 
 });
 
-teacherCount.textContent=Object.keys(teacherMap).length;
+todayHomework.textContent = todayCount;
 
-classCount.textContent=Object.keys(classMap).length;
+teacherCount.textContent =
+Object.keys(teacherMap).length;
 
-// Teacher UI
+classCount.textContent =
+Object.keys(classMap).length;
+//====================================
+// Teacher Wise UI
+//====================================
 
-let teacherHTML="";
+let teacherHTML = "";
 
-Object.entries(teacherMap).forEach(([name,count])=>{
+Object.keys(teacherMap)
+.sort()
+.forEach(name=>{
 
-teacherHTML+=`
+teacherHTML += `
 
 <div class="item">
 
 <span>👨‍🏫 ${name}</span>
 
-<span>${count}</span>
+<span>${teacherMap[name]}</span>
 
 </div>
 
@@ -110,21 +55,25 @@ teacherHTML+=`
 
 });
 
-teacherWise.innerHTML=teacherHTML;
+teacherWise.innerHTML = teacherHTML;
 
-// Class UI
+//====================================
+// Class Wise UI
+//====================================
 
-let classHTML="";
+let classHTML = "";
 
-Object.entries(classMap).forEach(([cls,count])=>{
+Object.keys(classMap)
+.sort()
+.forEach(cls=>{
 
-classHTML+=`
+classHTML += `
 
 <div class="item">
 
 <span>🏫 ${cls}</span>
 
-<span>${count}</span>
+<span>${classMap[cls]}</span>
 
 </div>
 
@@ -132,41 +81,41 @@ classHTML+=`
 
 });
 
-classWise.innerHTML=classHTML;
-
+classWise.innerHTML = classHTML;
+//====================================
 // Latest Homework
+//====================================
 
 list.sort((a,b)=>{
 
-const t1=a.createdAt?.seconds||0;
+const t1 = a.createdAt?.seconds || 0;
+const t2 = b.createdAt?.seconds || 0;
 
-const t2=b.createdAt?.seconds||0;
-
-return t2-t1;
+return t2 - t1;
 
 });
 
-let latestHTML="";
+let latestHTML = "";
 
-list.slice(0,10).forEach(item=>{
+list.slice(0,10).forEach(hw=>{
 
-latestHTML+=`
+latestHTML += `
 
 <div class="item">
 
 <div>
 
-<b>${item.subject||"-"}</b><br>
+<b>${hw.subject || "-"}</b><br>
 
-Class : ${item.className||"-"}-${item.section||"-"}<br>
+Class : ${hw.className || "-"}-${hw.section || "-"}<br>
 
-${item.title||item.description||"-"}
+${hw.title || hw.description || "-"}
 
 </div>
 
 <div>
 
-${item.dueDate||"-"}
+${hw.dueDate || "-"}
 
 </div>
 
@@ -176,33 +125,6 @@ ${item.dueDate||"-"}
 
 });
 
-latestHomework.innerHTML=latestHTML;
-}
-catch(error){
+latestHomework.innerHTML = latestHTML;
 
-console.error(error);
-
-totalHomework.textContent = "ERR";
-todayHomework.textContent = "ERR";
-teacherCount.textContent = "ERR";
-classCount.textContent = "ERR";
-
-teacherWise.innerHTML = `
-<div style="color:red;padding:10px">
-<b>Error:</b><br>
-${error.message}
-</div>`;
-
-classWise.innerHTML = `
-<div style="color:red;padding:10px">
-${error.message}
-</div>`;
-
-latestHomework.innerHTML = `
-<div style="color:red;padding:10px">
-${error.message}
-</div>`;
-
-}
-
-console.log("Homework Analytics Loaded");
+console.log("Homework Analytics Loaded Successfully");
