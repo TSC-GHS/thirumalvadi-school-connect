@@ -6,8 +6,10 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
-  doc,
-  getDoc
+  collection,
+  query,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 // =====================================
@@ -32,131 +34,97 @@ let currentTeacher = null;
 // Load Teacher Profile
 // =====================================
 
-async function loadTeacherProfile(){
+async function loadTeacherProfile() {
 
-const teacherId =
-localStorage.getItem("teacherId") ||
-sessionStorage.getItem("teacherId");
+  const teacherId =
+    localStorage.getItem("teacherId") ||
+    sessionStorage.getItem("teacherId");
 
-if(!teacherId){
+  if (!teacherId) {
+    alert("Teacher session expired");
+    location.href = "index.html";
+    return false;
+  }
 
-alert("Teacher session expired");
+  const q = query(
+    collection(db, "teachers"),
+    where("id", "==", teacherId)
+  );
 
-location.href="index.html";
+  const snapshot = await getDocs(q);
 
-return false;
+  if (snapshot.empty) {
+    alert("Teacher Record Not Found");
+    location.href = "index.html";
+    return false;
+  }
 
-}
+  currentTeacher = snapshot.docs[0].data();
 
-const teacherSnap =
-await getDoc(doc(db,"teachers",teacherId));
+  teacherIdElement.textContent = currentTeacher.id || "-";
+  teacherNameElement.textContent = currentTeacher.name || "-";
+  teacherTypeElement.textContent = currentTeacher.teacherType || "-";
+  subjectElement.textContent = currentTeacher.subject || "-";
+  classNameElement.textContent = currentTeacher.className || "-";
+  sectionElement.textContent = currentTeacher.section || "-";
+  emailElement.textContent = currentTeacher.email || "-";
+  mobileElement.textContent = currentTeacher.mobile || "-";
 
-if(!teacherSnap.exists()){
-
-alert("Teacher Record Not Found");
-
-location.href="index.html";
-
-return false;
-
-}
-
-currentTeacher = teacherSnap.data();
-// =====================================
-// Display Teacher Details
-// =====================================
-
-teacherIdElement.textContent =
-teacherId;
-
-teacherNameElement.textContent =
-currentTeacher.name || "-";
-
-teacherTypeElement.textContent =
-currentTeacher.teacherType || "-";
-
-subjectElement.textContent =
-currentTeacher.subject || "-";
-
-classNameElement.textContent =
-currentTeacher.className || "-";
-
-sectionElement.textContent =
-currentTeacher.section || "-";
-
-emailElement.textContent =
-currentTeacher.email || "-";
-
-mobileElement.textContent =
-currentTeacher.mobile || "-";
-
-return true;
-
+  return true;
 }
 
 // =====================================
 // Change Password
 // =====================================
 
-changePasswordBtn.addEventListener(
-"click",
-async ()=>{
+changePasswordBtn.addEventListener("click", async () => {
 
-if(!auth.currentUser){
+  if (!auth.currentUser) {
+    alert("Please login again.");
+    return;
+  }
 
-alert("Please login again.");
+  try {
 
-return;
+    await sendPasswordResetEmail(
+      auth,
+      auth.currentUser.email
+    );
 
-}
+    alert("✅ Password reset email sent.");
 
-try{
+  } catch (error) {
 
-await sendPasswordResetEmail(
+    console.error(error);
+    alert(error.message);
 
-auth,
-
-auth.currentUser.email
-
-);
-
-alert(
-"✅ Password reset link has been sent to your registered email."
-);
-
-}catch(error){
-
-console.error(error);
-
-alert(error.message);
-
-}
+  }
 
 });
+
 // =====================================
 // Logout
 // =====================================
 
 logoutBtn.addEventListener("click", async () => {
 
-const ok = confirm("Are you sure you want to logout?");
+  if (!confirm("Are you sure you want to logout?")) return;
 
-if(!ok) return;
+  try {
+    await signOut(auth);
+  } catch (e) {
+    console.log(e);
+  }
 
-try{
+  localStorage.removeItem("teacherId");
+  localStorage.removeItem("teacherName");
+  localStorage.removeItem("userRole");
 
-await signOut(auth);
+  sessionStorage.removeItem("teacherId");
+  sessionStorage.removeItem("teacherName");
+  sessionStorage.removeItem("userRole");
 
-}catch(error){
-
-console.error(error);
-
-}
-
-localStorage.removeItem("teacherId");
-sessionStorage.removeItem("teacherId");
-
-location.href = "index.html";
+  location.href = "index.html";
 
 });
 
@@ -164,52 +132,30 @@ location.href = "index.html";
 // Initialize
 // =====================================
 
-async function initializeSettings(){
+(async () => {
 
-try{
+  try {
 
-const loaded = await loadTeacherProfile();
+    await loadTeacherProfile();
+    console.log("Teacher Settings Loaded");
 
-if(!loaded) return;
+  } catch (error) {
 
-console.log("Teacher Settings Loaded Successfully");
+    console.error(error);
+    alert("Settings Loading Failed\n\n" + error.message);
 
-}catch(error){
+  }
 
-console.error(error);
-
-alert(
-"Settings Loading Failed\n\n" +
-error.message
-);
-
-}
-
-}
-
-initializeSettings();
-
-// =====================================
-// Version
-// =====================================
-
-console.log("================================");
-console.log("School Connect TN");
-console.log("Teacher Settings V1");
-console.log("================================");
+})();
 
 // =====================================
 // Global Error Handler
 // =====================================
 
-window.addEventListener("error",(event)=>{
-
-console.error("Global Error:",event.error);
-
+window.addEventListener("error", (event) => {
+  console.error(event.error);
 });
 
-window.addEventListener("unhandledrejection",(event)=>{
-
-console.error("Unhandled Promise:",event.reason);
-
+window.addEventListener("unhandledrejection", (event) => {
+  console.error(event.reason);
 });
