@@ -1,394 +1,129 @@
-/*==================================================
+/* =====================================
 School Connect TN
-Admin Dashboard V3
-CSS Part 1
-==================================================*/
+Admin Dashboard V3 Stable
+===================================== */
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
+font-family:Arial,sans-serif;
 }
 
 body{
-background:#F4F7FB;
-color:#333;
+background:#f4f6fb;
+color:#222;
 }
 
-/*==============================
-HEADER
-==============================*/
-
-.header{
-
-background:linear-gradient(135deg,#1565C0,#0D47A1);
-
+.topBar{
+background:#6A1B9A;
 color:#fff;
-
-padding:18px 25px;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-box-shadow:0 3px 12px rgba(0,0,0,.15);
-
-}
-
-.header-left h2{
-
-font-size:28px;
-
-margin-bottom:4px;
-
-}
-
-.header-left p{
-
-font-size:14px;
-
-opacity:.9;
-
-}
-
-.profile{
-
-background:rgba(255,255,255,.18);
-
-padding:10px 18px;
-
-border-radius:25px;
-
-font-weight:bold;
-
-}
-
-/*==============================
-WELCOME CARD
-==============================*/
-
-.welcome-card{
-
-margin:20px;
-
-background:#fff;
-
-padding:22px;
-
-border-radius:16px;
-
-box-shadow:0 4px 12px rgba(0,0,0,.08);
-
-}
-
-.welcome-card h1{
-
-color:#1565C0;
-
-margin-bottom:8px;
-
-font-size:28px;
-
-}
-
-.welcome-card p{
-
-color:#666;
-
-}
-
-/*==============================
-SUMMARY GRID
-==============================*/
-
-.summary-grid{
-
-display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
-
-gap:18px;
-
-padding:0 20px 20px;
-
-}
-
-.summary-card{
-
-background:#fff;
-
-padding:25px;
-
-border-radius:16px;
-
-text-align:center;
-
-box-shadow:0 4px 12px rgba(0,0,0,.08);
-
-transition:.3s;
-
-}
-
-.summary-card:hover{
-
-transform:translateY(-5px);
-
-}
-
-.summary-card h2{
-
-font-size:34px;
-
-color:#1565C0;
-
-margin-bottom:10px;
-
-}
-
-.summary-card p{
-
-font-size:16px;
-
-font-weight:bold;
-
-color:#666;
-
-}
-/*==================================================
-DASHBOARD CARDS
-==================================================*/
-
-.dashboard-card{
-
-margin:20px;
-
-background:#fff;
-
-padding:20px;
-
-border-radius:16px;
-
-box-shadow:0 4px 12px rgba(0,0,0,.08);
-
-}
-
-.dashboard-card h2{
-
-margin-bottom:18px;
-
-color:#1565C0;
-
-}
-
-/*==================================================
-QUICK GRID
-==================================================*/
-
-.quick-grid{
-
-display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-
-gap:15px;
-
-}
-
-.quick-grid button{
-
-background:#1565C0;
-
-color:#fff;
-
-border:none;
-
-border-radius:14px;
-
 padding:18px;
-
-font-size:16px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-transition:.3s;
-
-min-height:100px;
-
-}
-
-.quick-grid button:hover{
-
-background:#0D47A1;
-
-transform:translateY(-4px);
-
-}
-
-/*==================================================
-MODULE GRID
-==================================================*/
-
-.management-grid{
-
-display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-
-gap:18px;
-
-}
-
-.module-card{
-
-background:#F8FAFD;
-
-border-radius:16px;
-
-padding:20px;
-
-text-decoration:none;
-
 text-align:center;
-
-color:#333;
-
-box-shadow:0 2px 8px rgba(0,0,0,.08);
-
-transition:.3s;
-
+box-shadow:0 2px 8px rgba(0,0,0,.2);
 }
 
-.module-card:hover{
-
-background:#E3F2FD;
-
-transform:translateY(-5px);
-
+.topBar .title{
+font-size:28px;
+font-weight:bold;
 }
 
-.module-card h3{
-
-margin:12px 0 8px;
-
-color:#1565C0;
-
-}
-
-.module-card p{
-
-font-size:14px;
-
-color:#666;
-
-}
-
-/*==================================================
-LOGOUT
-==================================================*/
-
-.logoutBtn{
-
-width:100%;
-
-padding:16px;
-
-background:#D32F2F;
-
-color:#fff;
-
-border:none;
-
-border-radius:12px;
-
+.topBar .admin{
+margin-top:8px;
 font-size:18px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-transition:.3s;
-
 }
 
-.logoutBtn:hover{
-
-background:#B71C1C;
-
-}
-
-/*==================================================
-FOOTER
-==================================================*/
-
-.footer{
-
-margin-top:25px;
-
+.dashboard{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
 padding:20px;
+}
 
-background:#0D47A1;
-
-color:#fff;
-
+.card{
+background:#f3e5f5;
+border-radius:18px;
+padding:25px 15px;
 text-align:center;
-
+box-shadow:0 4px 10px rgba(0,0,0,.1);
+transition:.3s;
 }
 
-.footer b{
-
-color:#FFD54F;
-
+.card:hover{
+transform:translateY(-5px);
 }
 
-/*==================================================
-MOBILE
-==================================================*/
+.card h1{
+font-size:48px;
+color:#6A1B9A;
+margin-bottom:10px;
+}
 
-@media(max-width:768px){
+.card p{
+font-size:22px;
+font-weight:bold;
+}
 
-.header{
-
+.menu{
+background:#fff;
+margin:20px;
+padding:20px;
+border-radius:18px;
+box-shadow:0 4px 12px rgba(0,0,0,.12);
+display:flex;
 flex-direction:column;
+gap:15px;
+}
 
+.menu button{
+border:none;
+border-radius:15px;
+padding:18px;
+font-size:22px;
+background:#6A1B9A;
+color:#fff;
+cursor:pointer;
+transition:.3s;
+}
+
+.menu button:hover{
+background:#7B1FA2;
+}
+
+.menu .logout{
+background:#d32f2f;
+}
+
+.menu .logout:hover{
+background:#b71c1c;
+}
+
+footer{
 text-align:center;
+padding:25px;
+font-size:15px;
+color:#666;
+}
 
+@media(max-width:600px){
+
+.dashboard{
+grid-template-columns:repeat(2,1fr);
 gap:12px;
-
+padding:15px;
 }
 
-.summary-grid{
-
-grid-template-columns:repeat(2,1fr);
-
+.card h1{
+font-size:40px;
 }
 
-.quick-grid{
-
-grid-template-columns:repeat(2,1fr);
-
+.card p{
+font-size:18px;
 }
 
-.management-grid{
-
-grid-template-columns:1fr;
-
-}
-
-.header-left h2{
-
-font-size:24px;
-
-}
-
-.welcome-card h1{
-
-font-size:24px;
-
+.menu button{
+font-size:20px;
+padding:16px;
 }
 
 }
