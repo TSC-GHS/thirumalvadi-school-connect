@@ -32,34 +32,49 @@ async function loadDashboard() {
 
   try {
 
-    const students = await getDocs(collection(db, "students"));
-    document.getElementById("studentCount").textContent = students.size;
-
-    const teachers = await getDocs(collection(db, "teachers"));
-    document.getElementById("teacherCount").textContent = teachers.size;
-
-    const homework = await getDocs(collection(db, "homework"));
-    document.getElementById("homeworkCount").textContent = homework.size;
-
-    let notices = 0;
-
-    try {
-      const noticeData = await getDocs(collection(db, "notices"));
-      notices = noticeData.size;
-    } catch {
-      const noticeData = await getDocs(collection(db, "notice"));
-      notices = noticeData.size;
+    // Students
+    const studentSnap = await getDocs(collection(db, "students"));
+    const studentEl = document.getElementById("studentCount");
+    if (studentEl) {
+      studentEl.textContent = studentSnap.size;
     }
 
-    document.getElementById("noticeCount").textContent = notices;
+    // Teachers
+    const teacherSnap = await getDocs(collection(db, "teachers"));
+    const teacherEl = document.getElementById("teacherCount");
+    if (teacherEl) {
+      teacherEl.textContent = teacherSnap.size;
+    }
 
- } catch (error) {
+    // Homework
+    const homeworkSnap = await getDocs(collection(db, "homework"));
+    const homeworkEl = document.getElementById("homeworkCount");
+    if (homeworkEl) {
+      homeworkEl.textContent = homeworkSnap.size;
+    }
+
+    // Notices
+    let noticeCount = 0;
+
+    try {
+      const noticeSnap = await getDocs(collection(db, "notices"));
+      noticeCount = noticeSnap.size;
+    } catch {
+      const noticeSnap = await getDocs(collection(db, "notice"));
+      noticeCount = noticeSnap.size;
+    }
+
+    const noticeEl = document.getElementById("noticeCount");
+    if (noticeEl) {
+      noticeEl.textContent = noticeCount;
+    }
+
+  } catch (error) {
 
     console.error(error);
-
     alert(error.message);
 
-} 
+  }
 
 }
 
@@ -80,14 +95,14 @@ window.logoutAdmin = async function () {
 
   } catch (error) {
 
-    alert("Logout Failed");
+    alert(error.message);
 
   }
 
 };
 
 //==================================================
-// Load
+// Load Dashboard
 //==================================================
 
 document.addEventListener("DOMContentLoaded", loadDashboard);
