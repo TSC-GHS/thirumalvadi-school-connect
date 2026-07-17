@@ -1,385 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Student Profile</title>
-
-<link rel="stylesheet"
-href="css/student_profile.css">
-
-</head>
-
-<body>
-
-<!-- =====================================
-HEADER
-===================================== -->
-
-<header class="header">
-
-<div class="header-left">
-
-<h2>👨‍🎓 Student Profile</h2>
-
-<p>School Connect TN</p>
-
-</div>
-
-<div class="header-right">
-
-<button
-class="backBtn"
-onclick="location.href='students.html'">
-
-⬅ Back
-
-</button>
-
-</div>
-
-</header>
-
-<!-- =====================================
-MAIN CONTAINER
-===================================== -->
-
-<div class="container">
-
-<!-- =====================================
-PROFILE CARD
-===================================== -->
-
-<section class="profile-card">
-
-<div class="photo-section">
-
-<img
-id="studentPhoto"
-src="images/student.png"
-alt="Student Photo">
-
-<h2 id="studentName">
-
-Loading...
-
-</h2>
-
-<p id="studentClass">
-
-Loading...
-
-</p>
-
-</div>
-
-<div class="details-grid">
-
-<div class="detail-box">
-
-<span>🎓 Admission No</span>
-
-<h3 id="admissionNo">
-
-Loading...
-
-</h3>
-
-</div>
-
-<div class="detail-box">
-
-<span>🆔 EMIS Number</span>
-
-<h3 id="emis">
-
-Loading...
-
-</h3>
-
-</div>
-
-<div class="detail-box">
-
-<span>📅 Date of Birth</span>
-
-<h3 id="dob">
-
-Loading...
-
-</h3>
-
-</div>
-
-<div class="detail-box">
-
-<span>🩸 Blood Group</span>
-
-<h3 id="blood">
-
-Loading...
-
-</h3>
-
-</div>
-
-</div>
-
-</section>
-<!-- =====================================
-PARENT & STUDENT DETAILS
-===================================== -->
-
-<section class="info-card">
-
-<h2>👨‍👩‍👦 Student Information</h2>
-
-<div class="info-grid">
-
-<div class="info-item">
-<label>👨 Father Name</label>
-<p id="father">Loading...</p>
-</div>
-
-<div class="info-item">
-<label>👩 Mother Name</label>
-<p id="mother">Loading...</p>
-</div>
-
-<div class="info-item">
-<label>📱 Parent Mobile</label>
-<p id="mobile">Loading...</p>
-</div>
-
-<div class="info-item">
-<label>📚 Medium</label>
-<p id="medium">Loading...</p>
-</div>
-
-<div class="info-item">
-<label>🏫 Academic Year</label>
-<p id="academicYear">Loading...</p>
-</div>
-
-<div class="info-item full-width">
-<label>🏠 Address</label>
-<p id="address">Loading...</p>
-</div>
-
-</div>
-
-</section>
-
-<!-- =====================================
-ACADEMIC SUMMARY
-===================================== -->
-
-<section class="summary-grid">
-
-<div class="summary-card">
-
-<h3 id="attendancePercent">0%</h3>
-
-<p>Attendance</p>
-
-</div>
-
-<div class="summary-card">
-
-<h3 id="averageMark">0%</h3>
-
-<p>Average Marks</p>
-
-</div>
-
-<div class="summary-card">
-
-<h3 id="studentRank">-</h3>
-
-<p>Rank</p>
-
-</div>
-
-<div class="summary-card">
-
-<h3 id="studentResult">-</h3>
-
-<p>Result</p>
-
-</div>
-
-</section>
-<!-- =====================================
-ACTION BUTTONS
-===================================== -->
-
-<section class="action-card">
-
-<div class="action-grid">
-
-<button
-class="btn blue"
-onclick="window.print()">
-
-🖨️ Print Profile
-
-</button>
-
-<button
-class="btn green"
-onclick="downloadIDCard()">
-
-🪪 Download ID Card
-
-</button>
-
-<button
-class="btn orange"
-onclick="editStudent()">
-
-✏️ Edit Student
-
-</button>
-
-<button
-class="btn purple"
-onclick="location.href='students.html'">
-
-👨‍🎓 Students List
-
-</button>
-
-</div>
-
-</section>
-
-</div>
-
 <script type="module">
 
 import { db } from "./firebase.js";
 
 import {
-doc,
-getDoc
-}
-from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const params =
-new URLSearchParams(window.location.search);
+//========================================
+// Get Student EMIS
+//========================================
+
+const params = new URLSearchParams(window.location.search);
 
 const emis =
-params.get("emis");
+  params.get("emis") ||
+  localStorage.getItem("emis") ||
+  sessionStorage.getItem("emis");
 
-if(!emis){
+if (!emis) {
 
-alert("Student EMIS not found");
+  alert("Student EMIS not found");
 
-location.href="students.html";
+  location.href = "parent_dashboard.html";
 
-}
-
-async function loadStudent(){
-
-try{
-
-const snap =
-await getDoc(doc(db,"students",emis));
-
-if(snap.exists()){
-
-const s = snap.data();
-
-document.getElementById("studentName").innerHTML =
-s.name || "-";
-
-document.getElementById("studentClass").innerHTML =
-`${s.class || "-"} - ${s.section || "-"}`;
-
-document.getElementById("admissionNo").innerHTML =
-s.admissionNo || "-";
-
-document.getElementById("emis").innerHTML =
-s.emis || emis;
-
-document.getElementById("dob").innerHTML =
-s.dob || "-";
-
-document.getElementById("blood").innerHTML =
-s.blood || "-";
-
-document.getElementById("father").innerHTML =
-s.father || "-";
-
-document.getElementById("mother").innerHTML =
-s.mother || "-";
-
-document.getElementById("mobile").innerHTML =
-s.mobile || "-";
-
-document.getElementById("medium").innerHTML =
-s.medium || "-";
-
-document.getElementById("academicYear").innerHTML =
-s.academicYear || "-";
-
-document.getElementById("address").innerHTML =
-s.address || "-";
-
-if(s.photo){
-
-document.getElementById("studentPhoto").src =
-s.photo;
+  throw new Error("Student EMIS not found");
 
 }
 
+//========================================
+// Load Student
+//========================================
+
+async function loadStudent() {
+
+  try {
+
+    const snap = await getDoc(doc(db, "students", emis));
+
+    if (!snap.exists()) {
+
+      alert("Student not found");
+
+      return;
+
+    }
+
+    const s = snap.data();
+
+    document.getElementById("studentName").innerHTML = s.name || "-";
+
+    document.getElementById("studentClass").innerHTML =
+      `${s.class || "-"} - ${s.section || "-"}`;
+
+    document.getElementById("admissionNo").innerHTML =
+      s.admissionNo || "-";
+
+    document.getElementById("emis").innerHTML =
+      s.emis || emis;
+
+    document.getElementById("dob").innerHTML =
+      s.dob || "-";
+
+    document.getElementById("blood").innerHTML =
+      s.blood || "-";
+        document.getElementById("father").innerHTML =
+      s.father || "-";
+
+    document.getElementById("mother").innerHTML =
+      s.mother || "-";
+
+    document.getElementById("mobile").innerHTML =
+      s.mobile || "-";
+
+    document.getElementById("medium").innerHTML =
+      s.medium || "-";
+
+    document.getElementById("academicYear").innerHTML =
+      s.academicYear || "-";
+
+    document.getElementById("address").innerHTML =
+      s.address || "-";
+
+    if (s.photo) {
+      document.getElementById("studentPhoto").src = s.photo;
+    }
+
+    document.getElementById("attendancePercent").innerHTML =
+      s.attendance || "0%";
+
+    document.getElementById("averageMark").innerHTML =
+      s.average || "0%";
+
+    document.getElementById("studentRank").innerHTML =
+      s.rank || "-";
+
+    document.getElementById("studentResult").innerHTML =
+      s.result || "-";
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(error.message);
+
+  }
+
 }
-  const attendance =
-s.attendance || "0%";
+  //========================================
+// Buttons
+//========================================
 
-document.getElementById("attendancePercent").innerHTML =
-attendance;
+window.downloadIDCard = function () {
 
-document.getElementById("averageMark").innerHTML =
-s.average || "0%";
-
-document.getElementById("studentRank").innerHTML =
-s.rank || "-";
-
-document.getElementById("studentResult").innerHTML =
-s.result || "-";
-
-}catch(error){
-
-alert(error.message);
-console.log(error);
-
-}
-
-}
-
-window.downloadIDCard=function(){
-
-alert("🪪 Student ID Card download will be added in the next version.");
+  alert("🪪 Student ID Card download will be added in the next version.");
 
 };
 
-window.editStudent=function(){
+window.editStudent = function () {
 
-location.href=
-"student_management.html?emis="+emis;
+  location.href = "student_management.html?emis=" + emis;
 
 };
+
+//========================================
+// Load Student
+//========================================
 
 loadStudent();
 
 </script>
-
-</body>
-
-</html>
