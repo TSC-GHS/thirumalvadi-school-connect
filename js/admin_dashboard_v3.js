@@ -1,129 +1,92 @@
 //==================================================
 // School Connect TN
-// Admin Dashboard V3
+// Admin Dashboard V3 Stable
 //==================================================
 
 import { db, auth } from "../firebase.js";
 
 import {
-collection,
-getDocs
+  collection,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 import {
-signOut
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 //==================================================
-// Admin Session Check
+// Session Check
 //==================================================
 
 const role = localStorage.getItem("userRole");
 
-if(role !== "Admin"){
+if (role !== "Admin") {
+  window.location.href = "login.html";
+}
 
-window.location.href="login.html";
+//==================================================
+// Dashboard
+//==================================================
+
+async function loadDashboard() {
+
+  try {
+
+    const students = await getDocs(collection(db, "students"));
+    document.getElementById("studentCount").textContent = students.size;
+
+    const teachers = await getDocs(collection(db, "teachers"));
+    document.getElementById("teacherCount").textContent = teachers.size;
+
+    const homework = await getDocs(collection(db, "homework"));
+    document.getElementById("homeworkCount").textContent = homework.size;
+
+    let notices = 0;
+
+    try {
+      const noticeData = await getDocs(collection(db, "notices"));
+      notices = noticeData.size;
+    } catch {
+      const noticeData = await getDocs(collection(db, "notice"));
+      notices = noticeData.size;
+    }
+
+    document.getElementById("noticeCount").textContent = notices;
+
+  } catch (error) {
+
+    console.error("Dashboard Error:", error);
+    alert("Unable to load dashboard data.");
+
+  }
 
 }
 
 //==================================================
-// Dashboard Counts
+// Logout
 //==================================================
 
-async function loadDashboard(){
+window.logoutAdmin = async function () {
 
-try{
+  try {
 
-const students =
-await getDocs(collection(db,"students"));
+    await signOut(auth);
 
-document.getElementById("totalStudents").textContent =
-students.size;
+    localStorage.clear();
+    sessionStorage.clear();
 
-const teachers =
-await getDocs(collection(db,"teachers"));
+    window.location.href = "login.html";
 
-document.getElementById("totalTeachers").textContent =
-teachers.size;
+  } catch (error) {
 
-let notices = 0;
+    alert("Logout Failed");
 
-try{
-
-const noticeData =
-await getDocs(collection(db,"notices"));
-
-notices = noticeData.size;
-
-}catch(e){
-
-try{
-
-const noticeData =
-await getDocs(collection(db,"notice"));
-
-notices = noticeData.size;
-
-}catch(err){
-
-notices = 0;
-
-}
-
-}
-
-document.getElementById("totalNotices").textContent =
-notices;
-  document.getElementById("todayAttendance").textContent = "100%";
-
-}catch(error){
-
-console.error("Dashboard Error :", error);
-
-alert("Unable to load dashboard data.");
-
-}
-
-}
-
-//==================================================
-// Logout Function
-//==================================================
-
-window.logoutAdmin = async function(){
-
-try{
-
-await signOut(auth);
-
-localStorage.removeItem("userRole");
-
-localStorage.removeItem("teacherId");
-localStorage.removeItem("teacherName");
-
-localStorage.removeItem("parentEMIS");
-localStorage.removeItem("studentEMIS");
-
-sessionStorage.clear();
-
-window.location.href = "login.html";
-
-}catch(error){
-
-console.error(error);
-
-alert("Logout Failed");
-
-}
+  }
 
 };
 
 //==================================================
-// Load Dashboard
+// Load
 //==================================================
 
-document.addEventListener("DOMContentLoaded",()=>{
-
-loadDashboard();
-
-});
+document.addEventListener("DOMContentLoaded", loadDashboard);
