@@ -79,10 +79,10 @@ where("class","==",studentClass.value),
 where("section","==",section.value)
 
 );
-
+console.log("Loading:", studentClass.value, section.value);
 const snapshot =
 await getDocs(q);
-
+console.log("Students found:", snapshot.size);
 studentList.innerHTML="";
 
 let total=0;
@@ -165,7 +165,7 @@ leaveCount.innerHTML=0;
 updateSummary();
 
 }catch(error){
-
+console.error(error);
 alert(error.message);
 
 }
