@@ -53,12 +53,13 @@ async function loadDashboard() {
 
     document.getElementById("noticeCount").textContent = notices;
 
-  } catch (error) {
+ } catch (error) {
 
-    console.error("Dashboard Error:", error);
-    alert("Unable to load dashboard data.");
+    console.error(error);
 
-  }
+    alert(error.message);
+
+} 
 
 }
 
