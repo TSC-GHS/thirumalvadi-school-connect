@@ -4,7 +4,7 @@ Attendance Management V2
 JavaScript - Part 1
 ==================================================*/
 
-import { db } from "../firebase.js";
+import { db } from "./firebase.js";
 
 import {
 collection,
