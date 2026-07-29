@@ -57,7 +57,7 @@ window.loginUser = async function () {
       case "Admin":
 
         localStorage.setItem("userRole", "Admin");
-        window.location.href = "admin_dashboard_v3.html";
+        window.location.href = "admin_dashboard.html";
         break;
 
       case "Headmaster":
