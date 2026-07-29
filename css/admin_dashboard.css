@@ -1,6 +1,6 @@
 /* =====================================
 School Connect TN
-Admin Dashboard V3 Stable
+Admin Dashboard
 ===================================== */
 
 *{
@@ -15,115 +15,226 @@ background:#f4f6fb;
 color:#222;
 }
 
-.topBar{
+/* Header */
+
+.header{
 background:#6A1B9A;
 color:#fff;
-padding:18px;
-text-align:center;
-box-shadow:0 2px 8px rgba(0,0,0,.2);
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+box-shadow:0 2px 10px rgba(0,0,0,.15);
 }
 
-.topBar .title{
-font-size:28px;
-font-weight:bold;
+.header-left h2{
+font-size:30px;
+margin-bottom:5px;
 }
 
-.topBar .admin{
-margin-top:8px;
+.header-left p{
+font-size:17px;
+}
+
+.profile{
+background:rgba(255,255,255,.15);
+padding:10px 18px;
+border-radius:30px;
+font-size:16px;
+}
+
+/* Welcome */
+
+.welcome-card{
+background:#fff;
+margin:20px;
+padding:25px;
+border-radius:18px;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.welcome-card h1{
+font-size:36px;
+color:#6A1B9A;
+margin-bottom:10px;
+}
+
+.welcome-card p{
 font-size:18px;
+color:#555;
 }
 
-.dashboard{
+/* Summary */
+
+.summary-grid{
 display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:15px;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:20px;
 padding:20px;
 }
 
-.card{
+.summary-card{
 background:#f3e5f5;
+padding:30px 20px;
 border-radius:18px;
-padding:25px 15px;
 text-align:center;
 box-shadow:0 4px 10px rgba(0,0,0,.1);
 transition:.3s;
 }
 
-.card:hover{
+.summary-card:hover{
 transform:translateY(-5px);
 }
 
-.card h1{
+.summary-card h2{
 font-size:48px;
 color:#6A1B9A;
 margin-bottom:10px;
 }
 
-.card p{
-font-size:22px;
+.summary-card p{
+font-size:20px;
 font-weight:bold;
 }
 
-.menu{
+/* Sections */
+
+.dashboard-card{
 background:#fff;
 margin:20px;
-padding:20px;
+padding:25px;
 border-radius:18px;
-box-shadow:0 4px 12px rgba(0,0,0,.12);
-display:flex;
-flex-direction:column;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.dashboard-card h2{
+margin-bottom:20px;
+color:#6A1B9A;
+}
+
+/* Quick Actions */
+
+.quick-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
 gap:15px;
 }
 
-.menu button{
+.quick-grid button{
 border:none;
 border-radius:15px;
-padding:18px;
-font-size:22px;
 background:#6A1B9A;
 color:#fff;
+padding:18px;
+font-size:16px;
 cursor:pointer;
 transition:.3s;
 }
 
-.menu button:hover{
+.quick-grid button:hover{
 background:#7B1FA2;
+transform:translateY(-3px);
 }
 
-.menu .logout{
+/* Management */
+
+.management-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+}
+
+.module-card{
+background:#fafafa;
+border-radius:15px;
+padding:25px;
+text-align:center;
+text-decoration:none;
+color:#222;
+box-shadow:0 3px 8px rgba(0,0,0,.08);
+transition:.3s;
+font-size:30px;
+}
+
+.module-card:hover{
+background:#6A1B9A;
+color:#fff;
+transform:translateY(-5px);
+}
+
+.module-card h3{
+margin:15px 0 8px;
+font-size:22px;
+}
+
+.module-card p{
+font-size:15px;
+}
+
+/* Logout */
+
+.logoutBtn{
+width:100%;
+border:none;
+padding:18px;
 background:#d32f2f;
+color:#fff;
+font-size:18px;
+border-radius:15px;
+cursor:pointer;
 }
 
-.menu .logout:hover{
+.logoutBtn:hover{
 background:#b71c1c;
 }
 
-footer{
+/* Footer */
+
+.footer{
 text-align:center;
 padding:25px;
-font-size:15px;
 color:#666;
+font-size:15px;
 }
 
-@media(max-width:600px){
+/* Mobile */
 
-.dashboard{
+@media(max-width:768px){
+
+.header{
+flex-direction:column;
+text-align:center;
+gap:15px;
+}
+
+.header-left h2{
+font-size:26px;
+}
+
+.welcome-card h1{
+font-size:28px;
+}
+
+.summary-card h2{
+font-size:38px;
+}
+
+.quick-grid{
 grid-template-columns:repeat(2,1fr);
-gap:12px;
-padding:15px;
 }
 
-.card h1{
-font-size:40px;
+.management-grid{
+grid-template-columns:repeat(2,1fr);
 }
 
-.card p{
+.module-card{
+padding:18px;
+font-size:24px;
+}
+
+.module-card h3{
 font-size:18px;
-}
-
-.menu button{
-font-size:20px;
-padding:16px;
 }
 
 }
