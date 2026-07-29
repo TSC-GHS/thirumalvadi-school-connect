@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>School Timings</title>
+
+<link rel="stylesheet" href="css/school_timings.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+
+        <button class="back-btn" onclick="history.back()">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+
+        <h2>
+            <i class="fa-solid fa-clock"></i>
+            School Timings
+        </h2>
+
+    </div>
+
+    <!-- School Start -->
+
+    <div class="card">
+
+        <label>
+            <i class="fa-solid fa-school"></i>
+            School Start Time
+        </label>
+
+        <input
+            type="time"
+            id="schoolStart">
+
+    </div>
+
+    <!-- Period 1 -->
+
+    <div class="card">
+
+        <h3>Period 1</h3>
+
+        <div class="row">
+
+            <div>
+
+                <label>Start</label>
+
+                <input
+                type="time"
+                id="p1Start">
+
+            </div>
+
+            <div>
+
+                <label>End</label>
+
+                <input
+                type="time"
+                id="p1End">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Period 2 -->
+
+    <div class="card">
+
+        <h3>Period 2</h3>
+
+        <div class="row">
+
+            <div>
+
+                <label>Start</label>
+
+                <input
+                type="time"
+                id="p2Start">
+
+            </div>
+
+            <div>
+
+                <label>End</label>
+
+                <input
+                type="time"
+                id="p2End">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Break -->
+
+    <div class="card">
+
+        <h3>Break</h3>
+
+        <div class="row">
+
+            <div>
+
+                <label>Start</label>
+
+                <input
+                type="time"
+                id="breakStart">
+
+            </div>
+
+            <div>
+
+                <label>End</label>
+
+                <input
+                type="time"
+                id="breakEnd">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Period 3 -->
+
+    <div class="card">
+
+        <h3>Period 3</h3>
+
+        <div class="row">
+
+            <div>
+
+                <label>Start</label>
+
+                <input
+                type="time"
+                id="p3Start">
+
+            </div>
+
+            <div>
+
+                <label>End</label>
+
+                <input
+                type="time"
+                id="p3End">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Period 4 -->
+
+    <div class="card">
+
+        <h3>Period 4</h3>
+
+        <div class="row">
+
+            <div>
+
+                <label>Start</label>
+
+                <input
+                type="time"
+                id="p4Start">
+
+            </div>
+
+            <div>
+
+                <label>End</label>
+
+                <input
+                type="time"
+                id="p4End">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Lunch -->
+
+    <div class="card">
+
+        <h3>Lunch</h3>
+
+        <div class="row">
+
+            <div>
+
+                <label>Start</label>
+
+                <input
+                type="time"
+                id="lunchStart">
+
+            </div>
+
+            <div>
+
+                <label>End</label>
+
+                <input
+                type="time"
+                id="lunchEnd">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Period 5 -->
+
+    <div class="card">
+
+        <h3>Period 5</h3>
+
+        <div class="row">
+
+            <div>
+
+                <label>Start</label>
+
+                <input
+                type="time"
+                id="p5Start">
+
+            </div>
+
+            <div>
+
+                <label>End</label>
+
+                <input
+                type="time"
+                id="p5End">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Period 6 -->
+
+    <div class="card">
+
+        <h3>Period 6</h3>
+
+        <div class="row">
+
+            <div>
+
+                <label>Start</label>
+
+                <input
+                type="time"
+                id="p6Start">
+
+            </div>
+
+            <div>
+
+                <label>End</label>
+
+                <input
+                type="time"
+                id="p6End">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Period 7 -->
+
+    <div class="card">
+
+        <h3>Period 7</h3>
+
+        <div class="row">
+
+            <div>
+
+                <label>Start</label>
+
+                <input
+                type="time"
+                id="p7Start">
+
+            </div>
+
+            <div>
+
+                <label>End</label>
+
+                <input
+                type="time"
+                id="p7End">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- School End -->
+
+    <div class="card">
+
+        <label>
+
+            <i class="fa-solid fa-flag-checkered"></i>
+
+            School End Time
+
+        </label>
+
+        <input
+            type="time"
+            id="schoolEnd">
+
+    </div>
+
+    <!-- Save -->
+
+    <button
+        class="save-btn"
+        id="saveTimings">
+
+        <i class="fa-solid fa-floppy-disk"></i>
+
+        Save School Timings
+
+    </button>
+
+</div>
+
+<script type="module" src="js/school_timings.js"></script>
+
+</body>
+</html>
