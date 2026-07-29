@@ -16,7 +16,39 @@ import {
 //==================================================
 
 const saveTimings = document.getElementById("saveTimings");
+//==================================================
+// Elements
+//==================================================
 
+const schoolStart = document.getElementById("schoolStart");
+const schoolEnd = document.getElementById("schoolEnd");
+
+const p1Start = document.getElementById("p1Start");
+const p1End = document.getElementById("p1End");
+
+const p2Start = document.getElementById("p2Start");
+const p2End = document.getElementById("p2End");
+
+const breakStart = document.getElementById("breakStart");
+const breakEnd = document.getElementById("breakEnd");
+
+const p3Start = document.getElementById("p3Start");
+const p3End = document.getElementById("p3End");
+
+const p4Start = document.getElementById("p4Start");
+const p4End = document.getElementById("p4End");
+
+const lunchStart = document.getElementById("lunchStart");
+const lunchEnd = document.getElementById("lunchEnd");
+
+const p5Start = document.getElementById("p5Start");
+const p5End = document.getElementById("p5End");
+
+const p6Start = document.getElementById("p6Start");
+const p6End = document.getElementById("p6End");
+
+const p7Start = document.getElementById("p7Start");
+const p7End = document.getElementById("p7End");
 //==================================================
 // Load Timings
 //==================================================
@@ -35,7 +67,7 @@ async function loadTimings() {
 
         document.getElementById("schoolStart").value = data.schoolStart || "";
         document.getElementById("schoolEnd").value = data.schoolEnd || "";
-
+if (!data.periods) return;
         data.periods.forEach(p => {
 
             switch (p.name) {
