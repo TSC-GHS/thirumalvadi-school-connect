@@ -1,0 +1,151 @@
+/*=========================================
+School Connect TN
+School Timings
+=========================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f5f7fb;
+}
+
+.container{
+    max-width:800px;
+    margin:20px auto;
+    padding:15px;
+}
+
+/*=========================================
+Header
+=========================================*/
+
+.header{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.back-btn{
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:50%;
+    background:#1565c0;
+    color:#fff;
+    cursor:pointer;
+    font-size:18px;
+    transition:.3s;
+}
+
+.back-btn:hover{
+    background:#0d47a1;
+}
+
+.header h2{
+    color:#1565c0;
+    font-size:24px;
+}
+
+/*=========================================
+Cards
+=========================================*/
+
+.card{
+    background:#fff;
+    border-radius:15px;
+    padding:18px;
+    margin-bottom:18px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.card h3{
+    color:#1565c0;
+    margin-bottom:15px;
+}
+
+.card label{
+    display:block;
+    margin-bottom:8px;
+    color:#444;
+    font-weight:600;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+/*=========================================
+Inputs
+=========================================*/
+
+input[type="time"]{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+    transition:.3s;
+}
+
+input[type="time"]:focus{
+    border-color:#1565c0;
+    box-shadow:0 0 5px rgba(21,101,192,.3);
+}
+
+/*=========================================
+Save Button
+=========================================*/
+
+.save-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#1565c0;
+    color:#fff;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.save-btn:hover{
+    background:#0d47a1;
+}
+
+.save-btn i{
+    margin-right:8px;
+}
+
+/*=========================================
+Responsive
+=========================================*/
+
+@media(max-width:768px){
+
+    .row{
+        grid-template-columns:1fr;
+    }
+
+    .header h2{
+        font-size:20px;
+    }
+
+    .container{
+        padding:12px;
+    }
+
+    .card{
+        padding:15px;
+    }
+
+}
