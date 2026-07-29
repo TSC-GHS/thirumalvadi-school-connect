@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Timetable Management</title>
+
+    <link rel="stylesheet"
+        href="css/timetable_management.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Header -->
+
+        <div class="header">
+
+            <button class="back-btn"
+                onclick="history.back()">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+            </button>
+
+            <h2>
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+                Timetable Management
+
+            </h2>
+
+        </div>
+
+        <!-- Academic Details -->
+
+        <div class="card">
+
+            <div class="form-group">
+
+                <label>Academic Year</label>
+
+                <select id="academicYear">
+
+                    <option value="2026-2027">
+                        2026 - 2027
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Class</label>
+
+                <select id="class">
+
+                    <option value="">Select Class</option>
+
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Section</label>
+
+                <select id="section">
+
+                    <option value="">Select Section</option>
+
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Day</label>
+
+                <select id="day">
+
+                    <option>Monday</option>
+                    <option>Tuesday</option>
+                    <option>Wednesday</option>
+                    <option>Thursday</option>
+                    <option>Friday</option>
+                    <option>Saturday</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <!-- Subjects -->
+
+        <div class="card">
+
+            <h3>Subjects</h3>
+
+            <div id="subjectContainer">
+
+                <div class="period-row">
+                    <span>Period 1</span>
+                    <select id="period1"></select>
+                </div>
+
+                <div class="period-row">
+                    <span>Period 2</span>
+                    <select id="period2"></select>
+                </div>
+
+                <div class="period-row break">
+                    <span>Break</span>
+                    <input type="text"
+                        value="Auto"
+                        disabled>
+                </div>
+
+                <div class="period-row">
+                    <span>Period 3</span>
+                    <select id="period3"></select>
+                </div>
+
+                <div class="period-row">
+                    <span>Period 4</span>
+                    <select id="period4"></select>
+                </div>
+
+                <div class="period-row lunch">
+                    <span>Lunch</span>
+                    <input type="text"
+                        value="Auto"
+                        disabled>
+                </div>
+
+                <div class="period-row">
+                    <span>Period 5</span>
+                    <select id="period5"></select>
+                </div>
+
+                <div class="period-row">
+                    <span>Period 6</span>
+                    <select id="period6"></select>
+                </div>
+
+                <div class="period-row">
+                    <span>Period 7</span>
+                    <select id="period7"></select>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Buttons -->
+
+        <div class="button-group">
+
+            <button id="loadBtn"
+                class="load-btn">
+
+                <i class="fa-solid fa-folder-open"></i>
+
+                Load Timetable
+
+            </button>
+
+            <button id="saveBtn"
+                class="save-btn">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Save Timetable
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <script type="module"
+        src="js/timetable_management.js"></script>
+
+</body>
+
+</html>
