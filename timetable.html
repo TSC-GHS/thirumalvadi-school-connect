@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Connect TN - Timetable</title>
+
+    <link rel="stylesheet" href="css/timetable.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header">
+        <button class="back-btn" onclick="history.back()">
+            <i class="fa fa-arrow-left"></i>
+        </button>
+
+        <h2>
+            <i class="fa-solid fa-calendar-days"></i>
+            Weekly Timetable
+        </h2>
+    </header>
+
+    <!-- Student Details -->
+    <div class="student-card">
+
+        <img id="studentPhoto"
+             src="assets/default-user.png"
+             alt="Student">
+
+        <div>
+
+            <h3 id="studentName">Loading...</h3>
+
+            <p>
+                Class :
+                <span id="studentClass">-</span>
+            </p>
+
+            <p>
+                Section :
+                <span id="studentSection">-</span>
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Days -->
+    <div class="day-tabs">
+
+        <button class="day active" data-day="Monday">Mon</button>
+
+        <button class="day" data-day="Tuesday">Tue</button>
+
+        <button class="day" data-day="Wednesday">Wed</button>
+
+        <button class="day" data-day="Thursday">Thu</button>
+
+        <button class="day" data-day="Friday">Fri</button>
+
+        <button class="day" data-day="Saturday">Sat</button>
+
+    </div>
+
+    <!-- Current Period -->
+    <div class="current-period">
+
+        <h3>
+            <i class="fa-solid fa-clock"></i>
+            Current Period
+        </h3>
+
+        <div id="currentPeriod">
+            Loading...
+        </div>
+
+    </div>
+
+    <!-- Next Period -->
+    <div class="next-period">
+
+        <h3>
+            <i class="fa-solid fa-forward"></i>
+            Next Period
+        </h3>
+
+        <div id="nextPeriod">
+            Loading...
+        </div>
+
+    </div>
+
+    <!-- Timetable -->
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+            <tr>
+
+                <th>Period</th>
+
+                <th>Time</th>
+
+                <th>Subject</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody id="timetableBody">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script type="module" src="js/timetable.js"></script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Connect TN - Timetable</title>
+
+    <link rel="stylesheet" href="css/timetable.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header">
+        <button class="back-btn" onclick="history.back()">
+            <i class="fa fa-arrow-left"></i>
+        </button>
+
+        <h2>
+            <i class="fa-solid fa-calendar-days"></i>
+            Weekly Timetable
+        </h2>
+    </header>
+
+    <!-- Student Details -->
+    <div class="student-card">
+
+        <img id="studentPhoto"
+             src="assets/default-user.png"
+             alt="Student">
+
+        <div>
+
+            <h3 id="studentName">Loading...</h3>
+
+            <p>
+                Class :
+                <span id="studentClass">-</span>
+            </p>
+
+            <p>
+                Section :
+                <span id="studentSection">-</span>
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Days -->
+    <div class="day-tabs">
+
+        <button class="day active" data-day="Monday">Mon</button>
+
+        <button class="day" data-day="Tuesday">Tue</button>
+
+        <button class="day" data-day="Wednesday">Wed</button>
+
+        <button class="day" data-day="Thursday">Thu</button>
+
+        <button class="day" data-day="Friday">Fri</button>
+
+        <button class="day" data-day="Saturday">Sat</button>
+
+    </div>
+
+    <!-- Current Period -->
+    <div class="current-period">
+
+        <h3>
+            <i class="fa-solid fa-clock"></i>
+            Current Period
+        </h3>
+
+        <div id="currentPeriod">
+            Loading...
+        </div>
+
+    </div>
+
+    <!-- Next Period -->
+    <div class="next-period">
+
+        <h3>
+            <i class="fa-solid fa-forward"></i>
+            Next Period
+        </h3>
+
+        <div id="nextPeriod">
+            Loading...
+        </div>
+
+    </div>
+
+    <!-- Timetable -->
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+            <tr>
+
+                <th>Period</th>
+
+                <th>Time</th>
+
+                <th>Subject</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody id="timetableBody">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script type="module" src="js/timetable.js"></script>
+
+</body>
+</html>
