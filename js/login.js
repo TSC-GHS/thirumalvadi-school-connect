@@ -1,11 +1,6 @@
 import { auth, db } from "./firebase.js";
 
 import {
-signInWithEmailAndPassword,
-signOut
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-
-import {
 doc,
 getDoc,
 collection,
@@ -59,17 +54,6 @@ loginId = loginId + "@student.schoolconnecttn.app";
 try{
 
 // Firebase Authentication
-
-const credential =
-await signInWithEmailAndPassword(
-
-auth,
-
-loginId,
-
-password
-
-);
 
 // =====================================
 // User Record
