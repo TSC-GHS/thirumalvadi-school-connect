@@ -189,25 +189,26 @@ Quick Actions
 
 .menuGrid{
 display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-margin-bottom:20px;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-top:20px;
 }
 
 .menuCard{
 background:#fff;
 border-radius:16px;
-padding:15px 10px;
-text-decoration:none;
+padding:18px 10px;
 text-align:center;
+text-decoration:none;
 color:#333;
-box-shadow:0 2px 8px rgba(0,0,0,.08);
+box-shadow:0 4px 10px rgba(0,0,0,.10);
 transition:.3s;
+min-height:120px;
+
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-min-height:90px;
 }
 
 .menuCard:hover{
@@ -218,13 +219,12 @@ box-shadow:0 6px 14px rgba(0,0,0,.15);
 }
 
 .menuCard{
-font-size:28px;
+font-size:32px;
 }
 
 .menuCard span{
-display:block;
-margin-top:8px;
-font-size:13px;
+margin-top:10px;
+font-size:16px;
 font-weight:600;
 }
 
@@ -378,30 +378,19 @@ font-size:12px;
 }
 
 .menuGrid{
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(4,1fr);
 gap:10px;
 }
 
 .menuCard{
-min-height:80px;
-padding:12px 8px;
+padding:12px 6px;
+min-height:90px;
 font-size:24px;
 }
 
 .menuCard span{
-font-size:11px;
-margin-top:5px;
+font-size:13px;
 }
-
-.listCard{
-padding:12px;
-}
-
-.sectionTitle{
-font-size:18px;
-margin:15px 0 10px;
-}
-
 }
 
 /* ==========================
