@@ -34,30 +34,22 @@ window.loginUser = async function () {
 
 if (selectedRole === "Parent") {
 
-    console.log("Login EMIS:", loginId);
-
-    const parentQuery = query(
-        collection(db, "users"),
-        where("emis", "==", loginId)
+    const userRef = doc(
+        db,
+        "users",
+        loginId + "@schoolconnecttn.app"
     );
 
-    const parentSnap = await getDocs(parentQuery);
+    const userSnap = await getDoc(userRef);
 
-    console.log("Documents Found:", parentSnap.size);
-
-    if (parentSnap.empty) {
-        alert("Parent not found");
+    if (!userSnap.exists()) {
+        alert("Parent document not found");
         return;
     }
 
-    const user = parentSnap.docs[0].data();
+    const user = userSnap.data();
 
     console.log(user);
-
-    if (user.role !== "Parent") {
-        alert("This EMIS is not a Parent account");
-        return;
-    }
 
     if (user.password !== password) {
         alert("Invalid Password");
