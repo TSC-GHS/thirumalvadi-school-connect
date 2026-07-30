@@ -63,7 +63,7 @@ if (selectedRole === "Parent") {
     sessionStorage.setItem("parentEMIS", user.emis || "");
     sessionStorage.setItem("emis", user.emis || "");
 
-    window.location.href = "parent_dashboard.html";
+    window.location.href = "parent.html";
     return;
 }
         // =====================================
