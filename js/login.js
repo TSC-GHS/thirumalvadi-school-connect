@@ -28,42 +28,52 @@ window.loginUser = async function () {
 
         let user = null;
 
-        // =====================================
-        // Parent Login (EMIS)
-        // =====================================
+       // =====================================
+// Parent Login (EMIS)
+// =====================================
 
-        if (selectedRole === "Parent") {
+if (selectedRole === "Parent") {
 
-            const parentQuery = query(
-                collection(db, "users"),
-                where("emis", "==", loginId),
-                where("role", "==", "Parent")
-            );
+    console.log("Login EMIS:", loginId);
 
-            const parentSnap = await getDocs(parentQuery);
+    const parentQuery = query(
+        collection(db, "users"),
+        where("emis", "==", loginId)
+    );
 
-            if (parentSnap.empty) {
-                alert("Parent not found");
-                return;
-            }
+    const parentSnap = await getDocs(parentQuery);
 
-            user = parentSnap.docs[0].data();
+    console.log("Documents Found:", parentSnap.size);
 
-            if (user.password !== password) {
-                alert("Invalid Password");
-                return;
-            }
+    if (parentSnap.empty) {
+        alert("Parent not found");
+        return;
+    }
 
-            localStorage.setItem("parentEMIS", user.emis || "");
-            localStorage.setItem("emis", user.emis || "");
-            localStorage.setItem("userRole", "Parent");
+    const user = parentSnap.docs[0].data();
 
-            sessionStorage.setItem("parentEMIS", user.emis || "");
-            sessionStorage.setItem("emis", user.emis || "");
+    console.log(user);
 
-            window.location.href = "parent_dashboard.html";
-            return;
-        }
+    if (user.role !== "Parent") {
+        alert("This EMIS is not a Parent account");
+        return;
+    }
+
+    if (user.password !== password) {
+        alert("Invalid Password");
+        return;
+    }
+
+    localStorage.setItem("parentEMIS", user.emis || "");
+    localStorage.setItem("emis", user.emis || "");
+    localStorage.setItem("userRole", "Parent");
+
+    sessionStorage.setItem("parentEMIS", user.emis || "");
+    sessionStorage.setItem("emis", user.emis || "");
+
+    window.location.href = "parent_dashboard.html";
+    return;
+}
         // =====================================
         // Teacher Login (Teacher ID)
         // =====================================
