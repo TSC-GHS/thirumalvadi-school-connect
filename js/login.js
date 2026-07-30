@@ -1,227 +1,205 @@
 import { db } from "./firebase.js";
 
 import {
-doc,
-getDoc,
-collection,
-query,
-where,
-getDocs
+    doc,
+    getDoc,
+    collection,
+    query,
+    where,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 // =====================================
 // Login Function
 // =====================================
 
-window.loginUser = async function(){
+window.loginUser = async function () {
 
-let loginId =
-document.getElementById("email").value.trim();
+    let loginId = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const selectedRole = document.getElementById("role").value;
 
-const password =
-document.getElementById("password").value.trim();
+    if (loginId === "" || password === "") {
+        alert("Please enter Login ID and Password");
+        return;
+    }
 
-const selectedRole =
-document.getElementById("role").value;
+    try {
 
-if(loginId==="" || password===""){
+        let user = null;
 
-alert("Please enter Login ID and Password");
+        // =====================================
+        // Parent Login (EMIS)
+        // =====================================
 
-return;
+        if (selectedRole === "Parent") {
 
-}
-// =====================================
-// Parent Login
-// =====================================
+            const parentQuery = query(
+                collection(db, "users"),
+                where("emis", "==", loginId),
+                where("role", "==", "Parent")
+            );
 
-if(selectedRole==="Parent"){
+            const parentSnap = await getDocs(parentQuery);
 
-loginId = loginId + "@schoolconnecttn.app";
+            if (parentSnap.empty) {
+                alert("Parent not found");
+                return;
+            }
 
-}
+            user = parentSnap.docs[0].data();
 
-// =====================================
-// Student Login
-// =====================================
+            if (user.password !== password) {
+                alert("Invalid Password");
+                return;
+            }
 
-if(selectedRole==="Student"){
+            localStorage.setItem("parentEMIS", user.emis || "");
+            localStorage.setItem("emis", user.emis || "");
+            localStorage.setItem("userRole", "Parent");
 
-loginId = loginId + "@student.schoolconnecttn.app";
+            sessionStorage.setItem("parentEMIS", user.emis || "");
+            sessionStorage.setItem("emis", user.emis || "");
 
-}
+            window.location.href = "parent_dashboard.html";
+            return;
+        }
 
-try{
+        // =====================================
+        // Student Login (EMIS)
+        // =====================================
 
-// Firebase Authentication
+        if (selectedRole === "Student") {
 
-// =====================================
-// User Record
-// =====================================
-const userQuery = query(
-collection(db,"users"),
-where("emis","==",document.getElementById("email").value.trim()),
-where("role","==",selectedRole)
-);
+            const studentQuery = query(
+                collection(db, "users"),
+                where("emis", "==", loginId),
+                where("role", "==", "Student")
+            );
 
-const userResult = await getDocs(userQuery);
+            const studentSnap = await getDocs(studentQuery);
 
-if(userResult.empty){
+            if (studentSnap.empty) {
+                alert("Student not found");
+                return;
+            }
 
-alert("User Record Not Found");
+            user = studentSnap.docs[0].data();
 
-return;
+            if (user.password !== password) {
+                alert("Invalid Password");
+                return;
+            }
 
-}
+            localStorage.setItem("studentEMIS", user.emis || "");
+            localStorage.setItem("emis", user.emis || "");
+            localStorage.setItem("userRole", "Student");
 
-const user = userResult.docs[0].data();
-if(user.password !== password){
+            sessionStorage.setItem("studentEMIS", user.emis || "");
+            sessionStorage.setItem("emis", user.emis || "");
 
-alert("Invalid Password");
+            window.location.href = "student.html";
+            return;
+        }
 
-return;
+        // ===== Part 2 starts here =====
+        // =====================================
+        // Teacher Login (Teacher ID)
+        // =====================================
 
-}
-if(!userSnap.exists()){
+        if (selectedRole === "Teacher") {
 
-alert("User Record Not Found");
+            const teacherQuery = query(
+                collection(db, "teachers"),
+                where("id", "==", loginId)
+            );
 
-return;
+            const teacherSnap = await getDocs(teacherQuery);
 
-}
+            if (teacherSnap.empty) {
+                alert("Teacher ID not found.");
+                return;
+            }
 
-const user =
-userSnap.data();
+            const teacherDoc = teacherSnap.docs[0];
+            const teacher = teacherDoc.data();
 
-// =====================================
-// Role Validation
-// =====================================
+            // Check Password
+            if (teacher.password !== password) {
+                alert("Invalid Password");
+                return;
+            }
 
-if(user.role !== selectedRole){
+            // Save Teacher Session
+            localStorage.setItem("teacherDocId", teacherDoc.id);
+            localStorage.setItem("teacherId", teacher.id || "");
+            localStorage.setItem("teacherName", teacher.name || "");
+            localStorage.setItem("teacherType", teacher.teacherType || "");
+            localStorage.setItem("teacherClass", teacher.className || "");
+            localStorage.setItem("teacherSection", teacher.section || "");
+            localStorage.setItem("teacherSubject", teacher.subject || "");
+            localStorage.setItem("userRole", "Teacher");
 
-alert("Selected Role is Incorrect");
+            window.location.href = "teacher.html";
+            return;
+        }
 
-return;
+        // ===== Part 3 starts here =====
+          // =====================================
+        // Admin / Headmaster Login (Email)
+        // =====================================
 
-}
-  // =====================================
-// Login Redirect
-// =====================================
+        if (selectedRole === "Admin" || selectedRole === "Headmaster") {
 
-switch(user.role){
+            const userRef = doc(db, "users", loginId);
 
-case "Admin":
+            const userSnap = await getDoc(userRef);
 
-window.location.href="admin_dashboard.html";
+            if (!userSnap.exists()) {
+                alert(selectedRole + " account not found.");
+                return;
+            }
 
-break;
+            const user = userSnap.data();
 
-// =====================================
-// Headmaster
-// =====================================
+            // Check Password
+            if (user.password !== password) {
+                alert("Invalid Password");
+                return;
+            }
 
-case "Headmaster":
+            // Check Role
+            if (user.role !== selectedRole) {
+                alert("Selected Role is Incorrect");
+                return;
+            }
 
-localStorage.setItem("userRole","Headmaster");
-localStorage.setItem("userEmail",loginId);
+            if (selectedRole === "Admin") {
 
-window.location.href="headmaster.html";
+                localStorage.setItem("userRole", "Admin");
+                localStorage.setItem("userEmail", loginId);
 
-break;
+                window.location.href = "admin_dashboard.html";
+                return;
+            }
 
-// =====================================
-// Teacher
-// =====================================
+            if (selectedRole === "Headmaster") {
 
-case "Teacher":{
+                localStorage.setItem("userRole", "Headmaster");
+                localStorage.setItem("userEmail", loginId);
 
-const teacherQuery = query(
-collection(db,"teachers"),
-where("email","==",loginId)
-);
+                window.location.href = "headmaster.html";
+                return;
+            }
+        }
 
-const teacherSnap = await getDocs(teacherQuery);
+        alert("Invalid User Role");
 
-if(teacherSnap.empty){
+    } catch (error) {
 
-alert("Teacher record not found.");
+        console.error(error);
+        alert("Login Failed\n\n" + error.message);
 
-return;
-
-}
-
-const teacherDoc = teacherSnap.docs[0];
-
-const teacher = teacherDoc.data();
-
-// Save complete teacher session
-
-localStorage.setItem("teacherDocId",teacherDoc.id);
-localStorage.setItem("teacherId",teacher.id || "");
-localStorage.setItem("teacherName",teacher.name || "");
-localStorage.setItem("teacherType",teacher.teacherType || "");
-localStorage.setItem("teacherClass",teacher.className || "");
-localStorage.setItem("teacherSection",teacher.section || "");
-localStorage.setItem("userRole","Teacher");
-
-window.location.href="teacher.html";
-
-break;
-
-}
-    // =====================================
-// Parent
-// =====================================
-
-case "Parent":
-
-localStorage.setItem("parentEMIS", user.emis || "");
-localStorage.setItem("emis", user.emis || "");
-localStorage.setItem("userRole", "Parent");
-
-sessionStorage.setItem("parentEMIS", user.emis || "");
-sessionStorage.setItem("emis", user.emis || "");
-
-window.location.href = "parent_dashboard.html";
-
-break;
-
-// =====================================
-// Student
-// =====================================
-
-case "Student":
-
-localStorage.setItem("studentEMIS", user.emis || "");
-localStorage.setItem("emis", user.emis || "");
-localStorage.setItem("userRole", "Student");
-
-sessionStorage.setItem("studentEMIS", user.emis || "");
-sessionStorage.setItem("emis", user.emis || "");
-
-window.location.href = "student.html";
-
-break;
-
-// =====================================
-// Invalid Role
-// =====================================
-
-default:
-
-alert("Invalid User Role");
-
-return;
-
-}
-
-}catch(error){
-
-console.error(error);
-
-alert("Login Failed\n\n" + error.message);
-
-console.log(error);
-}
+    }
 
 };
