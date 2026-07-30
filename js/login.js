@@ -64,45 +64,6 @@ window.loginUser = async function () {
             window.location.href = "parent_dashboard.html";
             return;
         }
-
-        // =====================================
-        // Student Login (EMIS)
-        // =====================================
-
-        if (selectedRole === "Student") {
-
-            const studentQuery = query(
-                collection(db, "users"),
-                where("emis", "==", loginId),
-                where("role", "==", "Student")
-            );
-
-            const studentSnap = await getDocs(studentQuery);
-
-            if (studentSnap.empty) {
-                alert("Student not found");
-                return;
-            }
-
-            user = studentSnap.docs[0].data();
-
-            if (user.password !== password) {
-                alert("Invalid Password");
-                return;
-            }
-
-            localStorage.setItem("studentEMIS", user.emis || "");
-            localStorage.setItem("emis", user.emis || "");
-            localStorage.setItem("userRole", "Student");
-
-            sessionStorage.setItem("studentEMIS", user.emis || "");
-            sessionStorage.setItem("emis", user.emis || "");
-
-            window.location.href = "student.html";
-            return;
-        }
-
-        // ===== Part 2 starts here =====
         // =====================================
         // Teacher Login (Teacher ID)
         // =====================================
