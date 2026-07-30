@@ -337,7 +337,8 @@ import { db } from "./firebase.js";
 
 import {
 doc,
-setDoc
+setDoc,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 window.saveStudent = async function(){
@@ -396,7 +397,43 @@ attendance:"0%",
 createdAt:new Date().toISOString()
 
 });
+// =====================================
+// Auto Create Parent Login
+// =====================================
 
+await setDoc(
+    doc(db, "users", emis + "@schoolconnecttn.app"),
+    {
+        emis: emis,
+        email: emis + "@schoolconnecttn.app",
+        password: emis,      // Default Password = EMIS
+        role: "Parent",
+        name: father,
+        studentName: name,
+        mobile: mobile,
+        active: true,
+        createdAt: new Date().toISOString()
+    }
+);
+
+// =====================================
+// Auto Create Student Login
+// =====================================
+
+await setDoc(
+    doc(db, "users", emis + "@student.schoolconnecttn.app"),
+    {
+        emis: emis,
+        email: emis + "@student.schoolconnecttn.app",
+        password: emis,      // Default Password = EMIS
+        role: "Student",
+        name: name,
+        class: studentClass,
+        section: section,
+        active: true,
+        createdAt: new Date().toISOString()
+    }
+);
 alert("✅ Student Saved Successfully");
 
 resetForm();
