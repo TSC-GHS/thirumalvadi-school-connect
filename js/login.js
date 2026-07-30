@@ -1,4 +1,4 @@
-import { auth, db } from "./firebase.js";
+import { db } from "./firebase.js";
 
 import {
 doc,
@@ -58,18 +58,33 @@ try{
 // =====================================
 // User Record
 // =====================================
+const userQuery = query(
+collection(db,"users"),
+where("emis","==",document.getElementById("email").value.trim()),
+where("role","==",selectedRole)
+);
 
-const userRef =
-doc(db,"users",loginId);
+const userResult = await getDocs(userQuery);
 
-const userSnap =
-await getDoc(userRef);
-
-if(!userSnap.exists()){
+if(userResult.empty){
 
 alert("User Record Not Found");
 
-await signOut(auth);
+return;
+
+}
+
+const user = userResult.docs[0].data();
+if(user.password !== password){
+
+alert("Invalid Password");
+
+return;
+
+}
+if(!userSnap.exists()){
+
+alert("User Record Not Found");
 
 return;
 
@@ -85,8 +100,6 @@ userSnap.data();
 if(user.role !== selectedRole){
 
 alert("Selected Role is Incorrect");
-
-await signOut(auth);
 
 return;
 
@@ -132,8 +145,6 @@ const teacherSnap = await getDocs(teacherQuery);
 if(teacherSnap.empty){
 
 alert("Teacher record not found.");
-
-await signOut(auth);
 
 return;
 
@@ -200,8 +211,6 @@ default:
 
 alert("Invalid User Role");
 
-await signOut(auth);
-
 return;
 
 }
@@ -212,12 +221,7 @@ console.error(error);
 
 alert("Login Failed\n\n" + error.message);
 
-try{
-await signOut(auth);
-}catch(e){
-console.log(e);
-}
-
+console.log(error);
 }
 
 };
