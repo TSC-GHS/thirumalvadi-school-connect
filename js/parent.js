@@ -23,7 +23,7 @@ const studentName =
 document.getElementById("studentName");
 
 const studentClassName =
-document.getElementById("studentClassName");
+document.getElementById("studentClass");
 
 const studentEMIS =
 document.getElementById("studentEMIS");
@@ -276,8 +276,8 @@ async function loadLatestNotices() {
             const notice = doc.data();
 
             latestNotices.innerHTML += `
-                <div className="notice-item">
-                    <div className="notice-title">${notice.title}</div>
+                <div class="notice-item">
+                    <div class="notice-title">${notice.title}</div>
                     <p>${notice.description || ""}</p>
                 </div>
             `;
@@ -339,9 +339,9 @@ const hw = doc.data();
 
 recentHomework.innerHTML += `
 
-<div className="homework-item">
+<div class="homework-item">
 
-<div className="homework-sub">
+<div class="homework-sub">
 
 ${hw.subject || "-"}
 
@@ -417,8 +417,8 @@ snap.forEach((doc)=>{
 const hw=doc.data();
 
 html += `
-<div className="homework-item">
-<div className="homework-sub">${hw.subject}</div>
+<div class="homework-item">
+<div class="homework-sub">${hw.subject}</div>
 <div>${hw.title}</div>
 <small>Due : ${hw.dueDate}</small>
 </div>
