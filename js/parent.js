@@ -224,65 +224,59 @@ console.log("Parent Dashboard Part 2 Loaded");
 // Latest Notices
 //==================================================
 
-async function loadLatestNotices(){
+async function loadLatestNotices() {
 
-try{
+    try {
 
-const snap = await getDocs(
+        const twoDaysAgo = new Date();
+        twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
 
-query(
-collection(db,"notices"),
-orderBy("createdAt","desc"),
-limit(5)
-)
+        const snap = await getDocs(
+            query(
+                collection(db, "notices"),
+                where("createdAt", ">=", twoDaysAgo.toISOString()),
+                orderBy("createdAt", "desc"),
+                limit(5)
+            )
+        );
 
-);
+        latestNotices.innerHTML = "";
 
-latestNotices.innerHTML="";
+        if (snap.empty) {
 
-if(snap.empty){
+            latestNotices.innerHTML = `
+                <div class="empty-card">
+                    📢 No notices available
+                </div>
+            `;
 
-latestNotices.innerHTML=
-"<p>No Notices Available</p>";
+            noticeCount.textContent = "0";
+            return;
+        }
 
-return;
+        noticeCount.textContent = snap.size;
 
-}
+        snap.forEach((doc) => {
 
-snap.forEach((doc)=>{
+            const notice = doc.data();
 
-const notice = doc.data();
+            latestNotices.innerHTML += `
+                <div class="notice-item">
+                    <div class="notice-title">${notice.title}</div>
+                    <p>${notice.description || ""}</p>
+                </div>
+            `;
 
-latestNotices.innerHTML += `
+        });
 
-<div class="notice-item">
+    } catch (error) {
 
-<div class="notice-title">
+        console.log(error);
 
-${notice.title || "Notice"}
+        latestNotices.innerHTML =
+            "<div class='empty-card'>📢 No notices available</div>";
 
-</div>
-
-<p>
-
-${notice.description || ""}
-
-</p>
-
-</div>
-
-`;
-
-});
-
-}catch(error){
-
-console.error(error);
-
-latestNotices.innerHTML=
-"<p>Unable to load notices</p>";
-
-}
+    }
 
 }
 
@@ -294,15 +288,19 @@ async function loadRecentHomework(){
 
 try{
 
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+
 const snap = await getDocs(
 
-query(
-collection(db,"homework"),
-where("className","==",studentData.class),
-where("section","==",studentData.section),
-orderBy("createdAt","desc"),
-limit(5)
-)
+    query(
+        collection(db,"homework"),
+        where("className","==",studentData.class),
+        where("section","==",studentData.section),
+        where("createdAt",">=",yesterday.toISOString()),
+        orderBy("createdAt","desc"),
+        limit(5)
+    )
 
 );
 
