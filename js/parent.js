@@ -135,7 +135,7 @@ const homeworkSnap = await getDocs(
 
 query(
 collection(db,"homework"),
-where("className","==",studentData.class),
+where("class","==",studentData.class)
 where("section","==",studentData.section)
 )
 
@@ -288,19 +288,19 @@ async function loadRecentHomework(){
 
 try{
 
-const yesterday = new Date();
-yesterday.setDate(yesterday.getDate() - 1);
+const today = new Date().toISOString().split("T")[0];
 
 const snap = await getDocs(
 
-    query(
-        collection(db,"homework"),
-        where("className","==",studentData.class),
-        where("section","==",studentData.section),
-        where("createdAt",">=",yesterday.toISOString()),
-        orderBy("createdAt","desc"),
-        limit(5)
-    )
+query(
+collection(db,"homework"),
+where("class","==",studentData.class),   // className -> class
+where("section","==",studentData.section),
+where("status","==","Active"),
+where("dueDate",">=",today),
+orderBy("dueDate"),
+limit(5)
+)
 
 );
 
@@ -383,7 +383,7 @@ try{
 
 const q = query(
 collection(db,"homework"),
-where("className","==",studentData.class),
+where("class","==",studentData.class)
 where("section","==",studentData.section)
 );
 
