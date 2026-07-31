@@ -77,7 +77,15 @@ placeholder="Homework Description">
 <input
 type="date"
 id="dueDate">
+<label>Status</label>
 
+<select id="status">
+
+<option value="Active">Active</option>
+
+<option value="Inactive">Inactive</option>
+
+</select>
 <button id="saveHomework">
 
 💾 Save Homework
@@ -90,7 +98,7 @@ id="dueDate">
 
 <div class="card">
 
-<h3>Homework List</h3>
+<h3>Active Homework</h3>
 
 <div id="homeworkList">
 
@@ -101,7 +109,7 @@ Loading...
 </div>
 <div class="card">
 
-<h3>Recent Homework</h3>
+<h3>Homework History</h3>
 
 <div id="homeworkList">
 
