@@ -98,9 +98,57 @@ window.generateTeacherIds = function () {
 
 };
 
-window.generateRegisterNumbers = function () {
+window.generateRegisterNumbers = async function () {
 
-    alert("Register Number Generator - Part 4");
+    progressBar.value = 40;
+    progressText.innerText = "Generating Register Numbers...";
+
+    report.innerHTML = "";
+
+    const studentsSnap = await getDocs(collection(db, "students"));
+
+    let count = 1;
+    let updated = 0;
+
+    for (const studentDoc of studentsSnap.docs) {
+
+        const student = studentDoc.data();
+
+        const updates = {};
+
+        if (!student.registerNo) {
+            updates.registerNo =
+                "STU26" + String(count).padStart(4, "0");
+        }
+
+        if (!student.admissionNo) {
+            updates.admissionNo =
+                "ADM26" + String(count).padStart(4, "0");
+        }
+
+        if (Object.keys(updates).length > 0) {
+
+            await updateDoc(
+                doc(db, "students", studentDoc.id),
+                updates
+            );
+
+            updated++;
+
+            addReport(
+                student.name + " → " + updates.registerNo
+            );
+
+        }
+
+        count++;
+
+    }
+
+    progressBar.value = 55;
+    progressText.innerText = "Register Numbers Completed";
+
+    addReport("Register Numbers Generated : " + updated);
 
 };
 
