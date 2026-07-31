@@ -203,7 +203,7 @@ const homeworkSnap = await getDocs(
 
     query(
         collection(db,"homework"),
-        where("className","==",studentData.class),
+        where("class","==",studentData.class),
         where("section","==",studentData.section),
         where("status","==","Active"),
         where("dueDate",">=",today)
@@ -259,21 +259,9 @@ parentEMIS
 
 );
 
-if(!markDoc.exists()){
-
     resultCount.textContent = "-";
 
 }else{
-
-   const markData = markDoc.data();
-
-resultCount.textContent =
-(markData.percentage || 0) + "%";
-    }else{
-
-        resultCount.textContent="-";
-
-    }
 
 }
 //==================================================
@@ -372,7 +360,7 @@ const snap = await getDocs(
 
     query(
         collection(db,"homework"),
-        where("className","==",studentData.class),
+        where("class","==",studentData.class),
         where("section","==",studentData.section),
         where("status","==","Active"),
         where("dueDate",">=",today),
@@ -464,7 +452,7 @@ const today = new Date().toISOString().split("T")[0];
 
 const q = query(
     collection(db,"homework"),
-    where("className","==",studentData.class),
+    where("class","==",studentData.class),
     where("section","==",studentData.section),
     where("status","==","Active"),
     where("dueDate",">=",today),
@@ -569,16 +557,36 @@ events:"📅 வரவிருக்கும் நிகழ்வுகள்
 },
 
 en:{
-dashboard:"Parent Dashboard",
-welcome:"👋 Welcome Parent",
-attendance:"Attendance",
-average:"Average",
-homework:"Homework",
-notice:"Notices",
-quick:"⚡ Quick Actions",
-latest:"📢 Latest Notice",
-today:"📚 Today's Homework",
-events:"📅 Upcoming Events"
+<p id="dashboardTitle">
+Parent Dashboard
+</p>
+<h2 id="welcomeTitle">
+👋 Welcome Parent
+</h2>
+<p id="attendanceLabel">
+Attendance
+</p>
+<p id="averageLabel">
+Average
+</p>
+<p id="homeworkLabel">
+Homework
+</p>
+<p id="noticeLabel">
+Notices
+</p>
+<h2 id="quickActionsTitle">
+⚡ Quick Actions
+</h2>
+<h2 id="latestNoticeTitle">
+📢 Latest Notice
+</h2>
+<h2 id="todayHomeworkTitle">
+📚 Today's Homework
+</h2>
+<h2 id="upcomingEventsTitle">
+📅 Upcoming Events
+</h2>
 },
 
 hi:{
