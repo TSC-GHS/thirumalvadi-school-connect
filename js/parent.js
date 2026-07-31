@@ -98,7 +98,7 @@ studentEMIS.textContent =
 studentData.emis || "-";
 
 studentClassName.textContent =
-`${studentData.className || "-"}-${studentData.section || "-"}`;
+`${studentData.class || "-"}-${studentData.section || "-"}`;
 
 attendanceCount.textContent =
 studentData.attendance || "0%";
@@ -109,7 +109,9 @@ return true;
 
 console.error(error);
 
-alert("Unable to load Student");
+alert(error.message);
+
+console.error(error);
 
 return false;
 
