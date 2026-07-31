@@ -133,11 +133,19 @@ try{
 
 const homeworkSnap = await getDocs(
 
-query(
-collection(db,"homework"),
-where("class","==",studentData.class)
-where("section","==",studentData.section)
-)
+const today = new Date().toISOString().split("T")[0];
+
+const homeworkSnap = await getDocs(
+
+    query(
+        collection(db,"homework"),
+        where("class","==",studentData.class),
+        where("section","==",studentData.section),
+        where("status","==","Active"),
+        where("dueDate",">=",today)
+    )
+
+);
 
 );
 
@@ -383,7 +391,7 @@ try{
 
 const q = query(
 collection(db,"homework"),
-where("class","==",studentData.class)
+where("class","==",studentData.class),
 where("section","==",studentData.section)
 );
 
