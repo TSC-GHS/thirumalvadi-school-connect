@@ -270,7 +270,16 @@ if (!settingsDoc.exists()) {
             (markData.percentage || 0) + "%";
 
     }
+}
+}catch(error){
 
+    console.error(error);
+
+    homeworkCount.textContent = "-";
+    noticeCount.textContent = "-";
+    resultCount.textContent = "-";
+
+}
 }
 //==================================================
 // Initialize Dashboard
