@@ -131,8 +131,6 @@ try{
 // Homework Count
 //============================
 
-const homeworkSnap = await getDocs(
-
 const today = new Date().toISOString().split("T")[0];
 
 const homeworkSnap = await getDocs(
@@ -144,8 +142,6 @@ const homeworkSnap = await getDocs(
         where("status","==","Active"),
         where("dueDate",">=",today)
     )
-
-);
 
 );
 
@@ -295,8 +291,6 @@ async function loadLatestNotices() {
 async function loadRecentHomework(){
 
 try{
-
-const today = new Date().toISOString().split("T")[0];
 
 const today = new Date().toISOString().split("T")[0];
 
@@ -476,7 +470,7 @@ location.href="index.html";
 // Initialize
 // ========================================
 
-loadStudent();
+initializeDashboard();
 
 console.log("================================");
 console.log("School Connect TN");
