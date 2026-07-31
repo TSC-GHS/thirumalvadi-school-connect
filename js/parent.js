@@ -239,29 +239,33 @@ noticeSnap.size;
     //============================
 // Average Marks
 //============================
-
 const settingsDoc = await getDoc(
-doc(db,"settings","marks")
+    doc(db,"settings","marks")
 );
 
 const latestExam =
-settingsDoc.data().currentExam;
+    settingsDoc.data().currentExam;
 
 const markDoc = await getDoc(
-
-doc(
-db,
-"marks",
-latestExam,
-"students",
-parentEMIS
-)
-
+    doc(
+        db,
+        "marks",
+        latestExam,
+        "students",
+        parentEMIS
+    )
 );
 
-    resultCount.textContent = "-";
+if(markDoc.exists()){
+
+    const markData = markDoc.data();
+
+    resultCount.textContent =
+        (markData.percentage || 0) + "%";
 
 }else{
+
+    resultCount.textContent = "-";
 
 }
 //==================================================
