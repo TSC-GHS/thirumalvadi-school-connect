@@ -117,7 +117,7 @@ homeworkList.innerHTML += `
 
 <p>${hw.description}</p>
 
-<p><b>Class :</b> ${hw.className}</p>
+<p><b>Class :</b> ${hw.class}</p>
 
 <p><b>Section :</b> ${hw.section}</p>
 
@@ -195,8 +195,8 @@ document.getElementById("homeworkTitle").value.trim();
 const description =
 document.getElementById("homeworkDescription").value.trim();
 
-const className =
-document.getElementById("className").value;
+const class =
+document.getElementById("class").value;
 
 const section =
 document.getElementById("section").value;
@@ -228,24 +228,30 @@ const homeworkRef = await addDoc(
 collection(db,"homework"),
 {
 
-title,
-description,
-className,
-section,
-subject,
-dueDate,
+title: title,
 
-teacherId,
+description: description,
+
+class: className,
+
+section: section,
+
+subject: subject,
+
+dueDate: dueDate,
+
+teacherId: teacherId,
+
 teacherName: teacher.name,
+
 teacherType: teacher.teacherType || "",
 
-status:"Active",
+status: "Active",
 
-createdAt:new Date()
+createdAt: new Date().toISOString()
 
 }
 );
-
 //==========================================
 // Create Homework Submission Records
 //==========================================
@@ -291,7 +297,7 @@ completedBy:"",
 parentComment:"",
 completedTime:null,
 
-createdAt:new Date()
+createdAt:new Date().toISOString()
 
 });
 
