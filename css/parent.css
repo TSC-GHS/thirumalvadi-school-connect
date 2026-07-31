@@ -419,3 +419,16 @@ width:4px;
 background:#90CAF9;
 border-radius:10px;
 }
+.headerRight{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.language-box select{
+padding:6px 10px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:14px;
+cursor:pointer;
+}
