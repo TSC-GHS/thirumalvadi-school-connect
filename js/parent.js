@@ -298,17 +298,19 @@ try{
 
 const today = new Date().toISOString().split("T")[0];
 
+const today = new Date().toISOString().split("T")[0];
+
 const snap = await getDocs(
 
-query(
-collection(db,"homework"),
-where("class","==",studentData.class),   // className -> class
-where("section","==",studentData.section),
-where("status","==","Active"),
-where("dueDate",">=",today),
-orderBy("dueDate"),
-limit(5)
-)
+    query(
+        collection(db,"homework"),
+        where("class","==",studentData.class),
+        where("section","==",studentData.section),
+        where("status","==","Active"),
+        where("dueDate",">=",today),
+        orderBy("dueDate"),
+        limit(5)
+    )
 
 );
 
@@ -316,8 +318,11 @@ recentHomework.innerHTML="";
 
 if(snap.empty){
 
-recentHomework.innerHTML=
-"<p>No Homework Available</p>";
+recentHomework.innerHTML = `
+<div class="empty-card">
+📚 No homework available
+</div>
+`;
 
 return;
 
@@ -389,10 +394,15 @@ async function loadHomework(){
 
 try{
 
+const today = new Date().toISOString().split("T")[0];
+
 const q = query(
-collection(db,"homework"),
-where("class","==",studentData.class),
-where("section","==",studentData.section)
+    collection(db,"homework"),
+    where("class","==",studentData.class),
+    where("section","==",studentData.section),
+    where("status","==","Active"),
+    where("dueDate",">=",today),
+    orderBy("dueDate")
 );
 
 const snap = await getDocs(q);
