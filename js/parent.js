@@ -152,8 +152,17 @@ homeworkSnap.size;
 // Notice Count
 //============================
 
-const noticeSnap =
-await getDocs(collection(db,"notices"));
+const twoDaysAgo = new Date();
+twoDaysAgo.setDate(twoDaysAgo.getDate()-2);
+
+const noticeSnap = await getDocs(
+
+query(
+collection(db,"notices"),
+where("createdAt",">=",twoDaysAgo.toISOString())
+)
+
+);
 
 noticeCount.textContent =
 noticeSnap.size;
@@ -218,6 +227,8 @@ await loadStudent();
 if(!loaded) return;
 
 await loadDashboard();
+
+await loadParentData();
 
 }
 
@@ -376,8 +387,6 @@ await loadLatestNotices();
 await loadRecentHomework();
 
 }
-
-loadParentData();
 
 console.log("Parent Dashboard Part 3 Loaded");
 // ========================================
