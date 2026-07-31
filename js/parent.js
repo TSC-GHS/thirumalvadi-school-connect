@@ -11,6 +11,8 @@ collection,
 query,
 where,
 getDocs,
+getDoc,
+doc,
 orderBy,
 limit
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
@@ -201,7 +203,7 @@ const homeworkSnap = await getDocs(
 
     query(
         collection(db,"homework"),
-        where("className","==",studentData.className),
+        where("className","==",studentData.class),
         where("section","==",studentData.section),
         where("status","==","Active"),
         where("dueDate",">=",today)
@@ -234,68 +236,46 @@ noticeSnap.size;
 //============================
 // Average Marks
 //============================
+    //============================
+// Average Marks
 //============================
-// Latest Exam Average
-//============================
 
-const latestExam = "Quarterly";
+const settingsDoc = await getDoc(
+doc(db,"settings","marks")
+);
 
-const markDoc = await getDocs(
+const latestExam =
+settingsDoc.data().currentExam;
 
-query(
-collection(
+const markDoc = await getDoc(
+
+doc(
 db,
 "marks",
 latestExam,
-"students"
-),
-where("emis","==",parentEMIS)
+"students",
+parentEMIS
 )
 
 );
 
-if(markDoc.empty){
+if(!markDoc.exists()){
 
-resultCount.textContent="-";
+    resultCount.textContent = "-";
 
 }else{
 
-const markData = markDoc.docs[0].data();
-
-let total = 0;
-let count = 0;
-
-Object.keys(markData).forEach((key)=>{
-
-if(typeof markData[key] === "number"){
-
-total += markData[key];
-
-count++;
-
-}
-
-});
+   const markData = markDoc.data();
 
 resultCount.textContent =
-count>0
-? Math.round(total/count)+"%"
-: "-";
+(markData.percentage || 0) + "%";
+    }else{
+
+        resultCount.textContent="-";
+
+    }
 
 }
-
-}catch(error){
-
-console.error(error);
-
-homeworkCount.textContent="-";
-noticeCount.textContent="-";
-resultCount.textContent="-";
-
-}
-
-}
-
 //==================================================
 // Initialize Dashboard
 //==================================================
@@ -372,7 +352,7 @@ async function loadLatestNotices() {
         console.log(error);
 
         latestNotices.innerHTML =
-            "<div className='empty-card'>📢 No notices available</div>";
+"<div class='empty-card'>📢 No notices available</div>";
 
     }
 
@@ -392,7 +372,7 @@ const snap = await getDocs(
 
     query(
         collection(db,"homework"),
-        where("className","==",studentData.className),
+        where("className","==",studentData.class),
         where("section","==",studentData.section),
         where("status","==","Active"),
         where("dueDate",">=",today),
@@ -484,7 +464,7 @@ const today = new Date().toISOString().split("T")[0];
 
 const q = query(
     collection(db,"homework"),
-    where("className","==",studentData.className),
+    where("className","==",studentData.class),
     where("section","==",studentData.section),
     where("status","==","Active"),
     where("dueDate",">=",today),
