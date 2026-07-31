@@ -100,9 +100,6 @@ studentData.emis || "-";
 studentClassName.textContent =
 `${studentData.class || "-"}-${studentData.section || "-"}`;
 
-attendanceCount.textContent =
-studentData.attendance || "0%";
-
 return true;
 
 }catch(error){
@@ -124,7 +121,72 @@ console.log("Parent Dashboard Part 1 Loaded");
 // Dashboard Summary
 // Part 2
 //==================================================
+//==================================================
+// Load Attendance
+//==================================================
 
+async function loadAttendance(){
+
+try{
+
+const attendanceRef = collection(db,"attendance");
+
+const attendanceDays = await getDocs(attendanceRef);
+
+let totalDays = 0;
+let presentDays = 0;
+
+for(const day of attendanceDays.docs){
+
+const studentRef = collection(
+db,
+"attendance",
+day.id,
+"students"
+);
+
+const studentSnap = await getDocs(
+
+query(
+studentRef,
+where("emis","==",parentEMIS)
+)
+
+);
+
+if(!studentSnap.empty){
+
+totalDays++;
+
+const data = studentSnap.docs[0].data();
+
+if(data.status=="P"){
+
+presentDays++;
+
+}
+
+}
+
+}
+
+const percentage =
+totalDays==0
+?0
+:Math.round((presentDays/totalDays)*100);
+
+attendanceCount.textContent =
+percentage+"%";
+
+}catch(error){
+
+console.error(error);
+
+attendanceCount.textContent="-";
+
+}
+
+}
 async function loadDashboard(){
 
 try{
@@ -172,36 +234,53 @@ noticeSnap.size;
 //============================
 // Average Marks
 //============================
+//============================
+// Latest Exam Average
+//============================
 
-const marksSnap = await getDocs(
+const latestExam = "Quarterly";
+
+const markDoc = await getDocs(
 
 query(
-collection(db,"marks"),
+collection(
+db,
+"marks",
+latestExam,
+"students"
+),
 where("emis","==",parentEMIS)
 )
 
 );
 
-let total = 0;
-let subjects = 0;
+if(markDoc.empty){
 
-marksSnap.forEach((doc)=>{
-
-const mark = Number(doc.data().mark || 0);
-
-total += mark;
-subjects++;
-
-});
-
-if(subjects>0){
-
-resultCount.textContent =
-Math.round(total/subjects)+"%";
+resultCount.textContent="-";
 
 }else{
 
-resultCount.textContent="0%";
+const markData = markDoc.docs[0].data();
+
+let total = 0;
+let count = 0;
+
+Object.keys(markData).forEach((key)=>{
+
+if(typeof markData[key] === "number"){
+
+total += markData[key];
+
+count++;
+
+}
+
+});
+
+resultCount.textContent =
+count>0
+? Math.round(total/count)+"%"
+: "-";
 
 }
 
@@ -227,6 +306,8 @@ const loaded =
 await loadStudent();
 
 if(!loaded) return;
+
+await loadAttendance();
 
 await loadDashboard();
 
