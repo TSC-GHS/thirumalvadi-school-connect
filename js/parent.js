@@ -488,7 +488,52 @@ console.log("================================");
 //==================================
 // Language Selector
 //==================================
+//==================================
+// Parent Language
+//==================================
 
+const language = {
+
+ta:{
+dashboard:"பெற்றோர் முகப்பு",
+welcome:"👋 வரவேற்கிறோம்",
+attendance:"வருகை",
+average:"சராசரி",
+homework:"வீட்டுப்பாடம்",
+notice:"அறிவிப்புகள்",
+quick:"⚡ விரைவு செயல்கள்",
+latest:"📢 சமீபத்திய அறிவிப்புகள்",
+today:"📚 இன்றைய வீட்டுப்பாடம்",
+events:"📅 வரவிருக்கும் நிகழ்வுகள்"
+},
+
+en:{
+dashboard:"Parent Dashboard",
+welcome:"👋 Welcome Parent",
+attendance:"Attendance",
+average:"Average",
+homework:"Homework",
+notice:"Notices",
+quick:"⚡ Quick Actions",
+latest:"📢 Latest Notice",
+today:"📚 Today's Homework",
+events:"📅 Upcoming Events"
+},
+
+hi:{
+dashboard:"अभिभावक डैशबोर्ड",
+welcome:"👋 स्वागत है",
+attendance:"उपस्थिति",
+average:"औसत",
+homework:"गृहकार्य",
+notice:"सूचनाएँ",
+quick:"⚡ त्वरित कार्य",
+latest:"📢 नवीनतम सूचनाएँ",
+today:"📚 आज का गृहकार्य",
+events:"📅 आगामी कार्यक्रम"
+}
+
+};
 const languageSelect =
 document.getElementById("languageSelect");
 
@@ -496,6 +541,18 @@ if(languageSelect){
 
 const savedLanguage =
 localStorage.getItem("language") || "ta";
+    const t = language[savedLanguage];
+
+document.getElementById("dashboardTitle").textContent = t.dashboard;
+document.getElementById("welcomeTitle").textContent = t.welcome;
+document.getElementById("attendanceLabel").textContent = t.attendance;
+document.getElementById("averageLabel").textContent = t.average;
+document.getElementById("homeworkLabel").textContent = t.homework;
+document.getElementById("noticeLabel").textContent = t.notice;
+document.getElementById("quickActionsTitle").textContent = t.quick;
+document.getElementById("latestNoticeTitle").textContent = t.latest;
+document.getElementById("todayHomeworkTitle").textContent = t.today;
+document.getElementById("upcomingEventsTitle").textContent = t.events;
 
 languageSelect.value = savedLanguage;
 
