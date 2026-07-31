@@ -22,8 +22,8 @@ limit
 const studentName =
 document.getElementById("studentName");
 
-const studentClass =
-document.getElementById("studentClass");
+const studentClassName =
+document.getElementById("studentClassName");
 
 const studentEMIS =
 document.getElementById("studentEMIS");
@@ -97,8 +97,8 @@ studentData.name || "-";
 studentEMIS.textContent =
 studentData.emis || "-";
 
-studentClass.textContent =
-`${studentData.class || "-"}-${studentData.section || "-"}`;
+studentClassName.textContent =
+`${studentData.className || "-"}-${studentData.section || "-"}`;
 
 attendanceCount.textContent =
 studentData.attendance || "0%";
@@ -137,7 +137,7 @@ const homeworkSnap = await getDocs(
 
     query(
         collection(db,"homework"),
-        where("class","==",studentData.class),
+        where("className","==",studentData.className),
         where("section","==",studentData.section),
         where("status","==","Active"),
         where("dueDate",">=",today)
@@ -260,7 +260,7 @@ async function loadLatestNotices() {
         if (snap.empty) {
 
             latestNotices.innerHTML = `
-                <div class="empty-card">
+                <div className="empty-card">
                     📢 No notices available
                 </div>
             `;
@@ -276,8 +276,8 @@ async function loadLatestNotices() {
             const notice = doc.data();
 
             latestNotices.innerHTML += `
-                <div class="notice-item">
-                    <div class="notice-title">${notice.title}</div>
+                <div className="notice-item">
+                    <div className="notice-title">${notice.title}</div>
                     <p>${notice.description || ""}</p>
                 </div>
             `;
@@ -289,7 +289,7 @@ async function loadLatestNotices() {
         console.log(error);
 
         latestNotices.innerHTML =
-            "<div class='empty-card'>📢 No notices available</div>";
+            "<div className='empty-card'>📢 No notices available</div>";
 
     }
 
@@ -309,7 +309,7 @@ const snap = await getDocs(
 
     query(
         collection(db,"homework"),
-        where("class","==",studentData.class),
+        where("className","==",studentData.className),
         where("section","==",studentData.section),
         where("status","==","Active"),
         where("dueDate",">=",today),
@@ -324,7 +324,7 @@ recentHomework.innerHTML="";
 if(snap.empty){
 
 recentHomework.innerHTML = `
-<div class="empty-card">
+<div className="empty-card">
 📚 No homework available
 </div>
 `;
@@ -339,9 +339,9 @@ const hw = doc.data();
 
 recentHomework.innerHTML += `
 
-<div class="homework-item">
+<div className="homework-item">
 
-<div class="homework-sub">
+<div className="homework-sub">
 
 ${hw.subject || "-"}
 
@@ -401,7 +401,7 @@ const today = new Date().toISOString().split("T")[0];
 
 const q = query(
     collection(db,"homework"),
-    where("class","==",studentData.class),
+    where("className","==",studentData.className),
     where("section","==",studentData.section),
     where("status","==","Active"),
     where("dueDate",">=",today),
@@ -417,8 +417,8 @@ snap.forEach((doc)=>{
 const hw=doc.data();
 
 html += `
-<div class="homework-item">
-<div class="homework-sub">${hw.subject}</div>
+<div className="homework-item">
+<div className="homework-sub">${hw.subject}</div>
 <div>${hw.title}</div>
 <small>Due : ${hw.dueDate}</small>
 </div>
@@ -478,8 +478,6 @@ location.href="index.html";
 // ========================================
 // Initialize
 // ========================================
-
-initializeDashboard();
 
 console.log("================================");
 console.log("School Connect TN");
