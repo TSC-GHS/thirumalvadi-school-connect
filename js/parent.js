@@ -232,40 +232,44 @@ where("createdAt",">=",twoDaysAgo.toISOString())
 
 noticeCount.textContent =
 noticeSnap.size;
+//============================
+// Average Marks
+//============================
 
-//============================
-// Average Marks
-//============================
-    //============================
-// Average Marks
-//============================
 const settingsDoc = await getDoc(
-    doc(db,"settings","marks")
+    doc(db, "settings", "marks")
 );
 
-const latestExam =
-    settingsDoc.data().currentExam;
-
-const markDoc = await getDoc(
-    doc(
-        db,
-        "marks",
-        latestExam,
-        "students",
-        parentEMIS
-    )
-);
-
-if(markDoc.exists()){
-
-    const markData = markDoc.data();
-
-    resultCount.textContent =
-        (markData.percentage || 0) + "%";
-
-}else{
+if (!settingsDoc.exists()) {
 
     resultCount.textContent = "-";
+
+} else {
+
+    const latestExam = settingsDoc.data().currentExam;
+
+    const markDoc = await getDoc(
+        doc(
+            db,
+            "marks",
+            latestExam,
+            "students",
+            parentEMIS
+        )
+    );
+
+    if (!markDoc.exists()) {
+
+        resultCount.textContent = "-";
+
+    } else {
+
+        const markData = markDoc.data();
+
+        resultCount.textContent =
+            (markData.percentage || 0) + "%";
+
+    }
 
 }
 //==================================================
@@ -561,36 +565,16 @@ events:"📅 வரவிருக்கும் நிகழ்வுகள்
 },
 
 en:{
-<p id="dashboardTitle">
-Parent Dashboard
-</p>
-<h2 id="welcomeTitle">
-👋 Welcome Parent
-</h2>
-<p id="attendanceLabel">
-Attendance
-</p>
-<p id="averageLabel">
-Average
-</p>
-<p id="homeworkLabel">
-Homework
-</p>
-<p id="noticeLabel">
-Notices
-</p>
-<h2 id="quickActionsTitle">
-⚡ Quick Actions
-</h2>
-<h2 id="latestNoticeTitle">
-📢 Latest Notice
-</h2>
-<h2 id="todayHomeworkTitle">
-📚 Today's Homework
-</h2>
-<h2 id="upcomingEventsTitle">
-📅 Upcoming Events
-</h2>
+dashboard:"Parent Dashboard",
+welcome:"👋 Welcome Parent",
+attendance:"Attendance",
+average:"Average",
+homework:"Homework",
+notice:"Notices",
+quick:"⚡ Quick Actions",
+latest:"📢 Latest Notice",
+today:"📚 Today's Homework",
+events:"📅 Upcoming Events"
 },
 
 hi:{
