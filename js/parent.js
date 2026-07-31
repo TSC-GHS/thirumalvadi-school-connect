@@ -482,3 +482,27 @@ console.log("================================");
 console.log("School Connect TN");
 console.log("Parent Dashboard V1");
 console.log("================================");
+//==================================
+// Language Selector
+//==================================
+
+const languageSelect =
+document.getElementById("languageSelect");
+
+if(languageSelect){
+
+const savedLanguage =
+localStorage.getItem("language") || "ta";
+
+languageSelect.value = savedLanguage;
+
+languageSelect.addEventListener("change",(e)=>{
+
+localStorage.setItem("language",e.target.value);
+
+// Later we'll translate the page
+location.reload();
+
+});
+
+}
