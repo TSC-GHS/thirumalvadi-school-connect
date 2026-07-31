@@ -260,7 +260,7 @@ async function loadLatestNotices() {
         if (snap.empty) {
 
             latestNotices.innerHTML = `
-                <div className="empty-card">
+                <div class="empty-card">
                     📢 No notices available
                 </div>
             `;
@@ -324,7 +324,7 @@ recentHomework.innerHTML="";
 if(snap.empty){
 
 recentHomework.innerHTML = `
-<div className="empty-card">
+<div class="empty-card">
 📚 No homework available
 </div>
 `;
