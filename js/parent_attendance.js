@@ -4,7 +4,7 @@
 //==========================================
 
 import { db } from "../firebase.js";
-
+https://github.com/TSC-GHS/thirumalvadi-school-connect/edit/main/js/parent_attendance.js
 import {
 collection,
 getDocs,
@@ -44,7 +44,8 @@ let absent=0;
 let html="";
 
 for(const day of attendanceDays.docs){
-
+console.log("Date :", day.id);
+console.log("EMIS :", emis);
 const studentDoc =
 await getDoc(
 doc(
@@ -55,7 +56,7 @@ day.id,
 emis
 )
 );
-
+console.log("Document Exists :", studentDoc.exists());
 if(!studentDoc.exists()){
 
 continue;
