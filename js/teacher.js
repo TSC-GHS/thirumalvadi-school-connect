@@ -5,12 +5,14 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
-  doc,
-  getDoc,
-  collection,
-  getDocs,
-  query,
-  where
+doc,
+getDoc,
+collection,
+getDocs,
+query,
+where,
+orderBy,
+limit
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 // =====================================
@@ -153,7 +155,13 @@ try{
 // ==============================
 
 const homeworkSnap =
-await getDocs(collection(db,"homework"));
+await getDocs(
+query(
+collection(db,"homework"),
+orderBy("updatedAt","desc"),
+limit(5)
+)
+);
 
 homeworkCount.textContent =
 homeworkSnap.size;
@@ -179,7 +187,13 @@ const data = doc.data();
 
 noticeHTML += `
 <div style="padding:10px;border-bottom:1px solid #eee;">
-📢 ${data.title || "Notice"}
+
+<b>📢 ${data.title || "Notice"}</b>
+
+<br>
+
+${data.startDate || "-"}
+
 </div>
 `;
 
@@ -200,7 +214,17 @@ const data = doc.data();
 
 hwHTML += `
 <div style="padding:10px;border-bottom:1px solid #eee;">
-📚 ${data.subject || "-"} - Class ${data.className || data.class || "-"}
+
+<b>📚 ${data.subject || "-"}</b><br>
+
+Class :
+${data.class || "-"}${data.section || ""}
+
+<br>
+
+Due :
+${data.dueDate || "-"}
+
 </div>
 `;
 
@@ -212,16 +236,36 @@ hwHTML || "<p>No Homework</p>";
 // Today's Attendance Count
 // ==============================
 
-const today = new Date().toISOString().split("T")[0];
+const today =
+new Date()
+.toLocaleDateString("en-GB")
+.replace(/\//g,"-");
 
-const attendanceSnap = await getDocs(
-    query(
-        collection(db, "attendance"),
-        where("date", "==", today)
-    )
+const attendanceDoc =
+await getDoc(
+doc(db,"attendance",today)
 );
 
-attendanceCount.textContent = attendanceSnap.size;
+if(attendanceDoc.exists()){
+
+const students =
+await getDocs(
+collection(
+db,
+"attendance",
+today,
+"students"
+)
+);
+
+attendanceCount.textContent =
+students.size;
+
+}else{
+
+attendanceCount.textContent="0";
+
+}
 
 // ==============================
 // Leave Count
