@@ -436,3 +436,118 @@ alert("Unable to Submit Homework");
 };
 
 console.log("Parent Homework Part 4 Loaded");
+//==================================================
+// School Connect TN
+// Parent Homework
+// Production Version V3
+// Part 5 - Final Helpers
+//==================================================
+
+//==================================================
+// Sort Homework by Due Date
+//==================================================
+
+function sortHomeworkByDate(homeworkArray){
+
+return homeworkArray.sort((a,b)=>{
+
+const dateA=new Date(a.dueDate || "2099-12-31");
+
+const dateB=new Date(b.dueDate || "2099-12-31");
+
+return dateA-dateB;
+
+});
+
+}
+
+//==================================================
+// Empty Message
+//==================================================
+
+function showNoHomework(){
+
+homeworkTable.innerHTML=`
+
+<tr>
+
+<td colspan="4"
+style="text-align:center;padding:25px;">
+
+📚 No Homework Available
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+//==================================================
+// Loading Message
+//==================================================
+
+function showLoading(){
+
+homeworkTable.innerHTML=`
+
+<tr>
+
+<td colspan="4"
+style="text-align:center;padding:25px;">
+
+⏳ Loading Homework...
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+//==================================================
+// Error Message
+//==================================================
+
+function showError(){
+
+homeworkTable.innerHTML=`
+
+<tr>
+
+<td colspan="4"
+style="text-align:center;
+color:red;
+padding:25px;">
+
+❌ Unable to Load Homework
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+//==================================================
+// Refresh Homework
+//==================================================
+
+window.refreshHomework=async()=>{
+
+await loadHomework();
+
+};
+
+//==================================================
+// Version
+//==================================================
+
+console.log("================================");
+console.log("School Connect TN");
+console.log("Parent Homework");
+console.log("Production Version V3");
+console.log("================================");
