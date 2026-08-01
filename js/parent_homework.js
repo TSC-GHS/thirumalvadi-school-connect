@@ -8,14 +8,23 @@
 import { db } from "../firebase.js";
 
 import {
+
 collection,
+
 query,
+
 where,
+
 getDocs,
+
 getDoc,
+
 doc,
-addDoc,
+
+updateDoc,
+
 serverTimestamp
+
 }
 from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
@@ -162,9 +171,23 @@ where("emis","==",student.emis)
 
 );
 
-const submissionSnap=await getDocs(submissionQuery);
+const submissionSnap = await getDocs(submissionQuery);
 
-const completed=!submissionSnap.empty;
+let completed = false;
+
+let submissionDocId = "";
+
+if(!submissionSnap.empty){
+
+const submissionDoc = submissionSnap.docs[0];
+
+submissionDocId = submissionDoc.id;
+
+const submission = submissionDoc.data();
+
+completed = submission.status === "Completed";
+
+}
 
 let badge="🟢 Pending";
 
@@ -185,11 +208,12 @@ badge="🔴 Overdue";
 
 }
 
-html+=createHomeworkRow(
+html += createHomeworkRow(
 docSnap.id,
 hw,
 badge,
-completed
+completed,
+submissionDocId
 );
 
 }
@@ -224,7 +248,9 @@ hw,
 
 badge,
 
-completed
+completed,
+
+submissionDocId
 
 ){
 
@@ -353,26 +379,6 @@ try{
 // Check Already Submitted
 //--------------------------------------------------
 
-const checkQuery = query(
-
-collection(db,"homework_submissions"),
-
-where("homeworkId","==",homeworkId),
-
-where("emis","==",student.emis)
-
-);
-
-const checkSnap = await getDocs(checkQuery);
-
-if(!checkSnap.empty){
-
-alert("Homework already completed.");
-
-return;
-
-}
-
 //--------------------------------------------------
 // Parent Comment
 //--------------------------------------------------
@@ -387,9 +393,31 @@ const comment = prompt(
 // Save Submission
 //--------------------------------------------------
 
-await addDoc(
+const submissionQuery = query(
 
 collection(db,"homework_submissions"),
+
+where("homeworkId","==",homeworkId),
+
+where("emis","==",student.emis)
+
+);
+
+const submissionSnap = await getDocs(submissionQuery);
+
+if(submissionSnap.empty){
+
+alert("Submission record not found.");
+
+return;
+
+}
+
+const submissionId = submissionSnap.docs[0].id;
+
+await updateDoc(
+
+doc(db,"homework_submissions",submissionId),
 
 {
 
