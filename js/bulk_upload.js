@@ -397,48 +397,56 @@ break;
 
 case "attendance":
 
-alert(
-"Attendance Upload - Part 4"
+await uploadAttendance(
+rows,
+header
 );
 
 break;
 
 case "marks":
 
-alert(
-"Marks Upload - Part 4"
+case "marks":
+
+await uploadMarks(
+rows,
+header
 );
 
 break;
 
 case "homework":
 
-alert(
-"Homework Upload - Part 5"
+await uploadHomework(
+rows,
+header
 );
 
 break;
 
 case "notices":
 
-alert(
-"Notice Upload - Part 5"
+await uploadNotice(
+rows,
+header
 );
 
 break;
 
 case "calendar":
 
-alert(
-"Calendar Upload - Part 5"
+await uploadCalendar(
+rows,
+header
 );
 
 break;
 
 case "timetable":
 
-alert(
-"Timetable Upload - Part 5"
+await uploadTimetable(
+rows,
+header
 );
 
 break;
