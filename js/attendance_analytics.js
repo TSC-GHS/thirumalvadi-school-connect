@@ -94,10 +94,7 @@ const today =
 String(d.getDate()).padStart(2,"0") + "-" +
 String(d.getMonth()+1).padStart(2,"0") + "-" +
 d.getFullYear();
-
  const attendanceSnap = await getDocs(
-console.log("Today :", today);
-console.log("Attendance Count :", attendanceSnap.size);
 collection(
 db,
 "attendance",
