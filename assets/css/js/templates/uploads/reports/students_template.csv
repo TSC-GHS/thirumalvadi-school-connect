@@ -1,1 +1,2 @@
-
+AdmissionNo,EMIS,StudentName,DOB,Gender,Class,Section,Medium,FatherName,MotherName,Mobile
+ADM001,610000030,Arun Kumar,2014-06-15,Male,6,A,Tamil,Ramesh,Lakshmi,9876543210
