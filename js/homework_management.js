@@ -206,7 +206,8 @@ document.getElementById("subject").value;
 
 const dueDate =
 document.getElementById("dueDate").value;
-
+const status =
+document.getElementById("status").value;
 if(
 !title ||
 !description ||
@@ -246,7 +247,7 @@ teacherName: teacher.name,
 
 teacherType: teacher.teacherType || "",
 
-status: "Active",
+status: status,
 
 createdAt: new Date().toISOString()
 
@@ -311,10 +312,11 @@ alert("✅ Homework Saved Successfully");
 
 document.getElementById("homeworkTitle").value="";
 document.getElementById("homeworkDescription").value="";
-document.getElementById("className").value="";
+document.getElementById("class").value="";
 document.getElementById("section").value="";
 document.getElementById("subject").value="";
 document.getElementById("dueDate").value="";
+document.getElementById("status").value="Active";
 
 await loadHomework();
 
