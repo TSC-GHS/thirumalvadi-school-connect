@@ -10,8 +10,10 @@ from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 window.loadReport = async function(){
 
+const emisBox = document.getElementById("emis");
+
 const inputEmis =
-document.getElementById("emis").value.trim();
+emisBox ? emisBox.value.trim() : "";
 
 const sessionEmis =
 localStorage.getItem("parentEMIS") ||
@@ -177,7 +179,11 @@ sessionStorage.getItem("parentEMIS");
 
 if(parentEmis){
 
-document.getElementById("emis").value = parentEmis;
+const emisBox = document.getElementById("emis");
+
+if (emisBox) {
+    emisBox.value = parentEmis;
+}
 
 window.loadReport();
 
