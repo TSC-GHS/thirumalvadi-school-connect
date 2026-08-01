@@ -200,20 +200,25 @@ try{
 const today = new Date().toISOString().split("T")[0];
 
 const homeworkSnap = await getDocs(
-
-    query(
-        collection(db,"homework"),
-        where("class","==",studentData.class),
-        where("section","==",studentData.section),
-        where("status","==","Active"),
-        where("dueDate",">=",today)
-    )
-
+collection(db,"homework")
 );
 
-homeworkCount.textContent =
-homeworkSnap.size;
+let count = 0;
 
+homeworkSnap.forEach((doc)=>{
+
+const hw = doc.data();
+
+if(
+hw.class == studentData.class &&
+hw.section == studentData.section
+){
+count++;
+}
+
+});
+
+homeworkCount.textContent = count;
 //============================
 // Notice Count
 //============================
