@@ -6,9 +6,12 @@
 import { db } from "../firebase.js";
 
 import {
-    collection,
-    getDocs
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+collection,
+getDocs,
+getDoc,
+doc
+}
+from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==========================================
 // Parent Session
@@ -29,127 +32,85 @@ if (!emis) {
 // Load Attendance
 //==========================================
 
-async function loadAttendance() {
+async function loadAttendance(){
 
-    try {
+try{
 
-        const attendanceDays = await getDocs(
-            collection(db, "attendance")
-        );
+const attendanceDays =
+await getDocs(collection(db,"attendance"));
 
-        let present = 0;
-        let absent = 0;
-        let html = "";
+let present=0;
+let absent=0;
+let html="";
 
-        for (const day of attendanceDays.docs) {
+for(const day of attendanceDays.docs){
 
-            const studentSnap = await getDocs(
+const studentDoc =
+await getDoc(
+doc(
+db,
+"attendance",
+day.id,
+"students",
+emis
+)
+);
 
-                collection(
-                    db,
-                    "attendance",
-                    day.id,
-                    "students"
-                )
+if(!studentDoc.exists()){
 
-            );
-
-            studentSnap.forEach((studentDoc) => {
-
-                const data = studentDoc.data();
-
-                const firebaseEmis =
-                String(data.emis || "").trim();
-
-                if (firebaseEmis !== emis) return;
-
-                if (
-                    data.status === "P" ||
-                    data.status === "Present"
-                ) {
-
-                    present++;
-
-                } else {
-
-                    absent++;
-
-                }
-
-                html += `
-<tr>
-<td>${day.id}</td>
-
-<td class="${
-data.status === "P" ||
-data.status === "Present"
-? "present"
-: "absent"
-}">
-${
-data.status === "P" ||
-data.status === "Present"
-? "Present"
-: "Absent"
-}
-</td>
-
-</tr>
-`;
-
-            });
-
-        }
-
-        const total = present + absent;
-
-        const percentage =
-        total === 0
-        ? 0
-        : Math.round((present / total) * 100);
-
-        document.getElementById("presentCount").textContent =
-        present;
-
-        document.getElementById("absentCount").textContent =
-        absent;
-
-        document.getElementById("attendancePercent").textContent =
-        percentage + "%";
-
-        document.getElementById("attendanceTable").innerHTML =
-
-        html ||
-
-        `
-<tr>
-<td colspan="2" style="text-align:center;">
-No Attendance Records Found
-</td>
-</tr>
-`;
-
-    }
-
-    catch(error){
-
-        console.error("Attendance Error :", error);
-
-        document.getElementById("attendanceTable").innerHTML=
-
-        `
-<tr>
-<td colspan="2"
-style="text-align:center;color:red;">
-Failed to Load Attendance
-</td>
-</tr>
-`;
-
-    }
+continue;
 
 }
 
+const data=studentDoc.data();
+
+if(data.status=="P"){
+
+present++;
+
+}else{
+
+absent++;
+
+}
+
+html+=`
+<tr>
+<td>${data.date}</td>
+<td>${data.status}</td>
+</tr>
+`;
+
+}
+
+const total=present+absent;
+
+const percent=
+total==0
+?0
+:Math.round((present/total)*100);
+
+presentCount.textContent=present;
+absentCount.textContent=absent;
+attendancePercent.textContent=percent+"%";
+
+attendanceTable.innerHTML=
+html||
+`
+<tr>
+<td colspan="2">
+No Attendance Records
+</td>
+</tr>
+`;
+
+}catch(e){
+
+console.log(e);
+
+}
+
+}
 //==========================================
 // Initialize
 //==========================================
