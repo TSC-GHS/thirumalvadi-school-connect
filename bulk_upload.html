@@ -8,14 +8,17 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Bulk Upload</title>
+<title>Bulk Upload | School Connect TN</title>
+
+<link rel="stylesheet" href="css/bulk_upload.css">
 
 <link rel="stylesheet"
-href="css/bulk_upload.css">
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
 <body>
+
 <!-- =========================
 HEADER
 ========================= -->
@@ -24,9 +27,19 @@ HEADER
 
 <div class="header-left">
 
-<h1>📥 Bulk Upload</h1>
+<h1>
 
-<p>School Connect TN - Admin Panel</p>
+<i class="fa-solid fa-file-arrow-up"></i>
+
+Bulk Upload
+
+</h1>
+
+<p>
+
+School Connect TN - Admin Panel
+
+</p>
 
 </div>
 
@@ -45,7 +58,7 @@ onclick="location.href='admin_dashboard.html'">
 </header>
 
 <!-- =========================
-MAIN CONTAINER
+MAIN
 ========================= -->
 
 <div class="container">
@@ -56,31 +69,85 @@ UPLOAD CARD
 
 <section class="card">
 
-<h2>Select Upload Type</h2>
+<h2>
+
+📤 Upload Data
+
+</h2>
+
+<div class="form-group">
+
+<label>
+
+Upload Type
+
+</label>
 
 <select id="uploadType">
 
+<option value="">
+
+Select Upload Type
+
+</option>
+
 <option value="students">
+
 👨‍🎓 Students
+
 </option>
 
 <option value="teachers">
+
 👨‍🏫 Teachers
+
 </option>
 
 <option value="parents">
+
 👨‍👩‍👧 Parents
+
 </option>
 
 <option value="attendance">
+
 📅 Attendance
+
 </option>
 
 <option value="marks">
+
 📝 Marks
+
+</option>
+
+<option value="homework">
+
+📚 Homework
+
+</option>
+
+<option value="notices">
+
+📢 Notices
+
+</option>
+
+<option value="calendar">
+
+🗓 Calendar
+
+</option>
+
+<option value="timetable">
+
+🕒 Timetable
+
 </option>
 
 </select>
+
+</div>
 
 <button
 id="downloadTemplateBtn"
@@ -90,28 +157,40 @@ class="downloadBtn">
 
 </button>
 
+<br><br>
+
 <input
 type="file"
 id="csvFile"
-accept=".csv">
+accept=".csv,.xlsx">
+
+<p id="fileName">
+
+No file selected
+
+</p>
 
 <button
 id="uploadBtn"
 class="uploadBtn">
 
-📤 Upload CSV
+📤 Upload File
 
 </button>
 
 </section>
 
 <!-- =========================
-UPLOAD STATUS
+PROGRESS
 ========================= -->
 
 <section class="card">
 
-<h2>Upload Progress</h2>
+<h2>
+
+📊 Upload Progress
+
+</h2>
 
 <div class="progress">
 
@@ -125,43 +204,98 @@ class="progress-bar">
 
 </div>
 
-<p
-id="status"
-class="status">
+<p id="status">
 
 Waiting for upload...
 
 </p>
 
 </section>
+
 <!-- =========================
-IMPORT SUMMARY
+SUMMARY
 ========================= -->
 
 <section class="card">
 
-<h2>📊 Import Summary</h2>
+<h2>
+
+📈 Import Summary
+
+</h2>
 
 <div class="summary-grid">
 
 <div class="summary-box">
-<h3 id="totalRecords">0</h3>
-<p>Total Records</p>
+
+<h3 id="totalRecords">
+
+0
+
+</h3>
+
+<p>Total</p>
+
 </div>
 
 <div class="summary-box success">
-<h3 id="successRecords">0</h3>
+
+<h3 id="successRecords">
+
+0
+
+</h3>
+
 <p>Imported</p>
+
 </div>
 
 <div class="summary-box warning">
-<h3 id="updatedRecords">0</h3>
+
+<h3 id="updatedRecords">
+
+0
+
+</h3>
+
 <p>Updated</p>
+
+</div>
+
+<div class="summary-box info">
+
+<h3 id="duplicateRecords">
+
+0
+
+</h3>
+
+<p>Duplicate</p>
+
+</div>
+
+<div class="summary-box secondary">
+
+<h3 id="skippedRecords">
+
+0
+
+</h3>
+
+<p>Skipped</p>
+
 </div>
 
 <div class="summary-box danger">
-<h3 id="failedRecords">0</h3>
+
+<h3 id="failedRecords">
+
+0
+
+</h3>
+
 <p>Failed</p>
+
 </div>
 
 </div>
@@ -169,55 +303,152 @@ IMPORT SUMMARY
 </section>
 
 <!-- =========================
-TEMPLATE DETAILS
+UPLOAD HISTORY
 ========================= -->
 
 <section class="card">
 
-<h2>📋 Download Templates</h2>
+<h2>
+
+📜 Upload History
+
+</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Module</th>
+
+<th>Records</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="historyTable">
+
+<tr>
+
+<td colspan="4">
+
+No Upload History
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</section>
+
+<!-- =========================
+DOWNLOAD TEMPLATE
+========================= -->
+
+<section class="card">
+
+<h2>
+
+📋 CSV Templates
+
+</h2>
 
 <p>
-Choose an upload type and click
-<b>Download CSV Template</b>.
+
+Download the correct template before uploading.
+
 </p>
 
 <ul class="template-list">
 
-<li>👨‍🎓 Students Template</li>
+<li>👨‍🎓 Student Template</li>
 
-<li>👨‍🏫 Teachers Template</li>
+<li>👨‍🏫 Teacher Template</li>
 
-<li>👨‍👩‍👧 Parents Template</li>
+<li>👨‍👩‍👧 Parent Template</li>
 
 <li>📅 Attendance Template</li>
 
 <li>📝 Marks Template</li>
 
+<li>📚 Homework Template</li>
+
+<li>📢 Notice Template</li>
+
+<li>🗓 Calendar Template</li>
+
+<li>🕒 Timetable Template</li>
+
 </ul>
+
+</section>
+
+<!-- =========================
+GUIDELINES
+========================= -->
+
+<section class="card">
+
+<h2>
+
+📖 Upload Guidelines
+
+</h2>
 
 <div class="info-box">
 
-<b>Instructions</b>
-
 <ol>
 
-<li>Download the required CSV template.</li>
+<li>Select Upload Type.</li>
 
-<li>Fill the data in Excel.</li>
+<li>Download the CSV Template.</li>
 
-<li>Save the file as <b>CSV (*.csv)</b>.</li>
+<li>Fill data in Excel.</li>
 
-<li>Select the file and click <b>Upload CSV</b>.</li>
+<li>Keep EMIS & Mobile columns as TEXT.</li>
+
+<li>Date Format : YYYY-MM-DD</li>
+
+<li>Attendance Status : P / A / L / OD</li>
+
+<li>Save file as CSV UTF-8.</li>
+
+<li>Select file.</li>
+
+<li>Click Upload.</li>
+
+<li>Verify Import Summary.</li>
 
 </ol>
 
 </div>
 
+<button
+id="downloadErrorBtn"
+class="downloadBtn">
+
+⬇ Download Error Report
+
+</button>
+
 </section>
 
 </div>
 
-<script type="module" src="bulk_upload.js"></script>
+<script
+type="module"
+src="js/bulk_upload.js">
+
+</script>
 
 </body>
 
