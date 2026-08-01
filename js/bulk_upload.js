@@ -217,26 +217,16 @@ return;
 
 }
 
-const files={
-
-students:"Student_Template.csv",
-
-teachers:"Teacher_Template.csv",
-
-parents:"Parent_Template.csv",
-
-attendance:"Attendance_Template.csv",
-
-marks:"Marks_Template.csv",
-
-homework:"Homework_Template.csv",
-
-notices:"Notice_Template.csv",
-
-calendar:"Calendar_Template.csv",
-
-timetable:"Timetable_Template.csv"
-
+const files = {
+  students: "students_template.csv",
+  teachers: "teachers_template.csv",
+  parents: "parents_template.csv",
+  attendance: "attendance_template.csv",
+  marks: "marks_template.csv",
+  homework: "homework_template.csv",
+  notices: "notice_template.csv",
+  calendar: "calendar_template.csv",
+  timetable: "timetable_template.csv"
 };
 
 const file=files[type];
