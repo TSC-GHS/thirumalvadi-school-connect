@@ -1,6 +1,8 @@
-/* ===================================
-   Teacher Analytics
-=================================== */
+/*=========================================
+School Connect TN
+Teacher Analytics
+Professional UI V2
+=========================================*/
 
 *{
 margin:0;
@@ -10,175 +12,205 @@ font-family:Arial,sans-serif;
 }
 
 body{
-background:#f3f5fb;
+background:#f4f7fb;
+color:#333;
 }
 
 .header{
-background:#6a1b9a;
-color:white;
+background:linear-gradient(135deg,#6a1b9a,#8e24aa);
+color:#fff;
 text-align:center;
-padding:25px 15px;
-box-shadow:0 2px 10px rgba(0,0,0,.15);
+padding:20px;
+box-shadow:0 3px 12px rgba(0,0,0,.15);
 }
 
 .header h2{
-font-size:32px;
-margin-bottom:8px;
+font-size:30px;
+margin-bottom:5px;
 }
 
 .header p{
-font-size:20px;
-opacity:.95;
+font-size:15px;
+opacity:.9;
 }
 
 .container{
+max-width:1300px;
+margin:auto;
 padding:20px;
 }
 
+/* Summary */
+
 .summaryGrid{
-
 display:grid;
-
 grid-template-columns:repeat(4,1fr);
-
 gap:15px;
-
 margin-bottom:20px;
-
 }
 
 .card{
-
 background:#fff;
-
-padding:18px;
-
+padding:20px;
 border-radius:12px;
-
 text-align:center;
-
-box-shadow:0 2px 10px rgba(0,0,0,.08);
-
-min-height:90px;
-
-display:flex;
-
-flex-direction:column;
-
-justify-content:center;
-
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+border-top:5px solid transparent;
+transition:.3s;
 }
 
+.card:hover{
+transform:translateY(-3px);
+box-shadow:0 8px 18px rgba(0,0,0,.12);
+}
+
+.blue{border-top:5px solid #1976d2;}
+.green{border-top:5px solid #2e7d32;}
+.orange{border-top:5px solid #fb8c00;}
+.pink{border-top:5px solid #e91e63;}
+
 .card h3{
-
 font-size:34px;
-
-margin:0;
-
-font-weight:bold;
-
+margin-bottom:8px;
 }
 
 .card p{
-
-margin-top:8px;
-
 font-size:15px;
-
-font-weight:600;
-
+font-weight:bold;
 }
 
-.blue{
-border-top-color:#1976d2;
-}
+/* Search */
 
-.green{
-border-top-color:#2e7d32;
-}
-
-.orange{
-border-top-color:#fb8c00;
-}
-
-.pink{
-border-top-color:#e91e63;
-}
-
-.listCard{
-background:white;
-padding:20px;
-border-radius:18px;
-box-shadow:0 4px 12px rgba(0,0,0,.10);
+.searchBox{
 margin-bottom:20px;
 }
 
+.searchBox input{
+width:100%;
+padding:12px 15px;
+font-size:15px;
+border:1px solid #ccc;
+border-radius:10px;
+outline:none;
+}
+
+.searchBox input:focus{
+border-color:#1976d2;
+box-shadow:0 0 8px rgba(25,118,210,.2);
+}
+
+/* Teacher List */
+
+.listCard{
+background:#fff;
+padding:20px;
+border-radius:15px;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
 .listCard h3{
-font-size:30px;
+font-size:26px;
 color:#6a1b9a;
 margin-bottom:20px;
 }
 
+/* Teacher Card */
+
 .teacherItem{
-background:#f8f8f8;
-border-left:6px solid #6a1b9a;
+background:#fff;
+border-left:5px solid #6a1b9a;
 border-radius:12px;
-padding:15px;
+padding:18px;
+margin-bottom:18px;
+box-shadow:0 3px 12px rgba(0,0,0,.08);
+transition:.3s;
+}
+
+.teacherItem:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 18px rgba(0,0,0,.12);
+}
+
+.teacherItem h3{
+color:#6a1b9a;
+font-size:24px;
 margin-bottom:15px;
 }
 
-.teacherItem h4{
-font-size:24px;
-color:#333;
-margin-bottom:10px;
+.teacherItem p{
+margin:10px 0;
+font-size:15px;
 }
 
-.teacherItem p{
-font-size:17px;
-margin:6px 0;
-color:#555;
+.teacherItem select{
+width:180px;
+padding:8px;
+border:1px solid #ccc;
+border-radius:6px;
+background:#fff;
 }
+
+.teacherItem input{
+width:80px;
+padding:8px;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+/* Buttons */
+
+.teacherItem button{
+padding:9px 15px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+margin-right:10px;
+transition:.3s;
+}
+
+.teacherItem button:first-child{
+background:#2e7d32;
+color:#fff;
+}
+
+.teacherItem button:last-child{
+background:#d32f2f;
+color:#fff;
+}
+
+.teacherItem button:hover{
+opacity:.9;
+}
+
+/* Back */
 
 .backBtn{
 width:100%;
-padding:16px;
-font-size:20px;
+padding:15px;
 background:#1976d2;
-color:white;
+color:#fff;
 border:none;
-border-radius:12px;
+border-radius:10px;
+font-size:17px;
 cursor:pointer;
+transition:.3s;
 }
 
 .backBtn:hover{
 background:#125ea8;
 }
 
-@media(max-width:600px){
+/* Mobile */
 
-.summaryGrid{
-grid-template-columns:1fr 1fr;
-}
-
-.card h3{
-font-size:38px;
-}
-
-.listCard h3{
-font-size:26px;
-}
-
-.teacherItem h4{
-font-size:21px;
-}
-
-}
 @media(max-width:900px){
 
 .summaryGrid{
-
 grid-template-columns:repeat(2,1fr);
+}
 
+.teacherItem select{
+width:100%;
 }
 
 }
@@ -186,36 +218,28 @@ grid-template-columns:repeat(2,1fr);
 @media(max-width:600px){
 
 .summaryGrid{
-
 grid-template-columns:1fr;
-
 }
 
+.teacherItem{
+padding:15px;
 }
-.searchBox input{
 
+.teacherItem h3{
+font-size:20px;
+}
+
+.teacherItem select,
+.teacherItem input{
 width:100%;
-
-padding:12px;
-
-font-size:16px;
-
-border:1px solid #ddd;
-
-border-radius:10px;
-
-outline:none;
-
-box-sizing:border-box;
-
-margin-bottom:15px;
-
+margin-top:6px;
+margin-bottom:8px;
 }
 
-.searchBox input:focus{
-
-border-color:#1976D2;
-
-box-shadow:0 0 5px rgba(25,118,210,.3);
+.teacherItem button{
+width:100%;
+margin-top:8px;
+margin-right:0;
+}
 
 }
