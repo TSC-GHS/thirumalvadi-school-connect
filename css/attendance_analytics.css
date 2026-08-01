@@ -188,3 +188,67 @@ font-size:20px;
 }
 
 }
+/*=============================
+Filter Bar
+=============================*/
+
+.filterBar{
+
+display:flex;
+
+gap:15px;
+
+margin-bottom:20px;
+
+background:#fff;
+
+padding:15px;
+
+border-radius:15px;
+
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+
+}
+
+.filterBar div{
+
+flex:1;
+
+}
+
+.filterBar label{
+
+display:block;
+
+font-weight:bold;
+
+margin-bottom:6px;
+
+color:#555;
+
+}
+
+.filterBar input,
+.filterBar select{
+
+width:100%;
+
+padding:10px;
+
+border:1px solid #ccc;
+
+border-radius:8px;
+
+font-size:15px;
+
+}
+
+@media(max-width:768px){
+
+.filterBar{
+
+flex-direction:column;
+
+}
+
+}
