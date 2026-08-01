@@ -561,7 +561,7 @@ console.log("================================");
 const language = {
 
 ta:{
-dashboard:"பெற்றோர் முகப்பு",
+dashboard:"முகப்பு",
 welcome:"👋 வரவேற்கிறோம்",
 attendance:"வருகை",
 average:"சராசரி",
