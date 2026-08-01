@@ -30,7 +30,23 @@ document.getElementById("completedList");
 
 const pendingList =
 document.getElementById("pendingList");
+const completedCard =
+document.getElementById("completedCard");
 
+const pendingCard =
+document.getElementById("pendingCard");
+
+const completedPopup =
+document.getElementById("completedPopup");
+
+const pendingPopup =
+document.getElementById("pendingPopup");
+
+const closeCompleted =
+document.getElementById("closeCompleted");
+
+const closePending =
+document.getElementById("closePending");
 // Teacher Session
 
 const teacherId =
@@ -104,19 +120,9 @@ if(hw.status === "Completed"){
 completed++;
 
 completedList.innerHTML += `
-
-<div class="homeworkCard">
-
-<h3>👨‍🎓 ${hw.studentName}</h3>
-
-<p><b>EMIS :</b> ${hw.emis}</p>
-
-<p><b>Subject :</b> ${hw.subject}</p>
-
-<p><b>Status :</b> ✅ Completed</p>
-
+<div class="studentItem">
+✅ ${hw.studentName}
 </div>
-
 `;
 
 }else{
@@ -124,19 +130,9 @@ completedList.innerHTML += `
 pending++;
 
 pendingList.innerHTML += `
-
-<div class="homeworkCard">
-
-<h3>👨‍🎓 ${hw.studentName}</h3>
-
-<p><b>EMIS :</b> ${hw.emis}</p>
-
-<p><b>Subject :</b> ${hw.subject}</p>
-
-<p><b>Status :</b> 🟢 Pending</p>
-
+<div class="studentItem">
+⏳ ${hw.studentName}
 </div>
-
 `;
 
 }
@@ -182,6 +178,49 @@ console.error("Refresh Error :",error);
 //==========================================
 
 console.log("================================");
+//==========================================
+// Popup Events
+//==========================================
+
+completedCard.addEventListener("click",()=>{
+
+completedPopup.style.display="flex";
+
+});
+
+pendingCard.addEventListener("click",()=>{
+
+pendingPopup.style.display="flex";
+
+});
+
+closeCompleted.addEventListener("click",()=>{
+
+completedPopup.style.display="none";
+
+});
+
+closePending.addEventListener("click",()=>{
+
+pendingPopup.style.display="none";
+
+});
+
+window.addEventListener("click",(e)=>{
+
+if(e.target===completedPopup){
+
+completedPopup.style.display="none";
+
+}
+
+if(e.target===pendingPopup){
+
+pendingPopup.style.display="none";
+
+}
+
+});
 console.log("School Connect TN");
 console.log("Teacher Homework Status");
 console.log("Stable Version V1");
