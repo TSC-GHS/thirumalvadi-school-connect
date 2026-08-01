@@ -441,10 +441,84 @@ recentHomework.innerHTML=
 //==================================================
 
 async function loadParentData(){
+//==================================================
+// Upcoming Events
+//==================================================
 
+async function loadUpcomingEvents(){
+
+try{
+
+const upcomingEvents =
+document.getElementById("upcomingEvents");
+
+const snap =
+await getDocs(
+collection(db,"calendar")
+);
+
+upcomingEvents.innerHTML="";
+
+if(snap.empty){
+
+upcomingEvents.innerHTML=`
+<div class="empty-card">
+📅 No Upcoming Events
+</div>
+`;
+
+return;
+
+}
+
+snap.forEach((doc)=>{
+
+const event=doc.data();
+
+upcomingEvents.innerHTML+=`
+
+<div class="notice-item">
+
+<div class="notice-title">
+
+${event.title || "-"}
+
+</div>
+
+<p>
+
+${event.description || "-"}
+
+</p>
+
+<small>
+
+📅 ${event.date || "-"}
+
+</small>
+
+</div>
+
+`;
+
+});
+
+}catch(error){
+
+console.log(error);
+
+document.getElementById("upcomingEvents").innerHTML=
+
+"<div class='empty-card'>No Events Available</div>";
+
+}
+
+}
 await loadLatestNotices();
 
 await loadRecentHomework();
+
+await loadUpcomingEvents();
 
 }
 
