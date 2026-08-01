@@ -18,7 +18,30 @@ const totalSubjects = document.getElementById("totalSubjects");
 const teacherList = document.getElementById("teacherList");
 
 loadAnalytics();
+const searchTeacher =
+document.getElementById("searchTeacher");
 
+searchTeacher.addEventListener("input",()=>{
+
+const value =
+searchTeacher.value.toLowerCase();
+
+const cards =
+document.querySelectorAll(".teacherItem");
+
+cards.forEach(card=>{
+
+const text =
+card.innerText.toLowerCase();
+
+card.style.display =
+text.includes(value)
+? "block"
+: "none";
+
+});
+
+});
 async function loadAnalytics(){
 
 try{
