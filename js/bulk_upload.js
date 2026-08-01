@@ -1064,7 +1064,18 @@ errorRows.push(rows[i]);
 continue;
 
 }
+const dayRef = doc(db, "attendance", date);
 
+await setDoc(
+    dayRef,
+    {
+        date: date,
+        updatedAt: serverTimestamp()
+    },
+    {
+        merge: true
+    }
+);
 const ref=doc(
 db,
 "attendance",
