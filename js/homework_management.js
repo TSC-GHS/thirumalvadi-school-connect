@@ -49,11 +49,14 @@ return;
 
 try{
 
+const teacherDocId =
+localStorage.getItem("teacherDocId") ||
+sessionStorage.getItem("teacherDocId");
+
 const teacherSnap =
 await getDoc(
-doc(db,"teachers",teacherId)
+doc(db,"teachers",teacherDocId)
 );
-
 if(!teacherSnap.exists()){
 
 alert("Teacher Not Found");
@@ -243,8 +246,8 @@ subject: subject,
 dueDate: dueDate,
 
 teacherId: teacherId,
-
 teacherName: teacher.name,
+teacherType: teacher.teacherType || "",
 
 teacherType: teacher.teacherType || "",
 
@@ -293,13 +296,17 @@ teacherName: teacher.name,
 studentName: student.name,
 emis: student.emis,
 
+class: className,
+section: section,
+
 status:"Pending",
 
 completedBy:"",
 parentComment:"",
 completedTime:null,
 
-createdAt:new Date().toISOString()
+createdAt:new Date().toISOString(),
+updatedAt:new Date().toISOString()
 
 });
 
