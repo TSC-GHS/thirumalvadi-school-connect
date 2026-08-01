@@ -207,9 +207,6 @@ const d2 = b.data().appliedDate?.seconds || 0;
 return d2 - d1;
 
 });
-
-const snap = await getDocs(q);
-
 if(snap.empty){
 
 leaveHistory.innerHTML =
