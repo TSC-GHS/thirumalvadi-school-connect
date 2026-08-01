@@ -195,7 +195,7 @@ document.getElementById("homeworkTitle").value.trim();
 const description =
 document.getElementById("homeworkDescription").value.trim();
 
-const class =
+const className =
 document.getElementById("class").value;
 
 const section =
