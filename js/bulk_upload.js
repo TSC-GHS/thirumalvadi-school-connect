@@ -4,7 +4,7 @@
 // Part 1 - Imports & Initialization
 //==================================================
 
-import { db } from "./firebase.js";
+import { db } from "../firebase.js";
 
 import {
 doc,
