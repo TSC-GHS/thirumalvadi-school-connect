@@ -32,7 +32,7 @@ if (!emis) {
 //==========================================
 
 async function loadAttendance(){
-
+console.log("Parent Attendance JS Version - 01 Aug");
 try{
 
 const attendanceDays = await getDocs(collection(db, "attendance"));
