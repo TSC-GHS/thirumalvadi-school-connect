@@ -27,7 +27,16 @@ const lowestClass = document.getElementById("lowestClass");
 
 const boysAttendance = document.getElementById("boysAttendance");
 const girlsAttendance = document.getElementById("girlsAttendance");
+const d = new Date();
 
+const today =
+String(d.getDate()).padStart(2,"0") + "-" +
+String(d.getMonth()+1).padStart(2,"0") + "-" +
+d.getFullYear();
+
+attendanceDate.value = today;
+
+loadAttendanceAnalytics();
 attendanceDate.value = today;
 
 loadAttendanceAnalytics();
@@ -85,12 +94,6 @@ async function loadAttendanceAnalytics() {
 
     // Today's Attendance
 
-   const d = new Date();
-
-const today =
-String(d.getDate()).padStart(2,"0") + "-" +
-String(d.getMonth()+1).padStart(2,"0") + "-" +
-d.getFullYear();
  const attendanceSnap = await getDocs(
 collection(
 db,
@@ -110,7 +113,7 @@ today,
 
 const data = docSnap.data();
 
-const status = (data.status || "").toUpperCase();
+const status = String(data.status || "").trim().toUpperCase();
 
 if(status === "P" || status === "PRESENT"){
 
@@ -127,9 +130,11 @@ if(status === "P" || status === "PRESENT"){
     }
 
     // Student collection-la irundhu class & section edukkurom
-    const studentDoc = studentSnap.docs.find(doc=>{
-        return doc.data().emis === data.emis;
-    });
+   const studentDoc = studentSnap.docs.find(doc=>{
+
+return String(doc.data().emis) === String(data.emis);
+
+});
 
     if(studentDoc){
 
