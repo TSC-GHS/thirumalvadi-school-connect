@@ -1133,8 +1133,6 @@ percent,
 
 successRecords.textContent=success;
 updatedRecords.textContent=updated;
-duplicateRecords.textContent=duplicate;
-skippedRecords.textContent=skipped;
 failedRecords.textContent=failed;
 
 updateProgress(
