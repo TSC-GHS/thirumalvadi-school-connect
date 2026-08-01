@@ -16,5 +16,5 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 const db = getFirestore(app);
-
+console.log("Project ID :", app.options.projectId);
 export { auth, db };
