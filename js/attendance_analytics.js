@@ -33,7 +33,10 @@ const girlsAttendance = document.getElementById("girlsAttendance");
 loadAttendanceAnalytics();
 
 //============================
+const today =
+new Date().toISOString().split("T")[0];
 
+attendanceDate.value = today;
 async function loadAttendanceAnalytics() {
 
   try {
