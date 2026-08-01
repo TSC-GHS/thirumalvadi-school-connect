@@ -94,8 +94,6 @@ errorRows = [];
 totalRecords.textContent = "0";
 successRecords.textContent = "0";
 updatedRecords.textContent = "0";
-duplicateRecords.textContent = "0";
-skippedRecords.textContent = "0";
 failedRecords.textContent = "0";
 
 progressBar.style.width = "0%";
