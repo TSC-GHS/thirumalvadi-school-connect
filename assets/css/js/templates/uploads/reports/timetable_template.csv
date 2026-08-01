@@ -1,1 +1,7 @@
-
+AcademicYear,Class,Section,Day,Period1,Period2,Period3,Period4,Period5,Period6,Period7
+2026-2027,6,A,Monday,Tamil,English,Maths,Science,Social,Computer,PET
+2026-2027,6,A,Tuesday,English,Maths,Tamil,Science,Computer,Social,PET
+2026-2027,6,A,Wednesday,Maths,Tamil,Science,English,Social,PET,Computer
+2026-2027,6,A,Thursday,Science,English,Maths,Tamil,Computer,Social,PET
+2026-2027,6,A,Friday,Social,Tamil,English,Maths,Science,Computer,PET
+2026-2027,6,A,Saturday,Tamil,Maths,English,Science,Social,PET,Library
