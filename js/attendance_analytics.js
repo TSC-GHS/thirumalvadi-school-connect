@@ -247,5 +247,15 @@ async function loadAttendanceAnalytics() {
   }
 
 }
+attendanceDate.addEventListener("change",()=>{
 
+loadAnalytics();
+
+});
+
+classFilter.addEventListener("change",()=>{
+
+loadAnalytics();
+
+});
 console.log("Attendance Analytics Loaded");
