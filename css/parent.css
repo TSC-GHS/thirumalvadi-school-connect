@@ -29,19 +29,26 @@ color:#fff;
 padding:14px 18px;
 display:flex;
 justify-content:space-between;
-align-items:center;
+align-items:flex-start;
 box-shadow:0 3px 10px rgba(0,0,0,.15);
 z-index:999;
 }
 
 .headerLeft h2{
+  flex:1;
+min-width:0;
 font-size:21px;
 margin-bottom:3px;
 }
 
 .headerLeft p{
-font-size:13px;
-opacity:.9;
+
+font-size:14px;
+opacity:.95;
+white-space:normal;
+line-height:20px;
+margin-top:2px;
+
 }
 
 #notificationBtn{
@@ -426,9 +433,10 @@ gap:10px;
 }
 
 .language-box select{
+
 padding:6px 10px;
-border-radius:8px;
-border:1px solid #ccc;
 font-size:14px;
-cursor:pointer;
+border-radius:8px;
+min-width:90px;
+
 }
