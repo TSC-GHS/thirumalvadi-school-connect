@@ -36,7 +36,9 @@ console.log("Parent Attendance JS Version - 01 Aug");
 try{
 
 const attendanceDays = await getDocs(collection(db, "attendance"));
-
+attendanceDays.forEach(doc => {
+    console.log("Firestore Date :", doc.id);
+});
 console.log("Parent EMIS :", emis);
 console.log("Total Dates :", attendanceDays.size);
 
