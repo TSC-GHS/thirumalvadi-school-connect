@@ -28,15 +28,12 @@ const lowestClass = document.getElementById("lowestClass");
 const boysAttendance = document.getElementById("boysAttendance");
 const girlsAttendance = document.getElementById("girlsAttendance");
 
-//============================
-
-loadAttendanceAnalytics();
-
-//============================
 const today =
 new Date().toISOString().split("T")[0];
 
 attendanceDate.value = today;
+
+loadAttendanceAnalytics();
 async function loadAttendanceAnalytics() {
 
   try {
@@ -249,13 +246,13 @@ async function loadAttendanceAnalytics() {
 }
 attendanceDate.addEventListener("change",()=>{
 
-loadAnalytics();
+loadAttendanceAnalytics();
 
 });
 
 classFilter.addEventListener("change",()=>{
 
-loadAnalytics();
+loadAttendanceAnalytics();
 
 });
 console.log("Attendance Analytics Loaded");
