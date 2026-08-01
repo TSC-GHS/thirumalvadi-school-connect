@@ -35,33 +35,48 @@ async function loadAttendance(){
 
 try{
 
-const attendanceDays =
-await getDocs(collection(db,"attendance"));
+const attendanceDays = await getDocs(collection(db, "attendance"));
+
+console.log("Parent EMIS :", emis);
+console.log("Total Dates :", attendanceDays.size);
 
 let present=0;
 let absent=0;
 let html="";
 
-for(const day of attendanceDays.docs){
-console.log("Date :", day.id);
-console.log("EMIS :", emis);
-const studentDoc =
-await getDoc(
-doc(
-db,
-"attendance",
-day.id,
-"students",
-emis
-)
-);
-console.log("Document Exists :", studentDoc.exists());
-if(!studentDoc.exists()){
+for (const day of attendanceDays.docs) {
 
-continue;
+    console.log("Checking Date :", day.id);
 
+    const studentRef = doc(
+        db,
+        "attendance",
+        day.id,
+        "students",
+        emis
+    );
+
+    const studentDoc = await getDoc(studentRef);
+
+    console.log(day.id, studentDoc.exists());
+
+    if (!studentDoc.exists()) continue;
+
+    const data = studentDoc.data();
+
+    if (data.status === "P") {
+        present++;
+    } else {
+        absent++;
+    }
+
+    html += `
+    <tr>
+        <td>${data.date}</td>
+        <td>${data.status}</td>
+    </tr>
+    `;
 }
-
 const data=studentDoc.data();
 
 if(data.status=="P"){
