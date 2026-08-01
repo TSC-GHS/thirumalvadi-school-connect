@@ -374,17 +374,7 @@ try{
 const today = new Date().toISOString().split("T")[0];
 
 const snap = await getDocs(
-
-    query(
-        collection(db,"homework"),
-        where("class","==",studentData.class),
-        where("section","==",studentData.section),
-        where("status","==","Active"),
-        where("dueDate",">=",today),
-        orderBy("dueDate"),
-        limit(5)
-    )
-
+collection(db,"homework")
 );
 
 recentHomework.innerHTML="";
@@ -404,7 +394,8 @@ return;
 snap.forEach((doc)=>{
 
 const hw = doc.data();
-
+if(hw.class != studentData.class) return;
+if(hw.section != studentData.section) return;
 recentHomework.innerHTML += `
 
 <div class="homework-item">
