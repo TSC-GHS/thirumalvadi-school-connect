@@ -80,7 +80,8 @@ where("teacherId","==",teacherId)
 );
 
 const snap = await getDocs(q);
-
+console.log("Teacher ID :", teacherId);
+console.log("Matched Docs :", snap.size);
 let total = 0;
 let completed = 0;
 let pending = 0;
@@ -109,12 +110,7 @@ snap.forEach((docSnap)=>{
 const hw = docSnap.data();
 
 total++;
-const today = new Date().toISOString().split("T")[0];
-
-if(hw.dueDate < today){
-    return;
-}  
-
+ 
 if(hw.status === "Completed"){
 
 completed++;
@@ -145,8 +141,8 @@ pendingCount.textContent = pending;
 
 }catch(error){
 
-console.error("Teacher Analytics Error:", err);
-alert(err.message);
+console.error("Teacher Analytics Error:", error);
+alert(error.message);
 
 }
 
