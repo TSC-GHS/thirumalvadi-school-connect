@@ -1,1 +1,192 @@
+<script type="module">
 
+import { db } from "./firebase.js";
+
+import {
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.loadReport = async function(){
+
+const emisBox = document.getElementById("emis");
+
+const inputEmis =
+emisBox ? emisBox.value.trim() : "";
+
+const sessionEmis =
+localStorage.getItem("parentEMIS") ||
+sessionStorage.getItem("parentEMIS");
+
+const emis = inputEmis || sessionEmis;
+
+if(!emis){
+
+alert("Enter EMIS Number");
+
+return;
+
+}
+
+document.getElementById("emis").value = emis;
+
+const studentSnap =
+await getDoc(doc(db,"students",emis));
+
+if(!studentSnap.exists()){
+
+alert("Student Not Found");
+
+return;
+
+}
+
+const student =
+studentSnap.data();
+
+document.getElementById("name").textContent =
+student.name || "-";
+
+document.getElementById("emisNo").textContent =
+student.emis || emis;
+
+document.getElementById("class").textContent =
+student.class || "-";
+
+document.getElementById("section").textContent =
+student.section || "-";
+
+if(student.photo){
+
+document.getElementById("studentPhoto").src =
+student.photo;
+
+}
+
+const exams = [
+"Unit Test",
+"Quarterly",
+"Half Yearly",
+"Annual"
+];
+
+const tbody =
+document.getElementById("reportTable");
+
+tbody.innerHTML="";
+  for (const exam of exams) {
+
+  const snap = await getDoc(
+    doc(db, "marks", exam, "students", emis)
+  );
+
+  if (!snap.exists()) continue;
+
+  const m = snap.data();
+
+  tbody.innerHTML += `
+
+<tr>
+<td colspan="2"
+style="background:#f5f5f5;font-weight:bold;">
+${exam}
+</td>
+</tr>
+
+<tr>
+<td>Tamil</td>
+<td>${m.tamil ?? "-"}</td>
+</tr>
+
+<tr>
+<td>English</td>
+<td>${m.english ?? "-"}</td>
+</tr>
+
+<tr>
+<td>Maths</td>
+<td>${m.maths ?? "-"}</td>
+</tr>
+
+<tr>
+<td>Science</td>
+<td>${m.science ?? "-"}</td>
+</tr>
+
+<tr>
+<td>Social</td>
+<td>${m.social ?? "-"}</td>
+</tr>
+
+<tr class="summary">
+<td>Total</td>
+<td>${m.total ?? "-"}</td>
+</tr>
+
+<tr class="summary">
+<td>Percentage</td>
+<td>${m.percentage ?? "-"}%</td>
+</tr>
+
+<tr class="summary">
+<td>Grade</td>
+<td>${m.grade ?? "-"}</td>
+</tr>
+
+<tr class="summary">
+<td>Result</td>
+
+<td class="${m.result==="PASS" ? "pass" : "fail"}">
+
+${m.result ?? "-"}
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+if (tbody.innerHTML === "") {
+
+tbody.innerHTML = `
+
+<tr>
+
+<td colspan="2">
+
+No Report Available
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+};
+
+// =====================================
+// Auto Load Parent Report
+// =====================================
+
+const parentEmis =
+localStorage.getItem("parentEMIS") ||
+sessionStorage.getItem("parentEMIS");
+
+if(parentEmis){
+
+const emisBox = document.getElementById("emis");
+
+if (emisBox) {
+    emisBox.value = parentEmis;
+}
+
+window.loadReport();
+
+}
+
+</script>
