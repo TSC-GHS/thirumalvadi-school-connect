@@ -1,4 +1,5 @@
-Title,Date,Description
-Independence Day,2026-08-15,National Holiday
-Krishna Jayanthi,2026-09-04,Government Holiday
-Gandhi Jayanthi,2026-10-02,National Holiday
+Date,Title,Description,Holiday
+2026-08-15,Independence Day,National Holiday,Yes
+2026-08-29,Vinayagar Chaturthi,Festival Holiday,Yes
+2026-09-05,Teachers Day,School Celebration,No
+2026-10-02,Gandhi Jayanthi,National Holiday,Yes
