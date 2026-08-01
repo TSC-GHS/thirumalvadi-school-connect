@@ -61,7 +61,6 @@ let html = "";
 snap.forEach(docSnap=>{
 
 const t = docSnap.data();
-const t = doc.data();
 
 total++;
 
@@ -246,7 +245,6 @@ status
 alert("✅ Teacher Updated Successfully");
 
 loadAnalytics();
-console.log("Teacher Analytics Loaded");
 }catch(error){
 
 console.error(error);
@@ -284,3 +282,6 @@ alert(error.message);
 }
 
 };
+loadAnalytics();
+
+console.log("Teacher Analytics Loaded");
