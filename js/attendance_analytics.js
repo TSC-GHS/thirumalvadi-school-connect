@@ -15,7 +15,11 @@ const totalStudents = document.getElementById("totalStudents");
 const presentStudents = document.getElementById("presentStudents");
 const absentStudents = document.getElementById("absentStudents");
 const attendancePercent = document.getElementById("attendancePercent");
+const attendanceDate =
+document.getElementById("attendanceDate");
 
+const classFilter =
+document.getElementById("classFilter");
 const classAttendance = document.getElementById("classAttendance");
 
 const highestClass = document.getElementById("highestClass");
