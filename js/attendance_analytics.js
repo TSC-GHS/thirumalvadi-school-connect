@@ -28,9 +28,6 @@ const lowestClass = document.getElementById("lowestClass");
 const boysAttendance = document.getElementById("boysAttendance");
 const girlsAttendance = document.getElementById("girlsAttendance");
 
-const today =
-new Date().toISOString().split("T")[0];
-
 attendanceDate.value = today;
 
 loadAttendanceAnalytics();
@@ -113,29 +110,40 @@ today,
 
 const data = docSnap.data();
 
-if(data.status === "Present"){
+const status = (data.status || "").toUpperCase();
 
-present++;
+if(status === "P" || status === "PRESENT"){
 
-const gender = studentGender[data.emis];
+    present++;
 
-if(gender==="male"){
-presentBoys++;
+    const gender = studentGender[data.emis];
+
+    if(gender === "male"){
+        presentBoys++;
+    }
+
+    if(gender === "female"){
+        presentGirls++;
+    }
+
+    // Student collection-la irundhu class & section edukkurom
+    const studentDoc = studentSnap.docs.find(doc=>{
+        return doc.data().emis === data.emis;
+    });
+
+    if(studentDoc){
+
+        const s = studentDoc.data();
+
+        const cls = `${s.class}-${s.section}`;
+
+        if(classWise[cls]){
+            classWise[cls].present++;
+        }
+
+    }
+
 }
-
-if(gender==="female"){
-presentGirls++;
-}
-
-const cls =
-`${data.class}-${data.section}`;
-
-if(classWise[cls]){
-classWise[cls].present++;
-}
-
-}
-
 });
 
     // Summary
