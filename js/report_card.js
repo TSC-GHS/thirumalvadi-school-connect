@@ -1,14 +1,22 @@
-<script type="module">
+//==================================================
+// School Connect TN
+// Report Card
+//==================================================
 
-import { db } from "./firebase.js";
+import { db } from "../firebase.js";
 
 import {
 doc,
 getDoc
-}
-from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-window.loadReport = async function(){
+//==================================================
+// Load Report
+//==================================================
+
+window.loadReport = async function () {
+
+try{
 
 const emisBox = document.getElementById("emis");
 
@@ -23,13 +31,21 @@ const emis = inputEmis || sessionEmis;
 
 if(!emis){
 
-alert("Enter EMIS Number");
+alert("Please Enter EMIS Number");
 
 return;
 
 }
 
-document.getElementById("emis").value = emis;
+if(emisBox){
+
+emisBox.value = emis;
+
+}
+
+//==================================================
+// Student Details
+//==================================================
 
 const studentSnap =
 await getDoc(doc(db,"students",emis));
@@ -64,34 +80,53 @@ student.photo;
 
 }
 
+//==================================================
+// Report Card
+//==================================================
+
 const exams = [
+
 "Unit Test",
 "Quarterly",
 "Half Yearly",
 "Annual"
+
 ];
 
 const tbody =
 document.getElementById("reportTable");
 
-tbody.innerHTML="";
-  for (const exam of exams) {
+tbody.innerHTML = "";
 
-  const snap = await getDoc(
-    doc(db, "marks", exam, "students", emis)
-  );
+let reportFound = false;
 
-  if (!snap.exists()) continue;
+for(const exam of exams){
 
-  const m = snap.data();
+const snap =
+await getDoc(
+doc(
+db,
+"marks",
+exam,
+"students",
+emis
+)
+);
 
-  tbody.innerHTML += `
+if(!snap.exists()){
 
-<tr>
-<td colspan="2"
-style="background:#f5f5f5;font-weight:bold;">
-${exam}
-</td>
+continue;
+
+}
+
+reportFound = true;
+
+const m = snap.data();
+
+tbody.innerHTML += `
+
+<tr style="background:#1565C0;color:white;font-weight:bold;">
+<td colspan="2">${exam}</td>
 </tr>
 
 <tr>
@@ -137,10 +172,12 @@ ${exam}
 <tr class="summary">
 <td>Result</td>
 
-<td class="${m.result==="PASS" ? "pass" : "fail"}">
-
+<td class="${
+m.result==="PASS"
+? "pass"
+: "fail"
+}">
 ${m.result ?? "-"}
-
 </td>
 
 </tr>
@@ -149,7 +186,7 @@ ${m.result ?? "-"}
 
 }
 
-if (tbody.innerHTML === "") {
+if(!reportFound){
 
 tbody.innerHTML = `
 
@@ -167,26 +204,35 @@ No Report Available
 
 }
 
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
 };
 
-// =====================================
+//==================================================
 // Auto Load Parent Report
-// =====================================
+//==================================================
+
+window.addEventListener("DOMContentLoaded",()=>{
 
 const parentEmis =
 localStorage.getItem("parentEMIS") ||
 sessionStorage.getItem("parentEMIS");
 
-if(parentEmis){
+const emisBox =
+document.getElementById("emis");
 
-const emisBox = document.getElementById("emis");
+if(parentEmis && emisBox){
 
-if (emisBox) {
-    emisBox.value = parentEmis;
+emisBox.value = parentEmis;
+
 }
 
 window.loadReport();
 
-}
-
-</script>
+});
