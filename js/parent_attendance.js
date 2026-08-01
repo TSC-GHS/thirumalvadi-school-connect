@@ -3,7 +3,7 @@
 // Parent Attendance
 //==========================================
 
-import { db } from "../firebase.js";
+import { db } from "./firebase.js";
 
 import {
 collection,
