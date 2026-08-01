@@ -171,7 +171,13 @@ homeworkSnap.size;
 // ==============================
 
 const noticeSnap =
-await getDocs(collection(db,"notices"));
+await getDocs(
+query(
+collection(db,"notices"),
+orderBy("createdAt","desc"),
+limit(5)
+)
+);
 
 noticeCount.textContent =
 noticeSnap.size;
