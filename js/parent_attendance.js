@@ -4,14 +4,13 @@
 //==========================================
 
 import { db } from "../firebase.js";
-https://github.com/TSC-GHS/thirumalvadi-school-connect/edit/main/js/parent_attendance.js
+
 import {
 collection,
 getDocs,
 getDoc,
 doc
-}
-from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 //==========================================
 // Parent Session
