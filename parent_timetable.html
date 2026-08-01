@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>Parent Timetable</title>
+
+<link rel="stylesheet" href="css/parent.css">
+
+<style>
+
+body{
+margin:0;
+background:#EEF4FA;
+font-family:Arial,Helvetica,sans-serif;
+padding-bottom:80px;
+}
+
+.header{
+background:#1565C0;
+color:white;
+padding:18px;
+text-align:center;
+font-size:22px;
+font-weight:bold;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+padding:15px;
+}
+
+.card{
+background:white;
+padding:18px;
+border-radius:15px;
+margin-bottom:15px;
+box-shadow:0 3px 8px rgba(0,0,0,.1);
+}
+
+.studentInfo{
+display:grid;
+grid-template-columns:120px 1fr;
+row-gap:10px;
+font-size:15px;
+}
+
+.studentInfo b{
+color:#1565C0;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th{
+background:#1565C0;
+color:white;
+padding:12px;
+}
+
+td{
+padding:12px;
+border:1px solid #ddd;
+text-align:center;
+}
+
+.breakRow{
+background:#FFF3CD;
+font-weight:bold;
+}
+
+.lunchRow{
+background:#D4EDDA;
+font-weight:bold;
+}
+
+.backBtn{
+width:100%;
+padding:15px;
+border:none;
+background:#1565C0;
+color:white;
+font-size:17px;
+border-radius:10px;
+cursor:pointer;
+margin-top:10px;
+}
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:60px;
+background:#1565C0;
+display:flex;
+justify-content:space-around;
+align-items:center;
+}
+
+.bottom-nav button{
+background:none;
+border:none;
+color:white;
+display:flex;
+flex-direction:column;
+font-size:12px;
+cursor:pointer;
+}
+
+.bottom-nav span{
+font-size:20px;
+margin-bottom:4px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+🕒 Today's Timetable
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h2>
+
+Student Details
+
+</h2>
+
+<div class="studentInfo">
+
+<b>Name</b>
+
+<div id="studentName">
+
+Loading...
+
+</div>
+
+<b>EMIS</b>
+
+<div id="studentEMIS">
+
+Loading...
+
+</div>
+
+<b>Class</b>
+
+<div id="studentClass">
+
+Loading...
+
+</div>
+
+<b>Today</b>
+
+<div id="todayName">
+
+Loading...
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+Today's Classes
+
+</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+
+Period
+
+</th>
+
+<th>
+
+Subject
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="timetableBody">
+
+<tr>
+
+<td colspan="2">
+
+Loading Timetable...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<button
+class="backBtn"
+onclick="location.href='parent.html'">
+
+🏠 Back to Parent Dashboard
+
+</button>
+
+</div>
+
+<div class="bottom-nav">
+
+<button onclick="location.href='parent.html'">
+
+<span>🏠</span>
+
+Home
+
+</button>
+
+<button onclick="location.href='parent_attendance.html'">
+
+<span>📅</span>
+
+Attendance
+
+</button>
+
+<button onclick="location.href='parent_report_card.html'">
+
+<span>📊</span>
+
+Report
+
+</button>
+
+<button onclick="location.href='parent_timetable.html'">
+
+<span>🕒</span>
+
+Timetable
+
+</button>
+
+</div>
+
+<script
+type="module"
+src="js/parent_timetable.js">
+
+</script>
+
+</body>
+
+</html>
