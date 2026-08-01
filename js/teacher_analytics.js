@@ -45,28 +45,6 @@ text.includes(value)
 });
 
 }
-
-searchTeacher.addEventListener("input",()=>{
-
-const value =
-searchTeacher.value.toLowerCase();
-
-const cards =
-document.querySelectorAll(".teacherItem");
-
-cards.forEach(card=>{
-
-const text =
-card.innerText.toLowerCase();
-
-card.style.display =
-text.includes(value)
-? "block"
-: "none";
-
-});
-
-});
 async function loadAnalytics(){
 
 try{
@@ -80,9 +58,9 @@ let classTeacher = 0;
 const subjects = new Set();
 
 let html = "";
+snap.forEach(docSnap=>{
 
-snap.forEach(doc=>{
-
+const t = docSnap.data();
 const t = doc.data();
 
 total++;
@@ -111,7 +89,7 @@ html += `
 
 <b>Subject :</b>
 
-<select id="subject_${doc.id}">
+<select id="subject_${docSnap.id}">
 
 <option ${t.subject=="Tamil"?"selected":""}>Tamil</option>
 <option ${t.subject=="English"?"selected":""}>English</option>
@@ -127,7 +105,7 @@ html += `
 
 <b>Teacher Type :</b>
 
-<select id="type_${doc.id}">
+<select id="type_${docSnap.id}">
 
 <option value="Subject Teacher"
 ${t.teacherType=="Subject Teacher"?"selected":""}>
@@ -149,7 +127,7 @@ Class Teacher
 
 <input
 type="text"
-id="class_${doc.id}"
+id="class_${docSnap.id}"
 value="${t.className || ""}"
 placeholder="Ex : 9">
 
@@ -157,7 +135,7 @@ placeholder="Ex : 9">
 
 <input
 type="text"
-id="section_${doc.id}"
+id="section_${docSnap.id}"
 value="${t.section || ""}"
 placeholder="A">
 
@@ -167,7 +145,7 @@ placeholder="A">
 
 <b>Status :</b>
 
-<select id="status_${doc.id}">
+<select id="status_${docSnap.id}">
 
 <option value="Active"
 ${t.status=="Active"?"selected":""}>
@@ -185,13 +163,13 @@ Inactive
 
 <div style="margin-top:10px;">
 
-<button onclick="updateTeacher('${doc.id}')">
+<button onclick="updateTeacher('${docSnap.id}')">
 
 💾 Save
 
 </button>
 
-<button onclick="deleteTeacher('${doc.id}')">
+<button onclick="deleteTeacher('${docSnap.id}')">
 
 🗑 Delete
 
@@ -268,7 +246,7 @@ status
 alert("✅ Teacher Updated Successfully");
 
 loadAnalytics();
-
+console.log("Teacher Analytics Loaded");
 }catch(error){
 
 console.error(error);
