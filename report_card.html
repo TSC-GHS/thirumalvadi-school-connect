@@ -1,157 +1,81 @@
-<script type="module">
+<!DOCTYPE html>
+<html lang="en">
 
-import { db } from "./firebase.js";
+<head>
 
-import {
-doc,
-getDoc
-}
-from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-window.loadReport = async function(){
+<title>Student Report Card | School Connect TN</title>
 
-const emisBox = document.getElementById("emis");
+<link rel="stylesheet" href="css/report_card.css">
 
-const inputEmis =
-emisBox ? emisBox.value.trim() : "";
+</head>
 
-const sessionEmis =
-localStorage.getItem("parentEMIS") ||
-sessionStorage.getItem("parentEMIS");
+<body>
 
-const emis = inputEmis || sessionEmis;
+<div class="header">
 
-if(!emis){
+📄 Student Report Card
 
-alert("Enter EMIS Number");
+</div>
 
-return;
+<div class="container">
 
-}
+<div class="card">
 
-document.getElementById("emis").value = emis;
+<h2>Student Details</h2>
 
-const studentSnap =
-await getDoc(doc(db,"students",emis));
+<input
+type="text"
+id="emis"
+placeholder="Enter EMIS Number">
 
-if(!studentSnap.exists()){
+<button
+onclick="loadReport()">
 
-alert("Student Not Found");
+🔍 Load Report
 
-return;
+</button>
 
-}
+<div class="student-details">
 
-const student =
-studentSnap.data();
+<img
+id="studentPhoto"
+src="images/student.png"
+alt="Student Photo">
 
-document.getElementById("name").textContent =
-student.name || "-";
+<p><b>Name :</b> <span id="name">-</span></p>
 
-document.getElementById("emisNo").textContent =
-student.emis || emis;
+<p><b>EMIS :</b> <span id="emisNo">-</span></p>
 
-document.getElementById("class").textContent =
-student.class || "-";
+<p><b>Class :</b> <span id="class">-</span></p>
 
-document.getElementById("section").textContent =
-student.section || "-";
+<p><b>Section :</b> <span id="section">-</span></p>
 
-if(student.photo){
+</div>
 
-document.getElementById("studentPhoto").src =
-student.photo;
+</div>
 
-}
+<div class="card">
 
-const exams = [
-"Unit Test",
-"Quarterly",
-"Half Yearly",
-"Annual"
-];
+<h2>Exam Results</h2>
 
-const tbody =
-document.getElementById("reportTable");
+<table>
 
-tbody.innerHTML="";
-  for (const exam of exams) {
-
-  const snap = await getDoc(
-    doc(db, "marks", exam, "students", emis)
-  );
-
-  if (!snap.exists()) continue;
-
-  const m = snap.data();
-
-  tbody.innerHTML += `
+<thead>
 
 <tr>
-<td colspan="2"
-style="background:#f5f5f5;font-weight:bold;">
-${exam}
-</td>
-</tr>
 
-<tr>
-<td>Tamil</td>
-<td>${m.tamil ?? "-"}</td>
-</tr>
+<th>Subject / Exam</th>
 
-<tr>
-<td>English</td>
-<td>${m.english ?? "-"}</td>
-</tr>
-
-<tr>
-<td>Maths</td>
-<td>${m.maths ?? "-"}</td>
-</tr>
-
-<tr>
-<td>Science</td>
-<td>${m.science ?? "-"}</td>
-</tr>
-
-<tr>
-<td>Social</td>
-<td>${m.social ?? "-"}</td>
-</tr>
-
-<tr class="summary">
-<td>Total</td>
-<td>${m.total ?? "-"}</td>
-</tr>
-
-<tr class="summary">
-<td>Percentage</td>
-<td>${m.percentage ?? "-"}%</td>
-</tr>
-
-<tr class="summary">
-<td>Grade</td>
-<td>${m.grade ?? "-"}</td>
-</tr>
-
-<tr class="summary">
-<td>Result</td>
-
-<td class="${m.result==="PASS" ? "pass" : "fail"}">
-
-${m.result ?? "-"}
-
-</td>
+<th>Marks</th>
 
 </tr>
 
-`;
+</thead>
 
-}
-
-if (tbody.innerHTML === "") {
-
-tbody.innerHTML = `
+<tbody id="reportTable">
 
 <tr>
 
@@ -163,30 +87,24 @@ No Report Available
 
 </tr>
 
-`;
+</tbody>
 
-}
+</table>
 
-};
+</div>
 
-// =====================================
-// Auto Load Parent Report
-// =====================================
+<button
+class="back-btn"
+onclick="history.back()">
 
-const parentEmis =
-localStorage.getItem("parentEMIS") ||
-sessionStorage.getItem("parentEMIS");
+🏠 Back
 
-if(parentEmis){
+</button>
 
-const emisBox = document.getElementById("emis");
+</div>
 
-if (emisBox) {
-    emisBox.value = parentEmis;
-}
+<script type="module" src="js/report_card.js"></script>
 
-window.loadReport();
+</body>
 
-}
-
-</script>
+</html>
