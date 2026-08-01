@@ -3,210 +3,187 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Timetable Management</title>
+<title>CSV Template Download</title>
 
-    <link rel="stylesheet"
-        href="css/timetable_management.css">
+<style>
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+body{
+font-family:Arial,sans-serif;
+background:#f5f5f5;
+padding:30px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+background:#fff;
+padding:25px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+h2{
+text-align:center;
+color:#1565C0;
+margin-bottom:25px;
+}
+
+.template-list{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+}
+
+.template-btn{
+display:block;
+text-decoration:none;
+text-align:center;
+background:#1565C0;
+color:#fff;
+padding:14px;
+border-radius:8px;
+font-size:16px;
+font-weight:bold;
+transition:.3s;
+}
+
+.template-btn:hover{
+background:#0D47A1;
+}
+
+.note{
+margin-top:25px;
+background:#FFF8E1;
+padding:15px;
+border-left:5px solid orange;
+font-size:14px;
+line-height:1.7;
+}
+
+</style>
 
 </head>
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <!-- Header -->
+<h2>
 
-        <div class="header">
+📥 School Connect TN
 
-            <button class="back-btn"
-                onclick="history.back()">
+CSV Templates
 
-                <i class="fa-solid fa-arrow-left"></i>
+</h2>
 
-            </button>
+<div class="template-list">
 
-            <h2>
+<a
+href="templates/Student_Template.csv"
+download
+class="template-btn">
 
-                <i class="fa-solid fa-calendar-days"></i>
+👨‍🎓 Student Template
 
-                Timetable Management
+</a>
 
-            </h2>
+<a
+href="templates/Teacher_Template.csv"
+download
+class="template-btn">
 
-        </div>
+👨‍🏫 Teacher Template
 
-        <!-- Academic Details -->
+</a>
 
-        <div class="card">
+<a
+href="templates/Attendance_Template.csv"
+download
+class="template-btn">
 
-            <div class="form-group">
+📅 Attendance Template
 
-                <label>Academic Year</label>
+</a>
 
-                <select id="academicYear">
+<a
+href="templates/Marks_Template.csv"
+download
+class="template-btn">
 
-                    <option value="2026-2027">
-                        2026 - 2027
-                    </option>
+📊 Marks Template
 
-                </select>
+</a>
 
-            </div>
+<a
+href="templates/Homework_Template.csv"
+download
+class="template-btn">
 
-            <div class="form-group">
+📚 Homework Template
 
-                <label>Class</label>
+</a>
 
-                <select id="class">
+<a
+href="templates/Notice_Template.csv"
+download
+class="template-btn">
 
-                    <option value="">Select Class</option>
+📢 Notice Template
 
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                    <option>10</option>
+</a>
 
-                </select>
+<a
+href="templates/Calendar_Template.csv"
+download
+class="template-btn">
 
-            </div>
+🗓 Calendar Template
 
-            <div class="form-group">
+</a>
 
-                <label>Section</label>
+<a
+href="templates/Timetable_Template.csv"
+download
+class="template-btn">
 
-                <select id="section">
+🕒 Timetable Template
 
-                    <option value="">Select Section</option>
+</a>
 
-                    <option>A</option>
-                    <option>B</option>
-                    <option>C</option>
+</div>
 
-                </select>
+<div class="note">
 
-            </div>
+<b>CSV Format Guidelines</b>
 
-            <div class="form-group">
+<ul>
 
-                <label>Day</label>
+<li>EMIS, Mobile Number → Format as <b>Text</b></li>
 
-                <select id="day">
+<li>Date Format → <b>YYYY-MM-DD</b></li>
 
-                    <option>Monday</option>
-                    <option>Tuesday</option>
-                    <option>Wednesday</option>
-                    <option>Thursday</option>
-                    <option>Friday</option>
-                    <option>Saturday</option>
+<li>Attendance Status → <b>P / A / L / OD</b></li>
 
-                </select>
+<li>Student Status → <b>Active / Inactive</b></li>
 
-            </div>
+<li>Teacher Status → <b>Active / Inactive</b></li>
 
-        </div>
+<li>Exam Names → Unit Test 1, Unit Test 2, Quarterly, Half Yearly, Revision Test, Model Exam, Public Exam</li>
 
-        <!-- Subjects -->
+<li>Do not change column names.</li>
 
-        <div class="card">
+<li>Do not delete any mandatory columns.</li>
 
-            <h3>Subjects</h3>
+<li>Save file only in CSV format.</li>
 
-            <div id="subjectContainer">
+</ul>
 
-                <div class="period-row">
-                    <span>Period 1</span>
-                    <select id="period1"></select>
-                </div>
+</div>
 
-                <div class="period-row">
-                    <span>Period 2</span>
-                    <select id="period2"></select>
-                </div>
-
-                <div class="period-row break">
-                    <span>Break</span>
-                    <input type="text"
-                        value="Auto"
-                        disabled>
-                </div>
-
-                <div class="period-row">
-                    <span>Period 3</span>
-                    <select id="period3"></select>
-                </div>
-
-                <div class="period-row">
-                    <span>Period 4</span>
-                    <select id="period4"></select>
-                </div>
-
-                <div class="period-row lunch">
-                    <span>Lunch</span>
-                    <input type="text"
-                        value="Auto"
-                        disabled>
-                </div>
-
-                <div class="period-row">
-                    <span>Period 5</span>
-                    <select id="period5"></select>
-                </div>
-
-                <div class="period-row">
-                    <span>Period 6</span>
-                    <select id="period6"></select>
-                </div>
-
-                <div class="period-row">
-                    <span>Period 7</span>
-                    <select id="period7"></select>
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Buttons -->
-
-        <div class="button-group">
-
-            <button id="loadBtn"
-                class="load-btn">
-
-                <i class="fa-solid fa-folder-open"></i>
-
-                Load Timetable
-
-            </button>
-
-            <button id="saveBtn"
-                class="save-btn">
-
-                <i class="fa-solid fa-floppy-disk"></i>
-
-                Save Timetable
-
-            </button>
-
-        </div>
-
-    </div>
-
-    <script type="module"
-        src="js/timetable_management.js"></script>
+</div>
 
 </body>
 
