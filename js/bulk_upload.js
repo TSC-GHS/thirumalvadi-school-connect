@@ -209,81 +209,57 @@ function downloadTemplate(){
 
 const type = uploadType.value;
 
-if(type==""){
+if(type===""){
 
-alert("Please Select Upload Type");
+alert("Please select Upload Type");
 
 return;
 
 }
 
-let file="";
+const files={
 
-switch(type){
+students:"Student_Template.csv",
 
-case "students":
+teachers:"Teacher_Template.csv",
 
-file="Student_Template.csv";
+parents:"Parent_Template.csv",
 
-break;
+attendance:"Attendance_Template.csv",
 
-case "teachers":
+marks:"Marks_Template.csv",
 
-file="Teacher_Template.csv";
+homework:"Homework_Template.csv",
 
-break;
+notices:"Notice_Template.csv",
 
-case "parents":
+calendar:"Calendar_Template.csv",
 
-file="Parent_Template.csv";
+timetable:"Timetable_Template.csv"
 
-break;
+};
 
-case "attendance":
+const file=files[type];
 
-file="Attendance_Template.csv";
+if(!file){
 
-break;
+alert("Template not found");
 
-case "marks":
-
-file="Marks_Template.csv";
-
-break;
-
-case "homework":
-
-file="Homework_Template.csv";
-
-break;
-
-case "notices":
-
-file="Notice_Template.csv";
-
-break;
-
-case "calendar":
-
-file="Calendar_Template.csv";
-
-break;
-
-case "timetable":
-
-file="Timetable_Template.csv";
-
-break;
+return;
 
 }
 
-window.open(
+const link=document.createElement("a");
 
-"templates/"+file,
+link.href="templates/"+file;
 
-"_blank"
+link.download=file;
 
-);
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
 
 }
 //==================================================
