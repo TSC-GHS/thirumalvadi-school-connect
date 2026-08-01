@@ -1,4 +1,4 @@
-Class,Section,Subject,Homework,GivenDate,DueDate,Teacher
+Class,Section,Subject,Title,Description,DueDate,Status
 6,A,Tamil,Write Tamil Lesson 1 Notes,2026-08-01,2026-08-03,Ravi Kumar
 6,A,English,Complete Grammar Exercise 2,2026-08-01,2026-08-03,Kalavani
 6,A,Maths,Solve Page 45 Problems,2026-08-01,2026-08-02,Kamalesh
