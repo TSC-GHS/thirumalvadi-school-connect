@@ -341,3 +341,98 @@ return dateString;
 }
 
 console.log("Parent Homework Part 3 Loaded");
+//==================================================
+// Part 4 - Complete Homework
+//==================================================
+
+window.completeHomework = async function(homeworkId){
+
+try{
+
+//--------------------------------------------------
+// Check Already Submitted
+//--------------------------------------------------
+
+const checkQuery = query(
+
+collection(db,"homework_submissions"),
+
+where("homeworkId","==",homeworkId),
+
+where("emis","==",student.emis)
+
+);
+
+const checkSnap = await getDocs(checkQuery);
+
+if(!checkSnap.empty){
+
+alert("Homework already completed.");
+
+return;
+
+}
+
+//--------------------------------------------------
+// Parent Comment
+//--------------------------------------------------
+
+const comment = prompt(
+
+"Parent Comment (Optional)"
+
+) || "";
+
+//--------------------------------------------------
+// Save Submission
+//--------------------------------------------------
+
+await addDoc(
+
+collection(db,"homework_submissions"),
+
+{
+
+homeworkId:homeworkId,
+
+emis:student.emis,
+
+studentName:student.name || "",
+
+class:student.class || "",
+
+section:student.section || "",
+
+status:"Completed",
+
+completedBy:"Parent",
+
+parentComment:comment,
+
+completedTime:serverTimestamp()
+
+}
+
+);
+
+//--------------------------------------------------
+// Success
+//--------------------------------------------------
+
+alert("✅ Homework Submitted Successfully");
+
+await loadHomework();
+
+}
+
+catch(error){
+
+console.error(error);
+
+alert("Unable to Submit Homework");
+
+}
+
+};
+
+console.log("Parent Homework Part 4 Loaded");
