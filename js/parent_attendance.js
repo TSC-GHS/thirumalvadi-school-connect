@@ -77,27 +77,6 @@ for (const day of attendanceDays.docs) {
     </tr>
     `;
 }
-const data=studentDoc.data();
-
-if(data.status=="P"){
-
-present++;
-
-}else{
-
-absent++;
-
-}
-
-html+=`
-<tr>
-<td>${data.date}</td>
-<td>${data.status}</td>
-</tr>
-`;
-
-}
-
 const total=present+absent;
 
 const percent=
