@@ -25,7 +25,7 @@ async function loadAttendance() {
 
     try {
 
-        const attendanceSnap = await getDocs(
+        const attendanceDays = await getDocs(
             collection(db, "attendance")
         );
 
@@ -33,34 +33,45 @@ async function loadAttendance() {
         let absent = 0;
         let html = "";
 
-        attendanceSnap.forEach((docSnap) => {
+        for (const day of attendanceDays.docs) {
 
-            const data = docSnap.data();
+            const studentSnap = await getDocs(
+                collection(
+                    db,
+                    "attendance",
+                    day.id,
+                    "students"
+                )
+            );
 
-            const firebaseEmis =
-                String(data.emis || "").trim();
+            studentSnap.forEach((docSnap) => {
 
-            if (firebaseEmis !== emis) return;
+                const data = docSnap.data();
 
-            if (data.status === "Present") {
+                if (String(data.emis).trim() !== emis) return;
 
-                present++;
+                if (data.status === "P") {
 
-            } else {
+                    present++;
 
-                absent++;
+                } else {
 
-            }
+                    absent++;
 
-            html += `
+                }
+
+                html += `
 <tr>
-<td>${data.date || "-"}</td>
-<td class="${data.status === "Present" ? "present" : "absent"}">
-${data.status || "-"}
+<td>${day.id}</td>
+<td class="${data.status === "P" ? "present" : "absent"}">
+${data.status === "P" ? "Present" : "Absent"}
 </td>
 </tr>
 `;
-                    });
+
+            });
+
+        }
 
         const total = present + absent;
 
@@ -69,14 +80,9 @@ ${data.status || "-"}
             ? 0
             : Math.round((present / total) * 100);
 
-        document.getElementById("presentCount").textContent =
-            present;
-
-        document.getElementById("absentCount").textContent =
-            absent;
-
-        document.getElementById("attendancePercent").textContent =
-            percent + "%";
+        document.getElementById("presentCount").textContent = present;
+        document.getElementById("absentCount").textContent = absent;
+        document.getElementById("attendancePercent").textContent = percent + "%";
 
         document.getElementById("attendanceTable").innerHTML =
             html || `
@@ -84,24 +90,15 @@ ${data.status || "-"}
 <td colspan="2" style="text-align:center;">
 No Attendance Records Found
 </td>
-</tr>
-`;
+</tr>`;
 
     } catch (error) {
 
-        console.error("Attendance Error:", error);
+        console.error(error);
 
-        document.getElementById("attendanceTable").innerHTML = `
-<tr>
-<td colspan="2" style="text-align:center;color:red;">
-Failed to Load Attendance
-</td>
-</tr>
-`;
-            }
+    }
 
 }
-
 window.addEventListener("DOMContentLoaded", () => {
 
     loadAttendance();
