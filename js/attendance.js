@@ -52,24 +52,38 @@ return;
 
 // Existing Attendance
 
-const attendanceQuery=query(
-collection(db,"attendance"),
-where("date","==",date),
-where("class","==",cls),
-where("section","==",sec)
+const formattedDate =
+date.split("-").reverse().join("-");
+
+const attendanceSnap =
+await getDocs(
+collection(
+db,
+"attendance",
+formattedDate,
+"students"
+)
 );
 
-const attendanceSnap=await getDocs(attendanceQuery);
+attendanceSnap.forEach(docSnap=>{
 
-attendanceSnap.forEach(d=>{
+const data = docSnap.data();
 
-attendanceMap[d.data().emis]={
-id:d.id,
-status:d.data().status
+if(
+data.class==cls &&
+data.section==sec
+){
+
+attendanceMap[data.emis]={
+status:
+data.status=="P"
+? "Present"
+: "Absent"
 };
 
-});
+}
 
+});
 if(attendanceSnap.empty){
 
 saveAttendance.innerHTML="💾 Save Attendance";
@@ -197,16 +211,101 @@ if(!select) continue;
 const emis=select.dataset.emis;
 const studentName=row.cells[1].textContent;
 const status=select.value;
-
 if(attendanceMap[emis]){
 
-await updateDoc(
+const formattedDate =
+date.split("-").reverse().join("-");
 
-doc(db,"attendance",attendanceMap[emis].id),
+await setDoc(
+
+doc(
+db,
+"attendance",
+formattedDate,
+"students",
+emis
+),
 
 {
 
-status:status,
+emis,
+
+studentName,
+
+class:cls,
+
+section:sec,
+
+date:formattedDate,
+
+status:
+status=="Present"
+?"P"
+:"A",
+
+markedBy:
+localStorage.getItem("teacherName") || "Teacher",
+
+updatedAt:serverTimestamp()
+
+},
+
+{merge:true}
+
+);
+
+}
+else{
+
+const formattedDate =
+date.split("-").reverse().join("-");
+
+await setDoc(
+
+doc(
+db,
+"attendance",
+formattedDate
+),
+
+{
+
+date:formattedDate,
+
+updatedAt:serverTimestamp()
+
+},
+
+{merge:true}
+
+);
+
+await setDoc(
+
+doc(
+db,
+"attendance",
+formattedDate,
+"students",
+emis
+),
+
+{
+
+emis,
+
+studentName,
+
+class:cls,
+
+section:sec,
+
+date:formattedDate,
+
+status:
+status=="Present"
+?"P"
+:"A",
 
 markedBy:
 localStorage.getItem("teacherName") || "Teacher",
@@ -217,39 +316,7 @@ updatedAt:serverTimestamp()
 
 );
 
-}else{
-
-const attendanceId = `${date}_${cls}_${sec}_${emis}`;
-
-await setDoc(
-
-doc(db,"attendance",attendanceId),
-
-{
-
-emis:emis,
-
-studentName:studentName,
-
-class:cls,
-
-section:sec,
-
-date:date,
-
-status:status,
-
-markedBy:
-localStorage.getItem("teacherName") || "Teacher",
-
-createdAt:serverTimestamp()
-
 }
-
-);
-
-}
-
 }
 
 alert("✅ Attendance Saved Successfully");
