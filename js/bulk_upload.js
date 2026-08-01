@@ -251,7 +251,7 @@ return;
 
 const link=document.createElement("a");
 
-link.href="templates/"+file;
+link.href = "assets/css/js/templates/" + file;
 
 link.download=file;
 
