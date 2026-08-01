@@ -41,7 +41,9 @@ attendanceDays.forEach(doc => {
 });
 console.log("Parent EMIS :", emis);
 console.log("Total Dates :", attendanceDays.size);
-
+attendanceDays.forEach(doc => {
+    console.log("DATE =", doc.id);
+});
 let present=0;
 let absent=0;
 let html="";
