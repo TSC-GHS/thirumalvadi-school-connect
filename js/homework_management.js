@@ -87,6 +87,7 @@ homeworkList.innerHTML = "Loading Homework...";
 const homeworkQuery = query(
 collection(db,"homework"),
 where("teacherId","==",teacherId),
+where("status","==","Active")
 );
 
 const homeworkSnap = await getDocs(homeworkQuery);
