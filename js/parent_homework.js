@@ -1,9 +1,9 @@
-//==========================================
+//==================================================
 // School Connect TN
 // Parent Homework
-// Production Version V2
-// Part 1
-//==========================================
+// Production Version V3
+// Part 1 - Imports & Initialization
+//==================================================
 
 import { db } from "../firebase.js";
 
@@ -14,17 +14,41 @@ where,
 getDocs,
 getDoc,
 doc,
-updateDoc,
+addDoc,
 serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+//==================================================
+// Elements
+//==================================================
 
 const homeworkTable =
 document.getElementById("homeworkTable");
 
+//==================================================
+// Variables
+//==================================================
+
 let emis = "";
+
 let student = {};
 
-window.addEventListener("DOMContentLoaded", initialize);
+//==================================================
+// Start
+//==================================================
+
+window.addEventListener(
+
+"DOMContentLoaded",
+
+initialize
+
+);
+
+//==================================================
+// Initialize
+//==================================================
 
 async function initialize(){
 
@@ -58,22 +82,27 @@ return;
 
 }
 
-student = studentSnap.data();
+student =
+studentSnap.data();
+
+console.log("Student Loaded");
+
+console.log(student);
 
 await loadHomework();
 
-}catch(error){
+}
+
+catch(error){
 
 console.error(error);
 
 alert(error.message);
 
 }
-
-}
-//==========================================
-// Load Homework
-//==========================================
+//==================================================
+// Part 2 - Load Homework
+//==================================================
 
 async function loadHomework(){
 
@@ -81,24 +110,31 @@ try{
 
 homeworkTable.innerHTML=`
 <tr>
-<td colspan="4">
-Loading...
+<td colspan="4" style="text-align:center;">
+Loading Homework...
 </td>
 </tr>
 `;
 
-const submissionQuery=query(
-collection(db,"homework_submissions"),
-where("emis","==",student.emis)
+const homeworkQuery=query(
+
+collection(db,"homework"),
+
+where("class","==",student.class),
+
+where("section","==",student.section),
+
+where("status","==","Active")
+
 );
 
-const submissionSnap=await getDocs(submissionQuery);
+const homeworkSnap=await getDocs(homeworkQuery);
 
-if(submissionSnap.empty){
+if(homeworkSnap.empty){
 
 homeworkTable.innerHTML=`
 <tr>
-<td colspan="4">
+<td colspan="4" style="text-align:center;">
 No Homework Available
 </td>
 </tr>
@@ -112,17 +148,32 @@ let html="";
 
 const today=new Date();
 
-submissionSnap.forEach((docSnap)=>{
+for(const docSnap of homeworkSnap.docs){
 
 const hw=docSnap.data();
 
+const submissionQuery=query(
+
+collection(db,"homework_submissions"),
+
+where("homeworkId","==",docSnap.id),
+
+where("emis","==",student.emis)
+
+);
+
+const submissionSnap=await getDocs(submissionQuery);
+
+const completed=!submissionSnap.empty;
+
 let badge="🟢 Pending";
 
-if(hw.status==="Completed"){
+if(completed){
 
 badge="✅ Completed";
 
-}else if(hw.dueDate){
+}
+else if(hw.dueDate){
 
 const due=new Date(hw.dueDate);
 
@@ -134,47 +185,114 @@ badge="🔴 Overdue";
 
 }
 
+html+=createHomeworkRow(
+docSnap.id,
+hw,
+badge,
+completed
+);
+
+}
+
+homeworkTable.innerHTML=html;
+
+}catch(error){
+
+console.error(error);
+
+homeworkTable.innerHTML=`
+<tr>
+<td colspan="4" style="text-align:center;color:red;">
+Unable to Load Homework
+</td>
+</tr>
+`;
+
+}
+
+}
+}
+//==================================================
+// Part 3 - Homework Table UI
+//==================================================
+
+function createHomeworkRow(
+
+homeworkId,
+
+hw,
+
+badge,
+
+completed
+
+){
+
 let button="";
 
-if(hw.status==="Completed"){
+if(completed){
 
 button=`
-<span style="color:green;font-weight:bold;">
+
+<span
+style="
+color:green;
+font-weight:bold;
+">
+
 Completed
+
 </span>
+
 `;
 
 }else{
 
 button=`
+
 <button
-onclick="completeHomework('${docSnap.id}')"
-class="completeBtn">
+
+class="completeBtn"
+
+onclick="completeHomework('${homeworkId}')">
 
 Complete
 
 </button>
+
 `;
 
 }
 
-html+=`
+return `
 
 <tr>
 
 <td>
 
-<b>${hw.subject}</b>
+<b>
+
+${hw.subject || "-"}
+
+</b>
 
 <br>
 
-<small>${badge}</small>
+<small>
+
+${badge}
+
+</small>
 
 </td>
 
 <td>
 
-${hw.homeworkTitle || hw.title || "-"}
+<b>
+
+${hw.title || "-"}
+
+</b>
 
 <br><br>
 
@@ -198,78 +316,28 @@ ${button}
 
 `;
 
-});
-
-homeworkTable.innerHTML=html;
-
-}catch(error){
-
-console.error(error);
-
-homeworkTable.innerHTML=`
-<tr>
-<td colspan="4">
-Unable to Load Homework
-</td>
-</tr>
-`;
-
 }
 
-}
-//==========================================
-// Complete Homework
-//==========================================
+//==================================================
+// Helper Function
+//==================================================
 
-window.completeHomework = async function(submissionId){
+function formatDate(dateString){
 
-const comment = prompt(
-"Parent Comment (Optional)"
-) || "";
-
-const ok = confirm(
-"Homework completed?"
-);
-
-if(!ok) return;
+if(!dateString) return "-";
 
 try{
 
-await updateDoc(
-doc(db,"homework_submissions",submissionId),
-{
+const date=new Date(dateString);
 
-status:"Completed",
+return date.toLocaleDateString("en-GB");
 
-completedBy:"Parent",
+}catch{
 
-parentComment:comment,
-
-completedTime:serverTimestamp()
-
-}
-);
-
-alert("✅ Homework Submitted Successfully");
-
-await loadHomework();
-
-}catch(error){
-
-console.error(error);
-
-alert("Unable to Submit Homework");
+return dateString;
 
 }
 
-};
+}
 
-//==========================================
-// Version
-//==========================================
-
-console.log("================================");
-console.log("School Connect TN");
-console.log("Parent Homework");
-console.log("Production Version V2");
-console.log("================================");
+console.log("Parent Homework Part 3 Loaded");
