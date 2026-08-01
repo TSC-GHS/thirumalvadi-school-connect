@@ -426,7 +426,7 @@ break;
 
 case "notices":
 
-await uploadNotice(
+await uploadNotices(
 rows,
 header
 );
