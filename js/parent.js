@@ -313,15 +313,9 @@ async function loadLatestNotices() {
 
         const twoDaysAgo = new Date();
         twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-
         const snap = await getDocs(
-            query(
-                collection(db, "notices"),
-                where("createdAt", ">=", twoDaysAgo.toISOString()),
-                orderBy("createdAt", "desc"),
-                limit(5)
-            )
-        );
+collection(db,"notices")
+);
 
         latestNotices.innerHTML = "";
 
@@ -337,20 +331,27 @@ async function loadLatestNotices() {
             return;
         }
 
-        noticeCount.textContent = snap.size;
+        noticeCount.textContent = snap.docs.length;
 
-        snap.forEach((doc) => {
+     snap.forEach((doc)=>{
 
-            const notice = doc.data();
+const notice = doc.data();
 
-            latestNotices.innerHTML += `
-                <div class="notice-item">
-                    <div class="notice-title">${notice.title}</div>
-                    <p>${notice.description || ""}</p>
-                </div>
-            `;
+latestNotices.innerHTML += `
+<div class="notice-item">
+<div class="notice-title">
+${notice.title || "-"}
+</div>
 
-        });
+<p>
+${notice.description || "-"}
+</p>
+
+</div>
+`;
+
+});
+
 
     } catch (error) {
 
