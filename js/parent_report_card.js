@@ -7,7 +7,8 @@ import {
 
 const studentInfo = document.getElementById("studentInfo");
 const reportBody = document.getElementById("reportBody");
-
+const examSelect =
+document.getElementById("examSelect");
 const params = new URLSearchParams(window.location.search);
 
 let emis = params.get("emis");
@@ -46,7 +47,7 @@ async function loadReportCard() {
 
     // Unit Test Marks
     const markSnap = await getDoc(
-      doc(db, "marks", "Unit Test", "students", emis)
+      doc(db, "marks",examSelect.value,"students", emis)
     );
 
     reportBody.innerHTML = "";
@@ -137,3 +138,8 @@ async function loadReportCard() {
 }
 
 loadReportCard();
+examSelect.addEventListener("change",()=>{
+
+loadReportCard();
+
+});
