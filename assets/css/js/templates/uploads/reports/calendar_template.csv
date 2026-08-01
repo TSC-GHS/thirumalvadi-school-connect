@@ -1,6 +1,4 @@
-Date,Title,Description,Type
-2026-08-05,Independence Practice,Cultural Practice,Event
-2026-08-15,Independence Day,National Holiday,Holiday
-2026-09-03,Quarterly Exam Starts,Quarterly Examination,Exam
-2026-09-12,Quarterly Exam Ends,Quarterly Examination Completed,Exam
-2026-10-01,Gandhi Jayanthi,Government Holiday,Holiday
+Holiday,Date,Description
+Independence Day,2026-08-15,National Holiday
+Krishna Jayanthi,2026-09-04,Government Holiday
+Gandhi Jayanthi,2026-10-02,National Holiday
