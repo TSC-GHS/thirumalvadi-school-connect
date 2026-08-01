@@ -1480,7 +1480,7 @@ title:cols[3].trim(),
 description:cols[4].trim(),
 dueDate:cols[5].trim(),
 status:cols[6].trim(),
-
+academicYear:"2026-2027",
 updatedAt:
 serverTimestamp()
 
@@ -1574,7 +1574,7 @@ target:cols[2].trim(),
 startDate:cols[3].trim(),
 endDate:cols[4].trim(),
 status:cols[5].trim(),
-
+academicYear:"2026-2027",
 createdAt:
 serverTimestamp()
 
@@ -1661,7 +1661,7 @@ date:cols[0].trim(),
 title:cols[1].trim(),
 description:cols[2].trim(),
 holiday:cols[3].trim(),
-
+academicYear:"2026-2027",
 updatedAt:
 serverTimestamp()
 
