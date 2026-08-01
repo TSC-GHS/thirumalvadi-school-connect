@@ -2,7 +2,10 @@ import { db } from "../firebase.js";
 
 import {
 collection,
-getDocs
+getDocs,
+doc,
+updateDoc,
+deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 // Dashboard Elements
@@ -50,17 +53,105 @@ subjects.add(t.subject);
 
 html += `
 
+html += `
+
 <div class="teacherItem">
 
-<h4>👨‍🏫 ${t.name || "-"}</h4>
+<h3>👨‍🏫 ${t.name || "-"}</h3>
 
 <p><b>Teacher ID :</b> ${t.id || "-"}</p>
 
-<p><b>Subject :</b> ${t.subject || "-"}</p>
+<p>
 
-<p><b>Class Teacher :</b> ${t.className || "-"} ${t.section || ""}</p>
+<b>Subject :</b>
 
-<p><b>Status :</b> ${t.status || "-"}</p>
+<select id="subject_${doc.id}">
+
+<option ${t.subject=="Tamil"?"selected":""}>Tamil</option>
+<option ${t.subject=="English"?"selected":""}>English</option>
+<option ${t.subject=="Maths"?"selected":""}>Maths</option>
+<option ${t.subject=="Science"?"selected":""}>Science</option>
+<option ${t.subject=="Social Science"?"selected":""}>Social Science</option>
+
+</select>
+
+</p>
+
+<p>
+
+<b>Teacher Type :</b>
+
+<select id="type_${doc.id}">
+
+<option value="Subject Teacher"
+${t.teacherType=="Subject Teacher"?"selected":""}>
+Subject Teacher
+</option>
+
+<option value="Class Teacher"
+${t.teacherType=="Class Teacher"?"selected":""}>
+Class Teacher
+</option>
+
+</select>
+
+</p>
+
+<p>
+
+<b>Class :</b>
+
+<input
+type="text"
+id="class_${doc.id}"
+value="${t.className || ""}"
+placeholder="Ex : 9">
+
+<b>Section :</b>
+
+<input
+type="text"
+id="section_${doc.id}"
+value="${t.section || ""}"
+placeholder="A">
+
+</p>
+
+<p>
+
+<b>Status :</b>
+
+<select id="status_${doc.id}">
+
+<option value="Active"
+${t.status=="Active"?"selected":""}>
+Active
+</option>
+
+<option value="Inactive"
+${t.status=="Inactive"?"selected":""}>
+Inactive
+</option>
+
+</select>
+
+</p>
+
+<div style="margin-top:10px;">
+
+<button onclick="updateTeacher('${doc.id}')">
+
+💾 Save
+
+</button>
+
+<button onclick="deleteTeacher('${doc.id}')">
+
+🗑 Delete
+
+</button>
+
+</div>
 
 </div>
 
@@ -91,3 +182,81 @@ ${err.message}
 }
 
 console.log("Teacher Analytics Loaded");
+//==========================================
+// Update Teacher
+//==========================================
+
+window.updateTeacher = async function(docId){
+
+try{
+
+const subject =
+document.getElementById("subject_"+docId).value;
+
+const teacherType =
+document.getElementById("type_"+docId).value;
+
+const className =
+document.getElementById("class_"+docId).value.trim();
+
+const section =
+document.getElementById("section_"+docId).value.trim();
+
+const status =
+document.getElementById("status_"+docId).value;
+
+await updateDoc(doc(db,"teachers",docId),{
+
+subject,
+
+teacherType,
+
+className,
+
+section,
+
+status
+
+});
+
+alert("✅ Teacher Updated Successfully");
+
+loadAnalytics();
+
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+};
+
+//==========================================
+// Delete Teacher
+//==========================================
+
+window.deleteTeacher = async function(docId){
+
+const ok = confirm("Delete this Teacher?");
+
+if(!ok) return;
+
+try{
+
+await deleteDoc(doc(db,"teachers",docId));
+
+alert("✅ Teacher Deleted");
+
+loadAnalytics();
+
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+};
