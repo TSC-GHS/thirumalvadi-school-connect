@@ -25,7 +25,7 @@ document.getElementById("teacherName");
 
 const teacherId =
 document.getElementById("teacherId");
-
+let teacherType = "";
 const leaveType =
 document.getElementById("leaveType");
 
@@ -61,7 +61,8 @@ localStorage.getItem("teacherName") || "";
 
 teacherId.value =
 localStorage.getItem("teacherId") || "";
-
+teacherType =
+localStorage.getItem("teacherType") || "";
 if(!teacherName.value){
 
 teacherName.value = "Teacher";
@@ -93,21 +94,23 @@ submitLeave.addEventListener("click", async ()=>{
 
 const data={
 
-teacherName:teacherName.value,
+teacherName: teacherName.value,
 
-teacherId:teacherId.value,
+teacherId: teacherId.value,
 
-leaveType:leaveType.value,
+teacherType: teacherType,
 
-fromDate:fromDate.value,
+leaveType: leaveType.value,
 
-toDate:toDate.value,
+fromDate: fromDate.value,
 
-reason:reason.value.trim(),
+toDate: toDate.value,
 
-status:"Pending",
+reason: reason.value.trim(),
 
-appliedDate:serverTimestamp()
+status: "Pending",
+
+appliedDate: serverTimestamp()
 
 };
 
@@ -190,9 +193,20 @@ try{
 
 const q = query(
 collection(db,"leave_requests"),
-where("teacherId","==",teacherId.value),
-orderBy("appliedDate","desc")
+where("teacherId","==",teacherId.value)
 );
+
+const snap = await getDocs(q);
+
+const docs = snap.docs.sort((a,b)=>{
+
+const d1 = a.data().appliedDate?.seconds || 0;
+
+const d2 = b.data().appliedDate?.seconds || 0;
+
+return d2 - d1;
+
+});
 
 const snap = await getDocs(q);
 
@@ -207,7 +221,7 @@ return;
 
 let html="";
 
-snap.forEach((doc)=>{
+docs.forEach((doc)=>{
 
 const leave = doc.data();
 
