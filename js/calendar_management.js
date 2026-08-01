@@ -1,120 +1,205 @@
 import { db } from "../firebase.js";
 
 import {
-  collection,
-  addDoc,
-  getDocs,
-  orderBy,
-  query,
-  serverTimestamp
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    orderBy,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 const form = document.getElementById("eventForm");
 const eventList = document.getElementById("eventList");
 
+// ==========================================
 // Load Events
+// ==========================================
+
 async function loadEvents() {
 
-  eventList.innerHTML = "Loading...";
-
-  const q = query(
-    collection(db, "calendar"),
-    orderBy("date", "asc")
-  );
-
-  const snap = await getDocs(q);
-
-  eventList.innerHTML = "";
-
-  if (snap.empty) {
-
     eventList.innerHTML = `
-      <div class="eventCard">
-        No Events Available
-      </div>
+    <div class="eventCard">
+        Loading Events...
+    </div>
     `;
 
-    return;
+    try {
 
-  }
+        const q = query(
+            collection(db, "calendar"),
+            orderBy("date", "desc")
+        );
 
-  snap.forEach((doc) => {
+        const snap = await getDocs(q);
 
-    const data = doc.data();
+        eventList.innerHTML = "";
 
-    eventList.innerHTML += `
+        if (snap.empty) {
 
-      <div class="eventCard">
+            eventList.innerHTML = `
+            <div class="eventCard">
+                No Events Available
+            </div>
+            `;
 
-        <div class="eventTitle">
-          ${data.title}
+            return;
+        }
+
+        snap.forEach((docSnap) => {
+
+            const data = docSnap.data();
+
+            eventList.innerHTML += `
+
+            <div class="eventCard">
+
+                <div class="eventTitle">
+                    📌 ${data.title}
+                </div>
+
+                <div class="eventDate">
+                    📅 ${data.date}
+                </div>
+
+                <div class="eventType">
+                    🏷️ ${data.type}
+                </div>
+
+                <div class="eventDesc">
+                    ${data.description || "No Description"}
+                </div>
+
+            </div>
+
+            `;
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        eventList.innerHTML = `
+        <div class="eventCard">
+            Unable to load events.
         </div>
+        `;
 
-        <div class="eventDate">
-          📅 ${data.date}
-        </div>
-
-        <div class="eventType">
-          ${data.type}
-        </div>
-
-        <div class="eventDesc">
-          ${data.description}
-        </div>
-
-      </div>
-
-    `;
-
-  });
+    }
 
 }
 
 loadEvents();
+
+// ==========================================
 // Save Event
+// ==========================================
 
 form.addEventListener("submit", async (e) => {
 
-  e.preventDefault();
+    e.preventDefault();
 
-  const title = document.getElementById("title").value.trim();
-  const date = document.getElementById("date").value;
-  const type = document.getElementById("type").value;
-  const description = document.getElementById("description").value.trim();
+    const title =
+        document.getElementById("title").value.trim();
 
-  if (!title || !date) {
+    const date =
+        document.getElementById("date").value;
 
-    alert("Please fill all required fields.");
+    const type =
+        document.getElementById("type").value;
 
-    return;
+    const description =
+        document.getElementById("description").value.trim();
 
-  }
+    if (!title || !date) {
 
-  try {
+        alert("Please fill all required fields.");
 
-    await addDoc(collection(db, "calendar"), {
+        return;
 
-      title,
-      date,
-      type,
-      description,
-      createdBy: "Headmaster",
-      createdAt: serverTimestamp()
+    }
 
-    });
+    try {
 
-    alert("✅ Event Added Successfully");
+        // ===========================
+        // Duplicate Check
+        // ===========================
 
-    form.reset();
+        const checkSnap =
+            await getDocs(collection(db, "calendar"));
 
-    loadEvents();
+        let exists = false;
 
-  } catch (error) {
+        checkSnap.forEach((doc) => {
 
-    console.error(error);
+            const d = doc.data();
 
-    alert("❌ Failed to save event.");
+            if (
+                d.title === title &&
+                d.date === date
+            ) {
 
-  }
+                exists = true;
+
+            }
+
+        });
+
+        if (exists) {
+
+            alert("Same event already exists.");
+
+            return;
+
+        }
+
+        // ===========================
+        // Save Event
+        // ===========================
+
+        await addDoc(
+            collection(db, "calendar"),
+            {
+
+                title,
+
+                date,
+
+                type,
+
+                description,
+
+                status: "Active",
+
+                createdBy: "Headmaster",
+
+                createdAt: serverTimestamp(),
+
+                updatedAt: serverTimestamp()
+
+            }
+        );
+
+        alert("✅ Event Added Successfully");
+
+        form.reset();
+
+        await loadEvents();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("❌ Failed to save event.");
+
+    }
 
 });
+
+console.log("================================");
+console.log("School Connect TN");
+console.log("Calendar Management");
+console.log("Production Version V2");
+console.log("Firebase Connected");
+console.log("================================");
