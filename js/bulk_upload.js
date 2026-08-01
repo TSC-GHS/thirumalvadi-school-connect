@@ -207,22 +207,85 @@ downloadErrorReport
 
 function downloadTemplate(){
 
-const type =
-uploadType.value;
+const type = uploadType.value;
 
-if(type===""){
+if(type==""){
 
-alert("Select Upload Type");
+alert("Please Select Upload Type");
 
 return;
 
 }
 
-location.href =
-`templates/${type}_template.csv`;
+let file="";
+
+switch(type){
+
+case "students":
+
+file="Student_Template.csv";
+
+break;
+
+case "teachers":
+
+file="Teacher_Template.csv";
+
+break;
+
+case "parents":
+
+file="Parent_Template.csv";
+
+break;
+
+case "attendance":
+
+file="Attendance_Template.csv";
+
+break;
+
+case "marks":
+
+file="Marks_Template.csv";
+
+break;
+
+case "homework":
+
+file="Homework_Template.csv";
+
+break;
+
+case "notices":
+
+file="Notice_Template.csv";
+
+break;
+
+case "calendar":
+
+file="Calendar_Template.csv";
+
+break;
+
+case "timetable":
+
+file="Timetable_Template.csv";
+
+break;
 
 }
 
+window.open(
+
+"templates/"+file,
+
+"_blank"
+
+);
+
+}
 //==================================================
 // Error Report
 //==================================================
