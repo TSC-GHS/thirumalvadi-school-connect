@@ -192,3 +192,30 @@ grid-template-columns:1fr;
 }
 
 }
+.searchBox input{
+
+width:100%;
+
+padding:12px;
+
+font-size:16px;
+
+border:1px solid #ddd;
+
+border-radius:10px;
+
+outline:none;
+
+box-sizing:border-box;
+
+margin-bottom:15px;
+
+}
+
+.searchBox input:focus{
+
+border-color:#1976D2;
+
+box-shadow:0 0 5px rgba(25,118,210,.3);
+
+}
