@@ -90,54 +90,50 @@ async function loadAttendanceAnalytics() {
 
     const today = new Date().toISOString().split("T")[0];
 
-    const attendanceSnap = await getDocs(
+ const attendanceSnap = await getDocs(
 
-      query(
+collection(
+db,
+"attendance",
+today,
+"students"
+)
 
-        collection(db, "attendance"),
-
-        where("date", "==", today)
-
-      )
-
-    );
+);
 
     let present = 0;
 
     let presentBoys = 0;
     let presentGirls = 0;
 
-    attendanceSnap.forEach((doc) => {
+    attendanceSnap.forEach((docSnap)=>{
 
-      const data = doc.data();
+const data = docSnap.data();
 
-      if (data.status === "Present") {
+if(data.status === "Present"){
 
-        present++;
+present++;
 
-        const gender = studentGender[data.emis];
+const gender = studentGender[data.emis];
 
-        if (gender === "male") {
+if(gender==="male"){
+presentBoys++;
+}
 
-          presentBoys++;
+if(gender==="female"){
+presentGirls++;
+}
 
-        } else if (gender === "female") {
+const cls =
+`${data.class}-${data.section}`;
 
-          presentGirls++;
+if(classWise[cls]){
+classWise[cls].present++;
+}
 
-        }
+}
 
-        const cls = `${data.class}-${data.section}`;
-
-        if (classWise[cls]) {
-
-          classWise[cls].present++;
-
-        }
-
-      }
-
-    });
+});
 
     // Summary
 
