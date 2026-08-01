@@ -62,11 +62,72 @@ MAIN
 ========================= -->
 
 <div class="container">
-
 <!-- =========================
 UPLOAD CARD
 ========================= -->
 
+<section class="card">
+
+<h2>📤 Bulk Upload</h2>
+
+<select id="uploadType">
+
+<option value="">Select Upload Type</option>
+
+<option value="students">👨‍🎓 Students</option>
+
+<option value="teachers">👨‍🏫 Teachers</option>
+
+<option value="parents">👨‍👩‍👧 Parents</option>
+
+<option value="attendance">📅 Attendance</option>
+
+<option value="marks">📝 Marks</option>
+
+<option value="homework">📚 Homework</option>
+
+<option value="notices">📢 Notices</option>
+
+<option value="calendar">🗓 Calendar</option>
+
+<option value="timetable">🕒 Timetable</option>
+
+</select>
+
+<br><br>
+
+<button
+id="downloadTemplateBtn"
+class="downloadBtn">
+
+⬇ Download CSV Template
+
+</button>
+
+<br><br>
+
+<input
+type="file"
+id="csvFile"
+accept=".csv">
+
+<p id="fileName">
+
+No file selected
+
+</p>
+
+<br>
+
+<button
+id="uploadBtn"
+class="uploadBtn">
+
+📤 Upload CSV
+
+</button>
+
+</section>
 <!-- =========================
 PROGRESS
 ========================= -->
@@ -149,30 +210,6 @@ SUMMARY
 
 </div>
 
-<div class="summary-box info">
-
-<h3 id="duplicateRecords">
-
-0
-
-</h3>
-
-<p>Duplicate</p>
-
-</div>
-
-<div class="summary-box secondary">
-
-<h3 id="skippedRecords">
-
-0
-
-</h3>
-
-<p>Skipped</p>
-
-</div>
-
 <div class="summary-box danger">
 
 <h3 id="failedRecords">
@@ -184,7 +221,17 @@ SUMMARY
 <p>Failed</p>
 
 </div>
+<div style="text-align:center;margin-top:15px;">
 
+<button
+id="downloadErrorBtn"
+class="downloadBtn">
+
+⬇ Download Error Report
+
+</button>
+
+</div>
 </div>
 
 </section>
@@ -240,45 +287,6 @@ No Upload History
 <!-- =========================
 DOWNLOAD TEMPLATE
 ========================= -->
-
-<section class="card">
-
-<h2>
-
-📋 CSV Templates
-
-</h2>
-
-<p>
-
-Download the correct template before uploading.
-
-</p>
-
-<ul class="template-list">
-
-<li>👨‍🎓 Student Template</li>
-
-<li>👨‍🏫 Teacher Template</li>
-
-<li>👨‍👩‍👧 Parent Template</li>
-
-<li>📅 Attendance Template</li>
-
-<li>📝 Marks Template</li>
-
-<li>📚 Homework Template</li>
-
-<li>📢 Notice Template</li>
-
-<li>🗓 Calendar Template</li>
-
-<li>🕒 Timetable Template</li>
-
-</ul>
-
-</section>
-
 </section>
 
 </div>
