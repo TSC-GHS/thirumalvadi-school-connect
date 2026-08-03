@@ -1,72 +1,145 @@
-/*==================================================
-School Connect TN
-Backup & Restore
-JavaScript - Part 1
-==================================================*/
+//==================================================
+// School Connect TN
+// Backup & Restore
+// Part 3A
+//==================================================
 
-import { db } from "../firebase.js";
+import { db } from "./firebase.js";
 
 import {
+
 collection,
 getDocs
+
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-/*====================================
-COLLECTIONS
-====================================*/
+//==================================================
+// Collections
+//==================================================
 
-const collections = [
+const collections=[
 
 "students",
+
 "teachers",
-"parents",
+
 "attendance",
-"report_cards",
+
+"marks",
+
 "homework",
-"notices"
+
+"notices",
+
+"calendar",
+
+"leave",
+
+"settings"
 
 ];
 
-/*====================================
-BACKUP
-====================================*/
+//==================================================
+// Dashboard
+//==================================================
 
-window.createBackup = async function(){
+async function loadDashboard(){
+
+let totalCollections=collections.length;
+
+let totalRecords=0;
+
+for(const name of collections){
 
 try{
 
-const backup = {
+const snap=
 
-version : "1.0",
+await getDocs(collection(db,name));
 
-createdAt :
-new Date().toISOString(),
+totalRecords+=snap.size;
 
-school :
-"School Connect TN",
+}catch(e){
 
-data : {}
+console.log(name,e);
 
-};
+}
 
-let totalRecords = 0;
+}
 
-/*====================================
-READ COLLECTIONS
-====================================*/
+document.getElementById("collectionCount").innerText=
 
-for(const collectionName of collections){
+totalCollections;
 
-const snap =
-await getDocs(
-collection(db,collectionName)
+document.getElementById("recordCount").innerText=
+
+totalRecords;
+
+document.getElementById("backupCount").innerText=
+
+localStorage.getItem("backupCount")||0;
+
+document.getElementById("lastBackup").innerText=
+
+localStorage.getItem("lastBackup")||"--";
+
+}
+
+loadDashboard();
+
+//==================================================
+// Download JSON
+//==================================================
+
+function downloadJSON(data,fileName){
+
+const blob=
+
+new Blob(
+
+[JSON.stringify(data,null,2)],
+
+{type:"application/json"}
+
 );
 
-backup.data[collectionName]=[];
+const url=
 
-snap.forEach(doc=>{
+URL.createObjectURL(blob);
 
-backup.data[collectionName].push({
+const a=document.createElement("a");
+
+a.href=url;
+
+a.download=fileName;
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+}
+
+//==================================================
+// Generic Backup
+//==================================================
+
+async function backupCollection(collectionName,fileName){
+
+try{
+
+const snap=
+
+await getDocs(
+
+collection(db,collectionName)
+
+);
+
+const data=[];
+
+snap.forEach((doc)=>{
+
+data.push({
 
 id:doc.id,
 
@@ -74,229 +147,332 @@ id:doc.id,
 
 });
 
-totalRecords++;
-
 });
 
-}
+downloadJSON(
 
-/*====================================
-UPDATE STATUS
-====================================*/
+data,
 
-document.getElementById("lastBackup").innerHTML =
-new Date().toLocaleString();
-
-document.getElementById("totalCollections").innerHTML =
-collections.length;
-/*====================================
-DOWNLOAD BACKUP
-====================================*/
-
-const jsonData =
-JSON.stringify(backup,null,2);
-
-const blob =
-new Blob(
-[jsonData],
-{
-type:"application/json"
-}
-);
-
-const url =
-URL.createObjectURL(blob);
-
-const link =
-document.createElement("a");
-
-const fileName =
-"SchoolConnectTN_Backup_" +
-new Date()
-.toISOString()
-.substring(0,19)
-.replace(/:/g,"-") +
-".json";
-
-link.href = url;
-
-link.download = fileName;
-
-link.click();
-
-URL.revokeObjectURL(url);
-
-/*====================================
-BACKUP SIZE
-====================================*/
-
-const backupSize =
-(blob.size/1024)
-.toFixed(2);
-
-document.getElementById("backupSize")
-.innerHTML =
-backupSize + " KB";
-
-/*====================================
-BACKUP HISTORY
-====================================*/
-
-document.getElementById("historyTable")
-.innerHTML = `
-
-<tr>
-
-<td>
-${new Date().toLocaleString()}
-</td>
-
-<td>
-V1.0
-</td>
-
-<td>
-✅ Success
-</td>
-
-</tr>
-
-`;
-
-alert(
-
-`Backup Created Successfully
-
-Collections : ${collections.length}
-
-Records : ${totalRecords}
-
-Size : ${backupSize} KB`
+fileName
 
 );
+
+updateBackupHistory(fileName);
 
 }catch(error){
-
-console.error(error);
 
 alert(error.message);
 
 }
 
-};
-/*====================================
-RESTORE BACKUP
-====================================*/
-
-import {
-doc,
-setDoc
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
-window.restoreBackup = async function(){
-
-const file =
-document.getElementById("restoreFile").files[0];
-
-if(!file){
-
-alert("Please select a backup file.");
-
-return;
-
 }
+//==================================================
+// Students Backup
+//==================================================
 
-const confirmRestore =
-confirm(
-"⚠️ This will restore data from the selected backup.\n\nDo you want to continue?"
+window.backupStudents=function(){
+
+backupCollection(
+
+"students",
+
+"Students_Backup.json"
+
 );
 
-if(!confirmRestore){
+}
+
+//==================================================
+// Teachers Backup
+//==================================================
+
+window.backupTeachers=function(){
+
+backupCollection(
+
+"teachers",
+
+"Teachers_Backup.json"
+
+);
+
+}
+
+//==================================================
+// Attendance Backup
+//==================================================
+
+window.backupAttendance=function(){
+
+backupCollection(
+
+"attendance",
+
+"Attendance_Backup.json"
+
+);
+
+}
+
+//==================================================
+// Marks Backup
+//==================================================
+
+window.backupMarks=function(){
+
+backupCollection(
+
+"marks",
+
+"Marks_Backup.json"
+
+);
+
+}
+
+//==================================================
+// Homework Backup
+//==================================================
+
+window.backupHomework=function(){
+
+backupCollection(
+
+"homework",
+
+"Homework_Backup.json"
+
+);
+
+}
+
+//==================================================
+// Notices Backup
+//==================================================
+
+window.backupNotices=function(){
+
+backupCollection(
+
+"notices",
+
+"Notices_Backup.json"
+
+);
+
+}
+
+//==================================================
+// Full Backup
+//==================================================
+
+window.backupAll = async function(){
+
+const backup={};
+
+for(const name of collections){
+
+const snap=await getDocs(collection(db,name));
+
+backup[name]=[];
+
+snap.forEach((doc)=>{
+
+backup[name].push({
+
+id:doc.id,
+
+...doc.data()
+
+});
+
+});
+
+}
+
+downloadJSON(
+
+backup,
+
+"School_Connect_TN_Full_Backup.json"
+
+);
+
+updateBackupHistory(
+
+"Full Database Backup"
+
+);
+
+}
+
+//==================================================
+// Backup History
+//==================================================
+
+function updateBackupHistory(fileName){
+
+const now=new Date();
+
+const dateTime=
+
+now.toLocaleString();
+
+localStorage.setItem(
+
+"lastBackup",
+
+dateTime
+
+);
+
+let count=
+
+Number(
+
+localStorage.getItem("backupCount")||0
+
+);
+
+count++;
+
+localStorage.setItem(
+
+"backupCount",
+
+count
+
+);
+
+document.getElementById(
+
+"backupCount"
+
+).innerText=count;
+
+document.getElementById(
+
+"lastBackup"
+
+).innerText=dateTime;
+
+const history=
+
+document.getElementById(
+
+"backupHistory"
+
+);
+
+history.innerHTML=
+
+`
+<div style="padding:12px;border-bottom:1px solid #ddd;">
+
+<b>${fileName}</b>
+
+<br>
+
+<small>${dateTime}</small>
+
+</div>
+`;
+
+}
+//==================================================
+// Restore Database
+// Part 3C
+//==================================================
+
+import {
+
+doc,
+setDoc
+
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+window.restoreDatabase = async function(){
+
+const fileInput =
+
+document.getElementById("restoreFile");
+
+if(fileInput.files.length===0){
+
+alert("Please Select Backup File");
 
 return;
 
 }
+
+const ok = confirm(
+
+"Restore Database?\n\nExisting data may be overwritten."
+
+);
+
+if(!ok){
+
+return;
+
+}
+
+const reader = new FileReader();
+
+reader.onload = async function(e){
 
 try{
 
-const text =
-await file.text();
+const backup = JSON.parse(e.target.result);
 
-const backup =
-JSON.parse(text);
+let total = 0;
 
-if(!backup.data){
+for(const collectionName in backup){
 
-alert("Invalid backup file.");
-
-return;
-
-}
-
-let restoredRecords = 0;
-
-for(const collectionName of Object.keys(backup.data)){
-
-const records =
-backup.data[collectionName];
+const records = backup[collectionName];
 
 for(const record of records){
 
-const { id, ...data } = record;
+const id = record.id;
+
+delete record.id;
 
 await setDoc(
 
 doc(db,collectionName,id),
 
-data,
-
-{merge:true}
+record
 
 );
 
-restoredRecords++;
+total++;
 
 }
 
 }
-
-document.getElementById("lastBackup").innerHTML =
-backup.createdAt || "-";
-
-document.getElementById("historyTable").innerHTML = `
-
-<tr>
-
-<td>${new Date().toLocaleString()}</td>
-
-<td>${backup.version || "V1.0"}</td>
-
-<td>🔄 Restored</td>
-
-</tr>
-
-`;
 
 alert(
 
-`✅ Restore Completed Successfully
-
-Collections : ${Object.keys(backup.data).length}
-
-Records Restored : ${restoredRecords}`
+"✅ Restore Completed\n\nRecords : "+total
 
 );
 
+loadDashboard();
+
 }catch(error){
 
-console.error(error);
+console.log(error);
 
-alert("Restore Failed\n\n" + error.message);
+alert(
+
+"Restore Failed\n\n"+error.message
+
+);
 
 }
 
 };
 
-console.log(
-"Backup & Restore Module Loaded Successfully"
-);
+reader.readAsText(fileInput.files[0]);
+
+}
