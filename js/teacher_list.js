@@ -201,14 +201,22 @@ ${teacher.mobile || "-"}
 
 </p>
 
-<p>
+<div class="${
+teacher.status==="Active"
 
-<b>Status :</b>
+?
+
+'statusBadge activeBadge'
+
+:
+
+'statusBadge inactiveBadge'
+
+}">
 
 ${teacher.status || "-"}
 
-</p>
-
+</div>
 </div>
 
 </div>
@@ -397,34 +405,51 @@ document
 
 window.downloadExcel=function(){
 
-let csv="Teacher ID,Name,Subject,Mobile,Gender,Status\n";
+const data=[];
 
 allTeachers.forEach((teacher)=>{
 
-csv+=
+data.push({
 
-`${teacher.teacherId||""},
-${teacher.name||""},
-${teacher.subject||""},
-${teacher.mobile||""},
-${teacher.gender||""},
-${teacher.status||""}\n`;
+"Teacher ID":teacher.teacherId||"",
+
+"Name":teacher.name||"",
+
+"Subject":teacher.subject||"",
+
+"Mobile":teacher.mobile||"",
+
+"Email":teacher.email||"",
+
+"Gender":teacher.gender||"",
+
+"Status":teacher.status||""
 
 });
 
-const blob=new Blob([csv],{type:"text/csv"});
+});
 
-const url=URL.createObjectURL(blob);
+const ws=XLSX.utils.json_to_sheet(data);
 
-const a=document.createElement("a");
+const wb=XLSX.utils.book_new();
 
-a.href=url;
+XLSX.utils.book_append_sheet(
 
-a.download="Teacher_List.csv";
+wb,
 
-a.click();
+ws,
 
-URL.revokeObjectURL(url);
+"Teachers"
+
+);
+
+XLSX.writeFile(
+
+wb,
+
+"Teacher_List.xlsx"
+
+);
 
 }
 
@@ -434,13 +459,87 @@ URL.revokeObjectURL(url);
 
 window.downloadPDF=function(){
 
-alert(
+const {jsPDF}=window.jspdf;
 
-"PDF Export will be added in Version 2"
+const doc=new jsPDF();
+
+doc.setFontSize(18);
+
+doc.text(
+
+"School Connect TN",
+
+20,
+
+20
 
 );
 
-};
+doc.setFontSize(12);
+
+doc.text(
+
+"Teacher Master List",
+
+20,
+
+30
+
+);
+
+let y=45;
+
+allTeachers.forEach((teacher,index)=>{
+
+doc.text(
+
+(index+1)+". "+teacher.name,
+
+20,
+
+y
+
+);
+
+doc.text(
+
+teacher.subject||"",
+
+90,
+
+y
+
+);
+
+doc.text(
+
+teacher.mobile||"",
+
+150,
+
+y
+
+);
+
+y+=10;
+
+if(y>270){
+
+doc.addPage();
+
+y=20;
+
+}
+
+});
+
+doc.save(
+
+"Teacher_List.pdf"
+
+);
+
+}
 
 //==================================================
 // View Teacher
@@ -554,3 +653,46 @@ active
 );
 
 }
+//==================================================
+// WhatsApp
+//==================================================
+
+window.openWhatsApp=function(number){
+
+if(!number){
+
+alert("Mobile Number Not Available");
+
+return;
+
+}
+
+window.open(
+
+"https://wa.me/91"+number,
+
+"_blank"
+
+);
+
+};
+
+//==================================================
+// Email
+//==================================================
+
+window.sendMail=function(email){
+
+if(!email){
+
+alert("Email Not Available");
+
+return;
+
+}
+
+window.location.href=
+
+"mailto:"+email;
+
+};
