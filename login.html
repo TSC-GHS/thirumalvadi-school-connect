@@ -234,7 +234,19 @@ Powered by
 </div>
 
 </div>
+<script>
+const params = new URLSearchParams(window.location.search);
+const role = params.get("role");
 
+if (role) {
+    window.addEventListener("DOMContentLoaded", () => {
+        const roleSelect = document.getElementById("role");
+        if (roleSelect) {
+            roleSelect.value = role;
+        }
+    });
+}
+</script>
 <script type="module" src="js/login.js"></script>
 
 <script>
