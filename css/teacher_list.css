@@ -557,3 +557,37 @@ font-size:28px;
 }
 
 }
+@media print{
+
+.header,
+.actionCard,
+.searchCard,
+.filterCard{
+
+display:none;
+
+}
+
+#printHeader{
+
+display:block !important;
+
+text-align:center;
+
+margin-bottom:20px;
+
+}
+
+body{
+
+background:white;
+
+}
+
+.teacherCard{
+
+page-break-inside:avoid;
+
+}
+
+}
