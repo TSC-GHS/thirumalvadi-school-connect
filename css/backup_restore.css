@@ -1,146 +1,279 @@
 /*==================================================
 School Connect TN
 Backup & Restore
-CSS - Part 1
+Professional UI
 ==================================================*/
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
+font-family:'Poppins',sans-serif;
 }
 
 body{
-background:#EEF4FA;
+
+background:#F4F7FC;
+
 color:#333;
-padding-bottom:80px;
+
 }
 
-/*=========================
+/*==================================================
 HEADER
-=========================*/
+==================================================*/
 
 .header{
+
 display:flex;
+
 justify-content:space-between;
+
 align-items:center;
-padding:16px 20px;
-background:linear-gradient(135deg,#1565C0,#1E88E5);
-color:#fff;
+
+padding:20px 35px;
+
+background:#1565C0;
+
+color:white;
+
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+
 position:sticky;
+
 top:0;
+
 z-index:999;
-box-shadow:0 3px 12px rgba(0,0,0,.15);
+
 }
 
-.header-left h2{
-font-size:24px;
-margin-bottom:4px;
+.headerLeft h2{
+
+font-size:28px;
+
+margin-bottom:5px;
+
 }
 
-.header-left p{
-font-size:13px;
+.headerLeft p{
+
+font-size:14px;
+
 opacity:.9;
+
 }
 
-.backBtn{
-background:#fff;
-color:#1565C0;
-padding:10px 18px;
+.dashboardBtn{
+
+background:#43A047;
+
+color:white;
+
 border:none;
+
+padding:12px 22px;
+
 border-radius:10px;
-font-weight:bold;
+
+font-size:15px;
+
 cursor:pointer;
+
+font-weight:600;
+
 transition:.3s;
+
 }
 
-.backBtn:hover{
-background:#E3F2FD;
+.dashboardBtn:hover{
+
+background:#2E7D32;
+
+transform:translateY(-2px);
+
 }
 
-/*=========================
+/*==================================================
 CONTAINER
-=========================*/
+==================================================*/
 
 .container{
-max-width:1100px;
-margin:20px auto;
-padding:15px;
+
+max-width:1400px;
+
+margin:auto;
+
+padding:30px;
+
 }
 
-/*=========================
+/*==================================================
+SUMMARY
+==================================================*/
+
+.summaryGrid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+gap:20px;
+
+margin-bottom:30px;
+
+}
+
+.summaryCard{
+
+background:white;
+
+padding:25px;
+
+border-radius:18px;
+
+text-align:center;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+transition:.3s;
+
+}
+
+.summaryCard:hover{
+
+transform:translateY(-5px);
+
+}
+
+.summaryCard h2{
+
+font-size:36px;
+
+margin-bottom:10px;
+
+}
+
+.summaryCard p{
+
+font-size:15px;
+
+font-weight:600;
+
+}
+
+.blue{
+
+border-left:6px solid #1976D2;
+
+}
+
+.green{
+
+border-left:6px solid #43A047;
+
+}
+
+.orange{
+
+border-left:6px solid #FB8C00;
+
+}
+
+.red{
+
+border-left:6px solid #E53935;
+
+}
+
+/*==================================================
 CARD
-=========================*/
+==================================================*/
 
 .card{
-background:#fff;
-padding:22px;
-margin-bottom:20px;
+
+background:white;
+
+padding:25px;
+
+margin-bottom:25px;
+
 border-radius:18px;
-box-shadow:0 4px 15px rgba(0,0,0,.08);
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
 }
 
 .card h2{
+
+margin-bottom:10px;
+
 color:#1565C0;
-margin-bottom:18px;
+
 }
 
-/*=========================
-SUMMARY
-=========================*/
+.card p{
 
-.summary-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:15px;
+margin-bottom:20px;
+
+color:#666;
+
 }
 
-.summary-card{
-background:linear-gradient(135deg,#1565C0,#42A5F5);
-color:#fff;
-padding:20px;
-border-radius:15px;
-text-align:center;
-}
-
-.summary-card h3{
-font-size:26px;
-margin-bottom:8px;
-}
-
-.summary-card p{
-font-size:14px;
-}
 /*==================================================
-School Connect TN
-Backup & Restore
-CSS - Part 2
+BUTTON GRID
 ==================================================*/
 
-/*=========================
+.buttonGrid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+gap:15px;
+
+}
+
+/*==================================================
 BUTTONS
-=========================*/
+==================================================*/
 
-.backupBtn,
-.restoreBtn{
+button{
 
-width:100%;
-padding:15px;
-margin-top:15px;
 border:none;
-border-radius:10px;
-font-size:16px;
-font-weight:bold;
+
+border-radius:12px;
+
+padding:15px;
+
 cursor:pointer;
+
+font-size:15px;
+
+font-weight:600;
+
 transition:.3s;
-color:#fff;
+
+}
+
+button:hover{
+
+transform:translateY(-3px);
 
 }
 
 .backupBtn{
 
+background:#1976D2;
+
+color:white;
+
+}
+
+.backupAllBtn{
+
 background:#2E7D32;
+
+color:white;
 
 }
 
@@ -148,233 +281,166 @@ background:#2E7D32;
 
 background:#FB8C00;
 
-}
+color:white;
 
-.backupBtn:hover{
+margin-top:15px;
 
-background:#1B5E20;
-transform:translateY(-2px);
-
-}
-
-.restoreBtn:hover{
-
-background:#EF6C00;
-transform:translateY(-2px);
+width:220px;
 
 }
 
-/*=========================
-INPUT
-=========================*/
+/*==================================================
+FILE
+==================================================*/
 
 input[type=file]{
 
-width:100%;
 padding:12px;
-margin-top:15px;
-border:2px dashed #90CAF9;
-border-radius:10px;
-background:#F8FBFF;
 
-}
+border:2px dashed #1565C0;
 
-/*=========================
-LIST
-=========================*/
-
-.backup-list{
-
-margin:15px 0;
-padding-left:25px;
-line-height:2;
-
-}
-
-.warning{
-
-margin-top:15px;
-padding:15px;
-border-radius:10px;
-background:#FFF3CD;
-color:#856404;
-border-left:5px solid #FFC107;
-
-}
-
-/*=========================
-HISTORY TABLE
-=========================*/
-
-.history-table{
+border-radius:12px;
 
 width:100%;
-border-collapse:collapse;
-margin-top:15px;
-
-}
-
-.history-table th{
-
-background:#1565C0;
-color:white;
-padding:12px;
-text-align:center;
-
-}
-
-.history-table td{
-
-padding:12px;
-border:1px solid #ddd;
-text-align:center;
-
-}
-
-.history-table tr:nth-child(even){
 
 background:#F8FBFF;
 
 }
 
-.history-table tr:hover{
-
-background:#E3F2FD;
-
-}
 /*==================================================
-School Connect TN
-Backup & Restore
-CSS - Part 3 (Final)
+TABLE
 ==================================================*/
 
-/*=========================
-RESPONSIVE
-=========================*/
+table{
 
-@media (max-width:768px){
+width:100%;
 
-.header{
-flex-direction:column;
-align-items:flex-start;
-gap:12px;
+border-collapse:collapse;
+
+margin-top:15px;
+
 }
 
-.backBtn{
-width:100%;
+table td{
+
+border:1px solid #E0E0E0;
+
+padding:14px;
+
+}
+
+table tr:nth-child(even){
+
+background:#F9F9F9;
+
+}
+
+table td:first-child{
+
+font-weight:600;
+
+width:220px;
+
+}
+
+/*==================================================
+BACKUP HISTORY
+==================================================*/
+
+#backupHistory{
+
+background:#F8FBFF;
+
+padding:18px;
+
+border-radius:12px;
+
+border:1px solid #DCEBFF;
+
+min-height:120px;
+
+}
+
+/*==================================================
+FOOTER
+==================================================*/
+
+.footer{
+
+background:#1565C0;
+
+color:white;
+
+text-align:center;
+
+padding:20px;
+
+margin-top:40px;
+
+}
+
+.footer p{
+
+margin:5px 0;
+
+}
+
+/*==================================================
+MOBILE
+==================================================*/
+
+@media(max-width:768px){
+
+.header{
+
+flex-direction:column;
+
+gap:15px;
+
+text-align:center;
+
 }
 
 .container{
-padding:10px;
-}
 
-.summary-grid{
-grid-template-columns:repeat(2,1fr);
-}
-
-.history-table{
-display:block;
-overflow-x:auto;
-white-space:nowrap;
-}
+padding:15px;
 
 }
 
-@media (max-width:480px){
+.summaryCard h2{
 
-.summary-grid{
+font-size:28px;
+
+}
+
+.buttonGrid{
+
 grid-template-columns:1fr;
-}
-
-.header-left h2{
-font-size:20px;
-}
-
-.card{
-padding:18px;
-}
 
 }
 
-/*=========================
-CARD EFFECTS
-=========================*/
+.restoreBtn{
 
-.card,
-.summary-card{
-
-transition:.3s;
+width:100%;
 
 }
 
-.card:hover{
+table td{
 
-transform:translateY(-2px);
+display:block;
 
-box-shadow:0 6px 18px rgba(0,0,0,.12);
-
-}
-
-.summary-card:hover{
-
-transform:scale(1.02);
+width:100%;
 
 }
 
-/*=========================
-SCROLLBAR
-=========================*/
+table tr{
 
-::-webkit-scrollbar{
+margin-bottom:10px;
 
-width:6px;
+display:block;
 
-}
-
-::-webkit-scrollbar-thumb{
-
-background:#90CAF9;
-border-radius:10px;
-
-}
-
-::-webkit-scrollbar-track{
-
-background:#EEF4FA;
-
-}
-
-/*=========================
-PRINT
-=========================*/
-
-@media print{
-
-.header,
-.backupBtn,
-.restoreBtn,
-.backBtn,
-input[type=file]{
-
-display:none;
-
-}
-
-body{
-
-background:#fff;
-
-}
-
-.card{
-
-box-shadow:none;
-border:1px solid #ccc;
+border:1px solid #ddd;
 
 }
 
 }
-
-/*=========================
-END
-=========================*/
