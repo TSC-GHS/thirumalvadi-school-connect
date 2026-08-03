@@ -1,1 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Backup & Restore | School Connect TN</title>
+
+<link rel="stylesheet"
+href="css/backup_restore.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- ======================================
+HEADER
+====================================== -->
+
+<header class="header">
+
+<div class="headerLeft">
+
+<h2>💾 Backup & Restore</h2>
+
+<p>School Connect TN</p>
+
+</div>
+
+<div class="headerRight">
+
+<button
+class="dashboardBtn"
+onclick="location.href='admin_dashboard.html'">
+
+🏠 Dashboard
+
+</button>
+
+</div>
+
+</header>
+
+<!-- ======================================
+MAIN
+====================================== -->
+
+<div class="container">
+
+<!-- ======================================
+SUMMARY
+====================================== -->
+
+<section class="summaryGrid">
+
+<div class="summaryCard blue">
+
+<h2 id="collectionCount">
+
+0
+
+</h2>
+
+<p>Collections</p>
+
+</div>
+
+<div class="summaryCard green">
+
+<h2 id="recordCount">
+
+0
+
+</h2>
+
+<p>Total Records</p>
+
+</div>
+
+<div class="summaryCard orange">
+
+<h2 id="backupCount">
+
+0
+
+</h2>
+
+<p>Backups</p>
+
+</div>
+
+<div class="summaryCard red">
+
+<h2 id="lastBackup">
+
+--
+
+</h2>
+
+<p>Last Backup</p>
+
+</div>
+
+</section>
+
+<!-- ======================================
+BACKUP
+====================================== -->
+
+<section class="card">
+
+<h2>
+
+💾 Backup Database
+
+</h2>
+
+<p>
+
+Download complete School ERP data.
+
+</p>
+
+<div class="buttonGrid">
+
+<button
+class="backupBtn"
+onclick="backupStudents()">
+
+👨‍🎓 Students
+
+</button>
+
+<button
+class="backupBtn"
+onclick="backupTeachers()">
+
+👨‍🏫 Teachers
+
+</button>
+
+<button
+class="backupBtn"
+onclick="backupAttendance()">
+
+📅 Attendance
+
+</button>
+
+<button
+class="backupBtn"
+onclick="backupMarks()">
+
+📝 Marks
+
+</button>
+
+<button
+class="backupBtn"
+onclick="backupHomework()">
+
+📚 Homework
+
+</button>
+
+<button
+class="backupBtn"
+onclick="backupNotices()">
+
+📢 Notices
+
+</button>
+
+<button
+class="backupAllBtn"
+onclick="backupAll()">
+
+💾 Full Backup
+
+</button>
+
+</div>
+
+</section>
+
+<!-- ======================================
+RESTORE
+====================================== -->
+
+<section class="card">
+
+<h2>
+
+📥 Restore Database
+
+</h2>
+
+<p>
+
+Restore data from backup file.
+
+</p>
+
+<input
+type="file"
+id="restoreFile"
+accept=".json">
+
+<br><br>
+
+<button
+class="restoreBtn"
+onclick="restoreDatabase()">
+
+📥 Restore Backup
+
+</button>
+
+</section>
+
+<!-- ======================================
+BACKUP HISTORY
+====================================== -->
+
+<section class="card">
+
+<h2>
+
+🕒 Backup History
+
+</h2>
+
+<div id="backupHistory">
+
+<p>
+
+No Backup Available
+
+</p>
+
+</div>
+
+</section>
+
+<!-- ======================================
+SYSTEM INFO
+====================================== -->
+
+<section class="card">
+
+<h2>
+
+⚙️ System Information
+
+</h2>
+
+<table>
+
+<tr>
+
+<td>System</td>
+
+<td>
+
+School Connect TN ERP
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Version</td>
+
+<td>
+
+2.0 Professional
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Database</td>
+
+<td>
+
+Firebase Firestore
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Storage</td>
+
+<td>
+
+Firebase Storage
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>Developed By</td>
+
+<td>
+
+VTOOS Software Solution
+
+</td>
+
+</tr>
+
+</table>
+
+</section>
+
+</div>
+
+<footer class="footer">
+
+<p>
+
+© 2026 School Connect TN
+
+</p>
+
+<p>
+
+Powered by
+
+<b>
+
+VTOOS Software Solution
+
+</b>
+
+</p>
+
+</footer>
+
+<script type="module"
+src="js/backup_restore.js"></script>
+
+</body>
+
+</html>
