@@ -27,6 +27,8 @@ loadAnalytics();
 async function loadAnalytics(){
 const selectedExam =
 examFilter.value;
+  const students = [];
+const studentMap = {};
 try{
 //======================================
 // Load Student Master
@@ -66,9 +68,6 @@ topRankers.innerHTML="<p>No Results Available</p>";
 return;
 
 }
-
-const students = [];
-const studentMap = {};
 
 snap.forEach(doc=>{
 
