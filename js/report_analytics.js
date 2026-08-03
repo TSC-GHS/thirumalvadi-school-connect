@@ -28,7 +28,31 @@ async function loadAnalytics(){
 const selectedExam =
 examFilter.value;
 try{
+//======================================
+// Load Student Master
+//======================================
 
+const studentMaster = await getDocs(
+    collection(db,"students")
+);
+
+studentMaster.forEach((doc)=>{
+
+    const s = doc.data();
+
+    studentMap[String(s.emis)] = {
+
+        name: s.name,
+
+        class: s.class,
+
+        section: s.section,
+
+        medium: s.medium
+
+    };
+
+});
 const snap = await getDocs(
 collection(db,"marks",selectedExam,"students")
 );
@@ -43,13 +67,34 @@ return;
 
 }
 
-const students=[];
+const students = [];
+const studentMap = {};
 
 snap.forEach(doc=>{
 
+const mark = doc.data();
+
+const master =
+studentMap[String(mark.emis)] || {};
+
 students.push({
+
 id:doc.id,
-...doc.data()
+
+...mark,
+
+name:
+mark.name || master.name || "-",
+
+class:
+mark.class || master.class || "",
+
+section:
+mark.section || master.section || "",
+
+medium:
+mark.medium || master.medium || ""
+
 });
 
 });
