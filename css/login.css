@@ -19,7 +19,23 @@ display:flex;
 justify-content:center;
 align-items:center;
 
-background:linear-gradient(135deg,#1565C0,#42A5F5);
+background:
+
+linear-gradient(
+
+rgba(21,101,192,.85),
+
+rgba(66,165,245,.85)
+
+),
+
+url("../assets/images/school.jpg");
+
+background-size:cover;
+
+background-position:center;
+
+background-attachment:fixed;
 
 padding:20px;
 
@@ -40,7 +56,9 @@ align-items:center;
 width:100%;
 max-width:420px;
 
-background:#ffffff;
+background:rgba(255,255,255,.95);
+
+backdrop-filter:blur(12px);
 
 border-radius:20px;
 
@@ -221,7 +239,7 @@ border:none;
 
 border-radius:12px;
 
-background:#28A745;
+background:linear-gradient(135deg,#1565C0,#1976D2);
 
 color:white;
 
@@ -237,7 +255,7 @@ transition:.3s;
 
 .login-btn:hover{
 
-background:#218838;
+background:#0D47A1;
 
 transform:translateY(-2px);
 
@@ -353,5 +371,131 @@ height:70px;
 font-size:14px;
 
 }
+
+}
+/*=========================================
+Version Badge
+=========================================*/
+
+.versionBadge{
+
+display:inline-block;
+
+margin-top:10px;
+
+padding:6px 15px;
+
+background:#1565C0;
+
+color:white;
+
+font-size:13px;
+
+font-weight:bold;
+
+border-radius:30px;
+
+}
+/*=========================================
+Welcome Box
+=========================================*/
+
+.welcomeBox{
+
+background:#F5F9FF;
+
+padding:15px;
+
+border-radius:15px;
+
+margin-bottom:20px;
+
+text-align:center;
+
+border:1px solid #D6E8FF;
+
+}
+
+.welcomeBox h2{
+
+font-size:22px;
+
+color:#1565C0;
+
+margin-bottom:8px;
+
+}
+
+.welcomeBox p{
+
+font-size:14px;
+
+color:#666;
+
+}
+/*=========================================
+Forgot Password
+=========================================*/
+
+.loginLinks{
+
+text-align:right;
+
+margin-bottom:18px;
+
+}
+
+.loginLinks a{
+
+text-decoration:none;
+
+font-size:14px;
+
+color:#1565C0;
+
+font-weight:bold;
+
+}
+
+.loginLinks a:hover{
+
+text-decoration:underline;
+
+}
+/*=========================================
+Features
+=========================================*/
+
+.loginFeatures{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:10px;
+
+margin-top:20px;
+
+margin-bottom:20px;
+
+}
+
+.loginFeatures div{
+
+background:#F5F9FF;
+
+padding:10px;
+
+text-align:center;
+
+border-radius:10px;
+
+font-size:13px;
+
+font-weight:bold;
+
+color:#1565C0;
+
+border:1px solid #DCEBFF;
 
 }
