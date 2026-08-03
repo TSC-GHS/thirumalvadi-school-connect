@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Teacher List | School Connect TN</title>
+
+<link rel="stylesheet"
+href="css/teacher_list.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- ======================================
+HEADER
+====================================== -->
+
+<header class="header">
+
+<div class="headerLeft">
+
+<h2>👨‍🏫 Teacher Management</h2>
+
+<p>School Connect TN</p>
+
+</div>
+
+<div class="headerRight">
+
+<button
+class="addBtn"
+onclick="location.href='manage_teachers.html'">
+
+<i class="fa-solid fa-user-plus"></i>
+
+Add Teacher
+
+</button>
+
+</div>
+
+</header>
+
+<!-- ======================================
+MAIN CONTAINER
+====================================== -->
+
+<div class="container">
+
+<!-- ======================================
+SUMMARY CARDS
+====================================== -->
+
+<section class="summaryGrid">
+
+<div class="summaryCard blue">
+
+<h2 id="totalTeachers">
+
+0
+
+</h2>
+
+<p>Total Teachers</p>
+
+</div>
+
+<div class="summaryCard green">
+
+<h2 id="maleTeachers">
+
+0
+
+</h2>
+
+<p>Male Teachers</p>
+
+</div>
+
+<div class="summaryCard pink">
+
+<h2 id="femaleTeachers">
+
+0
+
+</h2>
+
+<p>Female Teachers</p>
+
+</div>
+
+<div class="summaryCard orange">
+
+<h2 id="activeTeachers">
+
+0
+
+</h2>
+
+<p>Active Teachers</p>
+
+</div>
+
+</section>
+
+<!-- ======================================
+SEARCH
+====================================== -->
+
+<section class="searchCard">
+
+<input
+
+type="text"
+
+id="search"
+
+placeholder="🔍 Search Teacher Name / Teacher ID / Mobile"
+
+onkeyup="searchTeacher()">
+
+</section>
+
+<!-- ======================================
+FILTERS
+====================================== -->
+
+<section class="filterCard">
+
+<select id="filterSubject">
+
+<option value="">
+
+All Subjects
+
+</option>
+
+<option>தமிழ்</option>
+
+<option>English</option>
+
+<option>Mathematics</option>
+
+<option>Science</option>
+
+<option>Social Science</option>
+
+<option>Computer Science</option>
+
+<option>Physical Education</option>
+
+</select>
+
+<select id="filterStatus">
+
+<option value="">
+
+All Status
+
+</option>
+
+<option value="Active">
+
+Active
+
+</option>
+
+<option value="Inactive">
+
+Inactive
+
+</option>
+
+</select>
+
+<select id="filterGender">
+
+<option value="">
+
+All Gender
+
+</option>
+
+<option value="Male">
+
+Male
+
+</option>
+
+<option value="Female">
+
+Female
+
+</option>
+
+</select>
+
+</section>
+
+<!-- ======================================
+DOWNLOAD BUTTONS
+====================================== -->
+
+<section class="actionCard">
+
+<div class="buttonGrid">
+
+<button
+class="excelBtn"
+onclick="downloadExcel()">
+
+📥 Download Excel
+
+</button>
+
+<button
+class="pdfBtn"
+onclick="downloadPDF()">
+
+📄 Download PDF
+
+</button>
+
+<button
+class="printBtn"
+onclick="window.print()">
+
+🖨 Print
+
+</button>
+
+<button
+class="dashboardBtn"
+onclick="location.href='admin_dashboard.html'">
+
+🏠 Dashboard
+
+</button>
+
+</div>
+
+</section>
+
+<!-- ======================================
+TEACHER LIST
+====================================== -->
+
+<section>
+
+<div id="teacherList">
+
+<!-- Teacher Cards Loaded Here -->
+
+</div>
+
+</section>
+
+</div>
+
+<script type="module" src="js/teacher_list.js"></script>
+
+</body>
+
+</html>
