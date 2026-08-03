@@ -5,7 +5,8 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-const selectedExam = "Half Yearly";
+const examFilter =
+document.getElementById("examFilter");
 
 const totalStudents = document.getElementById("totalStudents");
 const passStudents = document.getElementById("passStudents");
@@ -24,7 +25,8 @@ const topRankers = document.getElementById("topRankers");
 loadAnalytics();
 
 async function loadAnalytics(){
-
+const selectedExam =
+examFilter.value;
 try{
 
 const snap = await getDocs(
@@ -208,3 +210,12 @@ ${error.stack}
 }
 
 }
+//============================
+// Reload Analytics when Exam Changes
+//============================
+
+examFilter.addEventListener("change", () => {
+
+    loadAnalytics();
+
+});
