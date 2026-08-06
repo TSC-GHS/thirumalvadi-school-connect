@@ -5,71 +5,156 @@
 
 <meta charset="UTF-8">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<meta
-name="theme-color"
-content="#1565C0">
+<title>School Connect TN | Login</title>
 
-<title>School Connect TN</title>
-
-<link
-rel="icon"
-type="image/png"
+<link rel="icon"
 href="assets/assets/favicon.png">
 
-<link
-rel="stylesheet"
+<link rel="stylesheet"
 href="css/login.css">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<div class="login-container">
+<div class="background">
 
-<div class="login-card">
+<div class="circle one"></div>
 
-<div class="logo-section">
+<div class="circle two"></div>
+
+<div class="circle three"></div>
+
+</div>
+
+<div class="container">
+
+<!-- LEFT PANEL -->
+
+<div class="leftPanel">
 
 <img
-src="assets/assets/login-logo.png"
-class="school-logo"
-alt="School Connect TN Logo">
+src="assets/assets/header-logo.png"
+class="logo">
 
-<h1>School Connect TN</h1>
+<div class="brand">
 
-<p class="subtitle">
-Government School Management System
+<h1>
+
+School Connect <span>TN</span>
+
+</h1>
+
+<p>
+
+Smart Digital School Management Platform
+
 </p>
 
-<div class="versionBadge">
-Version 2.0 Professional
 </div>
 
-</div>
+<div class="heroSection">
 
-<div class="form-group">
-<div class="welcomeBox">
+<img
+src="assets/assets/hero_school.png"
+class="heroImage"
+alt="School">
 
 <h2>
 
-👋 Welcome Back
+Empowering Education
+
+Through Technology
 
 </h2>
 
 <p>
 
-Please login to continue.
+One Platform.
+
+One School.
+
+One Digital Future.
 
 </p>
 
 </div>
+
+<div class="featureList">
+
+<div>
+
+<i class="fa-solid fa-cloud"></i>
+
+Cloud Based
+
+</div>
+
+<div>
+
+<i class="fa-solid fa-shield-halved"></i>
+
+100% Secure
+
+</div>
+
+<div>
+
+<i class="fa-solid fa-mobile-screen"></i>
+
+Mobile Ready
+
+</div>
+
+</div>
+
+</div>
+
+<!-- LOGIN CARD -->
+
+<div class="loginPanel">
+
+<div class="loginCard">
+
+<div class="badge">
+
+🔒 Enterprise Edition
+
+</div>
+
+<h2>
+
+Welcome Back 👋
+
+</h2>
+
+<p>
+
+Sign in to continue to your dashboard
+
+</p>
+
+<div class="formGroup">
+
 <label>
 
-School
+🏫 School
 
 </label>
 
@@ -85,15 +170,16 @@ School
 
 </div>
 
-<div class="form-group">
+<div class="formGroup">
 
 <label>
 
-Role
+👤 Login Role
 
 </label>
 
 <select id="role">
+
 <option value="Student">
 
 🎓 Student
@@ -120,7 +206,7 @@ Role
 
 <option value="Admin">
 
-⚙️ Admin
+⚙ Admin
 
 </option>
 
@@ -128,31 +214,30 @@ Role
 
 </div>
 
-<div class="form-group">
+<div class="formGroup">
 
 <label>
 
-Username / EMIS
+📱 EMIS Number / Username
 
 </label>
 
 <input
 type="text"
 id="email"
-placeholder="Enter EMIS Number or Username"
-autofocus>
+placeholder="Enter EMIS Number">
 
 </div>
 
-<div class="form-group">
+<div class="formGroup">
 
 <label>
 
-Password
+🔒 Password
 
 </label>
 
-<div class="password-box">
+<div class="passwordBox">
 
 <input
 type="password"
@@ -161,10 +246,9 @@ placeholder="Enter Password">
 
 <button
 type="button"
-id="togglePassword"
-aria-label="Show Password">
+id="togglePassword">
 
-👁️
+<i class="fa-solid fa-eye"></i>
 
 </button>
 
@@ -172,21 +256,17 @@ aria-label="Show Password">
 
 </div>
 
-<div class="remember">
+<div class="rememberBox">
+
+<label>
 
 <input
 type="checkbox"
 id="remember">
 
-<label for="remember">
-
 Remember Me
 
 </label>
-
-</div>
-
-<div class="loginLinks">
 
 <a href="#">
 
@@ -195,67 +275,115 @@ Forgot Password?
 </a>
 
 </div>
+
 <button
-class="login-btn"
+class="loginBtn"
 onclick="loginUser()">
 
-🔐 Secure Login
+🚀 LOGIN TO DASHBOARD
 
 </button>
 
 <p id="msg"></p>
-  <div class="loginFeatures">
+<!-- Login Features -->
 
-<div>☁ Cloud Sync</div>
+<div class="loginFeatures">
 
-<div>🔒 Secure Login</div>
+<div class="feature">
 
-<div>📱 Mobile Ready</div>
+<i class="fa-solid fa-cloud"></i>
+
+<span>Cloud Sync</span>
 
 </div>
-<div class="footer-section">
 
-<p class="version">
+<div class="feature">
 
-Version 2.0 Professional
+<i class="fa-solid fa-lock"></i>
+
+<span>Secure Login</span>
+
+</div>
+
+<div class="feature">
+
+<i class="fa-solid fa-mobile-screen"></i>
+
+<span>Mobile Ready</span>
+
+</div>
+
+</div>
+
+<!-- Footer -->
+
+<div class="footerSection">
+
+<img
+src="assets/assets/header-logo.png"
+class="footerLogo"
+alt="VTOOS Logo">
+
+<h3>
+
+VTOOS Software Solutions
+
+</h3>
+
+<p>
+
+Innovating Everyday Life
 
 </p>
 
-<p class="powered">
+<div class="version">
 
-Powered by
-
-<b>VTOOS Software Solution</b>
-
-</p>
+Version 3.0 Professional Edition
 
 </div>
 
 </div>
 
 </div>
+
+</div>
+
+</div>
+
 <script>
+
 const params = new URLSearchParams(window.location.search);
+
 const role = params.get("role");
 
-if (role) {
-    window.addEventListener("DOMContentLoaded", () => {
-        const roleSelect = document.getElementById("role");
-        if (roleSelect) {
-            roleSelect.value = role;
-        }
-    });
+if(role){
+
+window.addEventListener("DOMContentLoaded",()=>{
+
+const roleSelect=document.getElementById("role");
+
+if(roleSelect){
+
+roleSelect.value=role;
+
 }
+
+});
+
+}
+
 </script>
-<script type="module" src="js/login.js"></script>
+
+<script type="module"
+src="js/login.js">
+
+</script>
 
 <script>
 
-const togglePassword =
-document.getElementById("togglePassword");
+const togglePassword=document.getElementById("togglePassword");
 
-const password =
-document.getElementById("password");
+const password=document.getElementById("password");
 
 togglePassword.addEventListener("click",()=>{
 
@@ -263,13 +391,13 @@ if(password.type==="password"){
 
 password.type="text";
 
-togglePassword.innerHTML="🙈";
+togglePassword.innerHTML='<i class="fa-solid fa-eye-slash"></i>';
 
 }else{
 
 password.type="password";
 
-togglePassword.innerHTML="👁️";
+togglePassword.innerHTML='<i class="fa-solid fa-eye"></i>';
 
 }
 
