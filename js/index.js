@@ -483,3 +483,203 @@ greet=0;
 },3500);
 
 console.log("Premium Animation Loaded");
+//======================================
+// Premium Loader
+//======================================
+
+window.addEventListener("load",()=>{
+
+setTimeout(()=>{
+
+const loader=document.querySelector(".loader");
+
+if(loader){
+
+loader.style.opacity="0";
+
+loader.style.visibility="hidden";
+
+}
+
+},2200);
+
+});
+
+//======================================
+// Scroll Progress
+//======================================
+
+window.addEventListener("scroll",()=>{
+
+const winScroll=
+
+document.documentElement.scrollTop;
+
+const height=
+
+document.documentElement.scrollHeight-
+
+document.documentElement.clientHeight;
+
+const scrolled=
+
+(winScroll/height)*100;
+
+document.getElementById("progressBar").style.width=
+
+scrolled+"%";
+
+});
+
+//======================================
+// Smooth Welcome
+//======================================
+
+setTimeout(()=>{
+
+console.log("Welcome to School Connect TN");
+
+},2500);
+//======================================
+// Floating Action Button
+//======================================
+
+const aiButton = document.querySelector(".aiButton");
+
+if(aiButton){
+
+aiButton.addEventListener("click",()=>{
+
+alert("🤖 AI Assistant Coming Soon...");
+
+});
+
+}
+
+//======================================
+// Live Greeting
+//======================================
+
+const hour = new Date().getHours();
+
+const greeting = document.getElementById("greeting");
+
+if(greeting){
+
+if(hour<12){
+
+greeting.innerHTML="🌞 Good Morning";
+
+}
+
+else if(hour<17){
+
+greeting.innerHTML="☀️ Good Afternoon";
+
+}
+
+else{
+
+greeting.innerHTML="🌙 Good Evening";
+
+}
+
+}
+
+//======================================
+// Smooth Scroll
+//======================================
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+
+anchor.addEventListener("click",function(e){
+
+e.preventDefault();
+
+const target=document.querySelector(this.getAttribute("href"));
+
+if(target){
+
+target.scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+}
+
+});
+
+});
+
+//======================================
+// Random Floating Effect
+//======================================
+
+setInterval(()=>{
+
+document.querySelectorAll(".circle").forEach(circle=>{
+
+const x=Math.random()*30-15;
+
+const y=Math.random()*30-15;
+
+circle.style.transform=
+
+`translate(${x}px,${y}px)`;
+
+});
+
+},5000);
+
+//======================================
+// Button Ripple Effect
+//======================================
+
+document.querySelectorAll("button").forEach(btn=>{
+
+btn.addEventListener("click",function(e){
+
+const ripple=document.createElement("span");
+
+ripple.classList.add("ripple");
+
+const rect=this.getBoundingClientRect();
+
+ripple.style.left=(e.clientX-rect.left)+"px";
+
+ripple.style.top=(e.clientY-rect.top)+"px";
+
+this.appendChild(ripple);
+
+setTimeout(()=>{
+
+ripple.remove();
+
+},600);
+
+});
+
+});
+
+//======================================
+// Console Branding
+//======================================
+
+console.log("%cVTOOS SOFTWARE SOLUTIONS",
+
+"color:#42A5F5;font-size:20px;font-weight:bold;");
+
+console.log("%cSchool Connect TN",
+
+"color:#ffffff;font-size:16px;");
+
+console.log("%cInnovating Everyday Life",
+
+"color:#90CAF9;font-size:14px;");
+
+//======================================
+// End
+//======================================
+
+console.log("Homepage Ready 🚀");
