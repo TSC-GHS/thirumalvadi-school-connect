@@ -1,130 +1,432 @@
-import { auth, db } from "./firebase.js";
+import { db } from "../firebase.js";
 
 import {
-  signInWithEmailAndPassword,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-
-import {
-  doc,
-  getDoc
+    doc,
+    getDoc,
+    collection,
+    query,
+    where,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+//======================================
+// Enter Key Login
+//======================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    document.getElementById("password")
+    ?.addEventListener("keypress", (e) => {
+
+        if (e.key === "Enter") {
+
+            loginUser();
+
+        }
+
+    });
+
+});
+
+//======================================
+// Login Function
+//======================================
 
 window.loginUser = async function () {
 
-  let loginId = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const selectedRole = document.getElementById("role").value;
+    const loginBtn =
+    document.querySelector(".loginBtn");
 
-  if (!loginId || !password) {
-    alert("Please enter Login ID and Password");
-    return;
-  }
+    const msg =
+    document.getElementById("msg");
 
-  // Parent Login
-  if (selectedRole === "Parent") {
-    loginId += "@schoolconnecttn.app";
-  }
+    const remember =
+    document.getElementById("remember").checked;
 
-  // Student Login
-  if (selectedRole === "Student") {
-    loginId += "@student.schoolconnecttn.app";
-  }
+    let loginId =
+    document.getElementById("email")
+    .value
+    .trim();
 
-  try {
+    const password =
+    document.getElementById("password")
+    .value
+    .trim();
 
-    await signInWithEmailAndPassword(auth, loginId, password);
+    const selectedRole =
+    document.getElementById("role")
+    .value;
 
-    const userRef = doc(db, "users", loginId);
-    const userSnap = await getDoc(userRef);
+    msg.innerHTML = "";
 
-    if (!userSnap.exists()) {
-      alert("User Record Not Found");
-      await signOut(auth);
-      return;
-    }
+    if (
+        loginId === "" ||
+        password === ""
+    ) {
 
-    const user = userSnap.data();
+        msg.innerHTML =
+        "Please enter Login ID and Password";
 
-    if (user.role !== selectedRole) {
-      alert("Selected Role is Incorrect");
-      await signOut(auth);
-      return;
-    }
-
-    switch (user.role) {
-
-      case "Admin":
-
-        localStorage.setItem("userRole", "Admin");
-        window.location.href = "admin_dashboard.html";
-        break;
-
-      case "Headmaster":
-
-        localStorage.setItem("userRole", "Headmaster");
-        window.location.href = "headmaster.html";
-        break;
-
-      case "Teacher":
-
-        localStorage.setItem("teacherId", user.teacherId || "");
-        localStorage.setItem("teacherName", user.name || "");
-        localStorage.setItem("userRole", "Teacher");
-
-        sessionStorage.setItem("teacherId", user.teacherId || "");
-        sessionStorage.setItem("teacherName", user.name || "");
-        sessionStorage.setItem("userRole", "Teacher");
-
-        window.location.href = "teacher.html";
-        break;
-
-      case "Parent":
-
-        localStorage.setItem("parentEMIS", user.emis || "");
-        localStorage.setItem("emis", user.emis || "");
-        localStorage.setItem("userRole", "Parent");
-
-        sessionStorage.setItem("parentEMIS", user.emis || "");
-        sessionStorage.setItem("emis", user.emis || "");
-        sessionStorage.setItem("userRole", "Parent");
-
-        window.location.href = "parent_dashboard.html";
-        break;
-
-      case "Student":
-
-        localStorage.setItem("studentEMIS", user.emis || "");
-        localStorage.setItem("emis", user.emis || "");
-        localStorage.setItem("userRole", "Student");
-
-        sessionStorage.setItem("studentEMIS", user.emis || "");
-        sessionStorage.setItem("emis", user.emis || "");
-        sessionStorage.setItem("userRole", "Student");
-
-        window.location.href = "student_dashboard.html";
-        break;
-
-      default:
-
-        alert("Invalid User Role");
-        await signOut(auth);
         return;
 
     }
 
-  } catch (error) {
+    loginBtn.disabled = true;
 
-    console.error(error);
-
-    alert("Login Failed\n\n" + error.message);
+    loginBtn.innerHTML =
+    "⏳ Signing In...";
 
     try {
-      await signOut(auth);
-    } catch (e) {
-      console.log(e);
+
+        //======================================
+        // Parent Login
+        //======================================
+
+        if (selectedRole === "Parent") {
+
+            const userRef = doc(
+
+                db,
+
+                "users",
+
+                loginId +
+                "@schoolconnecttn.app"
+
+            );
+
+            const userSnap =
+            await getDoc(userRef);
+
+            if (!userSnap.exists()) {
+
+                throw new Error(
+                    "Parent account not found."
+                );
+
+            }
+
+            const user =
+            userSnap.data();
+
+            if (
+                user.password !== password
+            ) {
+
+                throw new Error(
+                    "Invalid Password"
+                );
+
+            }
+
+            if (remember) {
+
+                localStorage.setItem(
+                    "rememberLogin",
+                    loginId
+                );
+
+            }
+
+            localStorage.setItem(
+                "parentEMIS",
+                user.emis || ""
+            );
+
+            localStorage.setItem(
+                "emis",
+                user.emis || ""
+            );
+
+            localStorage.setItem(
+                "userRole",
+                "Parent"
+            );
+
+            sessionStorage.setItem(
+                "parentEMIS",
+                user.emis || ""
+            );
+
+            sessionStorage.setItem(
+                "emis",
+                user.emis || ""
+            );
+
+            msg.style.color =
+            "#2E7D32";
+
+            msg.innerHTML =
+            "✅ Login Successful...";
+
+            setTimeout(() => {
+
+                window.location.href =
+                "parent.html";
+
+            }, 800);
+
+            return;
+
+        }
+
+        //======== CONTINUE PART 2 =========
+            //======================================
+        // Teacher Login
+        //======================================
+
+        if (selectedRole === "Teacher") {
+
+            const teacherQuery = query(
+                collection(db, "teachers"),
+                where("id", "==", loginId)
+            );
+
+            const teacherSnap = await getDocs(teacherQuery);
+
+            if (teacherSnap.empty) {
+
+                throw new Error("Teacher ID not found.");
+
+            }
+
+            const teacherDoc = teacherSnap.docs[0];
+            const teacher = teacherDoc.data();
+
+            if (teacher.password !== password) {
+
+                throw new Error("Invalid Password");
+
+            }
+
+            if (remember) {
+
+                localStorage.setItem(
+                    "rememberLogin",
+                    loginId
+                );
+
+            }
+
+            localStorage.setItem("teacherDocId", teacherDoc.id);
+            localStorage.setItem("teacherId", teacher.id || "");
+            localStorage.setItem("teacherName", teacher.name || "");
+            localStorage.setItem("teacherType", teacher.teacherType || "");
+            localStorage.setItem("teacherClass", teacher.className || "");
+            localStorage.setItem("teacherSection", teacher.section || "");
+            localStorage.setItem("teacherSubject", teacher.subject || "");
+            localStorage.setItem("userRole", "Teacher");
+
+            msg.style.color = "#2E7D32";
+            msg.innerHTML = "✅ Login Successful...";
+
+            setTimeout(() => {
+
+                window.location.href = "teacher.html";
+
+            }, 800);
+
+            return;
+
+        }
+
+        //======================================
+        // Student Login
+        //======================================
+
+        if (selectedRole === "Student") {
+
+            const userRef = doc(
+                db,
+                "users",
+                loginId + "@student.schoolconnecttn.app"
+            );
+
+            const userSnap = await getDoc(userRef);
+
+            if (!userSnap.exists()) {
+
+                throw new Error("Student account not found.");
+
+            }
+
+            const user = userSnap.data();
+
+            if (user.password !== password) {
+
+                throw new Error("Invalid Password");
+
+            }
+
+            if (remember) {
+
+                localStorage.setItem(
+                    "rememberLogin",
+                    loginId
+                );
+
+            }
+
+            localStorage.setItem("studentEMIS", user.emis || "");
+            localStorage.setItem("emis", user.emis || "");
+            localStorage.setItem("userRole", "Student");
+
+            sessionStorage.setItem("studentEMIS", user.emis || "");
+
+            msg.style.color = "#2E7D32";
+            msg.innerHTML = "✅ Login Successful...";
+
+            setTimeout(() => {
+
+                window.location.href = "student.html";
+
+            }, 800);
+
+            return;
+
+        }
+
+        //========= CONTINUE PART 3 =========
+            //======================================
+        // Admin / Headmaster Login
+        //======================================
+
+        if (
+            selectedRole === "Admin" ||
+            selectedRole === "Headmaster"
+        ) {
+
+            const userRef = doc(
+                db,
+                "users",
+                loginId
+            );
+
+            const userSnap =
+            await getDoc(userRef);
+
+            if (!userSnap.exists()) {
+
+                throw new Error(
+                    selectedRole +
+                    " account not found."
+                );
+
+            }
+
+            const user =
+            userSnap.data();
+
+            if (
+                user.password !== password
+            ) {
+
+                throw new Error(
+                    "Invalid Password"
+                );
+
+            }
+
+            if (
+                user.role !== selectedRole
+            ) {
+
+                throw new Error(
+                    "Selected Role is Incorrect"
+                );
+
+            }
+
+            if (remember) {
+
+                localStorage.setItem(
+                    "rememberLogin",
+                    loginId
+                );
+
+            }
+
+            localStorage.setItem(
+                "userRole",
+                selectedRole
+            );
+
+            localStorage.setItem(
+                "userEmail",
+                loginId
+            );
+
+            msg.style.color =
+            "#2E7D32";
+
+            msg.innerHTML =
+            "✅ Login Successful...";
+
+            setTimeout(() => {
+
+                if (
+                    selectedRole === "Admin"
+                ) {
+
+                    window.location.href =
+                    "admin_dashboard.html";
+
+                } else {
+
+                    window.location.href =
+                    "headmaster.html";
+
+                }
+
+            },800);
+
+            return;
+
+        }
+
+        throw new Error(
+            "Invalid User Role"
+        );
+
+    } catch(error){
+
+        console.error(error);
+
+        msg.style.color="#D32F2F";
+
+        msg.innerHTML=error.message;
+
+    } finally{
+
+        loginBtn.disabled=false;
+
+        loginBtn.innerHTML=
+        "🚀 LOGIN TO DASHBOARD";
+
     }
 
-  }
-
 };
+
+//======================================
+// Auto Fill Remember Login
+//======================================
+
+window.addEventListener(
+"DOMContentLoaded",
+()=>{
+
+const savedLogin=
+localStorage.getItem(
+"rememberLogin"
+);
+
+if(savedLogin){
+
+document.getElementById("email").value=
+savedLogin;
+
+document.getElementById("remember").checked=true;
+
+}
+
+});
