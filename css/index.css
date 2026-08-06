@@ -1245,58 +1245,16 @@ padding:40px 20px;
 
 }
 /*==============================
-Notice
+Live Status
 ==============================*/
 
-.noticeSection{
-
-padding:30px 60px;
-
-}
-
-.noticeBox{
-
-background:#FFC107;
-
-color:#222;
-
-padding:18px;
-
-border-radius:18px;
-
-font-weight:600;
-
-}
-
-.noticeTitle{
-
-font-size:20px;
-
-margin-bottom:10px;
-
-}
-
-/*==============================
-Why Section
-==============================*/
-
-.whySection{
+.statusSection{
 
 padding:70px 60px;
 
-text-align:center;
-
 }
 
-.whySection h2{
-
-font-size:42px;
-
-margin-bottom:40px;
-
-}
-
-.whyGrid{
+.statusGrid{
 
 display:grid;
 
@@ -1306,96 +1264,174 @@ gap:25px;
 
 }
 
-.whyCard{
+.statusCard{
 
 background:rgba(255,255,255,.08);
 
 backdrop-filter:blur(18px);
 
-border-radius:20px;
+border-radius:22px;
 
-padding:30px;
+padding:35px;
+
+text-align:center;
+
+border:1px solid rgba(255,255,255,.12);
 
 transition:.35s;
 
 }
 
-.whyCard:hover{
+.statusCard:hover{
 
 transform:translateY(-8px);
 
-}
-
-.whyCard{
-
-font-size:42px;
+box-shadow:0 20px 40px rgba(0,0,0,.30);
 
 }
 
-.whyCard h3{
+.statusCard i{
 
-margin:15px 0;
+font-size:45px;
 
-}
-
-/*==============================
-Download
-==============================*/
-
-.downloadSection{
-
-padding:70px;
-
-text-align:center;
-
-}
-
-.downloadSection h2{
-
-font-size:42px;
+color:#4FC3F7;
 
 margin-bottom:15px;
 
 }
 
-.downloadSection p{
+.statusCard h2{
 
-font-size:18px;
+font-size:40px;
 
-margin-bottom:25px;
+margin-bottom:8px;
+
+}
+
+.statusCard p{
+
+font-size:17px;
 
 opacity:.9;
 
 }
 
-/*==============================
-Responsive
-==============================*/
-
 @media(max-width:768px){
 
-.noticeSection{
+.statusSection{
 
-padding:20px;
-
-}
-
-.whySection{
-
-padding:40px 20px;
+padding:35px 20px;
 
 }
 
-.whyGrid{
+.statusGrid{
 
-grid-template-columns:1fr;
+grid-template-columns:repeat(2,1fr);
+
+gap:15px;
+
+}
+
+.statusCard{
+
+padding:25px;
 
 }
 
-.downloadSection{
+.statusCard h2{
 
-padding:40px 20px;
+font-size:28px;
 
 }
+
+}
+.show{
+
+opacity:1 !important;
+
+transform:translateY(0px)!important;
+
+}
+
+.activeLink{
+
+color:#4FC3F7!important;
+
+font-weight:700;
+
+}
+/*====================================
+Premium Animation
+====================================*/
+
+.heroGlow{
+
+filter:
+
+drop-shadow(0 0 35px #42A5F5);
+
+transition:.8s;
+
+}
+
+.featureCard{
+
+animation:fadeUp .8s ease both;
+
+}
+
+@keyframes fadeUp{
+
+from{
+
+opacity:0;
+
+transform:translateY(40px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+.loginCard{
+
+transition:.35s;
+
+}
+
+.loginCard:hover{
+
+transform:
+
+translateY(-12px)
+
+scale(1.03);
+
+}
+
+.statusCard{
+
+transition:.35s;
+
+}
+
+.statusCard:hover{
+
+transform:
+
+scale(1.05);
+
+box-shadow:
+
+0 20px 45px
+
+rgba(33,150,243,.35);
 
 }
