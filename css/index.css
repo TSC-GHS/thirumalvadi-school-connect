@@ -1062,3 +1062,30 @@ padding:35px 20px;
 }
 
 }
+.show{
+
+opacity:1 !important;
+
+transform:translateY(0) !important;
+
+}
+
+.loginCard,
+.featureCard,
+.statCard,
+.aboutBox,
+.quoteCard{
+
+opacity:0;
+
+transform:translateY(50px);
+
+transition:all .8s ease;
+
+}
+
+.clicked{
+
+transform:scale(.95)!important;
+
+}
