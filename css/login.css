@@ -756,3 +756,46 @@ overflow:auto;
 }
 
 }
+/* ===== MOBILE FIX ===== */
+
+@media (max-width:768px){
+
+.container{
+display:flex;
+flex-direction:column;
+width:100%;
+height:auto;
+margin:0;
+border-radius:0;
+}
+
+.leftPanel{
+display:flex;
+width:100%;
+padding:25px;
+justify-content:center;
+align-items:center;
+text-align:center;
+}
+
+.heroImage{
+width:280px;
+max-width:90%;
+}
+
+.loginPanel{
+width:100%;
+padding:20px;
+}
+
+.loginCard{
+max-width:100%;
+}
+
+.loginFeatures{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+}
+
+}
