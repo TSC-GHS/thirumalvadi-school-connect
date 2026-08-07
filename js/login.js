@@ -1,3 +1,11 @@
+import { db } from "./firebase.js";
+
+import {
+collection,
+query,
+where,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 /*=========================================
  School Connect TN
  Login Module
@@ -16,6 +24,10 @@ function initLogin(){
     initializeElements();
 
     bindEvents();
+
+    loadRememberMe();
+
+    bindRememberEvent();
 
 }
 
@@ -405,7 +417,7 @@ async function loginUser(){
 
         // Next Step
 
-        processLogin();
+        await processLogin();
 
     }
     catch(error){
@@ -426,29 +438,146 @@ async function loginUser(){
 // Process Login
 // =========================================
 
-function processLogin(){
+async function processLogin(){
 
-    const loginData={
+    try{
 
-        school:schoolSelect.value.trim(),
+        const q = query(
+            collection(db,"users"),
+            where("emis","==",emisInput.value.trim())
+        );
 
-        role:roleSelect.value.trim(),
+        const snapshot = await getDocs(q);
 
-        emis:emisInput.value.trim(),
+        if(snapshot.empty){
 
-        password:passwordInput.value.trim()
+            hideLoading();
 
-    };
+            showMessage("EMIS Number not found.");
 
-    console.log("Login Request");
+            return;
 
-    console.table(loginData);
+        }
 
-    // Firebase Authentication
-    // (Part 5)
+        const user = snapshot.docs[0].data();
+
+        if(user.password !== passwordInput.value.trim()){
+
+            hideLoading();
+
+            showMessage("Incorrect Password.");
+
+            return;
+
+        }
+
+        if(user.role !== roleSelect.value){
+
+            hideLoading();
+
+            showMessage("Wrong Login Role.");
+
+            return;
+
+        }
+
+        if(user.active === false){
+
+            hideLoading();
+
+            showMessage("User account disabled.");
+
+            return;
+
+        }
+
+        loginSuccess(user);
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        hideLoading();
+
+        showMessage("Login Failed.");
+
+    }
 
 }
+/*=========================================
+ Login Success
+=========================================*/
 
+function loginSuccess(user){
+
+    // Session Save
+
+    sessionStorage.setItem(
+        "currentUser",
+        JSON.stringify(user)
+    );
+
+    // Success Message
+
+    showMessage(
+        "Login Successful.",
+        "success"
+    );
+
+    // Stop Loading
+
+    hideLoading();
+
+    // Dashboard Redirect
+
+    setTimeout(function(){
+
+        redirectDashboard(user.role);
+
+    },1000);
+
+}
+/*=========================================
+ Dashboard Redirect
+=========================================*/
+
+function redirectDashboard(role){
+
+    switch(role){
+
+        case "Student":
+
+            window.location.href="student.html";
+            break;
+
+        case "Parent":
+
+            window.location.href="parent.html";
+            break;
+
+        case "Teacher":
+
+            window.location.href="teacher.html";
+            break;
+
+        case "Headmaster":
+
+            window.location.href="headmaster.html";
+            break;
+
+        case "Admin":
+
+            window.location.href="admin.html";
+            break;
+
+        default:
+
+            showMessage("Invalid User Role.");
+
+    }
+
+}
 // =========================================
 // Delay Function
 // =========================================
