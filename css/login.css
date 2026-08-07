@@ -695,11 +695,15 @@ color:#1565C0;
 Responsive
 =========================*/
 
-@media(max-width:1100px){
+@media (max-width:1100px){
 
 .container{
 
-grid-template-columns:1fr;
+display:flex;
+
+flex-direction:column;
+
+width:100%;
 
 height:auto;
 
@@ -709,122 +713,45 @@ margin:20px;
 
 .leftPanel{
 
-display:flex;
-
 width:100%;
 
-padding:30px 20px;
-
-align-items:center;
-
-justify-content:center;
-
-text-align:center;
-
-}
-  .container{
+padding:40px 20px;
 
 display:flex;
 
 flex-direction:column;
 
-height:auto;
+align-items:center;
 
-}
-
-.loginPanel{
-
-width:100%;
-
-padding:20px;
+text-align:center;
 
 }
 
 .heroImage{
 
-width:250px;
+width:320px;
 
-max-width:100%;
+max-width:90%;
 
 }
 
 .loginPanel{
+
+width:100%;
 
 padding:30px;
 
 }
 
-body{
-
-overflow:auto;
-
-}
-
-}
-
-@media(max-width:768px){
-
-html,
-body{
-
-overflow:auto;
-
-}
-
-.container{
-
-width:100%;
-
-height:auto;
-
-margin:0;
-
-border-radius:0;
-
-}
-
-.loginPanel{
-
-padding:20px;
-
-}
-
 .loginCard{
 
-padding:25px;
-
-border-radius:20px;
-
-box-shadow:none;
+max-width:650px;
 
 }
 
-.loginCard h2{
+body{
 
-font-size:28px;
-
-}
-
-.loginFeatures{
-
-grid-template-columns:1fr;
-
-}
-
-.formGroup input,
-.formGroup select{
-
-font-size:15px;
-
-padding:14px;
-
-}
-
-.loginBtn{
-
-height:54px;
-
-font-size:16px;
+overflow:auto;
 
 }
 
