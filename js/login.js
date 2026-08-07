@@ -1,432 +1,464 @@
-import { db } from "../firebase.js";
+/*=========================================
+ School Connect TN
+ Login Module
+ Developed by VTOOS Software Solutions
+ Part - 1
+=========================================*/
 
-import {
-    doc,
-    getDoc,
-    collection,
-    query,
-    where,
-    getDocs
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+// =========================================
+// DOM Ready
+// =========================================
 
-//======================================
-// Enter Key Login
-//======================================
+document.addEventListener("DOMContentLoaded", initLogin);
 
-document.addEventListener("DOMContentLoaded", () => {
+function initLogin(){
 
-    document.getElementById("password")
-    ?.addEventListener("keypress", (e) => {
+    initializeElements();
 
-        if (e.key === "Enter") {
+    bindEvents();
 
-            loginUser();
+}
 
-        }
+// =========================================
+// Global Variables
+// =========================================
 
-    });
+let schoolSelect;
+let roleSelect;
+let emisInput;
+let passwordInput;
+let rememberCheck;
+let loginButton;
+let messageBox;
+let togglePasswordBtn;
 
-});
+// =========================================
+// Initialize Elements
+// =========================================
 
-//======================================
-// Login Function
-//======================================
+function initializeElements(){
 
-window.loginUser = async function () {
+    schoolSelect = document.getElementById("school");
 
-    const loginBtn =
-    document.querySelector(".loginBtn");
+    roleSelect = document.getElementById("role");
 
-    const msg =
-    document.getElementById("msg");
+    emisInput = document.getElementById("email");
 
-    const remember =
-    document.getElementById("remember").checked;
+    passwordInput = document.getElementById("password");
 
-    let loginId =
-    document.getElementById("email")
-    .value
-    .trim();
+    rememberCheck = document.getElementById("remember");
 
-    const password =
-    document.getElementById("password")
-    .value
-    .trim();
+    loginButton = document.querySelector(".loginBtn");
 
-    const selectedRole =
-    document.getElementById("role")
-    .value;
+    messageBox = document.getElementById("msg");
 
-    msg.innerHTML = "";
+    togglePasswordBtn = document.getElementById("togglePassword");
 
-    if (
-        loginId === "" ||
-        password === ""
-    ) {
+}
 
-        msg.innerHTML =
-        "Please enter Login ID and Password";
+// =========================================
+// Bind Events
+// =========================================
+
+function bindEvents(){
+
+    togglePasswordBtn.addEventListener("click", togglePassword);
+
+    loginButton.addEventListener("click", loginUser);
+
+}
+
+// =========================================
+// Password Show / Hide
+// =========================================
+
+function togglePassword(){
+
+    if(passwordInput.type==="password"){
+
+        passwordInput.type="text";
+
+        togglePasswordBtn.innerHTML='<i class="fa-solid fa-eye-slash"></i>';
+
+    }
+    else{
+
+        passwordInput.type="password";
+
+        togglePasswordBtn.innerHTML='<i class="fa-solid fa-eye"></i>';
+
+    }
+
+}
+
+// =========================================
+// Loading Button
+// =========================================
+
+function showLoading(){
+
+    loginButton.disabled=true;
+
+    loginButton.innerHTML=
+    '<i class="fa-solid fa-spinner fa-spin"></i> Signing In...';
+
+}
+
+function hideLoading(){
+
+    loginButton.disabled=false;
+
+    loginButton.innerHTML=
+    '🚀 LOGIN TO DASHBOARD';
+
+}
+
+// =========================================
+// Message Helper
+// =========================================
+
+function showMessage(text,type="error"){
+
+    messageBox.innerHTML=text;
+
+    messageBox.className=type;
+
+}
+
+function clearMessage(){
+
+    messageBox.innerHTML="";
+
+    messageBox.className="";
+
+}
+/*=========================================
+ Validation Module
+=========================================*/
+
+// =========================================
+// Login Validation
+// =========================================
+
+function validateLogin(){
+
+    clearMessage();
+
+    const school = schoolSelect.value.trim();
+    const role = roleSelect.value.trim();
+    const emis = emisInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    // School
+
+    if(school===""){
+
+        showMessage("Please select your school.");
+
+        schoolSelect.focus();
+
+        return false;
+
+    }
+
+    // Role
+
+    if(role===""){
+
+        showMessage("Please select login role.");
+
+        roleSelect.focus();
+
+        return false;
+
+    }
+
+    // EMIS
+
+    if(emis===""){
+
+        showMessage("Please enter EMIS Number.");
+
+        emisInput.focus();
+
+        return false;
+
+    }
+
+    // Password
+
+    if(password===""){
+
+        showMessage("Please enter password.");
+
+        passwordInput.focus();
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+// =========================================
+// EMIS Validation
+// =========================================
+
+function validateEMIS(emis){
+
+    if(emis.length < 6){
+
+        showMessage("Invalid EMIS Number.");
+
+        emisInput.focus();
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+// =========================================
+// Password Validation
+// =========================================
+
+function validatePassword(password){
+
+    if(password.length < 4){
+
+        showMessage("Password is too short.");
+
+        passwordInput.focus();
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+// =========================================
+// Form Validation
+// =========================================
+
+function validateForm(){
+
+    if(!validateLogin()){
+
+        return false;
+
+    }
+
+    if(!validateEMIS(emisInput.value.trim())){
+
+        return false;
+
+    }
+
+    if(!validatePassword(passwordInput.value.trim())){
+
+        return false;
+
+    }
+
+    return true;
+
+}
+/*=========================================
+ Remember Me Module
+=========================================*/
+
+// =========================================
+// Load Remembered Login
+// =========================================
+
+function loadRememberMe(){
+
+    const remember = localStorage.getItem("rememberMe");
+
+    if(remember !== "true"){
 
         return;
 
     }
 
-    loginBtn.disabled = true;
+    const savedSchool = localStorage.getItem("savedSchool");
+    const savedRole = localStorage.getItem("savedRole");
+    const savedEMIS = localStorage.getItem("savedEMIS");
 
-    loginBtn.innerHTML =
-    "⏳ Signing In...";
+    if(savedSchool){
 
-    try {
-
-        //======================================
-        // Parent Login
-        //======================================
-
-        if (selectedRole === "Parent") {
-
-            const userRef = doc(
-
-                db,
-
-                "users",
-
-                loginId +
-                "@schoolconnecttn.app"
-
-            );
-
-            const userSnap =
-            await getDoc(userRef);
-
-            if (!userSnap.exists()) {
-
-                throw new Error(
-                    "Parent account not found."
-                );
-
-            }
-
-            const user =
-            userSnap.data();
-
-            if (
-                user.password !== password
-            ) {
-
-                throw new Error(
-                    "Invalid Password"
-                );
-
-            }
-
-            if (remember) {
-
-                localStorage.setItem(
-                    "rememberLogin",
-                    loginId
-                );
-
-            }
-
-            localStorage.setItem(
-                "parentEMIS",
-                user.emis || ""
-            );
-
-            localStorage.setItem(
-                "emis",
-                user.emis || ""
-            );
-
-            localStorage.setItem(
-                "userRole",
-                "Parent"
-            );
-
-            sessionStorage.setItem(
-                "parentEMIS",
-                user.emis || ""
-            );
-
-            sessionStorage.setItem(
-                "emis",
-                user.emis || ""
-            );
-
-            msg.style.color =
-            "#2E7D32";
-
-            msg.innerHTML =
-            "✅ Login Successful...";
-
-            setTimeout(() => {
-
-                window.location.href =
-                "parent.html";
-
-            }, 800);
-
-            return;
-
-        }
-
-        //======== CONTINUE PART 2 =========
-            //======================================
-        // Teacher Login
-        //======================================
-
-        if (selectedRole === "Teacher") {
-
-            const teacherQuery = query(
-                collection(db, "teachers"),
-                where("id", "==", loginId)
-            );
-
-            const teacherSnap = await getDocs(teacherQuery);
-
-            if (teacherSnap.empty) {
-
-                throw new Error("Teacher ID not found.");
-
-            }
-
-            const teacherDoc = teacherSnap.docs[0];
-            const teacher = teacherDoc.data();
-
-            if (teacher.password !== password) {
-
-                throw new Error("Invalid Password");
-
-            }
-
-            if (remember) {
-
-                localStorage.setItem(
-                    "rememberLogin",
-                    loginId
-                );
-
-            }
-
-            localStorage.setItem("teacherDocId", teacherDoc.id);
-            localStorage.setItem("teacherId", teacher.id || "");
-            localStorage.setItem("teacherName", teacher.name || "");
-            localStorage.setItem("teacherType", teacher.teacherType || "");
-            localStorage.setItem("teacherClass", teacher.className || "");
-            localStorage.setItem("teacherSection", teacher.section || "");
-            localStorage.setItem("teacherSubject", teacher.subject || "");
-            localStorage.setItem("userRole", "Teacher");
-
-            msg.style.color = "#2E7D32";
-            msg.innerHTML = "✅ Login Successful...";
-
-            setTimeout(() => {
-
-                window.location.href = "teacher.html";
-
-            }, 800);
-
-            return;
-
-        }
-
-        //======================================
-        // Student Login
-        //======================================
-
-        if (selectedRole === "Student") {
-
-            const userRef = doc(
-                db,
-                "users",
-                loginId + "@student.schoolconnecttn.app"
-            );
-
-            const userSnap = await getDoc(userRef);
-
-            if (!userSnap.exists()) {
-
-                throw new Error("Student account not found.");
-
-            }
-
-            const user = userSnap.data();
-
-            if (user.password !== password) {
-
-                throw new Error("Invalid Password");
-
-            }
-
-            if (remember) {
-
-                localStorage.setItem(
-                    "rememberLogin",
-                    loginId
-                );
-
-            }
-
-            localStorage.setItem("studentEMIS", user.emis || "");
-            localStorage.setItem("emis", user.emis || "");
-            localStorage.setItem("userRole", "Student");
-
-            sessionStorage.setItem("studentEMIS", user.emis || "");
-
-            msg.style.color = "#2E7D32";
-            msg.innerHTML = "✅ Login Successful...";
-
-            setTimeout(() => {
-
-                window.location.href = "student.html";
-
-            }, 800);
-
-            return;
-
-        }
-
-        //========= CONTINUE PART 3 =========
-            //======================================
-        // Admin / Headmaster Login
-        //======================================
-
-        if (
-            selectedRole === "Admin" ||
-            selectedRole === "Headmaster"
-        ) {
-
-            const userRef = doc(
-                db,
-                "users",
-                loginId
-            );
-
-            const userSnap =
-            await getDoc(userRef);
-
-            if (!userSnap.exists()) {
-
-                throw new Error(
-                    selectedRole +
-                    " account not found."
-                );
-
-            }
-
-            const user =
-            userSnap.data();
-
-            if (
-                user.password !== password
-            ) {
-
-                throw new Error(
-                    "Invalid Password"
-                );
-
-            }
-
-            if (
-                user.role !== selectedRole
-            ) {
-
-                throw new Error(
-                    "Selected Role is Incorrect"
-                );
-
-            }
-
-            if (remember) {
-
-                localStorage.setItem(
-                    "rememberLogin",
-                    loginId
-                );
-
-            }
-
-            localStorage.setItem(
-                "userRole",
-                selectedRole
-            );
-
-            localStorage.setItem(
-                "userEmail",
-                loginId
-            );
-
-            msg.style.color =
-            "#2E7D32";
-
-            msg.innerHTML =
-            "✅ Login Successful...";
-
-            setTimeout(() => {
-
-                if (
-                    selectedRole === "Admin"
-                ) {
-
-                    window.location.href =
-                    "admin_dashboard.html";
-
-                } else {
-
-                    window.location.href =
-                    "headmaster.html";
-
-                }
-
-            },800);
-
-            return;
-
-        }
-
-        throw new Error(
-            "Invalid User Role"
-        );
-
-    } catch(error){
-
-        console.error(error);
-
-        msg.style.color="#D32F2F";
-
-        msg.innerHTML=error.message;
-
-    } finally{
-
-        loginBtn.disabled=false;
-
-        loginBtn.innerHTML=
-        "🚀 LOGIN TO DASHBOARD";
+        schoolSelect.value = savedSchool;
 
     }
 
-};
+    if(savedRole){
 
-//======================================
-// Auto Fill Remember Login
-//======================================
+        roleSelect.value = savedRole;
 
-window.addEventListener(
-"DOMContentLoaded",
-()=>{
+    }
 
-const savedLogin=
-localStorage.getItem(
-"rememberLogin"
-);
+    if(savedEMIS){
 
-if(savedLogin){
+        emisInput.value = savedEMIS;
 
-document.getElementById("email").value=
-savedLogin;
+    }
 
-document.getElementById("remember").checked=true;
+    rememberCheck.checked = true;
 
 }
 
-});
+// =========================================
+// Save Remember Me
+// =========================================
+
+function saveRememberMe(){
+
+    if(rememberCheck.checked){
+
+        localStorage.setItem("rememberMe","true");
+
+        localStorage.setItem("savedSchool",schoolSelect.value);
+
+        localStorage.setItem("savedRole",roleSelect.value);
+
+        localStorage.setItem("savedEMIS",emisInput.value.trim());
+
+    }else{
+
+        clearRememberMe();
+
+    }
+
+}
+
+// =========================================
+// Clear Remember Me
+// =========================================
+
+function clearRememberMe(){
+
+    localStorage.removeItem("rememberMe");
+
+    localStorage.removeItem("savedSchool");
+
+    localStorage.removeItem("savedRole");
+
+    localStorage.removeItem("savedEMIS");
+
+}
+
+// =========================================
+// Remember Checkbox Event
+// =========================================
+
+function bindRememberEvent(){
+
+    rememberCheck.addEventListener("change",function(){
+
+        if(!rememberCheck.checked){
+
+            clearRememberMe();
+
+        }
+
+    });
+
+}
+/*=========================================
+ Login Process Module
+=========================================*/
+
+// =========================================
+// Login Button Click
+// =========================================
+
+async function loginUser(){
+
+    clearMessage();
+
+    // Validate Form
+
+    if(!validateForm()){
+
+        return;
+
+    }
+
+    // Loading Start
+
+    showLoading();
+
+    try{
+
+        // Save Remember Me Data
+
+        saveRememberMe();
+
+        // Small Delay (UI Smooth)
+
+        await delay(800);
+
+        // Next Step
+
+        processLogin();
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Unexpected error occurred."
+        );
+
+        hideLoading();
+
+    }
+
+}
+
+// =========================================
+// Process Login
+// =========================================
+
+function processLogin(){
+
+    const loginData={
+
+        school:schoolSelect.value.trim(),
+
+        role:roleSelect.value.trim(),
+
+        emis:emisInput.value.trim(),
+
+        password:passwordInput.value.trim()
+
+    };
+
+    console.log("Login Request");
+
+    console.table(loginData);
+
+    // Firebase Authentication
+    // (Part 5)
+
+}
+
+// =========================================
+// Delay Function
+// =========================================
+
+function delay(ms){
+
+    return new Promise(resolve=>{
+
+        setTimeout(resolve,ms);
+
+    });
+
+}
