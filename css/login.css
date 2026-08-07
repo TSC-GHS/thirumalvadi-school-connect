@@ -709,7 +709,42 @@ margin:20px;
 
 .leftPanel{
 
-display:none;
+display:flex;
+
+width:100%;
+
+padding:30px 20px;
+
+align-items:center;
+
+justify-content:center;
+
+text-align:center;
+
+}
+  .container{
+
+display:flex;
+
+flex-direction:column;
+
+height:auto;
+
+}
+
+.loginPanel{
+
+width:100%;
+
+padding:20px;
+
+}
+
+.heroImage{
+
+width:250px;
+
+max-width:100%;
 
 }
 
