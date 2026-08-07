@@ -665,43 +665,38 @@ body{
 .loginFeatures{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    margin-top:25px;
+    gap:10px;
+    margin-top:20px;
 }
 
 .feature{
     background:#F5F9FF;
     border:1px solid #E3F2FD;
-    border-radius:16px;
-
-    padding:16px 10px;
-
+    border-radius:14px;
+    padding:12px 8px;
     text-align:center;
-
-    transition:all .30s ease;
+    transition:.3s;
 }
 
 .feature:hover{
-    transform:translateY(-5px);
-    background:#EAF4FF;
-    box-shadow:0 10px 20px rgba(33,150,243,.15);
+    transform:translateY(-3px);
+    box-shadow:0 8px 20px rgba(33,150,243,.15);
 }
 
 .feature i{
     display:block;
-    font-size:24px;
+    font-size:22px;
     color:#1976D2;
-    margin-bottom:10px;
+    margin-bottom:8px;
 }
 
 .feature span{
     display:block;
-    font-size:13px;
+    font-size:12px;
     font-weight:600;
+    line-height:18px;
     color:#444;
-    line-height:20px;
 }
-
 /*=========================*
  * Footer
  *=========================*/
@@ -944,7 +939,18 @@ body{
         grid-template-columns:repeat(3,1fr);
         gap:10px;
     }
+ .feature{
+        padding:10px 6px;
+    }
 
+    .feature i{
+        font-size:18px;
+    }
+
+    .feature span{
+        font-size:11px;
+        line-height:16px;
+    }
 }
 
 /*=========================*
