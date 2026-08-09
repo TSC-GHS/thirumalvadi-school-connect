@@ -219,6 +219,26 @@ function validateLogin(){
 
 function validateEMIS(emis){
 
+    const role = roleSelect.value;
+
+    // Teacher ID (T001, T014...)
+    if(role === "Teacher"){
+
+        if(emis.length < 4){
+
+            showMessage("Invalid Teacher ID.");
+
+            emisInput.focus();
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+    // Parent / Student EMIS
     if(emis.length < 6){
 
         showMessage("Invalid EMIS Number.");
