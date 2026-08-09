@@ -438,55 +438,78 @@ async function loginUser(){
 // Process Login
 // =========================================
 
-async function processLogin(){
+async function processLogin() {
 
-    try{
+    try {
 
-        const q = query(
-            collection(db,"users"),
-            where("emis","==",emisInput.value.trim())
-        );
+        const loginId = emisInput.value.trim();
+        const password = passwordInput.value.trim();
+        const role = roleSelect.value;
+
+        let q;
+
+        // Parent & Student -> Search by EMIS
+        if (role === "Parent" || role === "Student") {
+
+            q = query(
+                collection(db, "users"),
+                where("emis", "==", loginId)
+            );
+
+        }
+
+        // Teacher -> Search by Teacher ID
+        else if (role === "Teacher") {
+
+            q = query(
+                collection(db, "teachers"),
+                where("id", "==", loginId)
+            );
+
+        }
+
+        // Admin & Headmaster -> Search by Email
+        else if (role === "Admin" || role === "Headmaster") {
+
+            q = query(
+                collection(db, "users"),
+                where("email", "==", loginId)
+            );
+
+        }
 
         const snapshot = await getDocs(q);
 
-        if(snapshot.empty){
+        if (snapshot.empty) {
 
             hideLoading();
-
-            showMessage("EMIS Number not found.");
-
+            showMessage("User not found.");
             return;
 
         }
 
         const user = snapshot.docs[0].data();
 
-        if(user.password !== passwordInput.value.trim()){
+        if (user.password !== password) {
 
             hideLoading();
-
             showMessage("Incorrect Password.");
-
             return;
 
         }
 
-        if(user.role !== roleSelect.value){
+        if (user.role !== role) {
 
             hideLoading();
-
             showMessage("Wrong Login Role.");
-
             return;
 
         }
 
-        if(user.active === false){
+        if (user.active === false) {
 
             hideLoading();
-
             showMessage("User account disabled.");
-
             return;
 
         }
@@ -494,7 +517,7 @@ async function processLogin(){
         loginSuccess(user);
 
     }
-    catch(error){
+    catch (error) {
 
         console.error(error);
 
@@ -505,6 +528,7 @@ async function processLogin(){
     }
 
 }
+         
 /*=========================================
  Login Success
 =========================================*/
