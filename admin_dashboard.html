@@ -4,230 +4,478 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
 <title>School Connect TN - Admin Dashboard</title>
 
-<link rel="stylesheet"
-href="css/admin_dashboard.css">
+<link
+    rel="stylesheet"
+    href="css/admin_dashboard_v3.css">
 
 </head>
 
 <body>
 
-<!-- ===========================
-HEADER
-=========================== -->
 
-<header class="header">
+<!-- =========================================
+     TOP BAR
+========================================= -->
 
-<div class="header-left">
+<header class="topBar">
 
-<h2>🏫 School Connect TN</h2>
+    <div class="title">
 
-<p>Administrator Dashboard</p>
+        🏫 School Connect TN
 
-</div>
+    </div>
 
-<div class="header-right">
 
-<div class="profile">
+    <div class="admin">
 
-👤 Administrator
+        👨‍💼 Admin Dashboard
 
-</div>
-
-</div>
+    </div>
 
 </header>
 
-<!-- ===========================
-WELCOME
-=========================== -->
 
-<section class="welcome-card">
 
-<h1>Welcome Back 👋</h1>
+<!-- =========================================
+     WELCOME
+========================================= -->
 
-<p>
+<section class="welcomeSection">
 
-Manage your school from one professional dashboard.
+    <div>
 
-</p>
+        <h1>
+            Welcome Back 👋
+        </h1>
 
-</section>
+        <p>
+            Manage your school from one professional dashboard.
+        </p>
 
-<!-- ===========================
-SUMMARY
-=========================== -->
-
-<section class="summary-grid">
-
-<div class="summary-card">
-
-<h2 id="totalStudents">0</h2>
-
-<p>Students</p>
-
-</div>
-
-<div class="summary-card">
-
-<h2 id="totalTeachers">0</h2>
-
-<p>Teachers</p>
-
-</div>
-
-<div class="summary-card">
-
-<h2 id="todayAttendance">0%</h2>
-
-<p>Attendance</p>
-
-</div>
-
-<div class="summary-card">
-
-<h2 id="totalNotices">0</h2>
-
-<p>Notices</p>
-
-</div>
+    </div>
 
 </section>
 
-<!-- ===========================
-QUICK ACTIONS
-=========================== -->
 
-<section class="dashboard-card">
 
-<h2>⚡ Quick Actions</h2>
+<!-- =========================================
+     SUMMARY CARDS
+========================================= -->
 
-<div class="quick-grid">
+<section class="dashboard">
 
-<button onclick="location.href='student_management.html'">
 
-👨‍🎓<br>
+    <div class="card">
 
-Add Student
+        <h1 id="studentCount">
+            0
+        </h1>
 
-</button>
+        <p>
+            Students
+        </p>
 
-<button onclick="location.href='students.html'">
-📋<br>
+    </div>
 
-Student List
 
-</button>
+    <div class="card">
 
-<button onclick="location.href='manage_teachers.html'">
+        <h1 id="teacherCount">
+            0
+        </h1>
 
-👨‍🏫<br>
+        <p>
+            Teachers
+        </p>
 
-Add Teacher
+    </div>
 
-</button>
 
-<button onclick="location.href='teacher_list.html'">
+    <div class="card">
 
-👥<br>
+        <h1 id="noticeCount">
+            0
+        </h1>
 
-Teacher List
+        <p>
+            Notices
+        </p>
 
-</button>
+    </div>
 
-<button onclick="location.href='attendance.html'">
 
-📅<br>
+    <div class="card">
 
-Attendance
+        <h1 id="homeworkCount">
+            0
+        </h1>
 
-</button>
+        <p>
+            Homework
+        </p>
 
-<button onclick="location.href='bulk_upload.html'">
+    </div>
 
-📥<br>
-
-Bulk Upload
-
-</button>
-
-      
-<button class="sync-btn" onclick="location.href='database_sync.html'">
-🔄<br>
-      ⚙️ Database Sync
-</button>  
-
-<button onclick="location.href='backup_restore.html'">
-
-💾<br>
-
-Backup
-
-</button>
-
-</div>
-
-</section>
-<!-- ===========================
-SYSTEM
-=========================== -->
-
-<section class="dashboard-card">
-
-<h2>⚙️ System</h2>
-
-<div class="management-grid">
-
-<a href="backup_restore.html" class="module-card">
-💾
-<h3>Backup</h3>
-<p>Database Backup</p>
-</a>
-
-<a href="settings.html" class="module-card">
-⚙️
-<h3>Settings</h3>
-<p>School Settings</p>
-</a>
-
-</div>
 
 </section>
 
-<!-- ===========================
-LOGOUT
-=========================== -->
 
-<section class="dashboard-card">
 
-<button
-class="logoutBtn"
-onclick="logoutAdmin()">
+<!-- =========================================
+     QUICK ACTIONS
+========================================= -->
 
-🚪 Logout
+<section class="sectionCard">
 
-</button>
+    <div class="sectionHeader">
+
+        <div>
+
+            <h2>
+                ⚡ Quick Actions
+            </h2>
+
+            <p>
+                Manage daily school activities
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="menu">
+
+
+        <!-- Student -->
+
+        <button
+            onclick="location.href='student_management.html'">
+
+            🎓
+
+            <span>
+                Student Management
+            </span>
+
+        </button>
+
+
+        <!-- Student List -->
+
+        <button
+            onclick="location.href='students.html'">
+
+            📋
+
+            <span>
+                Student List
+            </span>
+
+        </button>
+
+
+        <!-- Teacher -->
+
+        <button
+            onclick="location.href='manage_teachers.html'">
+
+            👩‍🏫
+
+            <span>
+                Teacher Management
+            </span>
+
+        </button>
+
+
+        <!-- Teacher List -->
+
+        <button
+            onclick="location.href='teacher_list.html'">
+
+            👥
+
+            <span>
+                Teacher List
+            </span>
+
+        </button>
+
+
+        <!-- Attendance -->
+
+        <button
+            onclick="location.href='attendance.html'">
+
+            📅
+
+            <span>
+                Attendance
+            </span>
+
+        </button>
+
+
+        <!-- Bulk Upload -->
+
+        <button
+            onclick="location.href='bulk_upload.html'">
+
+            📥
+
+            <span>
+                Bulk Upload
+            </span>
+
+        </button>
+
+
+        <!-- Database Sync -->
+
+        <button
+            onclick="location.href='database_sync.html'">
+
+            🔄
+
+            <span>
+                Database Sync
+            </span>
+
+        </button>
+
+
+        <!-- Backup -->
+
+        <button
+            onclick="location.href='backup_restore.html'">
+
+            💾
+
+            <span>
+                Backup & Restore
+            </span>
+
+        </button>
+
+
+        <!-- Notice -->
+
+        <button
+            onclick="location.href='notice_management.html'">
+
+            📢
+
+            <span>
+                Notice Management
+            </span>
+
+        </button>
+
+
+        <!-- Report Card -->
+
+        <button
+            onclick="location.href='report_card.html'">
+
+            📄
+
+            <span>
+                Report Card
+            </span>
+
+        </button>
+
+
+        <!-- Homework -->
+
+        <button
+            onclick="location.href='homework.html'">
+
+            📚
+
+            <span>
+                Homework
+            </span>
+
+        </button>
+
+
+        <!-- Settings -->
+
+        <button
+            onclick="location.href='settings.html'">
+
+            ⚙️
+
+            <span>
+                Settings
+            </span>
+
+        </button>
+
+
+    </div>
 
 </section>
 
-<footer class="footer">
 
-<p>
-© 2026 School Connect TN
-</p>
 
-<p>
-Powered by <b>VTOOS Software Solution</b>
-</p>
+<!-- =========================================
+     SYSTEM
+========================================= -->
+
+<section class="sectionCard">
+
+    <div class="sectionHeader">
+
+        <div>
+
+            <h2>
+                ⚙️ System
+            </h2>
+
+            <p>
+                System configuration and administration
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="systemGrid">
+
+
+        <a
+            href="backup_restore.html"
+            class="systemCard">
+
+            <div class="systemIcon">
+                💾
+            </div>
+
+            <div>
+
+                <h3>
+                    Backup & Restore
+                </h3>
+
+                <p>
+                    Database Backup
+                </p>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="settings.html"
+            class="systemCard">
+
+            <div class="systemIcon">
+                ⚙️
+            </div>
+
+            <div>
+
+                <h3>
+                    Settings
+                </h3>
+
+                <p>
+                    School Settings
+                </p>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="database_sync.html"
+            class="systemCard">
+
+            <div class="systemIcon">
+                🔄
+            </div>
+
+            <div>
+
+                <h3>
+                    Database Sync
+                </h3>
+
+                <p>
+                    Synchronize Database
+                </p>
+
+            </div>
+
+        </a>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     LOGOUT
+========================================= -->
+
+<section class="logoutSection">
+
+    <button
+        class="logout"
+        onclick="logoutAdmin()">
+
+        🚪 Logout
+
+    </button>
+
+</section>
+
+
+
+<!-- =========================================
+     FOOTER
+========================================= -->
+
+<footer>
+
+    <p>
+        © 2026 School Connect TN
+    </p>
+
+    <p>
+        Powered by
+        <b>VTOOS Software Solution</b>
+    </p>
 
 </footer>
 
-<script type="module"
-src="js/admin_dashboard_v3.js"></script>
+
+
+<!-- =========================================
+     ADMIN DASHBOARD JS
+========================================= -->
+
+<script
+    type="module"
+    src="js/admin_dashboard_v3.js">
+</script>
+
 
 </body>
+
 </html>
