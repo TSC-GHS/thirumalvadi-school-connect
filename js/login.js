@@ -1,25 +1,49 @@
+//==================================================
+// School Connect TN
+// Login Module
+// Developed by VTOOS Software Solutions
+// Production Stable Version
+//==================================================
+
 import { db } from "../firebase.js";
 
 import {
-collection,
-query,
-where,
-getDocs
+    collection,
+    query,
+    where,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-/*=========================================
- School Connect TN
- Login Module
- Developed by VTOOS Software Solutions
- Part - 1
-=========================================*/
 
-// =========================================
+
+//==================================================
 // DOM Ready
-// =========================================
+//==================================================
 
-document.addEventListener("DOMContentLoaded", initLogin);
+document.addEventListener(
+    "DOMContentLoaded",
+    initLogin
+);
 
-function initLogin(){
+
+//==================================================
+// Global Variables
+//==================================================
+
+let schoolSelect;
+let roleSelect;
+let emisInput;
+let passwordInput;
+let rememberCheck;
+let loginButton;
+let messageBox;
+let togglePasswordBtn;
+
+
+//==================================================
+// Initialize Login
+//==================================================
+
+function initLogin() {
 
     initializeElements();
 
@@ -31,141 +55,174 @@ function initLogin(){
 
 }
 
-// =========================================
-// Global Variables
-// =========================================
 
-let schoolSelect;
-let roleSelect;
-let emisInput;
-let passwordInput;
-let rememberCheck;
-let loginButton;
-let messageBox;
-let togglePasswordBtn;
-
-// =========================================
+//==================================================
 // Initialize Elements
-// =========================================
+//==================================================
 
-function initializeElements(){
+function initializeElements() {
 
-    schoolSelect = document.getElementById("school");
+    schoolSelect =
+        document.getElementById("school");
 
-    roleSelect = document.getElementById("role");
+    roleSelect =
+        document.getElementById("role");
 
-    emisInput = document.getElementById("email");
+    emisInput =
+        document.getElementById("email");
 
-    passwordInput = document.getElementById("password");
+    passwordInput =
+        document.getElementById("password");
 
-    rememberCheck = document.getElementById("remember");
+    rememberCheck =
+        document.getElementById("remember");
 
-    loginButton = document.querySelector(".loginBtn");
+    loginButton =
+        document.querySelector(".loginBtn");
 
-    messageBox = document.getElementById("msg");
+    messageBox =
+        document.getElementById("msg");
 
-    togglePasswordBtn = document.getElementById("togglePassword");
+    togglePasswordBtn =
+        document.getElementById("togglePassword");
 
 }
 
-// =========================================
+
+//==================================================
 // Bind Events
-// =========================================
+//==================================================
 
-function bindEvents(){
+function bindEvents() {
 
-    togglePasswordBtn.addEventListener("click", togglePassword);
+    if (togglePasswordBtn) {
 
-    loginButton.addEventListener("click", loginUser);
+        togglePasswordBtn.addEventListener(
+            "click",
+            togglePassword
+        );
+
+    }
+
+
+    if (loginButton) {
+
+        loginButton.addEventListener(
+            "click",
+            loginUser
+        );
+
+    }
 
 }
 
-// =========================================
+
+//==================================================
 // Password Show / Hide
-// =========================================
+//==================================================
 
-function togglePassword(){
+function togglePassword() {
 
-    if(passwordInput.type==="password"){
+    if (
+        passwordInput.type === "password"
+    ) {
 
-        passwordInput.type="text";
+        passwordInput.type = "text";
 
-        togglePasswordBtn.innerHTML='<i class="fa-solid fa-eye-slash"></i>';
+        togglePasswordBtn.innerHTML =
+            '<i class="fa-solid fa-eye-slash"></i>';
 
     }
-    else{
+    else {
 
-        passwordInput.type="password";
+        passwordInput.type = "password";
 
-        togglePasswordBtn.innerHTML='<i class="fa-solid fa-eye"></i>';
+        togglePasswordBtn.innerHTML =
+            '<i class="fa-solid fa-eye"></i>';
 
     }
 
 }
 
-// =========================================
+
+//==================================================
 // Loading Button
-// =========================================
+//==================================================
 
-function showLoading(){
+function showLoading() {
 
-    loginButton.disabled=true;
+    loginButton.disabled = true;
 
-    loginButton.innerHTML=
-    '<i class="fa-solid fa-spinner fa-spin"></i> Signing In...';
-
-}
-
-function hideLoading(){
-
-    loginButton.disabled=false;
-
-    loginButton.innerHTML=
-    '🚀 LOGIN TO DASHBOARD';
+    loginButton.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Signing In...';
 
 }
 
-// =========================================
+
+function hideLoading() {
+
+    loginButton.disabled = false;
+
+    loginButton.innerHTML =
+        "🚀 LOGIN TO DASHBOARD";
+
+}
+
+
+//==================================================
 // Message Helper
-// =========================================
+//==================================================
 
-function showMessage(text,type="error"){
+function showMessage(
+    text,
+    type = "error"
+) {
 
-    messageBox.innerHTML=text;
+    messageBox.innerHTML = text;
 
-    messageBox.className=type;
+    messageBox.className = type;
+
+}
+
+
+function clearMessage() {
+
+    messageBox.innerHTML = "";
+
+    messageBox.className = "";
 
 }
 
-function clearMessage(){
 
-    messageBox.innerHTML="";
-
-    messageBox.className="";
-
-}
-/*=========================================
- Validation Module
-=========================================*/
-
-// =========================================
+//==================================================
 // Login Validation
-// =========================================
+//==================================================
 
-function validateLogin(){
+function validateLogin() {
 
     clearMessage();
 
-    const school = schoolSelect.value.trim();
-    const role = roleSelect.value.trim();
-    const emis = emisInput.value.trim();
-    const password = passwordInput.value.trim();
+
+    const school =
+        schoolSelect.value.trim();
+
+    const role =
+        roleSelect.value.trim();
+
+    const emis =
+        emisInput.value.trim();
+
+    const password =
+        passwordInput.value.trim();
+
 
     // School
 
-    if(school===""){
+    if (school === "") {
 
-        showMessage("Please select your school.");
+        showMessage(
+            "Please select your school."
+        );
 
         schoolSelect.focus();
 
@@ -173,11 +230,14 @@ function validateLogin(){
 
     }
 
+
     // Role
 
-    if(role===""){
+    if (role === "") {
 
-        showMessage("Please select login role.");
+        showMessage(
+            "Please select login role."
+        );
 
         roleSelect.focus();
 
@@ -185,11 +245,14 @@ function validateLogin(){
 
     }
 
-    // EMIS
 
-    if(emis===""){
+    // Username / EMIS
 
-        showMessage("Please enter EMIS Number.");
+    if (emis === "") {
+
+        showMessage(
+            "Please enter EMIS Number / Username."
+        );
 
         emisInput.focus();
 
@@ -197,11 +260,14 @@ function validateLogin(){
 
     }
 
+
     // Password
 
-    if(password===""){
+    if (password === "") {
 
-        showMessage("Please enter password.");
+        showMessage(
+            "Please enter password."
+        );
 
         passwordInput.focus();
 
@@ -209,24 +275,31 @@ function validateLogin(){
 
     }
 
+
     return true;
 
 }
 
-// =========================================
-// EMIS Validation
-// =========================================
 
-function validateEMIS(emis){
+//==================================================
+// EMIS / Username Validation
+//==================================================
 
-    const role = roleSelect.value;
+function validateEMIS(emis) {
 
-    // Teacher ID (T001, T014...)
-    if(role === "Teacher"){
+    const role =
+        roleSelect.value;
 
-        if(emis.length < 4){
 
-            showMessage("Invalid Teacher ID.");
+    // Teacher
+
+    if (role === "Teacher") {
+
+        if (emis.length < 4) {
+
+            showMessage(
+                "Invalid Teacher ID."
+            );
 
             emisInput.focus();
 
@@ -238,10 +311,38 @@ function validateEMIS(emis){
 
     }
 
-    // Parent / Student EMIS
-    if(emis.length < 6){
 
-        showMessage("Invalid EMIS Number.");
+    // Admin / Headmaster
+
+    if (
+        role === "Admin" ||
+        role === "Headmaster"
+    ) {
+
+        if (emis.length < 4) {
+
+            showMessage(
+                "Invalid Username / Email."
+            );
+
+            emisInput.focus();
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+
+    // Parent / Student
+
+    if (emis.length < 6) {
+
+        showMessage(
+            "Invalid EMIS Number."
+        );
 
         emisInput.focus();
 
@@ -249,19 +350,23 @@ function validateEMIS(emis){
 
     }
 
+
     return true;
 
 }
 
-// =========================================
+
+//==================================================
 // Password Validation
-// =========================================
+//==================================================
 
-function validatePassword(password){
+function validatePassword(password) {
 
-    if(password.length < 4){
+    if (password.length < 4) {
 
-        showMessage("Password is too short.");
+        showMessage(
+            "Password is too short."
+        );
 
         passwordInput.focus();
 
@@ -269,98 +374,146 @@ function validatePassword(password){
 
     }
 
-    return true;
-
-}
-
-// =========================================
-// Form Validation
-// =========================================
-
-function validateForm(){
-
-    if(!validateLogin()){
-
-        return false;
-
-    }
-
-    if(!validateEMIS(emisInput.value.trim())){
-
-        return false;
-
-    }
-
-    if(!validatePassword(passwordInput.value.trim())){
-
-        return false;
-
-    }
 
     return true;
 
 }
-/*=========================================
- Remember Me Module
-=========================================*/
 
-// =========================================
-// Load Remembered Login
-// =========================================
 
-function loadRememberMe(){
+//==================================================
+// Complete Form Validation
+//==================================================
 
-    const remember = localStorage.getItem("rememberMe");
+function validateForm() {
 
-    if(remember !== "true"){
+    if (!validateLogin()) {
+
+        return false;
+
+    }
+
+
+    if (
+        !validateEMIS(
+            emisInput.value.trim()
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        !validatePassword(
+            passwordInput.value.trim()
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+//==================================================
+// Remember Me
+//==================================================
+
+function loadRememberMe() {
+
+    const remember =
+        localStorage.getItem(
+            "rememberMe"
+        );
+
+
+    if (remember !== "true") {
 
         return;
 
     }
 
-    const savedSchool = localStorage.getItem("savedSchool");
-    const savedRole = localStorage.getItem("savedRole");
-    const savedEMIS = localStorage.getItem("savedEMIS");
 
-    if(savedSchool){
+    const savedSchool =
+        localStorage.getItem(
+            "savedSchool"
+        );
 
-        schoolSelect.value = savedSchool;
+    const savedRole =
+        localStorage.getItem(
+            "savedRole"
+        );
+
+    const savedEMIS =
+        localStorage.getItem(
+            "savedEMIS"
+        );
+
+
+    if (savedSchool) {
+
+        schoolSelect.value =
+            savedSchool;
 
     }
 
-    if(savedRole){
 
-        roleSelect.value = savedRole;
+    if (savedRole) {
+
+        roleSelect.value =
+            savedRole;
+
+    }
+
+
+    if (savedEMIS) {
+
+        emisInput.value =
+            savedEMIS;
 
     }
 
-    if(savedEMIS){
-
-        emisInput.value = savedEMIS;
-
-    }
 
     rememberCheck.checked = true;
 
 }
 
-// =========================================
+
+//==================================================
 // Save Remember Me
-// =========================================
+//==================================================
 
-function saveRememberMe(){
+function saveRememberMe() {
 
-    if(rememberCheck.checked){
+    if (rememberCheck.checked) {
 
-        localStorage.setItem("rememberMe","true");
+        localStorage.setItem(
+            "rememberMe",
+            "true"
+        );
 
-        localStorage.setItem("savedSchool",schoolSelect.value);
+        localStorage.setItem(
+            "savedSchool",
+            schoolSelect.value
+        );
 
-        localStorage.setItem("savedRole",roleSelect.value);
+        localStorage.setItem(
+            "savedRole",
+            roleSelect.value
+        );
 
-        localStorage.setItem("savedEMIS",emisInput.value.trim());
+        localStorage.setItem(
+            "savedEMIS",
+            emisInput.value.trim()
+        );
 
-    }else{
+    }
+    else {
 
         clearRememberMe();
 
@@ -368,271 +521,729 @@ function saveRememberMe(){
 
 }
 
-// =========================================
+
+//==================================================
 // Clear Remember Me
-// =========================================
+//==================================================
 
-function clearRememberMe(){
+function clearRememberMe() {
 
-    localStorage.removeItem("rememberMe");
+    localStorage.removeItem(
+        "rememberMe"
+    );
 
-    localStorage.removeItem("savedSchool");
+    localStorage.removeItem(
+        "savedSchool"
+    );
 
-    localStorage.removeItem("savedRole");
+    localStorage.removeItem(
+        "savedRole"
+    );
 
-    localStorage.removeItem("savedEMIS");
-
-}
-
-// =========================================
-// Remember Checkbox Event
-// =========================================
-
-function bindRememberEvent(){
-
-    rememberCheck.addEventListener("change",function(){
-
-        if(!rememberCheck.checked){
-
-            clearRememberMe();
-
-        }
-
-    });
+    localStorage.removeItem(
+        "savedEMIS"
+    );
 
 }
-/*=========================================
- Login Process Module
-=========================================*/
 
-// =========================================
-// Login Button Click
-// =========================================
 
-async function loginUser(){
+//==================================================
+// Remember Checkbox
+//==================================================
 
-    clearMessage();
+function bindRememberEvent() {
 
-    // Validate Form
-
-    if(!validateForm()){
+    if (!rememberCheck) {
 
         return;
 
     }
 
-    // Loading Start
+
+    rememberCheck.addEventListener(
+        "change",
+        function () {
+
+            if (!rememberCheck.checked) {
+
+                clearRememberMe();
+
+            }
+
+        }
+    );
+
+}
+
+
+//==================================================
+// LOGIN
+//==================================================
+
+async function loginUser() {
+
+    clearMessage();
+
+
+    if (!validateForm()) {
+
+        return;
+
+    }
+
 
     showLoading();
 
-    try{
 
-        // Save Remember Me Data
+    try {
 
         saveRememberMe();
 
-        // Small Delay (UI Smooth)
 
-        await delay(800);
+        await delay(500);
 
-        // Next Step
 
         await processLogin();
 
     }
-    catch(error){
+    catch (error) {
 
-        console.error(error);
+        console.error(
+            "Login Error:",
+            error
+        );
+
+        hideLoading();
 
         showMessage(
             "Unexpected error occurred."
         );
 
-        hideLoading();
-
     }
 
 }
 
-// =========================================
-// Process Login
-// =========================================
+
+//==================================================
+// PROCESS LOGIN
+//==================================================
 
 async function processLogin() {
 
     try {
 
-        const loginId = emisInput.value.trim();
-        const password = passwordInput.value.trim();
-        const role = roleSelect.value;
+        const loginId =
+            emisInput.value.trim();
+
+        const password =
+            passwordInput.value.trim();
+
+        const role =
+            roleSelect.value;
+
 
         let q;
 
-        // Parent & Student -> Search by EMIS
-        if (role === "Parent" || role === "Student") {
+
+        //================================================
+        // Student / Parent
+        //================================================
+
+        if (
+            role === "Student" ||
+            role === "Parent"
+        ) {
 
             q = query(
-                collection(db, "users"),
-                where("emis", "==", loginId)
+
+                collection(
+                    db,
+                    "users"
+                ),
+
+                where(
+                    "emis",
+                    "==",
+                    loginId
+                )
+
             );
 
         }
 
-        // Teacher -> Search by Teacher ID
-        else if (role === "Teacher") {
+
+        //================================================
+        // Teacher
+        //================================================
+
+        else if (
+            role === "Teacher"
+        ) {
 
             q = query(
-                collection(db, "teachers"),
-                where("id", "==", loginId)
+
+                collection(
+                    db,
+                    "teachers"
+                ),
+
+                where(
+                    "id",
+                    "==",
+                    loginId
+                )
+
             );
 
         }
 
-        // Admin & Headmaster -> Search by Email
-        else if (role === "Admin" || role === "Headmaster") {
+
+        //================================================
+        // Admin / Headmaster
+        //================================================
+
+        else if (
+            role === "Admin" ||
+            role === "Headmaster"
+        ) {
 
             q = query(
-                collection(db, "users"),
-                where("email", "==", loginId)
+
+                collection(
+                    db,
+                    "users"
+                ),
+
+                where(
+                    "email",
+                    "==",
+                    loginId
+                )
+
             );
 
         }
 
-        const snapshot = await getDocs(q);
+
+        //================================================
+        // Firestore Search
+        //================================================
+
+        const snapshot =
+            await getDocs(q);
+
+
+        console.log(
+            "Login Role:",
+            role
+        );
+
+        console.log(
+            "Login ID:",
+            loginId
+        );
+
+        console.log(
+            "Matched Users:",
+            snapshot.size
+        );
+
+
+        //================================================
+        // User Not Found
+        //================================================
 
         if (snapshot.empty) {
 
             hideLoading();
-            showMessage("User not found.");
+
+            showMessage(
+                "User not found."
+            );
+
             return;
 
         }
 
-        const user = snapshot.docs[0].data();
 
-        if (user.password !== password) {
+        //================================================
+        // Get User
+        //================================================
+
+        const user =
+            snapshot.docs[0].data();
+
+
+        console.log(
+            "User Data:",
+            user
+        );
+
+
+        //================================================
+        // Password
+        //================================================
+
+        if (
+            user.password !== password
+        ) {
 
             hideLoading();
-            showMessage("Incorrect Password.");
+
+            showMessage(
+                "Incorrect Password."
+            );
+
             return;
 
         }
 
-        if (user.role !== role) {
+
+        //================================================
+        // Role
+        //================================================
+
+        if (
+            user.role !== role
+        ) {
 
             hideLoading();
-            showMessage("Wrong Login Role.");
+
+            showMessage(
+                "Wrong Login Role."
+            );
+
             return;
 
         }
 
-        if (user.active === false) {
+
+        //================================================
+        // Active Status
+        //================================================
+
+        if (
+            user.active === false
+        ) {
 
             hideLoading();
-            showMessage("User account disabled.");
+
+            showMessage(
+                "User account disabled."
+            );
+
             return;
 
         }
 
-        loginSuccess(user);
+
+        //================================================
+        // LOGIN SUCCESS
+        //================================================
+
+        loginSuccess(
+            user,
+            snapshot.docs[0].id
+        );
 
     }
     catch (error) {
 
-        console.error(error);
+        console.error(
+            "Process Login Error:",
+            error
+        );
 
         hideLoading();
 
-        showMessage("Login Failed.");
+        showMessage(
+            error.message ||
+            "Login Failed."
+        );
 
     }
 
 }
-         
-/*=========================================
- Login Success
-=========================================*/
 
-function loginSuccess(user){
 
-    // Session Save
+//==================================================
+// LOGIN SUCCESS
+//==================================================
+
+function loginSuccess(
+    user,
+    documentId
+) {
+
+    const role =
+        user.role;
+
+
+    //================================================
+    // IMPORTANT SESSION DATA
+    //================================================
+
+    // Common
 
     sessionStorage.setItem(
         "currentUser",
         JSON.stringify(user)
     );
 
+
+    // VERY IMPORTANT
+    // Admin Dashboard checks this
+
+    localStorage.setItem(
+        "userRole",
+        role
+    );
+
+
+    sessionStorage.setItem(
+        "userRole",
+        role
+    );
+
+
+    //================================================
+    // Store User ID
+    //================================================
+
+    if (user.id) {
+
+        localStorage.setItem(
+            "userId",
+            user.id
+        );
+
+        sessionStorage.setItem(
+            "userId",
+            user.id
+        );
+
+    }
+
+
+    // Firestore Document ID
+
+    if (documentId) {
+
+        localStorage.setItem(
+            "userDocId",
+            documentId
+        );
+
+        sessionStorage.setItem(
+            "userDocId",
+            documentId
+        );
+
+    }
+
+
+    //================================================
+    // Teacher Session
+    //================================================
+
+    if (role === "Teacher") {
+
+        const teacherId =
+            user.id || user.teacherId;
+
+
+        if (teacherId) {
+
+            localStorage.setItem(
+                "teacherId",
+                teacherId
+            );
+
+            sessionStorage.setItem(
+                "teacherId",
+                teacherId
+            );
+
+        }
+
+
+        if (user.name) {
+
+            localStorage.setItem(
+                "teacherName",
+                user.name
+            );
+
+            sessionStorage.setItem(
+                "teacherName",
+                user.name
+            );
+
+        }
+
+
+        localStorage.setItem(
+            "userRole",
+            "Teacher"
+        );
+
+    }
+
+
+    //================================================
+    // Student / Parent Session
+    //================================================
+
+    if (
+        role === "Student" ||
+        role === "Parent"
+    ) {
+
+        if (user.emis) {
+
+            localStorage.setItem(
+                "emis",
+                user.emis
+            );
+
+            sessionStorage.setItem(
+                "emis",
+                user.emis
+            );
+
+        }
+
+    }
+
+
+    //================================================
+    // Headmaster
+    //================================================
+
+    if (
+        role === "Headmaster"
+    ) {
+
+        localStorage.setItem(
+            "userRole",
+            "Headmaster"
+        );
+
+        sessionStorage.setItem(
+            "userRole",
+            "Headmaster"
+        );
+
+    }
+
+
+    //================================================
+    // Admin
+    //================================================
+
+    if (
+        role === "Admin"
+    ) {
+
+        // This is the important fix
+
+        localStorage.setItem(
+            "userRole",
+            "Admin"
+        );
+
+        sessionStorage.setItem(
+            "userRole",
+            "Admin"
+        );
+
+        localStorage.setItem(
+            "adminLoggedIn",
+            "true"
+        );
+
+        sessionStorage.setItem(
+            "adminLoggedIn",
+            "true"
+        );
+
+    }
+
+
+    //================================================
     // Success Message
+    //================================================
 
     showMessage(
         "Login Successful.",
         "success"
     );
 
-    // Stop Loading
 
     hideLoading();
 
-    // Dashboard Redirect
 
-    setTimeout(function(){
+    //================================================
+    // Redirect
+    //================================================
 
-        redirectDashboard(user.role);
+    setTimeout(
+        function () {
 
-    },1000);
+            redirectDashboard(
+                role
+            );
+
+        },
+        700
+    );
 
 }
-/*=========================================
- Dashboard Redirect
-=========================================*/
 
-function redirectDashboard(role){
 
-    switch(role){
+//==================================================
+// DASHBOARD REDIRECT
+//==================================================
+
+function redirectDashboard(role) {
+
+    console.log(
+        "Redirecting Role:",
+        role
+    );
+
+
+    switch (role) {
+
+
+        //==========================================
+        // Student
+        //==========================================
 
         case "Student":
 
-            window.location.href="student.html";
+            window.location.href =
+                "student.html";
+
             break;
+
+
+        //==========================================
+        // Parent
+        //==========================================
 
         case "Parent":
 
-            window.location.href="parent.html";
+            window.location.href =
+                "parent.html";
+
             break;
+
+
+        //==========================================
+        // Teacher
+        //==========================================
 
         case "Teacher":
 
-            window.location.href="teacher.html";
+            window.location.href =
+                "teacher.html";
+
             break;
+
+
+        //==========================================
+        // Headmaster
+        //==========================================
 
         case "Headmaster":
 
-            window.location.href="headmaster.html";
+            window.location.href =
+                "headmaster.html";
+
             break;
 
-       case "Admin":
 
-    window.location.href="admin_dashboard_v3.html";
+        //==========================================
+        // ADMIN
+        //==========================================
 
-    break;
+        case "Admin":
+
+            window.location.href =
+                "admin_dashboard_v3.html";
+
+            break;
+
+
+        //==========================================
+        // Invalid
+        //==========================================
 
         default:
 
-            showMessage("Invalid User Role.");
+            console.error(
+                "Invalid Role:",
+                role
+            );
+
+            showMessage(
+                "Invalid User Role."
+            );
 
     }
 
 }
-// =========================================
-// Delay Function
-// =========================================
 
-function delay(ms){
 
-    return new Promise(resolve=>{
+//==================================================
+// DELAY
+//==================================================
 
-        setTimeout(resolve,ms);
+function delay(ms) {
 
-    });
+    return new Promise(
+        resolve => {
+
+            setTimeout(
+                resolve,
+                ms
+            );
+
+        }
+    );
 
 }
+
+
+//==================================================
+// VERSION
+//==================================================
+
+console.log(
+    "===================================="
+);
+
+console.log(
+    "School Connect TN"
+);
+
+console.log(
+    "Login Module"
+);
+
+console.log(
+    "Production Stable Version"
+);
+
+console.log(
+    "Firebase Connected"
+);
+
+console.log(
+    "Admin Session Fix Applied"
+);
+
+console.log(
+    "===================================="
+);
