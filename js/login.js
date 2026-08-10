@@ -610,10 +610,11 @@ function redirectDashboard(role){
             window.location.href="headmaster.html";
             break;
 
-        case "Admin":
+       case "Admin":
 
-            window.location.href="admin.html";
-            break;
+    window.location.href="admin_dashboard_v3.html";
+
+    break;
 
         default:
 
