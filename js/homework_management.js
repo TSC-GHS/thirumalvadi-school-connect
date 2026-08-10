@@ -1,387 +1,1041 @@
 //==========================================
 // School Connect TN
 // Homework Management
-// Production Version V2
-// Part 1
+// Production Version V3
+// Developed by VTOOS Software Solutions
 //==========================================
 
 import { db } from "../firebase.js";
 
 import {
-collection,
-addDoc,
-getDocs,
-getDoc,
-deleteDoc,
-doc,
-query,
-where,
-orderBy,
-writeBatch
+    collection,
+    addDoc,
+    getDocs,
+    getDoc,
+    deleteDoc,
+    doc,
+    query,
+    where,
+    orderBy,
+    writeBatch,
+    limit
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
+
+//==========================================
+// DOM Elements
+//==========================================
+
 const saveBtn =
-document.getElementById("saveHomework");
+    document.getElementById("saveHomework");
 
 const homeworkList =
-document.getElementById("homeworkList");
+    document.getElementById("homeworkList");
+
+
+//==========================================
+// Global Variables
+//==========================================
 
 let teacherId = "";
+
 let teacher = {};
 
-window.addEventListener("DOMContentLoaded", initialize);
 
-async function initialize(){
+//==========================================
+// DOM Ready
+//==========================================
 
-teacherId =
-localStorage.getItem("teacherId") ||
-sessionStorage.getItem("teacherId");
-
-if(!teacherId){
-
-alert("Session Expired");
-
-location.href="index.html";
-
-return;
-
-}
-
-try{
-
-const teacherDocId =
-localStorage.getItem("teacherDocId") ||
-sessionStorage.getItem("teacherDocId");
-
-const teacherSnap =
-await getDoc(
-doc(db,"teachers",teacherDocId)
+window.addEventListener(
+    "DOMContentLoaded",
+    initialize
 );
-if(!teacherSnap.exists()){
 
-alert("Teacher Not Found");
 
-return;
+//==========================================
+// Initialize
+//==========================================
+
+async function initialize() {
+
+    try {
+
+        // ----------------------------------
+        // Get Teacher ID
+        // ----------------------------------
+
+        teacherId =
+            localStorage.getItem("teacherId") ||
+            sessionStorage.getItem("teacherId") ||
+            "";
+
+
+        console.log(
+            "Teacher ID:",
+            teacherId
+        );
+
+
+        // ----------------------------------
+        // Session Check
+        // ----------------------------------
+
+        if (!teacherId) {
+
+            alert("Session Expired");
+
+            location.href =
+                "index.html";
+
+            return;
+
+        }
+
+
+        // ----------------------------------
+        // Load Teacher Profile
+        // ----------------------------------
+
+        let teacherSnap = null;
+
+
+        // First try document ID
+
+        const directTeacherRef =
+            doc(
+                db,
+                "teachers",
+                teacherId
+            );
+
+
+        const directTeacherSnap =
+            await getDoc(
+                directTeacherRef
+            );
+
+
+        if (
+            directTeacherSnap.exists()
+        ) {
+
+            teacherSnap =
+                directTeacherSnap;
+
+        }
+
+
+        // ----------------------------------
+        // If not found, search teacherId
+        // field
+        // ----------------------------------
+
+        if (!teacherSnap) {
+
+            const teacherQuery =
+                query(
+                    collection(
+                        db,
+                        "teachers"
+                    ),
+                    where(
+                        "teacherId",
+                        "==",
+                        teacherId
+                    ),
+                    limit(1)
+                );
+
+
+            const teacherResult =
+                await getDocs(
+                    teacherQuery
+                );
+
+
+            if (
+                !teacherResult.empty
+            ) {
+
+                teacherSnap =
+                    teacherResult.docs[0];
+
+            }
+
+        }
+
+
+        // ----------------------------------
+        // Teacher Not Found
+        // ----------------------------------
+
+        if (!teacherSnap) {
+
+            console.error(
+                "Teacher profile not found:",
+                teacherId
+            );
+
+            alert(
+                "Teacher Profile Not Found"
+            );
+
+            return;
+
+        }
+
+
+        // ----------------------------------
+        // Teacher Data
+        // ----------------------------------
+
+        teacher =
+            teacherSnap.data();
+
+
+        console.log(
+            "Teacher Profile:",
+            teacher
+        );
+
+
+        // ----------------------------------
+        // Save actual Firestore ID
+        // ----------------------------------
+
+        localStorage.setItem(
+            "teacherDocId",
+            teacherSnap.id
+        );
+
+        sessionStorage.setItem(
+            "teacherDocId",
+            teacherSnap.id
+        );
+
+
+        // ----------------------------------
+        // Load Homework
+        // ----------------------------------
+
+        await loadHomework();
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "Homework Initialize Error:",
+            error
+        );
+
+        alert(
+            "Unable to load Homework Management.\n\n" +
+            error.message
+        );
+
+    }
 
 }
 
-teacher = teacherSnap.data();
 
-await loadHomework();
-
-}catch(error){
-
-console.error("Homework Load Error :", error);
-alert(error.message);
-
-}
-
-}
 //==========================================
 // Load Homework List
 //==========================================
 
-async function loadHomework(){
+async function loadHomework() {
 
-try{
+    try {
 
-homeworkList.innerHTML = "Loading Homework...";
+        if (!homeworkList) {
 
-const homeworkQuery = query(
-collection(db,"homework"),
-where("teacherId","==",teacherId),
-where("status","==","Active")
-);
+            console.error(
+                "homeworkList element not found"
+            );
 
-const homeworkSnap = await getDocs(homeworkQuery);
+            return;
 
-homeworkList.innerHTML = "";
+        }
 
-if(homeworkSnap.empty){
 
-homeworkList.innerHTML = `
-<p style="text-align:center;">
-No Homework Available
-</p>
-`;
+        homeworkList.innerHTML =
+            "Loading Homework...";
 
-return;
+
+        // ----------------------------------
+        // Query Active Homework
+        // ----------------------------------
+
+        const homeworkQuery =
+            query(
+                collection(
+                    db,
+                    "homework"
+                ),
+                where(
+                    "teacherId",
+                    "==",
+                    teacherId
+                ),
+                where(
+                    "status",
+                    "==",
+                    "Active"
+                )
+            );
+
+
+        const homeworkSnap =
+            await getDocs(
+                homeworkQuery
+            );
+
+
+        // ----------------------------------
+        // Empty
+        // ----------------------------------
+
+        if (
+            homeworkSnap.empty
+        ) {
+
+            homeworkList.innerHTML = `
+                <div class="emptyHomework">
+                    📚 No Active Homework
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        // ----------------------------------
+        // Build List
+        // ----------------------------------
+
+        homeworkList.innerHTML = "";
+
+
+        homeworkSnap.forEach(
+            (docSnap) => {
+
+                const hw =
+                    docSnap.data();
+
+
+                const title =
+                    hw.title ||
+                    "Untitled Homework";
+
+
+                const description =
+                    hw.description ||
+                    "";
+
+
+                const className =
+                    hw.class ||
+                    hw.className ||
+                    "-";
+
+
+                const section =
+                    hw.section ||
+                    "";
+
+
+                const subject =
+                    hw.subject ||
+                    "-";
+
+
+                const dueDate =
+                    hw.dueDate ||
+                    "-";
+
+
+                const teacherName =
+                    hw.teacherName ||
+                    teacher.name ||
+                    "-";
+
+
+                homeworkList.innerHTML += `
+                    <div class="homeworkCard">
+
+                        <h3>
+                            📚 ${escapeHTML(title)}
+                        </h3>
+
+                        <p>
+                            ${escapeHTML(description)}
+                        </p>
+
+                        <div class="homeworkInfo">
+
+                            <span>
+                                🏫 Class:
+                                <b>
+                                    ${escapeHTML(
+                                        className
+                                    )}
+                                    ${escapeHTML(
+                                        section
+                                    )}
+                                </b>
+                            </span>
+
+                            <span>
+                                📖 Subject:
+                                <b>
+                                    ${escapeHTML(
+                                        subject
+                                    )}
+                                </b>
+                            </span>
+
+                            <span>
+                                📅 Due:
+                                <b>
+                                    ${escapeHTML(
+                                        dueDate
+                                    )}
+                                </b>
+                            </span>
+
+                            <span>
+                                👨‍🏫 Teacher:
+                                <b>
+                                    ${escapeHTML(
+                                        teacherName
+                                    )}
+                                </b>
+                            </span>
+
+                        </div>
+
+                        <button
+                            class="deleteBtn"
+                            onclick="deleteHomework('${docSnap.id}')"
+                        >
+                            🗑️ Delete
+                        </button>
+
+                    </div>
+                `;
+
+            }
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Homework Load Error:",
+            error
+        );
+
+
+        if (homeworkList) {
+
+            homeworkList.innerHTML = `
+                <div class="errorMessage">
+                    ❌ Unable to load Homework
+                    <br>
+                    <small>
+                        ${escapeHTML(
+                            error.message
+                        )}
+                    </small>
+                </div>
+            `;
+
+        }
+
+    }
 
 }
 
-homeworkSnap.forEach((docSnap)=>{
-
-const hw = docSnap.data();
-
-homeworkList.innerHTML += `
-
-<div class="homeworkCard">
-
-<h3>${hw.title}</h3>
-
-<p>${hw.description}</p>
-
-<p><b>Class :</b> ${hw.class}</p>
-
-<p><b>Section :</b> ${hw.section}</p>
-
-<p><b>Subject :</b> ${hw.subject}</p>
-
-<p><b>Due Date :</b> ${hw.dueDate}</p>
-
-<p><b>Status :</b> ${hw.status}</p>
-
-<button
-onclick="deleteHomework('${docSnap.id}')">
-
-🗑 Delete
-
-</button>
-
-</div>
-
-<br>
-
-`;
-
-});
-
-}catch(error){
-
-console.error(error);
-
-homeworkList.innerHTML = `
-<p style="color:red;">
-Unable to Load Homework
-</p>
-`;
-
-}
-
-}
 
 //==========================================
 // Delete Homework
 //==========================================
 
-window.deleteHomework = async function(id){
+window.deleteHomework =
+    async function(id) {
 
-const ok = confirm("Delete this Homework?");
+        const ok =
+            confirm(
+                "Delete this Homework?"
+            );
 
-if(!ok) return;
 
-try{
+        if (!ok) {
 
-await deleteDoc(doc(db,"homework",id));
+            return;
 
-alert("✅ Homework Deleted");
+        }
 
-await loadHomework();
 
-}catch(error){
+        try {
 
-console.error(error);
+            await deleteDoc(
+                doc(
+                    db,
+                    "homework",
+                    id
+                )
+            );
 
-alert("Unable to Delete Homework");
 
-}
+            alert(
+                "✅ Homework Deleted"
+            );
 
-}
+
+            await loadHomework();
+
+        }
+        catch (error) {
+
+            console.error(
+                "Delete Homework Error:",
+                error
+            );
+
+
+            alert(
+                "Unable to Delete Homework.\n\n" +
+                error.message
+            );
+
+        }
+
+    };
+
+
 //==========================================
 // Save Homework
 //==========================================
 
-saveBtn.addEventListener("click", async ()=>{
+if (saveBtn) {
 
-const title =
-document.getElementById("homeworkTitle").value.trim();
-
-const description =
-document.getElementById("homeworkDescription").value.trim();
-
-const className =
-document.getElementById("class").value;
-
-const section =
-document.getElementById("section").value;
-
-const subject =
-document.getElementById("subject").value;
-
-const dueDate =
-document.getElementById("dueDate").value;
-const status =
-document.getElementById("status").value;
-if(
-!title ||
-!description ||
-!className ||
-!section ||
-!subject ||
-!dueDate
-){
-
-alert("Please fill all fields");
-
-return;
+    saveBtn.addEventListener(
+        "click",
+        saveHomework
+    );
 
 }
 
-try{
 
-const homeworkRef = await addDoc(
-collection(db,"homework"),
-{
+//==========================================
+// Save Homework Function
+//==========================================
 
-title: title,
+async function saveHomework() {
 
-description: description,
+    const title =
+        document
+            .getElementById(
+                "homeworkTitle"
+            )
+            .value
+            .trim();
 
-class: className,
 
-section: section,
+    const description =
+        document
+            .getElementById(
+                "homeworkDescription"
+            )
+            .value
+            .trim();
 
-subject: subject,
 
-dueDate: dueDate,
+    const className =
+        document
+            .getElementById("class")
+            .value;
 
-teacherId: teacherId,
-teacherName: teacher.name,
-teacherType: teacher.teacherType || "",
 
-teacherType: teacher.teacherType || "",
+    const section =
+        document
+            .getElementById("section")
+            .value;
 
-status: status,
 
-createdAt: new Date().toISOString()
+    const subject =
+        document
+            .getElementById("subject")
+            .value;
+
+
+    const dueDate =
+        document
+            .getElementById("dueDate")
+            .value;
+
+
+    const status =
+        document
+            .getElementById("status")
+            .value;
+
+
+    // ----------------------------------
+    // Validation
+    // ----------------------------------
+
+    if (
+        !title ||
+        !description ||
+        !className ||
+        !section ||
+        !subject ||
+        !dueDate
+    ) {
+
+        alert(
+            "Please fill all fields"
+        );
+
+        return;
+
+    }
+
+
+    if (!teacherId) {
+
+        alert(
+            "Teacher session not found."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        saveBtn.disabled = true;
+
+        saveBtn.textContent =
+            "⏳ Saving Homework...";
+
+
+        //==================================
+        // Create Homework
+        //==================================
+
+        const homeworkRef =
+            await addDoc(
+                collection(
+                    db,
+                    "homework"
+                ),
+                {
+
+                    title:
+                        title,
+
+                    description:
+                        description,
+
+                    class:
+                        className,
+
+                    section:
+                        section,
+
+                    subject:
+                        subject,
+
+                    dueDate:
+                        dueDate,
+
+                    teacherId:
+                        teacherId,
+
+                    teacherName:
+                        teacher.name ||
+                        teacher.teacherName ||
+                        "",
+
+                    teacherType:
+                        teacher.teacherType ||
+                        "",
+
+                    status:
+                        status,
+
+                    createdAt:
+                        new Date()
+                            .toISOString(),
+
+                    updatedAt:
+                        new Date()
+                            .toISOString()
+
+                }
+            );
+
+
+        //==================================
+        // Find Students
+        //==================================
+
+        const studentQuery =
+            query(
+                collection(
+                    db,
+                    "students"
+                ),
+                where(
+                    "class",
+                    "==",
+                    className
+                ),
+                where(
+                    "section",
+                    "==",
+                    section
+                )
+            );
+
+
+        const studentSnap =
+            await getDocs(
+                studentQuery
+            );
+
+
+        //==================================
+        // Create Submission Records
+        //==================================
+
+        if (
+            !studentSnap.empty
+        ) {
+
+            const batch =
+                writeBatch(db);
+
+
+            studentSnap.forEach(
+                (studentDoc) => {
+
+                    const student =
+                        studentDoc.data();
+
+
+                    const submissionRef =
+                        doc(
+                            collection(
+                                db,
+                                "homework_submissions"
+                            )
+                        );
+
+
+                    batch.set(
+                        submissionRef,
+                        {
+
+                            homeworkId:
+                                homeworkRef.id,
+
+                            title:
+                                title,
+
+                            description:
+                                description,
+
+                            className:
+                                className,
+
+                            section:
+                                section,
+
+                            subject:
+                                subject,
+
+                            dueDate:
+                                dueDate,
+
+                            teacherId:
+                                teacherId,
+
+                            teacherName:
+                                teacher.name ||
+                                teacher.teacherName ||
+                                "",
+
+                            studentName:
+                                student.name ||
+                                student.studentName ||
+                                "",
+
+                            emis:
+                                student.emis ||
+                                "",
+
+                            class:
+                                className,
+
+                            status:
+                                "Pending",
+
+                            completedBy:
+                                "",
+
+                            parentComment:
+                                "",
+
+                            completedTime:
+                                null,
+
+                            createdAt:
+                                new Date()
+                                    .toISOString(),
+
+                            updatedAt:
+                                new Date()
+                                    .toISOString()
+
+                        }
+                    );
+
+                }
+            );
+
+
+            await batch.commit();
+
+        }
+
+
+        //==================================
+        // Success
+        //==================================
+
+        alert(
+            "✅ Homework Saved Successfully"
+        );
+
+
+        //==================================
+        // Clear Form
+        //==================================
+
+        document
+            .getElementById(
+                "homeworkTitle"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "homeworkDescription"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "class"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "section"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "subject"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "dueDate"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "status"
+            )
+            .value = "Active";
+
+
+        //==================================
+        // Reload
+        //==================================
+
+        await loadHomework();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Save Homework Error:",
+            error
+        );
+
+
+        alert(
+            "Unable to Save Homework.\n\n" +
+            error.message
+        );
+
+    }
+    finally {
+
+        saveBtn.disabled =
+            false;
+
+        saveBtn.textContent =
+            "💾 Save Homework";
+
+    }
 
 }
+
+
+//==========================================
+// HTML Safety
+//==========================================
+
+function escapeHTML(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+//==========================================
+// Auto Refresh
+//==========================================
+
+setInterval(
+    async () => {
+
+        try {
+
+            if (teacherId) {
+
+                await loadHomework();
+
+            }
+
+        }
+        catch (error) {
+
+            console.log(
+                "Homework Refresh Failed:",
+                error
+            );
+
+        }
+
+    },
+    60000
 );
-//==========================================
-// Create Homework Submission Records
-//==========================================
 
-const studentQuery = query(
-collection(db,"students"),
-where("class","==",className),
-where("section","==",section)
-);
-
-const studentSnap = await getDocs(studentQuery);
-
-const batch = writeBatch(db);
-
-studentSnap.forEach((studentDoc)=>{
-
-const student = studentDoc.data();
-
-const submissionRef =
-doc(collection(db,"homework_submissions"));
-
-batch.set(submissionRef,{
-
-homeworkId: homeworkRef.id,
-
-title,
-description,
-
-className,
-section,
-subject,
-dueDate,
-
-teacherId,
-teacherName: teacher.name,
-
-studentName: student.name,
-emis: student.emis,
-
-class: className,
-section: section,
-
-status:"Pending",
-
-completedBy:"",
-parentComment:"",
-completedTime:null,
-
-createdAt:new Date().toISOString(),
-updatedAt:new Date().toISOString()
-
-});
-
-});
-
-await batch.commit();
-
-alert("✅ Homework Saved Successfully");
-
-// Clear Form
-
-document.getElementById("homeworkTitle").value="";
-document.getElementById("homeworkDescription").value="";
-document.getElementById("class").value="";
-document.getElementById("section").value="";
-document.getElementById("subject").value="";
-document.getElementById("dueDate").value="";
-document.getElementById("status").value="Active";
-
-await loadHomework();
-
-}catch(error){
-
-console.error(error);
-
-alert(error.message);
-
-}
-
-});
-//==========================================
-// Auto Refresh Homework List
-//==========================================
-
-setInterval(async()=>{
-
-try{
-
-if(teacherId){
-
-await loadHomework();
-
-}
-
-}catch(error){
-
-console.log("Homework Refresh Failed",error);
-
-}
-
-},60000);
 
 //==========================================
 // Version Information
 //==========================================
 
-console.log("================================");
-console.log("School Connect TN");
-console.log("Homework Management");
-console.log("Production Version V2");
-console.log("Firebase Connected");
-console.log("================================");
+console.log(
+    "================================"
+);
+
+console.log(
+    "School Connect TN"
+);
+
+console.log(
+    "Homework Management"
+);
+
+console.log(
+    "Production Version V3"
+);
+
+console.log(
+    "Firebase Connected"
+);
+
+console.log(
+    "================================"
+);
+
 
 //==========================================
 // Global Error Handler
 //==========================================
 
-window.addEventListener("error",(event)=>{
+window.addEventListener(
+    "error",
+    (event) => {
 
-console.error("Global Error :",event.error);
+        console.error(
+            "Global Error:",
+            event.error
+        );
 
-});
+    }
+);
 
-window.addEventListener("unhandledrejection",(event)=>{
 
-console.error("Unhandled Promise :",event.reason);
+window.addEventListener(
+    "unhandledrejection",
+    (event) => {
 
-});
+        console.error(
+            "Unhandled Promise:",
+            event.reason
+        );
+
+    }
+);
