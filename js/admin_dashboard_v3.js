@@ -1,108 +1,602 @@
 //==================================================
 // School Connect TN
-// Admin Dashboard V3 Stable
+// Admin Dashboard V4
+// Stable Session Version
 //==================================================
 
 import { db, auth } from "../firebase.js";
 
 import {
-  collection,
-  getDocs
+    collection,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 import {
-  signOut
+    signOut
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
 
 //==================================================
 // Session Check
 //==================================================
 
-const role = localStorage.getItem("userRole");
+function getUserRole() {
 
-if (role !== "Admin") {
-  window.location.href = "login.html";
+    return (
+        localStorage.getItem("userRole") ||
+        sessionStorage.getItem("userRole") ||
+        ""
+    );
+
 }
 
+
+const role = getUserRole();
+
+console.log("================================");
+console.log("School Connect TN");
+console.log("Admin Dashboard V4");
+console.log("User Role :", role);
+console.log("================================");
+
+
 //==================================================
-// Dashboard
+// Admin Access Protection
+//==================================================
+
+if (role !== "Admin") {
+
+    console.warn(
+        "Admin access denied. Current role:",
+        role
+    );
+
+    window.location.href = "index.html";
+
+}
+
+
+//==================================================
+// Dashboard Elements
+//==================================================
+
+const studentEl =
+    document.getElementById("studentCount");
+
+const teacherEl =
+    document.getElementById("teacherCount");
+
+const homeworkEl =
+    document.getElementById("homeworkCount");
+
+const noticeEl =
+    document.getElementById("noticeCount");
+
+
+//==================================================
+// Safe Count Helper
+//==================================================
+
+function setCount(element, value) {
+
+    if (element) {
+
+        element.textContent = value;
+
+    }
+
+}
+
+
+//==================================================
+// Load Students
+//==================================================
+
+async function loadStudents() {
+
+    try {
+
+        const studentSnap =
+            await getDocs(
+                collection(
+                    db,
+                    "students"
+                )
+            );
+
+        setCount(
+            studentEl,
+            studentSnap.size
+        );
+
+        console.log(
+            "Students :",
+            studentSnap.size
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Student Load Error :",
+            error
+        );
+
+        setCount(
+            studentEl,
+            "-"
+        );
+
+    }
+
+}
+
+
+//==================================================
+// Load Teachers
+//==================================================
+
+async function loadTeachers() {
+
+    try {
+
+        const teacherSnap =
+            await getDocs(
+                collection(
+                    db,
+                    "teachers"
+                )
+            );
+
+        setCount(
+            teacherEl,
+            teacherSnap.size
+        );
+
+        console.log(
+            "Teachers :",
+            teacherSnap.size
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Teacher Load Error :",
+            error
+        );
+
+        setCount(
+            teacherEl,
+            "-"
+        );
+
+    }
+
+}
+
+
+//==================================================
+// Load Homework
+//==================================================
+
+async function loadHomework() {
+
+    try {
+
+        const homeworkSnap =
+            await getDocs(
+                collection(
+                    db,
+                    "homework"
+                )
+            );
+
+        setCount(
+            homeworkEl,
+            homeworkSnap.size
+        );
+
+        console.log(
+            "Homework :",
+            homeworkSnap.size
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Homework Load Error :",
+            error
+        );
+
+        setCount(
+            homeworkEl,
+            "-"
+        );
+
+    }
+
+}
+
+
+//==================================================
+// Load Notices
+//==================================================
+
+async function loadNotices() {
+
+    try {
+
+        let noticeCount = 0;
+
+
+        //==========================================
+        // First try: notices
+        //==========================================
+
+        try {
+
+            const noticeSnap =
+                await getDocs(
+                    collection(
+                        db,
+                        "notices"
+                    )
+                );
+
+            noticeCount =
+                noticeSnap.size;
+
+        } catch (error) {
+
+            console.warn(
+                "notices collection unavailable. Trying notice..."
+            );
+
+
+            //======================================
+            // Second try: notice
+            //======================================
+
+            try {
+
+                const noticeSnap =
+                    await getDocs(
+                        collection(
+                            db,
+                            "notice"
+                        )
+                    );
+
+                noticeCount =
+                    noticeSnap.size;
+
+            } catch (secondError) {
+
+                console.error(
+                    "Notice Load Error :",
+                    secondError
+                );
+
+                noticeCount = 0;
+
+            }
+
+        }
+
+
+        setCount(
+            noticeEl,
+            noticeCount
+        );
+
+        console.log(
+            "Notices :",
+            noticeCount
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Notice Error :",
+            error
+        );
+
+        setCount(
+            noticeEl,
+            "-"
+        );
+
+    }
+
+}
+
+
+//==================================================
+// Load Complete Dashboard
 //==================================================
 
 async function loadDashboard() {
 
-  try {
+    console.log(
+        "Loading Admin Dashboard..."
+    );
 
-    // Students
-    const studentSnap = await getDocs(collection(db, "students"));
-    const studentEl = document.getElementById("studentCount");
-    if (studentEl) {
-      studentEl.textContent = studentSnap.size;
-    }
 
-    // Teachers
-    const teacherSnap = await getDocs(collection(db, "teachers"));
-    const teacherEl = document.getElementById("teacherCount");
-    if (teacherEl) {
-      teacherEl.textContent = teacherSnap.size;
-    }
+    // Show loading state
 
-    // Homework
-    const homeworkSnap = await getDocs(collection(db, "homework"));
-    const homeworkEl = document.getElementById("homeworkCount");
-    if (homeworkEl) {
-      homeworkEl.textContent = homeworkSnap.size;
-    }
+    setCount(
+        studentEl,
+        "..."
+    );
 
-    // Notices
-    let noticeCount = 0;
+    setCount(
+        teacherEl,
+        "..."
+    );
+
+    setCount(
+        homeworkEl,
+        "..."
+    );
+
+    setCount(
+        noticeEl,
+        "..."
+    );
+
 
     try {
-      const noticeSnap = await getDocs(collection(db, "notices"));
-      noticeCount = noticeSnap.size;
-    } catch {
-      const noticeSnap = await getDocs(collection(db, "notice"));
-      noticeCount = noticeSnap.size;
+
+        await Promise.all([
+
+            loadStudents(),
+
+            loadTeachers(),
+
+            loadHomework(),
+
+            loadNotices()
+
+        ]);
+
+
+        console.log(
+            "Admin Dashboard Loaded Successfully"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Dashboard Load Error :",
+            error
+        );
+
     }
-
-    const noticeEl = document.getElementById("noticeCount");
-    if (noticeEl) {
-      noticeEl.textContent = noticeCount;
-    }
-
-  } catch (error) {
-
-    console.error(error);
-    alert(error.message);
-
-  }
 
 }
 
+
 //==================================================
-// Logout
+// Logout Admin
 //==================================================
 
 window.logoutAdmin = async function () {
 
-  try {
+    const confirmLogout =
+        confirm(
+            "Are you sure you want to logout?"
+        );
 
-    await signOut(auth);
 
-    localStorage.clear();
-    sessionStorage.clear();
+    if (!confirmLogout) {
 
-    window.location.href = "login.html";
+        return;
 
-  } catch (error) {
+    }
 
-    alert(error.message);
 
-  }
+    try {
+
+        //==========================================
+        // Firebase Logout
+        //==========================================
+
+        if (auth) {
+
+            await signOut(auth);
+
+        }
+
+
+    } catch (error) {
+
+        console.warn(
+            "Firebase Logout Error :",
+            error
+        );
+
+    }
+
+
+    //==============================================
+    // Remove only application session data
+    //==============================================
+
+    localStorage.removeItem(
+        "userRole"
+    );
+
+    localStorage.removeItem(
+        "userId"
+    );
+
+    localStorage.removeItem(
+        "currentUser"
+    );
+
+    localStorage.removeItem(
+        "teacherId"
+    );
+
+    localStorage.removeItem(
+        "teacherDocId"
+    );
+
+    localStorage.removeItem(
+        "teacherName"
+    );
+
+
+    sessionStorage.removeItem(
+        "userRole"
+    );
+
+    sessionStorage.removeItem(
+        "userId"
+    );
+
+    sessionStorage.removeItem(
+        "currentUser"
+    );
+
+    sessionStorage.removeItem(
+        "teacherId"
+    );
+
+    sessionStorage.removeItem(
+        "teacherDocId"
+    );
+
+    sessionStorage.removeItem(
+        "teacherName"
+    );
+
+
+    //==============================================
+    // Redirect to Main Login
+    //==============================================
+
+    window.location.href =
+        "index.html";
 
 };
 
+
 //==================================================
-// Load Dashboard
+// DOM Ready
 //==================================================
 
-document.addEventListener("DOMContentLoaded", loadDashboard);
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        console.log(
+            "Admin Dashboard DOM Ready"
+        );
+
+
+        // Re-check session
+
+        const currentRole =
+            getUserRole();
+
+
+        if (
+            currentRole !== "Admin"
+        ) {
+
+            console.warn(
+                "Invalid Admin Session"
+            );
+
+            window.location.href =
+                "index.html";
+
+            return;
+
+        }
+
+
+        // Load dashboard
+
+        await loadDashboard();
+
+    }
+);
+
+
+//==================================================
+// Auto Refresh
+//==================================================
+
+setInterval(
+    async function () {
+
+        try {
+
+            const currentRole =
+                getUserRole();
+
+
+            if (
+                currentRole === "Admin"
+            ) {
+
+                await loadDashboard();
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Dashboard Refresh Error :",
+                error
+            );
+
+        }
+
+    },
+    60000
+);
+
+
+//==================================================
+// Global Error Handler
+//==================================================
+
+window.addEventListener(
+    "error",
+    function (event) {
+
+        console.error(
+            "Global Error :",
+            event.error
+        );
+
+    }
+);
+
+
+//==================================================
+// Promise Error Handler
+//==================================================
+
+window.addEventListener(
+    "unhandledrejection",
+    function (event) {
+
+        console.error(
+            "Unhandled Promise :",
+            event.reason
+        );
+
+    }
+);
+
+
+//==================================================
+// Final Log
+//==================================================
+
+console.log(
+    "Admin Dashboard V4 Ready"
+);
