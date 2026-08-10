@@ -5,352 +5,534 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
 <title>School Connect TN | Login</title>
 
-<link rel="icon"
-href="assets/assets/favicon.png">
+<link
+    rel="icon"
+    href="assets/assets/favicon.png">
 
-<link rel="stylesheet"
-href="css/login.css">
+<link
+    rel="stylesheet"
+    href="css/login.css">
 
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
+<!-- Google Font -->
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-rel="stylesheet">
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+<!-- Font Awesome -->
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
+
 <body>
+
+
+<!-- =========================================
+     BACKGROUND
+========================================= -->
 
 <div class="background">
 
-<div class="circle one"></div>
+    <div class="circle one"></div>
 
-<div class="circle two"></div>
+    <div class="circle two"></div>
 
-<div class="circle three"></div>
+    <div class="circle three"></div>
 
 </div>
+
+
+<!-- =========================================
+     MAIN CONTAINER
+========================================= -->
 
 <div class="container">
 
-<!-- LEFT PANEL -->
 
-<div class="leftPanel">
+    <!-- =====================================
+         LEFT PANEL
+    ====================================== -->
 
-<img
-src="assets/assets/header-logo.png"
-class="logo">
+    <div class="leftPanel">
 
-<div class="brand">
 
-<h1>
+        <img
+            src="assets/assets/header-logo.png"
+            class="logo"
+            alt="School Connect TN">
 
-School Connect <span>TN</span>
 
-</h1>
+        <div class="brand">
 
-<p>
+            <h1>
 
-Smart Digital School Management Platform
+                School Connect
+                <span>TN</span>
 
-</p>
+            </h1>
+
+            <p>
+
+                Smart Digital School Management Platform
+
+            </p>
+
+        </div>
+
+
+        <!-- Hero -->
+
+        <div class="heroSection">
+
+            <img
+                src="assets/assets/hero_school.png"
+                class="heroImage"
+                alt="School">
+
+
+            <h2>
+
+                Empowering Education
+
+                <br>
+
+                Through Technology
+
+            </h2>
+
+
+            <p>
+
+                One Platform.
+
+                <br>
+
+                One School.
+
+                <br>
+
+                One Digital Future.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================
+         LOGIN PANEL
+    ====================================== -->
+
+    <div class="loginPanel">
+
+
+        <div class="loginCard">
+
+
+            <!-- Badge -->
+
+            <div class="badge">
+
+                🔒 Enterprise Edition
+
+            </div>
+
+
+            <!-- Heading -->
+
+            <h2>
+
+                Welcome Back 👋
+
+            </h2>
+
+
+            <p>
+
+                Sign in to continue to your dashboard
+
+            </p>
+
+
+
+            <!-- =================================
+                 SCHOOL
+            ================================== -->
+
+            <div class="formGroup">
+
+                <label>
+
+                    🏫 School
+
+                </label>
+
+
+                <select id="school">
+
+                    <option value="Thirumalvadi Government High School">
+
+                        Thirumalvadi Government High School
+
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- =================================
+                 ROLE
+            ================================== -->
+
+            <div class="formGroup">
+
+                <label>
+
+                    👤 Login Role
+
+                </label>
+
+
+                <select id="role">
+
+                    <option value="Student">
+
+                        🎓 Student
+
+                    </option>
+
+
+                    <option value="Parent">
+
+                        👨‍👩‍👧 Parent
+
+                    </option>
+
+
+                    <option value="Teacher">
+
+                        👨‍🏫 Teacher
+
+                    </option>
+
+
+                    <option value="Headmaster">
+
+                        👨‍💼 Headmaster
+
+                    </option>
+
+
+                    <option value="Admin">
+
+                        ⚙️ Admin
+
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- =================================
+                 USERNAME / EMIS
+            ================================== -->
+
+            <div class="formGroup">
+
+                <label>
+
+                    📱 EMIS Number / Username
+
+                </label>
+
+
+                <input
+                    type="text"
+                    id="email"
+                    placeholder="Enter EMIS Number or Username"
+                    autocomplete="username">
+
+
+            </div>
+
+
+
+            <!-- =================================
+                 PASSWORD
+            ================================== -->
+
+            <div class="formGroup">
+
+                <label>
+
+                    🔒 Password
+
+                </label>
+
+
+                <div class="passwordBox">
+
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter Password"
+                        autocomplete="current-password">
+
+
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        aria-label="Show Password">
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 REMEMBER ME
+            ================================== -->
+
+            <div class="rememberBox">
+
+
+                <label>
+
+                    <input
+                        type="checkbox"
+                        id="remember">
+
+                    Remember Me
+
+                </label>
+
+
+                <a
+                    href="#"
+                    id="forgotPassword">
+
+                    Forgot Password?
+
+                </a>
+
+
+            </div>
+
+
+
+            <!-- =================================
+                 LOGIN BUTTON
+            ================================== -->
+
+            <button
+                type="button"
+                class="loginBtn"
+                id="loginButton">
+
+                🚀 LOGIN TO DASHBOARD
+
+            </button>
+
+
+            <!-- Message -->
+
+            <p id="msg"></p>
+
+
+
+            <!-- =================================
+                 LOGIN FEATURES
+            ================================== -->
+
+            <div class="loginFeatures">
+
+
+                <div class="feature">
+
+                    <i class="fa-solid fa-cloud"></i>
+
+                    <span>
+
+                        Cloud Sync
+
+                    </span>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <span>
+
+                        Secure Login
+
+                    </span>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <i class="fa-solid fa-mobile-screen"></i>
+
+                    <span>
+
+                        Mobile Ready
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================
+                 FOOTER
+            ================================== -->
+
+            <div class="footerSection">
+
+
+                <img
+                    src="assets/assets/header-logo.png"
+                    class="footerLogo"
+                    alt="VTOOS Logo">
+
+
+                <h3>
+
+                    VTOOS Software Solutions
+
+                </h3>
+
+
+                <p>
+
+                    Innovating Everyday Life
+
+                </p>
+
+
+                <div class="version">
+
+                    Version 3.0 Professional Edition
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
 
 </div>
 
-<div class="heroSection">
 
-<img
-src="assets/assets/hero_school.png"
-class="heroImage"
-alt="School">
 
-<h2>
-
-Empowering Education
-
-Through Technology
-
-</h2>
-
-<p>
-
-One Platform.
-
-One School.
-
-One Digital Future.
-
-</p>
-
-</div>
-
-</div>
-
-<!-- LOGIN CARD -->
-
-<div class="loginPanel">
-
-<div class="loginCard">
-
-<div class="badge">
-
-🔒 Enterprise Edition
-
-</div>
-
-<h2>
-
-Welcome Back 👋
-
-</h2>
-
-<p>
-
-Sign in to continue to your dashboard
-
-</p>
-
-<div class="formGroup">
-
-<label>
-
-🏫 School
-
-</label>
-
-<select id="school">
-
-<option>
-
-திருமல்வாடி அரசு உயர்நிலைப்பள்ளி
-
-</option>
-
-</select>
-
-</div>
-
-<div class="formGroup">
-
-<label>
-
-👤 Login Role
-
-</label>
-
-<select id="role">
-
-<option value="Student">
-
-🎓 Student
-
-</option>
-
-<option value="Parent">
-
-👨‍👩‍👧 Parent
-
-</option>
-
-<option value="Teacher">
-
-👨‍🏫 Teacher
-
-</option>
-
-<option value="Headmaster">
-
-👨‍💼 Headmaster
-
-</option>
-
-<option value="Admin">
-
-⚙ Admin
-
-</option>
-
-</select>
-
-</div>
-
-<div class="formGroup">
-
-<label>
-
-📱 EMIS Number / Username
-
-</label>
-
-<input
-type="text"
-id="email"
-placeholder="Enter EMIS Number">
-
-</div>
-
-<div class="formGroup">
-
-<label>
-
-🔒 Password
-
-</label>
-
-<div class="passwordBox">
-
-<input
-type="password"
-id="password"
-placeholder="Enter Password">
-
-<button
-type="button"
-id="togglePassword">
-
-<i class="fa-solid fa-eye"></i>
-
-</button>
-
-</div>
-
-</div>
-
-<div class="rememberBox">
-
-<label>
-
-<input
-type="checkbox"
-id="remember">
-
-Remember Me
-
-</label>
-
-<a href="#">
-
-Forgot Password?
-
-</a>
-
-</div>
-
-<button
-type="button"
-class="loginBtn">
-
-🚀 LOGIN TO DASHBOARD
-
-</button>
-
-<p id="msg"></p>
-<!-- Login Features -->
-
-<div class="loginFeatures">
-
-<div class="feature">
-
-<i class="fa-solid fa-cloud"></i>
-
-<span>Cloud Sync</span>
-
-</div>
-
-<div class="feature">
-
-<i class="fa-solid fa-lock"></i>
-
-<span>Secure Login</span>
-
-</div>
-
-<div class="feature">
-
-<i class="fa-solid fa-mobile-screen"></i>
-
-<span>Mobile Ready</span>
-
-</div>
-
-</div>
-
-<!-- Footer -->
-
-<div class="footerSection">
-
-<img
-src="assets/assets/header-logo.png"
-class="footerLogo"
-alt="VTOOS Logo">
-
-<h3>
-
-VTOOS Software Solutions
-
-</h3>
-
-<p>
-
-Innovating Everyday Life
-
-</p>
-
-<div class="version">
-
-Version 3.0 Professional Edition
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
+<!-- =========================================
+     ROLE PARAMETER
+========================================= -->
 
 <script>
 
-const params = new URLSearchParams(window.location.search);
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
 
-const role = params.get("role");
 
-if(role){
+const urlRole =
+    params.get("role");
 
-window.addEventListener("DOMContentLoaded",()=>{
 
-const roleSelect=document.getElementById("role");
+window.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-if(roleSelect){
+        const roleSelect =
+            document.getElementById("role");
 
-roleSelect.value=role;
 
-}
+        if (
+            urlRole &&
+            roleSelect
+        ) {
 
-});
+            const validRoles = [
+                "Student",
+                "Parent",
+                "Teacher",
+                "Headmaster",
+                "Admin"
+            ];
 
-}
+
+            if (
+                validRoles.includes(urlRole)
+            ) {
+
+                roleSelect.value =
+                    urlRole;
+
+            }
+
+        }
+
+    }
+);
 
 </script>
 
-<script type="module"
-src="js/login.js">
-});
 
+
+<!-- =========================================
+     LOGIN JAVASCRIPT
+========================================= -->
+
+<script
+    type="module"
+    src="js/login.js">
 </script>
+
 
 </body>
 
