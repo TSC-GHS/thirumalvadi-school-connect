@@ -133,6 +133,7 @@ function togglePassword() {
             '<i class="fa-solid fa-eye-slash"></i>';
 
     }
+
     else {
 
         passwordInput.type = "password";
@@ -178,6 +179,8 @@ function showMessage(
     type = "error"
 ) {
 
+    if (!messageBox) return;
+
     messageBox.innerHTML = text;
 
     messageBox.className = type;
@@ -186,6 +189,8 @@ function showMessage(
 
 
 function clearMessage() {
+
+    if (!messageBox) return;
 
     messageBox.innerHTML = "";
 
@@ -216,7 +221,9 @@ function validateLogin() {
         passwordInput.value.trim();
 
 
+    //==================================================
     // School
+    //==================================================
 
     if (school === "") {
 
@@ -231,7 +238,9 @@ function validateLogin() {
     }
 
 
+    //==================================================
     // Role
+    //==================================================
 
     if (role === "") {
 
@@ -246,7 +255,9 @@ function validateLogin() {
     }
 
 
+    //==================================================
     // Username / EMIS
+    //==================================================
 
     if (emis === "") {
 
@@ -261,7 +272,9 @@ function validateLogin() {
     }
 
 
+    //==================================================
     // Password
+    //==================================================
 
     if (password === "") {
 
@@ -291,7 +304,9 @@ function validateEMIS(emis) {
         roleSelect.value;
 
 
+    //==================================================
     // Teacher
+    //==================================================
 
     if (role === "Teacher") {
 
@@ -312,7 +327,9 @@ function validateEMIS(emis) {
     }
 
 
+    //==================================================
     // Admin / Headmaster
+    //==================================================
 
     if (
         role === "Admin" ||
@@ -336,7 +353,9 @@ function validateEMIS(emis) {
     }
 
 
+    //==================================================
     // Parent / Student
+    //==================================================
 
     if (emis.length < 6) {
 
@@ -513,6 +532,7 @@ function saveRememberMe() {
         );
 
     }
+
     else {
 
         clearRememberMe();
@@ -599,13 +619,12 @@ async function loginUser() {
 
         saveRememberMe();
 
-
         await delay(500);
-
 
         await processLogin();
 
     }
+
     catch (error) {
 
         console.error(
@@ -847,6 +866,7 @@ async function processLogin() {
         );
 
     }
+
     catch (error) {
 
         console.error(
@@ -883,22 +903,21 @@ function loginSuccess(
     // IMPORTANT SESSION DATA
     //================================================
 
-    // Common
-
+    // Common User
     sessionStorage.setItem(
         "currentUser",
         JSON.stringify(user)
     );
 
 
-    // VERY IMPORTANT
-    // Admin Dashboard checks this
+    //================================================
+    // Common Role
+    //================================================
 
     localStorage.setItem(
         "userRole",
         role
     );
-
 
     sessionStorage.setItem(
         "userRole",
@@ -925,7 +944,9 @@ function loginSuccess(
     }
 
 
+    //================================================
     // Firestore Document ID
+    //================================================
 
     if (documentId) {
 
@@ -949,7 +970,8 @@ function loginSuccess(
     if (role === "Teacher") {
 
         const teacherId =
-            user.id || user.teacherId;
+            user.id ||
+            user.teacherId;
 
 
         if (teacherId) {
@@ -987,6 +1009,11 @@ function loginSuccess(
             "Teacher"
         );
 
+        sessionStorage.setItem(
+            "userRole",
+            "Teacher"
+        );
+
     }
 
 
@@ -995,22 +1022,78 @@ function loginSuccess(
     //================================================
 
     if (
-    role === "Student" ||
-    role === "Parent"
-) {
+        role === "Student" ||
+        role === "Parent"
+    ) {
 
-    if (user.emis) {
+        if (user.emis) {
 
-        // Common EMIS
-        localStorage.setItem(
-            "emis",
-            user.emis
-        );
+            //================================================
+            // Common EMIS
+            //================================================
 
-        sessionStorage.setItem(
-            "emis",
-            user.emis
-        );
+            localStorage.setItem(
+                "emis",
+                user.emis
+            );
+
+            sessionStorage.setItem(
+                "emis",
+                user.emis
+            );
+
+
+            //================================================
+            // Parent Session
+            // IMPORTANT FIX
+            //================================================
+
+            if (role === "Parent") {
+
+                localStorage.setItem(
+                    "parentEMIS",
+                    user.emis
+                );
+
+                sessionStorage.setItem(
+                    "parentEMIS",
+                    user.emis
+                );
+
+                console.log(
+                    "Parent EMIS Session Saved:",
+                    user.emis
+                );
+
+            }
+
+
+            //================================================
+            // Student Session
+            //================================================
+
+            if (role === "Student") {
+
+                localStorage.setItem(
+                    "studentEMIS",
+                    user.emis
+                );
+
+                sessionStorage.setItem(
+                    "studentEMIS",
+                    user.emis
+                );
+
+                console.log(
+                    "Student EMIS Session Saved:",
+                    user.emis
+                );
+
+            }
+
+        }
+
+    }
 
 
     //================================================
@@ -1042,8 +1125,6 @@ function loginSuccess(
         role === "Admin"
     ) {
 
-        // This is the important fix
-
         localStorage.setItem(
             "userRole",
             "Admin"
@@ -1053,6 +1134,7 @@ function loginSuccess(
             "userRole",
             "Admin"
         );
+
 
         localStorage.setItem(
             "adminLoggedIn",
@@ -1235,6 +1317,10 @@ console.log(
 
 console.log(
     "Firebase Connected"
+);
+
+console.log(
+    "Parent Session Fix Applied"
 );
 
 console.log(
