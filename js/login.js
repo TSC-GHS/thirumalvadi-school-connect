@@ -995,25 +995,22 @@ function loginSuccess(
     //================================================
 
     if (
-        role === "Student" ||
-        role === "Parent"
-    ) {
+    role === "Student" ||
+    role === "Parent"
+) {
 
-        if (user.emis) {
+    if (user.emis) {
 
-            localStorage.setItem(
-                "emis",
-                user.emis
-            );
+        // Common EMIS
+        localStorage.setItem(
+            "emis",
+            user.emis
+        );
 
-            sessionStorage.setItem(
-                "emis",
-                user.emis
-            );
-
-        }
-
-    }
+        sessionStorage.setItem(
+            "emis",
+            user.emis
+        );
 
 
     //================================================
