@@ -612,7 +612,7 @@ function redirectDashboard(role){
 
        case "Admin":
 
-    window.location.href="admin_dashboard_v3.html";
+    window.location.href="admin_dashboard.html";
 
     break;
 
