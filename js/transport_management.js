@@ -1,15 +1,16 @@
-import {
-    db
-} from "../firebase.js";
+import { db } from "../firebase.js";
 
 import {
     collection,
     addDoc,
     getDocs,
+    deleteDoc,
+    doc,
     serverTimestamp,
-    orderBy,
-    query
+    query,
+    orderBy
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
 
 console.log("=================================");
 console.log("School Connect TN");
@@ -46,62 +47,84 @@ async function saveBus() {
     try {
 
         const busNumber =
-            busNumberInput?.value.trim();
+            busNumberInput.value.trim();
 
         const registrationNumber =
-            registrationNumberInput?.value.trim();
+            registrationNumberInput.value.trim();
 
         const capacity =
-            Number(busCapacityInput?.value);
+            Number(busCapacityInput.value);
 
         const status =
-            busStatusInput?.value || "Active";
+            busStatusInput.value || "Active";
 
-
-        /* Validation */
 
         if (!busNumber) {
+
             alert("Please enter Bus Number.");
-            busNumberInput?.focus();
+
+            busNumberInput.focus();
+
             return;
         }
+
 
         if (!registrationNumber) {
-            alert("Please enter Registration Number.");
-            registrationNumberInput?.focus();
+
+            alert(
+                "Please enter Registration Number."
+            );
+
+            registrationNumberInput.focus();
+
             return;
         }
+
 
         if (!capacity || capacity <= 0) {
-            alert("Please enter a valid Bus Capacity.");
-            busCapacityInput?.focus();
+
+            alert(
+                "Please enter valid Bus Capacity."
+            );
+
+            busCapacityInput.focus();
+
             return;
         }
 
 
-        /* Prevent duplicate registration */
+        /* =====================================
+           CHECK DUPLICATE REGISTRATION
+        ===================================== */
 
         const existingSnapshot =
             await getDocs(
-                collection(db, "transport_buses")
+                collection(
+                    db,
+                    "transport_buses"
+                )
             );
 
+
         const duplicate =
-            existingSnapshot.docs.some(doc => {
+            existingSnapshot.docs.some(
+                item => {
 
-                const data = doc.data();
+                    const data =
+                        item.data();
 
-                return (
-                    String(data.registrationNumber || "")
-                        .toLowerCase()
+                    return String(
+                        data.registrationNumber || ""
+                    )
                         .trim()
-                    ===
-                    registrationNumber
                         .toLowerCase()
-                        .trim()
-                );
+                        ===
+                        registrationNumber
+                            .trim()
+                            .toLowerCase();
 
-            });
+                }
+            );
 
 
         if (duplicate) {
@@ -114,28 +137,43 @@ async function saveBus() {
         }
 
 
-        /* Save */
+        /* =====================================
+           SAVE TO FIRESTORE
+        ===================================== */
 
-        await addDoc(
-            collection(db, "transport_buses"),
-            {
+        const docRef =
+            await addDoc(
+                collection(
+                    db,
+                    "transport_buses"
+                ),
+                {
 
-                busNumber: busNumber,
+                    busNumber:
+                        busNumber,
 
-                registrationNumber:
-                    registrationNumber,
+                    registrationNumber:
+                        registrationNumber,
 
-                capacity: capacity,
+                    capacity:
+                        capacity,
 
-                status: status,
+                    status:
+                        status,
 
-                createdAt:
-                    serverTimestamp(),
+                    createdAt:
+                        serverTimestamp(),
 
-                updatedAt:
-                    serverTimestamp()
+                    updatedAt:
+                        serverTimestamp()
 
-            }
+                }
+            );
+
+
+        console.log(
+            "Bus Saved:",
+            docRef.id
         );
 
 
@@ -144,12 +182,7 @@ async function saveBus() {
         );
 
 
-        /* Clear form */
-
         clearBusForm();
-
-
-        /* Reload count */
 
         await loadBusCount();
 
@@ -183,8 +216,12 @@ async function loadBusCount() {
 
         const snapshot =
             await getDocs(
-                collection(db, "transport_buses")
+                collection(
+                    db,
+                    "transport_buses"
+                )
             );
+
 
         if (busCount) {
 
@@ -192,6 +229,7 @@ async function loadBusCount() {
                 snapshot.size;
 
         }
+
 
         console.log(
             "Buses Loaded:",
@@ -202,7 +240,7 @@ async function loadBusCount() {
     } catch (error) {
 
         console.error(
-            "Load Bus Count Error:",
+            "Bus Count Error:",
             error
         );
 
@@ -217,15 +255,21 @@ async function loadBusCount() {
 
 async function loadBusList() {
 
+    const busList =
+        document.getElementById("busList");
+
+
+    if (!busList) {
+
+        console.log(
+            "Bus list element not found."
+        );
+
+        return;
+    }
+
+
     try {
-
-        const busList =
-            document.getElementById("busList");
-
-        if (!busList) {
-            return;
-        }
-
 
         const q =
             query(
@@ -262,67 +306,99 @@ async function loadBusList() {
         }
 
 
-        snapshot.forEach(doc => {
+        snapshot.forEach(
+            item => {
 
-            const data = doc.data();
-
-
-            const row =
-                document.createElement("tr");
+                const data =
+                    item.data();
 
 
-            row.innerHTML = `
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
 
-                <td>
-                    ${escapeHTML(
-                        data.busNumber || "-"
-                    )}
-                </td>
 
-                <td>
-                    ${escapeHTML(
-                        data.registrationNumber || "-"
-                    )}
-                </td>
+                row.innerHTML = `
 
-                <td>
-                    ${data.capacity || 0}
-                </td>
+                    <td>
+                        ${escapeHTML(
+                            data.busNumber || "-"
+                        )}
+                    </td>
 
-                <td>
-                    <span class="status-badge">
+                    <td>
+                        ${escapeHTML(
+                            data.registrationNumber || "-"
+                        )}
+                    </td>
+
+                    <td>
+                        ${data.capacity || 0}
+                    </td>
+
+                    <td>
                         ${escapeHTML(
                             data.status || "Active"
                         )}
-                    </span>
-                </td>
+                    </td>
 
-                <td>
-                    ${formatDate(
-                        data.createdAt
-                    )}
-                </td>
+                    <td>
+                        ${formatDate(
+                            data.createdAt
+                        )}
+                    </td>
 
-                <td>
-                    <button
-                        type="button"
-                        onclick="deleteBus('${doc.id}')">
-                        🗑️ Delete
-                    </button>
-                </td>
+                    <td>
 
-            `;
+                        <button
+                            type="button"
+                            class="deleteBusBtn"
+                            data-id="${item.id}">
+
+                            🗑️ Delete
+
+                        </button>
+
+                    </td>
+
+                `;
 
 
-            busList.appendChild(row);
+                busList.appendChild(row);
 
-        });
+            }
+        );
+
+
+        /* =====================================
+           DELETE BUTTON EVENTS
+        ===================================== */
+
+        document
+            .querySelectorAll(
+                ".deleteBusBtn"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        deleteBus(
+                            button.dataset.id
+                        );
+
+                    }
+                );
+
+            });
 
 
     } catch (error) {
 
         console.error(
-            "Load Bus List Error:",
+            "Bus List Error:",
             error
         );
 
@@ -337,26 +413,18 @@ async function loadBusList() {
 
 async function deleteBus(id) {
 
-    const confirmDelete =
-        confirm(
+    if (
+        !confirm(
             "Are you sure you want to delete this bus?"
-        );
+        )
+    ) {
 
-    if (!confirmDelete) {
         return;
+
     }
 
 
     try {
-
-        const {
-            deleteDoc,
-            doc
-        } =
-        await import(
-            "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js"
-        );
-
 
         await deleteDoc(
             doc(
@@ -395,7 +463,7 @@ async function deleteBus(id) {
 
 
 /* =====================================
-   CLEAR BUS FORM
+   CLEAR FORM
 ===================================== */
 
 function clearBusForm() {
@@ -403,11 +471,14 @@ function clearBusForm() {
     if (busNumberInput)
         busNumberInput.value = "";
 
+
     if (registrationNumberInput)
         registrationNumberInput.value = "";
 
+
     if (busCapacityInput)
         busCapacityInput.value = "";
+
 
     if (busStatusInput)
         busStatusInput.value = "Active";
@@ -416,23 +487,22 @@ function clearBusForm() {
 
 
 /* =====================================
-   DATE FORMAT
+   FORMAT DATE
 ===================================== */
 
 function formatDate(timestamp) {
 
-    if (!timestamp) {
+    if (!timestamp)
         return "-";
-    }
+
 
     try {
 
-        const date =
-            timestamp.toDate();
-
-        return date.toLocaleDateString(
-            "en-IN"
-        );
+        return timestamp
+            .toDate()
+            .toLocaleDateString(
+                "en-IN"
+            );
 
     } catch {
 
@@ -444,7 +514,7 @@ function formatDate(timestamp) {
 
 
 /* =====================================
-   HTML SECURITY
+   ESCAPE HTML
 ===================================== */
 
 function escapeHTML(value) {
@@ -466,11 +536,11 @@ function escapeHTML(value) {
 window.saveBus =
     saveBus;
 
-window.deleteBus =
-    deleteBus;
-
 window.clearBusForm =
     clearBusForm;
+
+window.deleteBus =
+    deleteBus;
 
 
 /* =====================================
@@ -484,6 +554,7 @@ document.addEventListener(
         console.log(
             "Transport Management Ready"
         );
+
 
         await loadBusCount();
 
