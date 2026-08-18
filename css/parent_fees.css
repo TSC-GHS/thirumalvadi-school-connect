@@ -1,0 +1,720 @@
+/* =====================================
+   School Connect TN
+   Parent Fees
+   Professional V1 UI
+===================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #222;
+    min-height: 100vh;
+}
+
+
+/* =====================================
+   HEADER
+===================================== */
+
+.topBar {
+    width: 100%;
+    min-height: 78px;
+
+    background: linear-gradient(
+        90deg,
+        #1458b8,
+        #1976d2
+    );
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 14px 30px;
+
+    box-shadow:
+        0 3px 12px rgba(0, 0, 0, 0.16);
+
+    position: relative;
+    z-index: 10;
+}
+
+.brandArea {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.schoolTitle {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.schoolSubtitle {
+    font-size: 13px;
+    opacity: 0.95;
+}
+
+
+/* =====================================
+   HEADER BUTTON
+===================================== */
+
+.topBar .backButton {
+    border: none;
+
+    background: rgba(255, 255, 255, 0.16);
+
+    color: #ffffff;
+
+    padding: 10px 18px;
+
+    border-radius: 25px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.topBar .backButton:hover {
+    background: rgba(255, 255, 255, 0.25);
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================
+   MAIN
+===================================== */
+
+.mainContainer {
+    width: 100%;
+
+    max-width: 1180px;
+
+    margin: 0 auto;
+
+    padding: 22px 25px 35px;
+}
+
+
+/* =====================================
+   WELCOME
+===================================== */
+
+.welcomeSection {
+    background: #ffffff;
+
+    padding: 24px 28px;
+
+    border-radius: 14px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+.welcomeSection h1 {
+    color: #6a1b9a;
+
+    font-size: 30px;
+
+    margin-bottom: 7px;
+}
+
+.welcomeSection p {
+    color: #555;
+
+    font-size: 15px;
+}
+
+
+/* =====================================
+   DASHBOARD CARD
+===================================== */
+
+.dashboardCard {
+    background: #ffffff;
+
+    border-radius: 15px;
+
+    padding: 22px;
+
+    margin-bottom: 22px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+
+/* =====================================
+   SECTION HEADER
+===================================== */
+
+.sectionHeader {
+    margin-bottom: 18px;
+}
+
+.sectionHeader h2 {
+    color: #6a1b9a;
+
+    font-size: 20px;
+
+    margin-bottom: 5px;
+}
+
+.sectionHeader p {
+    color: #666;
+
+    font-size: 13px;
+}
+
+
+/* =====================================
+   STUDENT INFORMATION
+===================================== */
+
+.studentInfoGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+}
+
+.infoBox {
+    background: #f7faff;
+
+    border: 1px solid #e1e8f2;
+
+    border-radius: 11px;
+
+    padding: 15px;
+}
+
+.infoBox span {
+    display: block;
+
+    color: #777;
+
+    font-size: 11px;
+
+    margin-bottom: 7px;
+}
+
+.infoBox strong {
+    display: block;
+
+    color: #1458b8;
+
+    font-size: 14px;
+
+    word-break: break-word;
+}
+
+
+/* =====================================
+   SUMMARY
+===================================== */
+
+.summaryGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.summaryCard {
+    background: #ffffff;
+
+    min-height: 125px;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    position: relative;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.summaryCard::after {
+    content: "";
+
+    position: absolute;
+
+    width: 72px;
+
+    height: 72px;
+
+    right: -28px;
+
+    top: -28px;
+
+    background: #eaf4ff;
+
+    border-radius: 50%;
+}
+
+.summaryCard:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 7px 18px rgba(0, 0, 0, 0.12);
+}
+
+.summaryNumber {
+    position: relative;
+
+    z-index: 2;
+
+    color: #1976d2;
+
+    font-size: 30px;
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    word-break: break-word;
+}
+
+.summaryNumber.pendingAmount {
+    color: #d32f2f;
+}
+
+.summaryLabel {
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 10px;
+
+    color: #555;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =====================================
+   TABLE WRAPPER
+===================================== */
+
+.tableWrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border-radius: 10px;
+
+    border: 1px solid #e3e8ef;
+}
+
+
+/* =====================================
+   TABLE
+===================================== */
+
+table {
+    width: 100%;
+
+    min-width: 850px;
+
+    border-collapse: collapse;
+
+    background: #ffffff;
+}
+
+thead {
+    background: #1458b8;
+
+    color: #ffffff;
+}
+
+th {
+    padding: 13px 10px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    text-align: left;
+
+    white-space: nowrap;
+}
+
+td {
+    padding: 12px 10px;
+
+    border-bottom:
+        1px solid #edf0f4;
+
+    font-size: 12px;
+
+    color: #444;
+
+    white-space: nowrap;
+}
+
+tbody tr:hover {
+    background: #f7faff;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =====================================
+   STATUS BADGE
+===================================== */
+
+.statusBadge {
+    display: inline-block;
+
+    padding: 5px 11px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+.statusPaid {
+    background: #e8f5e9;
+
+    color: #2e7d32;
+}
+
+.statusPartial {
+    background: #fff8e1;
+
+    color: #f57c00;
+}
+
+.statusPending {
+    background: #ffebee;
+
+    color: #c62828;
+}
+
+
+/* =====================================
+   EMPTY MESSAGE
+===================================== */
+
+.emptyMessage {
+    text-align: center;
+
+    padding: 30px !important;
+
+    color: #777;
+
+    font-size: 13px;
+}
+
+
+/* =====================================
+   NO FEE
+===================================== */
+
+.noFeeSection {
+    background: #ffffff;
+
+    border-radius: 15px;
+
+    padding: 35px 20px;
+
+    margin-bottom: 22px;
+
+    text-align: center;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+.noFeeIcon {
+    font-size: 42px;
+
+    margin-bottom: 12px;
+}
+
+.noFeeSection h2 {
+    color: #6a1b9a;
+
+    font-size: 20px;
+
+    margin-bottom: 8px;
+}
+
+.noFeeSection p {
+    color: #666;
+
+    font-size: 13px;
+}
+
+
+/* =====================================
+   NAVIGATION
+===================================== */
+
+.navigationSection {
+    margin-bottom: 22px;
+}
+
+.backButtonLarge {
+    width: 100%;
+
+    border: none;
+
+    background: #1554a6;
+
+    color: #ffffff;
+
+    padding: 14px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.backButtonLarge:hover {
+    background: #12468b;
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================
+   FOOTER
+===================================== */
+
+.footer {
+    background: #1554a6;
+
+    color: #ffffff;
+
+    text-align: center;
+
+    padding: 18px;
+
+    font-size: 12px;
+
+    line-height: 1.8;
+}
+
+.footer strong {
+    font-weight: 700;
+}
+
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media (max-width: 900px) {
+
+    .studentInfoGrid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .summaryGrid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 600px) {
+
+    .topBar {
+        padding: 13px 15px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+    .schoolTitle {
+        font-size: 19px;
+    }
+
+    .schoolSubtitle {
+        font-size: 11px;
+    }
+
+    .topBar .backButton {
+        padding: 8px 15px;
+
+        font-size: 12px;
+    }
+
+    .mainContainer {
+        padding: 15px 12px 25px;
+    }
+
+    .welcomeSection {
+        padding: 20px;
+
+        margin-bottom: 15px;
+    }
+
+    .welcomeSection h1 {
+        font-size: 25px;
+    }
+
+    .welcomeSection p {
+        font-size: 13px;
+    }
+
+    .dashboardCard {
+        padding: 17px;
+
+        margin-bottom: 15px;
+    }
+
+    .sectionHeader h2 {
+        font-size: 18px;
+    }
+
+    .studentInfoGrid {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 10px;
+    }
+
+    .infoBox {
+        padding: 12px;
+    }
+
+    .infoBox span {
+        font-size: 10px;
+    }
+
+    .infoBox strong {
+        font-size: 12px;
+    }
+
+    .summaryGrid {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 12px;
+    }
+
+    .summaryCard {
+        min-height: 105px;
+    }
+
+    .summaryNumber {
+        font-size: 23px;
+    }
+
+    .summaryLabel {
+        font-size: 9px;
+    }
+
+    .tableWrapper {
+        border-radius: 8px;
+    }
+
+    th {
+        font-size: 10px;
+
+        padding: 10px 8px;
+    }
+
+    td {
+        font-size: 10px;
+
+        padding: 10px 8px;
+    }
+
+    .footer {
+        font-size: 10px;
+    }
+
+}
+
+
+/* =====================================
+   VERY SMALL MOBILE
+===================================== */
+
+@media (max-width: 380px) {
+
+    .studentInfoGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .summaryGrid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .summaryNumber {
+        font-size: 20px;
+    }
+
+}
