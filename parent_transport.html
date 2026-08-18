@@ -1,525 +1,1411 @@
-<!DOCTYPE html>
-<html lang="en">
+/* =====================================
+   SCHOOL CONNECT TN
+   PARENT TRANSPORT
+   FULL UPDATED VERSION
+===================================== */
 
-<head>
+import { db } from "../firebase.js";
 
-<meta charset="UTF-8">
+import {
+    collection,
+    query,
+    where,
+    getDocs,
+    doc,
+    getDoc
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
 
-<title>School Connect TN - Transport</title>
+/* =====================================
+   COLLECTIONS
+===================================== */
 
-<link rel="stylesheet"
-href="css/parent_transport.css">
+const ASSIGNMENTS_COLLECTION =
+    "transport_assignments";
 
-</head>
+const BUSES_COLLECTION =
+    "transport_buses";
 
+const ROUTES_COLLECTION =
+    "transport_routes";
 
-<body>
+const STUDENTS_COLLECTION =
+    "students";
 
 
-<!-- =====================================
-     HEADER
-===================================== -->
+/* =====================================
+   HTML ELEMENTS
+===================================== */
 
-<header class="topBar">
+/* Student */
 
-    <div class="brandArea">
+const studentNameEl =
+    document.getElementById("studentName");
 
-        <div class="schoolTitle">
-            🏫 School Connect TN
-        </div>
+const studentEMISEl =
+    document.getElementById("studentEMIS");
 
-        <div class="schoolSubtitle">
-            Student Transport
-        </div>
+const studentClassEl =
+    document.getElementById("studentClass");
 
-    </div>
+const studentSectionEl =
+    document.getElementById("studentSection");
 
 
-    <div class="parentBadge">
-        👤 Parent
-    </div>
+/* Summary */
 
-</header>
+const busNumberEl =
+    document.getElementById("busNumber");
 
+const routeNameEl =
+    document.getElementById("routeName");
 
+const pickupPointEl =
+    document.getElementById("pickupPoint");
 
-<!-- =====================================
-     MAIN
-===================================== -->
+const pickupTimeEl =
+    document.getElementById("pickupTime");
 
-<main class="mainContainer">
 
+/* Details */
 
-<!-- =====================================
-     PAGE TITLE
-===================================== -->
+const detailBusNumberEl =
+    document.getElementById("detailBusNumber");
 
-<section class="welcomeSection">
+const registrationNumberEl =
+    document.getElementById("registrationNumber");
 
-    <h1>
-        🚌 Transport
-    </h1>
+const detailRouteEl =
+    document.getElementById("detailRoute");
 
-    <p>
-        View your child's school transport details.
-    </p>
+const startPointEl =
+    document.getElementById("startPoint");
 
-</section>
+const endPointEl =
+    document.getElementById("endPoint");
 
+const detailPickupPointEl =
+    document.getElementById("detailPickupPoint");
 
+const detailPickupTimeEl =
+    document.getElementById("detailPickupTime");
 
-<!-- =====================================
-     STUDENT INFORMATION
-===================================== -->
+const dropTimeEl =
+    document.getElementById("dropTime");
 
-<section class="dashboardCard">
+const transportStatusEl =
+    document.getElementById("transportStatus");
 
-    <div class="sectionHeader">
 
-        <h2>
-            👨‍🎓 Student Information
-        </h2>
+/* No Transport */
 
-        <p>
-            Transport details for your child.
-        </p>
+const noTransportEl =
+    document.getElementById(
+        "noTransportSection"
+    );
 
-    </div>
 
+/* =====================================
+   START
+===================================== */
 
-    <div class="studentGrid">
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
+        console.log(
+            "====================================="
+        );
 
-        <div class="infoCard">
+        console.log(
+            "School Connect TN"
+        );
 
-            <span>
-                Student Name
-            </span>
+        console.log(
+            "Parent Transport"
+        );
 
-            <strong id="studentName">
-                Loading...
-            </strong>
+        console.log(
+            "Firebase Transport Module Loaded"
+        );
 
-        </div>
+        console.log(
+            "====================================="
+        );
 
+        loadParentTransport();
 
-        <div class="infoCard">
+    }
+);
 
-            <span>
-                EMIS Number
-            </span>
 
-            <strong id="studentEMIS">
-                Loading...
-            </strong>
+/* =====================================
+   GET PARENT EMIS
+===================================== */
 
-        </div>
+function getParentEMIS() {
 
+    const keys = [
 
-        <div class="infoCard">
+        "parentEMIS",
 
-            <span>
-                Class
-            </span>
+        "parentStudentId",
 
-            <strong id="studentClass">
-                Loading...
-            </strong>
+        "studentEMIS",
 
-        </div>
+        "emis"
 
+    ];
 
-        <div class="infoCard">
 
-            <span>
-                Section
-            </span>
+    for (const key of keys) {
 
-            <strong id="studentSection">
-                Loading...
-            </strong>
+        const value =
+            localStorage.getItem(key);
 
-        </div>
 
-    </div>
+        if (
+            value &&
+            String(value).trim() !== ""
+        ) {
 
-</section>
+            console.log(
+                "Parent EMIS:",
+                value
+            );
 
+            return String(value).trim();
 
+        }
 
-<!-- =====================================
-     TRANSPORT STATUS
-===================================== -->
+    }
 
-<section class="summaryGrid">
 
+    return null;
 
-    <div class="summaryCard">
+}
 
-        <div class="summaryIcon">
-            🚌
-        </div>
 
-        <div class="summaryValue"
-             id="busNumber">
+/* =====================================
+   LOAD PARENT TRANSPORT
+===================================== */
 
-            -
+async function loadParentTransport() {
 
-        </div>
+    try {
 
-        <div class="summaryLabel">
-            BUS
-        </div>
+        hideNoTransport();
 
-    </div>
 
+        const emis =
+            getParentEMIS();
 
 
-    <div class="summaryCard">
+        /* ---------------------------------
+           CHECK EMIS
+        --------------------------------- */
 
-        <div class="summaryIcon">
-            🛣️
-        </div>
+        if (!emis) {
 
-        <div class="summaryValue"
-             id="routeName">
+            console.error(
+                "Parent EMIS not found"
+            );
 
-            -
 
-        </div>
+            showNoTransport(
+                "Student Login Required",
+                "Please login again to view transport details."
+            );
 
-        <div class="summaryLabel">
-            ROUTE
-        </div>
 
-    </div>
+            return;
 
+        }
 
 
-    <div class="summaryCard">
+        console.log(
+            "Searching transport for EMIS:",
+            emis
+        );
 
-        <div class="summaryIcon">
-            📍
-        </div>
 
-        <div class="summaryValue"
-             id="pickupPoint">
+        /* ---------------------------------
+           LOAD ASSIGNMENT
+        --------------------------------- */
 
-            -
+        const assignmentsRef =
+            collection(
+                db,
+                ASSIGNMENTS_COLLECTION
+            );
 
-        </div>
 
-        <div class="summaryLabel">
-            PICKUP POINT
-        </div>
+        const assignmentQuery =
+            query(
+                assignmentsRef,
+                where(
+                    "studentSearch",
+                    "==",
+                    emis
+                )
+            );
 
-    </div>
 
+        const assignmentSnapshot =
+            await getDocs(
+                assignmentQuery
+            );
 
 
-    <div class="summaryCard">
+        console.log(
+            "Transport Assignments:",
+            assignmentSnapshot.size
+        );
 
-        <div class="summaryIcon">
-            ⏰
-        </div>
 
-        <div class="summaryValue"
-             id="pickupTime">
+        /* ---------------------------------
+           NO ASSIGNMENT
+        --------------------------------- */
 
-            -
+        if (
+            assignmentSnapshot.empty
+        ) {
 
-        </div>
+            await loadStudentDetails(
+                emis
+            );
 
-        <div class="summaryLabel">
-            PICKUP TIME
-        </div>
 
-    </div>
+            showNoTransport(
+                "No Transport Assigned",
+                "School transport has not been assigned to this student yet."
+            );
 
 
-</section>
+            return;
 
+        }
 
 
-<!-- =====================================
-     TRANSPORT DETAILS
-===================================== -->
+        /* ---------------------------------
+           SELECT ACTIVE ASSIGNMENT
+        --------------------------------- */
 
-<section class="dashboardCard">
+        let assignment = null;
 
-    <div class="sectionHeader">
 
-        <h2>
-            🚌 Transport Details
-        </h2>
+        assignmentSnapshot.forEach(
+            (item) => {
 
-        <p>
-            Your child's assigned school transport.
-        </p>
+                const data =
+                    item.data();
 
-    </div>
 
+                const status =
+                    String(
+                        data.status || ""
+                    ).toLowerCase();
 
-    <div class="detailsGrid">
 
+                if (
+                    !assignment &&
+                    status === "active"
+                ) {
 
-        <div class="detailRow">
+                    assignment = {
 
-            <span>
-                Bus Number
-            </span>
+                        id: item.id,
 
-            <strong id="detailBusNumber">
-                -
-            </strong>
+                        ...data
 
-        </div>
+                    };
 
+                }
 
-        <div class="detailRow">
+            }
+        );
 
-            <span>
-                Registration Number
-            </span>
 
-            <strong id="registrationNumber">
-                -
-            </strong>
+        /* ---------------------------------
+           FALLBACK FIRST RECORD
+        --------------------------------- */
 
-        </div>
+        if (!assignment) {
 
+            const firstDoc =
+                assignmentSnapshot.docs[0];
 
-        <div class="detailRow">
 
-            <span>
-                Route
-            </span>
+            assignment = {
 
-            <strong id="detailRoute">
-                -
-            </strong>
+                id: firstDoc.id,
 
-        </div>
+                ...firstDoc.data()
 
+            };
 
-        <div class="detailRow">
+        }
 
-            <span>
-                Starting Point
-            </span>
 
-            <strong id="startPoint">
-                -
-            </strong>
+        console.log(
+            "Selected Assignment:",
+            assignment
+        );
 
-        </div>
 
+        /* ---------------------------------
+           LOAD STUDENT
+        --------------------------------- */
 
-        <div class="detailRow">
+        await loadStudentDetails(
+            emis
+        );
 
-            <span>
-                End Point
-            </span>
 
-            <strong id="endPoint">
-                -
-            </strong>
+        /* ---------------------------------
+           LOAD BUS
+        --------------------------------- */
 
-        </div>
+        let busData = {};
 
 
-        <div class="detailRow">
+        if (
+            assignment.busId
+        ) {
 
-            <span>
-                Pickup Point
-            </span>
+            busData =
+                await loadDocumentById(
+                    BUSES_COLLECTION,
+                    assignment.busId
+                );
 
-            <strong id="detailPickupPoint">
-                -
-            </strong>
+        }
 
-        </div>
 
+        console.log(
+            "Bus Data:",
+            busData
+        );
 
-        <div class="detailRow">
 
-            <span>
-                Pickup Time
-            </span>
+        /* ---------------------------------
+           LOAD ROUTE
+        --------------------------------- */
 
-            <strong id="detailPickupTime">
-                -
-            </strong>
+        let routeData = {};
 
-        </div>
 
+        if (
+            assignment.routeId
+        ) {
 
-        <div class="detailRow">
+            routeData =
+                await loadDocumentById(
+                    ROUTES_COLLECTION,
+                    assignment.routeId
+                );
 
-            <span>
-                Drop Time
-            </span>
+        }
 
-            <strong id="dropTime">
-                -
-            </strong>
 
-        </div>
+        console.log(
+            "Route Data:",
+            routeData
+        );
 
 
-        <div class="detailRow">
+        /* ---------------------------------
+           DISPLAY
+        --------------------------------- */
 
-            <span>
-                Transport Status
-            </span>
+        displayTransport(
+            assignment,
+            busData,
+            routeData
+        );
 
-            <strong
-                id="transportStatus"
-                class="statusBadge">
 
-                Loading...
+    } catch (error) {
 
-            </strong>
+        console.error(
+            "Parent Transport Error:",
+            error
+        );
 
-        </div>
 
+        showNoTransport(
+            "Unable to Load Transport",
+            "Please try again later."
+        );
 
-    </div>
+    }
 
-</section>
+}
 
 
+/* =====================================
+   LOAD FIRESTORE DOCUMENT BY ID
+===================================== */
 
-<!-- =====================================
-     LIVE TRACKING
-===================================== -->
+async function loadDocumentById(
+    collectionName,
+    documentId
+) {
 
-<section class="dashboardCard">
+    try {
 
-    <div class="sectionHeader">
+        if (
+            !documentId
+        ) {
 
-        <h2>
-            📍 Live Bus Tracking
-        </h2>
+            return {};
 
-        <p>
-            Track your child's school bus.
-        </p>
+        }
 
-    </div>
 
+        const reference =
+            doc(
+                db,
+                collectionName,
+                documentId
+            );
 
-    <div class="trackingBox">
 
-        <div class="trackingIcon">
-            🚌
-        </div>
+        const snapshot =
+            await getDoc(
+                reference
+            );
 
 
-        <h3>
-            Live Tracking Coming Soon
-        </h3>
+        if (
+            !snapshot.exists()
+        ) {
 
+            console.warn(
+                "Document not found:",
+                collectionName,
+                documentId
+            );
 
-        <p>
-            Live bus location will be available
-            when the driver starts the trip.
-        </p>
 
+            return {};
 
-        <button
-            class="trackingButton"
-            disabled>
+        }
 
-            📍 Track Bus
 
-        </button>
+        return snapshot.data();
 
-    </div>
 
-</section>
+    } catch (error) {
 
+        console.error(
+            "Document loading error:",
+            collectionName,
+            documentId,
+            error
+        );
 
 
-<!-- =====================================
-     NO TRANSPORT MESSAGE
-===================================== -->
+        return {};
 
-<section
-    class="dashboardCard noTransport"
-    id="noTransportSection"
-    style="display:none;">
+    }
 
-    <div class="emptyIcon">
-        🚌
-    </div>
+}
 
-    <h2>
-        No Transport Assigned
-    </h2>
 
-    <p>
-        Your child is currently not assigned
-        to school transport.
-    </p>
+/* =====================================
+   LOAD STUDENT DETAILS
+===================================== */
 
-</section>
+async function loadStudentDetails(
+    emis
+) {
 
+    try {
 
+        const studentsRef =
+            collection(
+                db,
+                STUDENTS_COLLECTION
+            );
 
-<!-- =====================================
-     BACK TO DASHBOARD
-===================================== -->
 
-<section class="backSection">
+        /* ---------------------------------
+           TRY emis
+        --------------------------------- */
 
-    <button
-        class="backButton"
-        onclick="location.href='parent.html'">
+        const q1 =
+            query(
+                studentsRef,
+                where(
+                    "emis",
+                    "==",
+                    emis
+                )
+            );
 
-        🏠 Back to Parent Dashboard
 
-    </button>
+        let snapshot =
+            await getDocs(q1);
 
-</section>
 
+        /* ---------------------------------
+           TRY studentEMIS
+        --------------------------------- */
 
-</main>
+        if (
+            snapshot.empty
+        ) {
 
+            const q2 =
+                query(
+                    studentsRef,
+                    where(
+                        "studentEMIS",
+                        "==",
+                        emis
+                    )
+                );
 
 
-<!-- =====================================
-     FOOTER
-===================================== -->
+            snapshot =
+                await getDocs(q2);
 
-<footer class="footer">
+        }
 
-    <div>
-        © 2026 School Connect TN
-    </div>
 
-    <div>
-        Powered by
-        <strong>VTOOS Software Solution</strong>
-    </div>
+        /* ---------------------------------
+           STUDENT NOT FOUND
+        --------------------------------- */
 
-</footer>
+        if (
+            snapshot.empty
+        ) {
 
+            console.warn(
+                "Student record not found:",
+                emis
+            );
 
 
-<!-- =====================================
-     JAVASCRIPT
-===================================== -->
+            setText(
+                studentEMISEl,
+                emis
+            );
 
-<script
-    type="module"
-    src="js/parent_transport.js">
-</script>
 
+            return;
 
-</body>
+        }
 
-</html>
+
+        const student =
+            snapshot.docs[0].data();
+
+
+        /* ---------------------------------
+           STUDENT NAME
+        --------------------------------- */
+
+        setText(
+            studentNameEl,
+            firstValue(
+                student.studentName,
+                student.name,
+                "-"
+            )
+        );
+
+
+        /* ---------------------------------
+           EMIS
+        --------------------------------- */
+
+        setText(
+            studentEMISEl,
+            emis
+        );
+
+
+        /* ---------------------------------
+           CLASS
+        --------------------------------- */
+
+        setText(
+            studentClassEl,
+            firstValue(
+                student.class,
+                student.studentClass,
+                "-"
+            )
+        );
+
+
+        /* ---------------------------------
+           SECTION
+        --------------------------------- */
+
+        setText(
+            studentSectionEl,
+            firstValue(
+                student.section,
+                student.studentSection,
+                "-"
+            )
+        );
+
+
+        console.log(
+            "Student Details Loaded"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Student loading error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================
+   DISPLAY TRANSPORT
+===================================== */
+
+function displayTransport(
+    assignment,
+    bus,
+    route
+) {
+
+    console.log(
+        "====================================="
+    );
+
+    console.log(
+        "DISPLAY TRANSPORT"
+    );
+
+
+    /* =====================================
+       BUS NUMBER
+    ===================================== */
+
+    const busNumber =
+        firstValue(
+
+            bus.busNumber,
+
+            bus.busNo,
+
+            bus.number,
+
+            bus.vehicleNumber,
+
+            assignment.busNumber,
+
+            assignment.busNo,
+
+            assignment.bus,
+
+            "-"
+
+        );
+
+
+    /* =====================================
+       REGISTRATION NUMBER
+    ===================================== */
+
+    const registrationNumber =
+        firstValue(
+
+            bus.registrationNumber,
+
+            bus.registrationNo,
+
+            bus.vehicleRegistrationNumber,
+
+            bus.vehicleNumber,
+
+            assignment.registrationNumber,
+
+            assignment.registrationNo,
+
+            "-"
+
+        );
+
+
+    /* =====================================
+       ROUTE NAME
+    ===================================== */
+
+    const routeName =
+        firstValue(
+
+            route.routeName,
+
+            route.name,
+
+            route.route,
+
+            route.routeTitle,
+
+            assignment.routeName,
+
+            assignment.route,
+
+            "-"
+
+        );
+
+
+    /* =====================================
+       STARTING POINT
+    ===================================== */
+
+    const startingPoint =
+        firstValue(
+
+            route.startingPoint,
+
+            route.startPoint,
+
+            route.from,
+
+            route.start,
+
+            route.origin,
+
+            assignment.startingPoint,
+
+            assignment.startPoint,
+
+            assignment.from,
+
+            "-"
+
+        );
+
+
+    /* =====================================
+       END POINT
+    ===================================== */
+
+    const endPoint =
+        firstValue(
+
+            route.endPoint,
+
+            route.endPointName,
+
+            route.to,
+
+            route.destination,
+
+            assignment.endPoint,
+
+            assignment.destination,
+
+            assignment.to,
+
+            "-"
+
+        );
+
+
+    /* =====================================
+       PICKUP POINT
+    ===================================== */
+
+    const pickupPoint =
+        firstValue(
+
+            assignment.pickupPoint,
+
+            assignment.pickupLocation,
+
+            assignment.pickup,
+
+            route.pickupPoint,
+
+            "-"
+
+        );
+
+
+    /* =====================================
+       PICKUP TIME
+    ===================================== */
+
+    const pickupTime =
+        formatTime(
+
+            firstValue(
+
+                assignment.pickupTime,
+
+                assignment.pickup_time,
+
+                route.pickupTime,
+
+                bus.pickupTime,
+
+                ""
+
+            )
+
+        );
+
+
+    /* =====================================
+       DROP TIME
+    ===================================== */
+
+    const dropTime =
+        formatTime(
+
+            firstValue(
+
+                assignment.dropTime,
+
+                assignment.drop_time,
+
+                route.dropTime,
+
+                bus.dropTime,
+
+                ""
+
+            )
+
+        );
+
+
+    /* =====================================
+       STATUS
+    ===================================== */
+
+    const status =
+        firstValue(
+
+            assignment.status,
+
+            "Active"
+
+        );
+
+
+    /* =====================================
+       SUMMARY CARDS
+    ===================================== */
+
+    setText(
+        busNumberEl,
+        busNumber
+    );
+
+
+    setText(
+        routeNameEl,
+        routeName
+    );
+
+
+    setText(
+        pickupPointEl,
+        pickupPoint
+    );
+
+
+    setText(
+        pickupTimeEl,
+        pickupTime
+    );
+
+
+    /* =====================================
+       TRANSPORT DETAILS
+    ===================================== */
+
+    setText(
+        detailBusNumberEl,
+        busNumber
+    );
+
+
+    setText(
+        registrationNumberEl,
+        registrationNumber
+    );
+
+
+    setText(
+        detailRouteEl,
+        routeName
+    );
+
+
+    setText(
+        startPointEl,
+        startingPoint
+    );
+
+
+    setText(
+        endPointEl,
+        endPoint
+    );
+
+
+    setText(
+        detailPickupPointEl,
+        pickupPoint
+    );
+
+
+    setText(
+        detailPickupTimeEl,
+        pickupTime
+    );
+
+
+    setText(
+        dropTimeEl,
+        dropTime
+    );
+
+
+    setText(
+        transportStatusEl,
+        status
+    );
+
+
+    /* =====================================
+       STATUS COLOR
+    ===================================== */
+
+    if (
+        transportStatusEl
+    ) {
+
+        transportStatusEl.classList.remove(
+            "active",
+            "inactive",
+            "pending"
+        );
+
+
+        const statusLower =
+            String(
+                status
+            ).toLowerCase();
+
+
+        if (
+            statusLower === "active"
+        ) {
+
+            transportStatusEl.classList.add(
+                "active"
+            );
+
+        } else if (
+            statusLower === "inactive"
+        ) {
+
+            transportStatusEl.classList.add(
+                "inactive"
+            );
+
+        } else {
+
+            transportStatusEl.classList.add(
+                "pending"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================
+       HIDE NO TRANSPORT
+    ===================================== */
+
+    hideNoTransport();
+
+
+    console.log(
+        "-------------------------------------"
+    );
+
+    console.log(
+        "FINAL TRANSPORT DATA"
+    );
+
+    console.log(
+        "Bus:",
+        busNumber
+    );
+
+    console.log(
+        "Registration:",
+        registrationNumber
+    );
+
+    console.log(
+        "Route:",
+        routeName
+    );
+
+    console.log(
+        "Starting Point:",
+        startingPoint
+    );
+
+    console.log(
+        "End Point:",
+        endPoint
+    );
+
+    console.log(
+        "Pickup Point:",
+        pickupPoint
+    );
+
+    console.log(
+        "Pickup Time:",
+        pickupTime
+    );
+
+    console.log(
+        "Drop Time:",
+        dropTime
+    );
+
+    console.log(
+        "Status:",
+        status
+    );
+
+    console.log(
+        "-------------------------------------"
+    );
+
+}
+
+
+/* =====================================
+   FIRST VALID VALUE
+===================================== */
+
+function firstValue(
+    ...values
+) {
+
+    for (
+        const value of values
+    ) {
+
+        if (
+            value !== undefined &&
+            value !== null &&
+            String(value).trim() !== ""
+        ) {
+
+            return value;
+
+        }
+
+    }
+
+
+    return "-";
+
+}
+
+
+/* =====================================
+   FORMAT TIME
+===================================== */
+
+function formatTime(
+    value
+) {
+
+    if (
+        !value ||
+        value === "-"
+    ) {
+
+        return "-";
+
+    }
+
+
+    /* ---------------------------------
+       STRING TIME
+       Example: 08:30
+    --------------------------------- */
+
+    if (
+        typeof value === "string" &&
+        /^\d{1,2}:\d{2}$/.test(
+            value.trim()
+        )
+    ) {
+
+        const parts =
+            value
+                .trim()
+                .split(":");
+
+
+        let hour =
+            parseInt(
+                parts[0],
+                10
+            );
+
+
+        const minute =
+            parts[1];
+
+
+        const suffix =
+            hour >= 12
+                ? "PM"
+                : "AM";
+
+
+        hour =
+            hour % 12 || 12;
+
+
+        return `${hour}:${minute} ${suffix}`;
+
+    }
+
+
+    /* ---------------------------------
+       STRING WITH AM / PM
+    --------------------------------- */
+
+    if (
+        typeof value === "string"
+    ) {
+
+        const cleaned =
+            value.trim();
+
+
+        if (
+            /\b(am|pm)\b/i.test(
+                cleaned
+            )
+        ) {
+
+            return cleaned
+                .toUpperCase();
+
+        }
+
+    }
+
+
+    /* ---------------------------------
+       FIRESTORE TIMESTAMP
+    --------------------------------- */
+
+    if (
+        typeof value === "object" &&
+        value !== null &&
+        typeof value.toDate === "function"
+    ) {
+
+        const date =
+            value.toDate();
+
+
+        return date.toLocaleTimeString(
+            "en-IN",
+            {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true
+            }
+        );
+
+    }
+
+
+    /* ---------------------------------
+       JAVASCRIPT DATE
+    --------------------------------- */
+
+    if (
+        value instanceof Date
+    ) {
+
+        return value.toLocaleTimeString(
+            "en-IN",
+            {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true
+            }
+        );
+
+    }
+
+
+    return String(value);
+
+}
+
+
+/* =====================================
+   SAFE TEXT
+===================================== */
+
+function setText(
+    element,
+    value
+) {
+
+    if (
+        !element
+    ) {
+
+        return;
+
+    }
+
+
+    element.textContent =
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+            ? "-"
+            : value;
+
+}
+
+
+/* =====================================
+   SHOW NO TRANSPORT
+===================================== */
+
+function showNoTransport(
+    title,
+    message
+) {
+
+    if (
+        !noTransportEl
+    ) {
+
+        console.warn(
+            "noTransportSection not found"
+        );
+
+        return;
+
+    }
+
+
+    noTransportEl.style.display =
+        "block";
+
+
+    const titleElement =
+        noTransportEl.querySelector(
+            "h2"
+        );
+
+
+    const messageElement =
+        noTransportEl.querySelector(
+            "p"
+        );
+
+
+    if (
+        titleElement
+    ) {
+
+        titleElement.textContent =
+            title;
+
+    }
+
+
+    if (
+        messageElement
+    ) {
+
+        messageElement.textContent =
+            message;
+
+    }
+
+}
+
+
+/* =====================================
+   HIDE NO TRANSPORT
+===================================== */
+
+function hideNoTransport() {
+
+    if (
+        noTransportEl
+    ) {
+
+        noTransportEl.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =====================================
+   BACK TO DASHBOARD
+===================================== */
+
+window.goBackToDashboard =
+    function () {
+
+        window.location.href =
+            "parent.html";
+
+    };
+
+
+/* =====================================
+   REFRESH TRANSPORT
+===================================== */
+
+window.refreshTransport =
+    function () {
+
+        loadParentTransport();
+
+    };
+
+
+/* =====================================
+   FINAL LOG
+===================================== */
+
+console.log(
+    "Parent Transport JS Loaded Successfully"
+);
