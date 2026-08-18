@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        School Connect TN - Notification Management
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/notification_management.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<header class="topBar">
+
+    <div class="brandArea">
+
+        <div class="schoolTitle">
+            🏫 School Connect TN
+        </div>
+
+        <div class="schoolSubtitle">
+            Notification Management
+        </div>
+
+    </div>
+
+
+    <div class="adminBadge">
+        👤 Administrator
+    </div>
+
+</header>
+
+
+
+<!-- =====================================
+     MAIN CONTAINER
+===================================== -->
+
+<main class="mainContainer">
+
+
+    <!-- =================================
+         PAGE TITLE
+    ================================== -->
+
+    <section class="welcomeSection">
+
+        <h1>
+            🔔 Notification Management
+        </h1>
+
+        <p>
+            Send important notifications to parents,
+            teachers and students.
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================
+         SUMMARY
+    ================================== -->
+
+    <section class="summaryGrid">
+
+
+        <div class="summaryCard">
+
+            <div
+                class="summaryNumber"
+                id="totalNotifications"
+            >
+                0
+            </div>
+
+            <div class="summaryLabel">
+                TOTAL
+            </div>
+
+        </div>
+
+
+
+        <div class="summaryCard">
+
+            <div
+                class="summaryNumber"
+                id="parentNotifications"
+            >
+                0
+            </div>
+
+            <div class="summaryLabel">
+                PARENTS
+            </div>
+
+        </div>
+
+
+
+        <div class="summaryCard">
+
+            <div
+                class="summaryNumber"
+                id="unreadNotifications"
+            >
+                0
+            </div>
+
+            <div class="summaryLabel">
+                UNREAD
+            </div>
+
+        </div>
+
+
+
+        <div class="summaryCard">
+
+            <div
+                class="summaryNumber"
+                id="todayNotifications"
+            >
+                0
+            </div>
+
+            <div class="summaryLabel">
+                TODAY
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================
+         CREATE NOTIFICATION
+    ================================== -->
+
+    <section class="dashboardCard">
+
+        <div class="sectionHeader">
+
+            <h2>
+                ➕ Create Notification
+            </h2>
+
+            <p>
+                Send a notification to a specific
+                parent or all parents.
+            </p>
+
+        </div>
+
+
+        <form id="notificationForm">
+
+
+            <!-- TITLE -->
+
+            <div class="formGroup">
+
+                <label for="notificationTitle">
+                    Notification Title
+                </label>
+
+                <input
+                    type="text"
+                    id="notificationTitle"
+                    placeholder="Example: Fee Payment Reminder"
+                    maxlength="100"
+                    required
+                >
+
+            </div>
+
+
+
+            <!-- TYPE -->
+
+            <div class="formGroup">
+
+                <label for="notificationType">
+                    Notification Type
+                </label>
+
+                <select
+                    id="notificationType"
+                    required
+                >
+
+                    <option value="">
+                        Select Notification Type
+                    </option>
+
+                    <option value="notice">
+                        📢 General Notice
+                    </option>
+
+                    <option value="attendance">
+                        📅 Attendance
+                    </option>
+
+                    <option value="fee">
+                        💰 Fee Reminder
+                    </option>
+
+                    <option value="homework">
+                        📚 Homework
+                    </option>
+
+                    <option value="exam">
+                        📝 Exam / Result
+                    </option>
+
+                    <option value="transport">
+                        🚌 Transport
+                    </option>
+
+                    <option value="leave">
+                        📋 Leave Request
+                    </option>
+
+                    <option value="event">
+                        🎉 Event
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- TARGET -->
+
+            <div class="formGroup">
+
+                <label for="notificationTarget">
+                    Send To
+                </label>
+
+                <select
+                    id="notificationTarget"
+                    required
+                >
+
+                    <option value="">
+                        Select Target
+                    </option>
+
+                    <option value="all_parents">
+                        👨‍👩‍👧 All Parents
+                    </option>
+
+                    <option value="parent">
+                        👤 Specific Parent
+                    </option>
+
+                    <option value="all_teachers">
+                        👩‍🏫 All Teachers
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- EMIS -->
+
+            <div
+                class="formGroup"
+                id="emisGroup"
+                style="display:none;"
+            >
+
+                <label for="targetEMIS">
+                    Student EMIS Number
+                </label>
+
+                <input
+                    type="text"
+                    id="targetEMIS"
+                    placeholder="Enter Student EMIS Number"
+                >
+
+                <small>
+                    Notification will be sent to the
+                    parent linked with this student.
+                </small>
+
+            </div>
+
+
+
+            <!-- PRIORITY -->
+
+            <div class="formGroup">
+
+                <label for="notificationPriority">
+                    Priority
+                </label>
+
+                <select
+                    id="notificationPriority"
+                >
+
+                    <option value="normal">
+                        Normal
+                    </option>
+
+                    <option value="important">
+                        Important
+                    </option>
+
+                    <option value="urgent">
+                        🚨 Urgent
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- MESSAGE -->
+
+            <div class="formGroup">
+
+                <label for="notificationMessage">
+                    Message
+                </label>
+
+                <textarea
+                    id="notificationMessage"
+                    rows="5"
+                    maxlength="500"
+                    placeholder="Enter notification message..."
+                    required
+                ></textarea>
+
+                <small>
+                    Maximum 500 characters.
+                </small>
+
+            </div>
+
+
+
+            <!-- BUTTONS -->
+
+            <div class="formActions">
+
+                <button
+                    type="submit"
+                    class="primaryButton"
+                    id="sendNotificationButton"
+                >
+
+                    🔔 Send Notification
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="secondaryButton"
+                    id="clearNotificationButton"
+                >
+
+                    🧹 Clear
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </section>
+
+
+
+    <!-- =================================
+         NOTIFICATION LIST
+    ================================== -->
+
+    <section class="dashboardCard">
+
+        <div class="sectionHeader">
+
+            <div>
+
+                <h2>
+                    📋 Notification History
+                </h2>
+
+                <p>
+                    Recently created notifications.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SEARCH -->
+
+        <div class="filterGrid">
+
+            <input
+                type="text"
+                id="notificationSearch"
+                placeholder="🔍 Search notification..."
+            >
+
+
+            <select id="notificationFilter">
+
+                <option value="all">
+                    All Types
+                </option>
+
+                <option value="notice">
+                    General Notice
+                </option>
+
+                <option value="attendance">
+                    Attendance
+                </option>
+
+                <option value="fee">
+                    Fee
+                </option>
+
+                <option value="homework">
+                    Homework
+                </option>
+
+                <option value="exam">
+                    Exam / Result
+                </option>
+
+                <option value="transport">
+                    Transport
+                </option>
+
+                <option value="leave">
+                    Leave
+                </option>
+
+                <option value="event">
+                    Event
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- TABLE -->
+
+        <div class="tableWrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Title
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Target
+                        </th>
+
+                        <th>
+                            Priority
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="notificationTableBody">
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="emptyTable"
+                        >
+
+                            Loading notifications...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================
+         BACK
+    ================================== -->
+
+    <section class="backSection">
+
+        <button
+            type="button"
+            class="backButton"
+            onclick="location.href='admin_dashboard_v3.html'"
+        >
+
+            🏠 Back to Admin Dashboard
+
+        </button>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================
+     FOOTER
+===================================== -->
+
+<footer class="footer">
+
+    <div>
+        © 2026 School Connect TN
+    </div>
+
+    <div>
+        Powered by
+        <strong>
+            VTOOS Software Solution
+        </strong>
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================
+     JAVASCRIPT
+===================================== -->
+
+<script
+    type="module"
+    src="js/notification_management.js"
+></script>
+
+
+</body>
+
+</html>
