@@ -1,7 +1,7 @@
 /* =====================================
    School Connect TN
    Parent Transport
-   Firebase V2
+   Firebase V3 - FINAL
 ===================================== */
 
 import { db } from "../firebase.js";
@@ -27,84 +27,19 @@ const STUDENTS_COLLECTION = "students";
 
 
 /* =====================================
-   ELEMENTS
-===================================== */
-
-const studentNameEl =
-    document.getElementById("studentName");
-
-const studentEMISEl =
-    document.getElementById("studentEMIS");
-
-const studentClassEl =
-    document.getElementById("studentClass");
-
-const studentSectionEl =
-    document.getElementById("studentSection");
-
-
-const busNumberEl =
-    document.getElementById("busNumber");
-
-const registrationNumberEl =
-    document.getElementById("registrationNumber");
-
-const routeNameEl =
-    document.getElementById("routeName");
-
-const startingPointEl =
-    document.getElementById("startingPoint");
-
-const endPointEl =
-    document.getElementById("endPoint");
-
-const pickupPointEl =
-    document.getElementById("pickupPoint");
-
-const pickupTimeEl =
-    document.getElementById("pickupTime");
-
-const dropTimeEl =
-    document.getElementById("dropTime");
-
-const transportStatusEl =
-    document.getElementById("transportStatus");
-
-const loadingEl =
-    document.getElementById("loadingTransport");
-
-const noTransportEl =
-    document.getElementById("noTransport");
-
-
-/* =====================================
    START
 ===================================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-        console.log(
-            "====================================="
-        );
+    console.log("=====================================");
+    console.log("School Connect TN");
+    console.log("Parent Transport V3");
+    console.log("=====================================");
 
-        console.log(
-            "School Connect TN"
-        );
+    loadParentTransport();
 
-        console.log(
-            "Parent Transport V2"
-        );
-
-        console.log(
-            "====================================="
-        );
-
-        loadParentTransport();
-
-    }
-);
+});
 
 
 /* =====================================
@@ -122,8 +57,7 @@ function getParentEMIS() {
 
     for (const key of keys) {
 
-        const value =
-            localStorage.getItem(key);
+        const value = localStorage.getItem(key);
 
         if (
             value &&
@@ -156,9 +90,7 @@ async function loadParentTransport() {
 
         showLoading();
 
-        const emis =
-            getParentEMIS();
-
+        const emis = getParentEMIS();
 
         if (!emis) {
 
@@ -177,7 +109,7 @@ async function loadParentTransport() {
 
 
         console.log(
-            "Searching assignment using studentSearch:",
+            "Searching transport for EMIS:",
             emis
         );
 
@@ -220,15 +152,9 @@ async function loadParentTransport() {
             assignmentSnapshot.empty
         ) {
 
-            console.log(
-                "No transport assignment found"
-            );
-
-
             await loadStudentDetails(
                 emis
             );
-
 
             showNoTransport(
                 "No Transport Assigned",
@@ -240,19 +166,23 @@ async function loadParentTransport() {
         }
 
 
-        /*
-         * Use first active assignment.
-         */
+        /* =====================================
+           SELECT ACTIVE ASSIGNMENT
+        ===================================== */
 
-        let assignment =
-            null;
+        let assignment = null;
 
 
         assignmentSnapshot.forEach(
             (item) => {
 
-                const data =
-                    item.data();
+                const data = item.data();
+
+                console.log(
+                    "Assignment Record:",
+                    data
+                );
+
 
                 if (
                     !assignment &&
@@ -272,10 +202,9 @@ async function loadParentTransport() {
         );
 
 
-        /*
-         * If no active assignment,
-         * use first record.
-         */
+        /* =====================================
+           FALLBACK FIRST RECORD
+        ===================================== */
 
         if (!assignment) {
 
@@ -291,7 +220,7 @@ async function loadParentTransport() {
 
 
         console.log(
-            "Assignment:",
+            "Selected Assignment:",
             assignment
         );
 
@@ -394,6 +323,11 @@ async function loadDocumentById(
 
     try {
 
+        if (!documentId) {
+            return {};
+        }
+
+
         const reference =
             doc(
                 db,
@@ -408,9 +342,7 @@ async function loadDocumentById(
             );
 
 
-        if (
-            !snapshot.exists()
-        ) {
+        if (!snapshot.exists()) {
 
             console.warn(
                 "Document not found:",
@@ -424,6 +356,7 @@ async function loadDocumentById(
 
 
         return snapshot.data();
+
 
     } catch (error) {
 
@@ -457,9 +390,9 @@ async function loadStudentDetails(
             );
 
 
-        /*
-         * Try EMIS field.
-         */
+        /* =====================================
+           TRY emis
+        ===================================== */
 
         const q1 =
             query(
@@ -476,10 +409,9 @@ async function loadStudentDetails(
             await getDocs(q1);
 
 
-        /*
-         * Some student records may use
-         * studentEMIS instead.
-         */
+        /* =====================================
+           TRY studentEMIS
+        ===================================== */
 
         if (
             snapshot.empty
@@ -511,8 +443,10 @@ async function loadStudentDetails(
                 emis
             );
 
-            setText(
-                studentEMISEl,
+            setElementText(
+                [
+                    "studentEMIS"
+                ],
                 emis
             );
 
@@ -525,32 +459,52 @@ async function loadStudentDetails(
             snapshot.docs[0].data();
 
 
-        setText(
-            studentNameEl,
-            student.studentName ||
-            student.name ||
-            "-"
+        console.log(
+            "Student Data:",
+            student
         );
 
 
-        setText(
-            studentEMISEl,
+        setElementText(
+            [
+                "studentName"
+            ],
+            firstValue(
+                student.studentName,
+                student.name,
+                "-"
+            )
+        );
+
+
+        setElementText(
+            [
+                "studentEMIS"
+            ],
             emis
         );
 
 
-        setText(
-            studentClassEl,
-            student.class ||
-            student.studentClass ||
-            "-"
+        setElementText(
+            [
+                "studentClass"
+            ],
+            firstValue(
+                student.class,
+                student.studentClass,
+                "-"
+            )
         );
 
 
-        setText(
-            studentSectionEl,
-            student.section ||
-            "-"
+        setElementText(
+            [
+                "studentSection"
+            ],
+            firstValue(
+                student.section,
+                "-"
+            )
         );
 
 
@@ -581,265 +535,538 @@ function displayTransport(
     route
 ) {
 
+    console.log(
+        "====================================="
+    );
+
+    console.log(
+        "DISPLAY TRANSPORT"
+    );
+
+    console.log(
+        "Assignment:",
+        assignment
+    );
+
+    console.log(
+        "Bus:",
+        bus
+    );
+
+    console.log(
+        "Route:",
+        route
+    );
+
+
     /* =====================================
-       BUS DATA
+       BUS NUMBER
     ===================================== */
 
     const busNumber =
-        bus.busNumber ||
-        bus.busNo ||
-        bus.number ||
-        assignment.busNumber ||
-        assignment.busNo ||
-        assignment.bus ||
-        "-";
+        firstValue(
 
+            /* Bus document */
+            bus.busNumber,
+            bus.busNo,
+            bus.busNumberValue,
+            bus.number,
 
-    const registrationNumber =
-        bus.registrationNumber ||
-        bus.registrationNo ||
-        bus.vehicleNumber ||
-        assignment.registrationNumber ||
-        "-";
+            /* Assignment */
+            assignment.busNumber,
+            assignment.busNo,
+
+            /* Common alternatives */
+            assignment.vehicleNumber,
+
+            "-"
+
+        );
 
 
     /* =====================================
-       ROUTE DATA
+       REGISTRATION NUMBER
+    ===================================== */
+
+    const registrationNumber =
+        firstValue(
+
+            bus.registrationNumber,
+            bus.registrationNo,
+            bus.vehicleRegistrationNumber,
+            bus.vehicleNumber,
+
+            assignment.registrationNumber,
+            assignment.registrationNo,
+
+            "-"
+
+        );
+
+
+    /* =====================================
+       ROUTE
     ===================================== */
 
     const routeName =
-        route.routeName ||
-        route.name ||
-        route.route ||
-        assignment.routeName ||
-        assignment.route ||
-        "-";
+        firstValue(
 
+            route.routeName,
+            route.route,
+            route.name,
+            route.routeTitle,
 
-    const startingPoint =
-        route.startingPoint ||
-        route.startPoint ||
-        route.from ||
-        route.start ||
-        assignment.startingPoint ||
-        assignment.startPoint ||
-        "-";
+            assignment.routeName,
+            assignment.route,
 
+            "-"
 
-    const endPoint =
-        route.endPoint ||
-        route.endPointName ||
-        route.to ||
-        route.destination ||
-        assignment.endPoint ||
-        assignment.destination ||
-        "-";
+        );
 
 
     /* =====================================
-       ASSIGNMENT DATA
+       STARTING POINT
+    ===================================== */
+
+    const startingPoint =
+        firstValue(
+
+            route.startingPoint,
+            route.startPoint,
+            route.from,
+            route.start,
+            route.origin,
+
+            assignment.startingPoint,
+            assignment.startPoint,
+            assignment.from,
+
+            "-"
+
+        );
+
+
+    /* =====================================
+       END POINT
+    ===================================== */
+
+    const endPoint =
+        firstValue(
+
+            route.endPoint,
+            route.endPointName,
+            route.to,
+            route.destination,
+
+            assignment.endPoint,
+            assignment.destination,
+            assignment.to,
+
+            "-"
+
+        );
+
+
+    /* =====================================
+       PICKUP POINT
     ===================================== */
 
     const pickupPoint =
-        assignment.pickupPoint ||
-        "-";
+        firstValue(
 
+            assignment.pickupPoint,
+            assignment.pickupLocation,
+            assignment.pickup,
+
+            "-"
+
+        );
+
+
+    /* =====================================
+       PICKUP TIME
+    ===================================== */
 
     const pickupTime =
         formatTime(
-            assignment.pickupTime
+            firstValue(
+                assignment.pickupTime,
+                assignment.pickup_time,
+                bus.pickupTime,
+                route.pickupTime,
+                ""
+            )
         );
 
+
+    /* =====================================
+       DROP TIME
+    ===================================== */
 
     const dropTime =
         formatTime(
-            assignment.dropTime
+            firstValue(
+                assignment.dropTime,
+                assignment.drop_time,
+                bus.dropTime,
+                route.dropTime,
+                ""
+            )
         );
-
-
-    const status =
-        assignment.status ||
-        "Active";
-
-
-    /* =====================================
-       SUMMARY CARDS
-    ===================================== */
-
-    setText(
-        document.getElementById("busCardValue"),
-        busNumber
-    );
-
-
-    setText(
-        document.getElementById("routeCardValue"),
-        routeName
-    );
-
-
-    setText(
-        document.getElementById("pickupCardValue"),
-        pickupPoint
-    );
-
-
-    setText(
-        document.getElementById("pickupTimeCardValue"),
-        pickupTime
-    );
-
-
-    /* =====================================
-       TRANSPORT DETAILS
-    ===================================== */
-
-    setText(
-        busNumberEl,
-        busNumber
-    );
-
-
-    setText(
-        registrationNumberEl,
-        registrationNumber
-    );
-
-
-    setText(
-        routeNameEl,
-        routeName
-    );
-
-
-    setText(
-        startingPointEl,
-        startingPoint
-    );
-
-
-    setText(
-        endPointEl,
-        endPoint
-    );
-
-
-    setText(
-        pickupPointEl,
-        pickupPoint
-    );
-
-
-    setText(
-        pickupTimeEl,
-        pickupTime
-    );
-
-
-    setText(
-        dropTimeEl,
-        dropTime
-    );
-
-
-    setText(
-        transportStatusEl,
-        status
-    );
 
 
     /* =====================================
        STATUS
     ===================================== */
 
-    if (transportStatusEl) {
-
-        transportStatusEl.classList.remove(
-            "active",
-            "inactive",
-            "pending"
+    const status =
+        firstValue(
+            assignment.status,
+            "Active"
         );
 
-        const statusLower =
-            String(status).toLowerCase();
 
-        if (statusLower === "active") {
+    /* =====================================
+       DEBUG
+    ===================================== */
 
-            transportStatusEl.classList.add(
-                "active"
-            );
+    console.log(
+        "FINAL BUS NUMBER:",
+        busNumber
+    );
 
-        } else if (statusLower === "inactive") {
+    console.log(
+        "FINAL REGISTRATION:",
+        registrationNumber
+    );
 
-            transportStatusEl.classList.add(
-                "inactive"
-            );
+    console.log(
+        "FINAL ROUTE:",
+        routeName
+    );
 
-        } else {
+    console.log(
+        "FINAL START:",
+        startingPoint
+    );
 
-            transportStatusEl.classList.add(
+    console.log(
+        "FINAL END:",
+        endPoint
+    );
+
+    console.log(
+        "FINAL PICKUP:",
+        pickupPoint
+    );
+
+    console.log(
+        "FINAL PICKUP TIME:",
+        pickupTime
+    );
+
+    console.log(
+        "FINAL DROP TIME:",
+        dropTime
+    );
+
+    console.log(
+        "FINAL STATUS:",
+        status
+    );
+
+
+    /* =====================================
+       SUMMARY CARDS
+    ===================================== */
+
+    setElementText(
+        [
+            "busCardValue",
+            "busValue",
+            "transportBus"
+        ],
+        busNumber
+    );
+
+
+    setElementText(
+        [
+            "routeCardValue",
+            "routeValue",
+            "transportRoute"
+        ],
+        routeName
+    );
+
+
+    setElementText(
+        [
+            "pickupCardValue",
+            "pickupValue",
+            "transportPickup"
+        ],
+        pickupPoint
+    );
+
+
+    setElementText(
+        [
+            "pickupTimeCardValue",
+            "pickupTimeValue",
+            "transportPickupTime"
+        ],
+        pickupTime
+    );
+
+
+    /* =====================================
+       DETAILS
+    ===================================== */
+
+    setElementText(
+        [
+            "busNumber",
+            "busNumberDetails",
+            "transportBusNumber"
+        ],
+        busNumber
+    );
+
+
+    setElementText(
+        [
+            "registrationNumber",
+            "registrationNumberDetails",
+            "transportRegistrationNumber"
+        ],
+        registrationNumber
+    );
+
+
+    setElementText(
+        [
+            "routeName",
+            "routeNameDetails",
+            "transportRouteName"
+        ],
+        routeName
+    );
+
+
+    setElementText(
+        [
+            "startingPoint",
+            "startingPointDetails",
+            "transportStartingPoint"
+        ],
+        startingPoint
+    );
+
+
+    setElementText(
+        [
+            "endPoint",
+            "endPointDetails",
+            "transportEndPoint"
+        ],
+        endPoint
+    );
+
+
+    setElementText(
+        [
+            "pickupPoint",
+            "pickupPointDetails",
+            "transportPickupPoint"
+        ],
+        pickupPoint
+    );
+
+
+    setElementText(
+        [
+            "pickupTime",
+            "pickupTimeDetails",
+            "transportPickupTime"
+        ],
+        pickupTime
+    );
+
+
+    setElementText(
+        [
+            "dropTime",
+            "dropTimeDetails",
+            "transportDropTime"
+        ],
+        dropTime
+    );
+
+
+    setElementText(
+        [
+            "transportStatus",
+            "transportStatusDetails"
+        ],
+        status
+    );
+
+
+    /* =====================================
+       STATUS CLASS
+    ===================================== */
+
+    const statusElements = [
+        document.getElementById(
+            "transportStatus"
+        ),
+        document.getElementById(
+            "transportStatusDetails"
+        )
+    ];
+
+
+    statusElements.forEach(
+        (element) => {
+
+            if (!element) {
+                return;
+            }
+
+
+            element.classList.remove(
+                "active",
+                "inactive",
                 "pending"
             );
 
+
+            const lowerStatus =
+                String(
+                    status
+                ).toLowerCase();
+
+
+            if (
+                lowerStatus === "active"
+            ) {
+
+                element.classList.add(
+                    "active"
+                );
+
+            } else if (
+                lowerStatus === "inactive"
+            ) {
+
+                element.classList.add(
+                    "inactive"
+                );
+
+            } else {
+
+                element.classList.add(
+                    "pending"
+                );
+
+            }
+
         }
+    );
 
-    }
 
+    /* =====================================
+       COMPLETE
+    ===================================== */
 
     hideLoading();
+
     hideNoTransport();
 
+
+    console.log(
+        "====================================="
+    );
 
     console.log(
         "Parent Transport Loaded Successfully"
     );
 
     console.log(
-        "Bus:",
-        busNumber
-    );
+        "====================================="
 
-    console.log(
-        "Registration:",
-        registrationNumber
-    );
-
-    console.log(
-        "Route:",
-        routeName
-    );
-
-    console.log(
-        "Starting Point:",
-        startingPoint
-    );
-
-    console.log(
-        "End Point:",
-        endPoint
-    );
-
-    console.log(
-        "Pickup Point:",
-        pickupPoint
-    );
-
-    console.log(
-        "Pickup Time:",
-        pickupTime
-    );
-
-    console.log(
-        "Drop Time:",
-        dropTime
-    );
-
-    console.log(
-        "Status:",
-        status
     );
 
 }
+
+
+/* =====================================
+   FIRST VALID VALUE
+===================================== */
+
+function firstValue(
+    ...values
+) {
+
+    for (
+        const value of values
+    ) {
+
+        if (
+            value !== undefined &&
+            value !== null &&
+            String(value).trim() !== ""
+        ) {
+
+            return value;
+
+        }
+
+    }
+
+    return "-";
+
+}
+
+
+/* =====================================
+   SET MULTIPLE POSSIBLE ELEMENT IDs
+===================================== */
+
+function setElementText(
+    ids,
+    value
+) {
+
+    if (!Array.isArray(ids)) {
+
+        ids = [ids];
+
+    }
+
+
+    ids.forEach(
+        (id) => {
+
+            const element =
+                document.getElementById(
+                    id
+                );
+
+
+            if (element) {
+
+                element.textContent =
+                    value ?? "-";
+
+            }
+
+        }
+    );
+
+}
+
 
 /* =====================================
    FORMAT TIME
@@ -849,27 +1076,59 @@ function formatTime(
     value
 ) {
 
-    if (!value) {
+    if (
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+    ) {
 
         return "-";
 
     }
 
 
-    /*
-     * Simple time:
-     * 08:30
-     */
+    /* =====================================
+       FIRESTORE TIMESTAMP
+    ===================================== */
 
     if (
-        typeof value === "string" &&
+        typeof value === "object" &&
+        value !== null &&
+        typeof value.toDate === "function"
+    ) {
+
+        const date =
+            value.toDate();
+
+
+        return date.toLocaleTimeString(
+            "en-IN",
+            {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true
+            }
+        );
+
+    }
+
+
+    /* =====================================
+       HH:MM
+    ===================================== */
+
+    const text =
+        String(value).trim();
+
+
+    if (
         /^\d{1,2}:\d{2}$/.test(
-            value
+            text
         )
     ) {
 
         const parts =
-            value.split(":");
+            text.split(":");
 
 
         let hour =
@@ -898,55 +1157,47 @@ function formatTime(
     }
 
 
-    /*
-     * Firestore Timestamp
-     */
+    /* =====================================
+       HH:MM:SS
+    ===================================== */
 
     if (
-        typeof value === "object" &&
-        value !== null &&
-        typeof value.toDate === "function"
+        /^\d{1,2}:\d{2}:\d{2}$/.test(
+            text
+        )
     ) {
 
-        const date =
-            value.toDate();
+        const parts =
+            text.split(":");
 
 
-        return date.toLocaleTimeString(
-            "en-IN",
-            {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true
-            }
-        );
-
-    }
+        let hour =
+            parseInt(
+                parts[0],
+                10
+            );
 
 
-    return String(value);
+        const minute =
+            parts[1];
 
-}
+
+        const suffix =
+            hour >= 12
+                ? "PM"
+                : "AM";
 
 
-/* =====================================
-   SAFE TEXT
-===================================== */
+        hour =
+            hour % 12 || 12;
 
-function setText(
-    element,
-    value
-) {
 
-    if (!element) {
-
-        return;
+        return `${hour}:${minute} ${suffix}`;
 
     }
 
 
-    element.textContent =
-        value ?? "-";
+    return text;
 
 }
 
@@ -957,9 +1208,15 @@ function setText(
 
 function showLoading() {
 
-    if (loadingEl) {
+    const element =
+        document.getElementById(
+            "loadingTransport"
+        );
 
-        loadingEl.style.display =
+
+    if (element) {
+
+        element.style.display =
             "flex";
 
     }
@@ -969,9 +1226,15 @@ function showLoading() {
 
 function hideLoading() {
 
-    if (loadingEl) {
+    const element =
+        document.getElementById(
+            "loadingTransport"
+        );
 
-        loadingEl.style.display =
+
+    if (element) {
+
+        element.style.display =
             "none";
 
     }
@@ -991,25 +1254,29 @@ function showNoTransport(
     hideLoading();
 
 
-    if (!noTransportEl) {
+    const element =
+        document.getElementById(
+            "noTransport"
+        );
 
+
+    if (!element) {
         return;
-
     }
 
 
-    noTransportEl.style.display =
+    element.style.display =
         "block";
 
 
     const titleElement =
-        noTransportEl.querySelector(
+        element.querySelector(
             "h2"
         );
 
 
     const messageElement =
-        noTransportEl.querySelector(
+        element.querySelector(
             "p"
         );
 
@@ -1032,15 +1299,17 @@ function showNoTransport(
 }
 
 
-/* =====================================
-   HIDE NO TRANSPORT
-===================================== */
-
 function hideNoTransport() {
 
-    if (noTransportEl) {
+    const element =
+        document.getElementById(
+            "noTransport"
+        );
 
-        noTransportEl.style.display =
+
+    if (element) {
+
+        element.style.display =
             "none";
 
     }
@@ -1073,6 +1342,10 @@ window.refreshTransport =
     };
 
 
+/* =====================================
+   FINAL LOG
+===================================== */
+
 console.log(
-    "Parent Transport JS Loaded Successfully"
+    "Parent Transport JS V3 Loaded Successfully"
 );
