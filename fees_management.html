@@ -1,1699 +1,664 @@
-// ==========================================================
-// School Connect TN
-// Fees Management
-// UPDATED FULL VERSION
-// ==========================================================
+<!DOCTYPE html>
+<html lang="en">
 
-import { db, auth } from "../firebase.js";
+<head>
 
-import {
-    collection,
-    getDocs,
-    addDoc,
-    updateDoc,
-    deleteDoc,
-    doc,
-    serverTimestamp,
-    query,
-    orderBy
-} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+<meta charset="UTF-8">
 
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-// ==========================================================
-// GLOBAL VARIABLES
-// ==========================================================
+<title>School Connect TN - Fees Management</title>
 
-let students = [];
-let feeRecords = [];
+<link rel="stylesheet"
+      href="css/fees_management.css">
 
-let selectedStudent = null;
-let editingFeeId = null;
+</head>
 
 
-// ==========================================================
-// DOM READY
-// ==========================================================
+<body>
 
-document.addEventListener("DOMContentLoaded", () => {
 
-    console.log("====================================");
-    console.log("School Connect TN");
-    console.log("Fees Management Loaded");
-    console.log("====================================");
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
-    initializePage();
+<header class="topBar">
 
-});
+    <div class="brandArea">
 
+        <div class="schoolTitle">
+            🏫 School Connect TN
+        </div>
 
-// ==========================================================
-// INITIALIZE
-// ==========================================================
+        <div class="schoolSubtitle">
+            Fees Management
+        </div>
 
-async function initializePage() {
+    </div>
 
-    try {
 
-        setDefaultDueDate();
+    <div class="adminBadge">
+        👤 Administrator
+    </div>
 
-        await loadStudents();
+</header>
 
-        await loadFees();
 
-        setupEvents();
 
-        console.log("Fees Management Ready");
+<!-- =====================================================
+     MAIN CONTAINER
+===================================================== -->
 
-    } catch (error) {
+<main class="mainContainer">
 
-        console.error("Initialization Error:", error);
 
-        showMessage(
-            "Unable to load Fees Management. Please refresh the page.",
-            "error"
-        );
 
-    }
+<!-- =====================================================
+     PAGE HEADER
+===================================================== -->
 
-}
+<section class="welcomeSection">
 
+    <h1>
+        💰 Fees Management
+    </h1>
 
-// ==========================================================
-// LOAD STUDENTS
-// ==========================================================
+    <p>
+        Manage student fees, payments and pending amounts.
+    </p>
 
-async function loadStudents() {
+</section>
 
-    try {
 
-        const snapshot = await getDocs(
-            collection(db, "students")
-        );
 
-        students = [];
+<!-- =====================================================
+     FEE SUMMARY
+===================================================== -->
 
-        snapshot.forEach((docSnap) => {
+<section class="summaryGrid">
 
-            const data = docSnap.data();
 
-            students.push({
+    <!-- TOTAL FEE -->
 
-                docId: docSnap.id,
+    <div class="summaryCard">
 
-                id:
-                    data.studentId ||
-                    data.emisNumber ||
-                    data.emis ||
-                    data.EMIS ||
-                    "",
+        <div class="summaryNumber"
+             id="totalFee">
 
-                name:
-                    data.studentName ||
-                    data.name ||
-                    data.fullName ||
-                    "",
+            ₹0
 
-                emis:
-                    data.emisNumber ||
-                    data.emis ||
-                    data.EMIS ||
-                    data.studentId ||
-                    "",
+        </div>
 
-                class:
-                    data.class ||
-                    data.studentClass ||
-                    "",
+        <div class="summaryLabel">
+            TOTAL FEE
+        </div>
 
-                section:
-                    data.section ||
-                    data.studentSection ||
-                    ""
+    </div>
 
-            });
 
-        });
 
-        console.log(
-            "Students Loaded:",
-            students.length
-        );
+    <!-- COLLECTED -->
 
-    } catch (error) {
+    <div class="summaryCard">
 
-        console.error(
-            "Student Load Error:",
-            error
-        );
+        <div class="summaryNumber"
+             id="collectedFee">
 
-        throw error;
+            ₹0
 
-    }
+        </div>
 
-}
+        <div class="summaryLabel">
+            COLLECTED
+        </div>
 
+    </div>
 
-// ==========================================================
-// LOAD FEES
-// ==========================================================
 
-async function loadFees() {
 
-    try {
+    <!-- PENDING -->
 
-        const snapshot = await getDocs(
-            collection(db, "fees")
-        );
+    <div class="summaryCard">
 
-        feeRecords = [];
+        <div class="summaryNumber"
+             id="pendingFee">
 
-        snapshot.forEach((docSnap) => {
+            ₹0
 
-            const data = docSnap.data();
+        </div>
 
-            feeRecords.push({
+        <div class="summaryLabel">
+            PENDING
+        </div>
 
-                id: docSnap.id,
+    </div>
 
-                studentName:
-                    data.studentName || "",
 
-                studentId:
-                    data.studentId || "",
 
-                studentDocId:
-                    data.studentDocId || "",
+    <!-- PAID STUDENTS -->
 
-                studentEmis:
-                    data.studentId ||
-                    data.studentEmis ||
-                    data.emis ||
-                    data.emisNumber ||
-                    "",
+    <div class="summaryCard">
 
-                studentClass:
-                    data.studentClass ||
-                    data.class ||
-                    "",
+        <div class="summaryNumber"
+             id="paidStudents">
 
-                studentSection:
-                    data.studentSection ||
-                    data.section ||
-                    "",
+            0
 
-                academicYear:
-                    data.academicYear || "",
+        </div>
 
-                feeType:
-                    data.feeType || "",
+        <div class="summaryLabel">
+            PAID STUDENTS
+        </div>
 
-                totalFee:
-                    Number(
-                        data.totalFee ??
-                        data.totalAmount ??
-                        0
-                    ),
+    </div>
 
-                paidAmount:
-                    Number(
-                        data.paidAmount ??
-                        data.paid ??
-                        data.paidFee ??
-                        0
-                    ),
 
-                pendingAmount:
-                    Number(
-                        data.pendingAmount ??
-                        data.balance ??
-                        0
-                    ),
+</section>
 
-                dueDate:
-                    data.dueDate || "",
 
-                paymentMode:
-                    data.paymentMode || "",
 
-                paymentDate:
-                    data.paymentDate || null,
+<!-- =====================================================
+     ASSIGN STUDENT FEE
+===================================================== -->
 
-                receiptNo:
-                    data.receiptNo || "",
+<section class="dashboardCard">
 
-                remarks:
-                    data.remarks || "",
 
-                status:
-                    data.status || "Pending",
+    <div class="sectionHeader">
 
-                createdAt:
-                    data.createdAt || null,
+        <h2>
+            ➕ Assign Student Fee
+        </h2>
 
-                createdBy:
-                    data.createdBy || ""
+        <p>
+            Search student and assign the required fee.
+        </p>
 
-            });
+    </div>
 
-        });
 
-        console.log(
-            "Fee Records Loaded:",
-            feeRecords.length
-        );
 
-        renderFees();
+    <div class="formGrid">
 
-        updateSummary();
 
-        renderPaymentHistory();
+        <!-- =================================================
+             STUDENT SEARCH
+        ================================================== -->
 
-    } catch (error) {
+        <div class="formGroup fullWidth">
 
-        console.error(
-            "Fee Load Error:",
-            error
-        );
+            <label for="studentSearch">
 
-        throw error;
+                🔎 Student Name / EMIS
 
-    }
+            </label>
 
-}
 
+            <input
+                type="text"
+                id="studentSearch"
+                placeholder="Enter student name or EMIS number"
+                autocomplete="off">
 
-// ==========================================================
-// EVENTS
-// ==========================================================
 
-function setupEvents() {
+            <div
+                id="studentResults"
+                class="studentResults">
 
-    // Student Search
-    const studentSearch =
-        document.getElementById("studentSearch");
+            </div>
 
-    if (studentSearch) {
+        </div>
 
-        studentSearch.addEventListener(
-            "input",
-            handleStudentSearch
-        );
 
-    }
 
+        <!-- =================================================
+             STUDENT NAME
+        ================================================== -->
 
-    // Save Fee
-    const saveButton =
-        document.getElementById("saveFee");
+        <div class="formGroup">
 
-    if (saveButton) {
+            <label for="studentName">
 
-        saveButton.addEventListener(
-            "click",
-            saveFee
-        );
+                Student Name
 
-    }
+            </label>
 
 
-    // Clear
-    const clearButton =
-        document.getElementById("clearFee");
+            <input
+                type="text"
+                id="studentName"
+                readonly
+                placeholder="Auto filled">
 
-    if (clearButton) {
+        </div>
 
-        clearButton.addEventListener(
-            "click",
-            clearFeeForm
-        );
 
-    }
 
+        <!-- =================================================
+             EMIS
+        ================================================== -->
 
-    // Fee Search
-    const feeSearch =
-        document.getElementById("feeSearch");
+        <div class="formGroup">
 
-    if (feeSearch) {
+            <label for="studentEmis">
 
-        feeSearch.addEventListener(
-            "input",
-            renderFees
-        );
+                EMIS Number
 
-    }
+            </label>
 
 
-    // Status Filter
-    const statusFilter =
-        document.getElementById("feeStatusFilter");
+            <input
+                type="text"
+                id="studentEmis"
+                readonly
+                placeholder="Auto filled">
 
-    if (statusFilter) {
+        </div>
 
-        statusFilter.addEventListener(
-            "change",
-            renderFees
-        );
 
-    }
 
-}
+        <!-- =================================================
+             CLASS
+        ================================================== -->
 
+        <div class="formGroup">
 
-// ==========================================================
-// STUDENT SEARCH
-// ==========================================================
+            <label for="studentClass">
 
-function handleStudentSearch(event) {
+                Class
 
-    const value =
-        event.target.value
-            .trim()
-            .toLowerCase();
+            </label>
 
-    const resultBox =
-        document.getElementById(
-            "studentResults"
-        );
 
-    if (!resultBox) return;
+            <input
+                type="text"
+                id="studentClass"
+                readonly
+                placeholder="Auto filled">
 
-    resultBox.innerHTML = "";
+        </div>
 
-    selectedStudent = null;
 
-    clearStudentFields();
 
+        <!-- =================================================
+             SECTION
+        ================================================== -->
 
-    if (!value) {
+        <div class="formGroup">
 
-        resultBox.style.display = "none";
+            <label for="studentSection">
 
-        return;
+                Section
 
-    }
+            </label>
 
 
-    const matches =
-        students.filter((student) => {
+            <input
+                type="text"
+                id="studentSection"
+                readonly
+                placeholder="Auto filled">
 
-            const name =
-                String(
-                    student.name || ""
-                ).toLowerCase();
+        </div>
 
-            const emis =
-                String(
-                    student.emis || ""
-                ).toLowerCase();
 
-            const id =
-                String(
-                    student.id || ""
-                ).toLowerCase();
 
-            return (
-                name.includes(value) ||
-                emis.includes(value) ||
-                id.includes(value)
-            );
+        <!-- =================================================
+             ACADEMIC YEAR
+        ================================================== -->
 
-        }).slice(0, 10);
+        <div class="formGroup">
 
+            <label for="academicYear">
 
-    if (matches.length === 0) {
+                Academic Year
 
-        resultBox.innerHTML =
-            `<div class="noResult">
-                No student found
-            </div>`;
+            </label>
 
-        resultBox.style.display = "block";
 
-        return;
+            <select id="academicYear">
 
-    }
+                <option value="2026-27">
+                    2026 - 2027
+                </option>
 
+                <option value="2027-28">
+                    2027 - 2028
+                </option>
 
-    matches.forEach((student) => {
+                <option value="2028-29">
+                    2028 - 2029
+                </option>
 
-        const item =
-            document.createElement("div");
+            </select>
 
-        item.className =
-            "studentResultItem";
+        </div>
 
-        item.innerHTML = `
-            <strong>
-                ${escapeHtml(student.name || "-")}
-            </strong>
 
-            <span>
-                EMIS:
-                ${escapeHtml(student.emis || "-")}
-            </span>
 
-            <small>
-                Class:
-                ${escapeHtml(student.class || "-")}
-                ${
-                    student.section
-                        ? " - " +
-                          escapeHtml(student.section)
-                        : ""
-                }
-            </small>
-        `;
+        <!-- =================================================
+             FEE TYPE
+        ================================================== -->
 
+        <div class="formGroup">
 
-        item.addEventListener(
-            "click",
-            () => {
+            <label for="feeType">
 
-                selectStudent(student);
+                Fee Type
 
-            }
-        );
+            </label>
 
 
-        resultBox.appendChild(item);
+            <select id="feeType">
 
-    });
+                <option value="Tuition Fee">
+                    Tuition Fee
+                </option>
 
+                <option value="Exam Fee">
+                    Exam Fee
+                </option>
 
-    resultBox.style.display = "block";
+                <option value="Transport Fee">
+                    Transport Fee
+                </option>
 
-}
+                <option value="Uniform Fee">
+                    Uniform Fee
+                </option>
 
+                <option value="Books Fee">
+                    Books Fee
+                </option>
 
-// ==========================================================
-// SELECT STUDENT
-// ==========================================================
+                <option value="Other Fee">
+                    Other Fee
+                </option>
 
-function selectStudent(student) {
+            </select>
 
-    selectedStudent = student;
+        </div>
 
-    const search =
-        document.getElementById(
-            "studentSearch"
-        );
 
-    if (search) {
 
-        search.value =
-            student.name || "";
+        <!-- =================================================
+             TOTAL AMOUNT
+        ================================================== -->
 
-    }
+        <div class="formGroup">
 
+            <label for="totalAmount">
 
-    setValue(
-        "studentName",
-        student.name
-    );
+                Total Amount
 
-    setValue(
-        "studentEmis",
-        student.emis
-    );
+            </label>
 
-    setValue(
-        "studentClass",
-        student.class
-    );
 
-    setValue(
-        "studentSection",
-        student.section
-    );
+            <input
+                type="number"
+                id="totalAmount"
+                min="0"
+                step="0.01"
+                placeholder="Enter amount">
 
+        </div>
 
-    const resultBox =
-        document.getElementById(
-            "studentResults"
-        );
 
-    if (resultBox) {
 
-        resultBox.innerHTML = "";
+        <!-- =================================================
+             DUE DATE
+        ================================================== -->
 
-        resultBox.style.display =
-            "none";
+        <div class="formGroup">
 
-    }
+            <label for="dueDate">
 
-}
+                Due Date
 
+            </label>
 
-// ==========================================================
-// CLEAR STUDENT FIELDS
-// ==========================================================
 
-function clearStudentFields() {
+            <input
+                type="date"
+                id="dueDate">
 
-    setValue(
-        "studentName",
-        ""
-    );
+        </div>
 
-    setValue(
-        "studentEmis",
-        ""
-    );
 
-    setValue(
-        "studentClass",
-        ""
-    );
+    </div>
 
-    setValue(
-        "studentSection",
-        ""
-    );
 
-}
 
+    <!-- =================================================
+         FORM ACTIONS
+    ================================================== -->
 
-// ==========================================================
-// SAVE FEE
-// ==========================================================
+    <div class="formActions">
 
-async function saveFee() {
+        <button
+            type="button"
+            id="saveFee"
+            class="primaryButton">
 
-    try {
+            💾 Save Fee
 
-        const saveButton =
-            document.getElementById(
-                "saveFee"
-            );
+        </button>
 
 
-        // ------------------------------------------
-        // VALIDATE STUDENT
-        // ------------------------------------------
+        <button
+            type="button"
+            id="clearFee"
+            class="secondaryButton">
 
-        if (!selectedStudent) {
+            🔄 Clear
 
-            showMessage(
-                "Please search and select a student.",
-                "error"
-            );
+        </button>
 
-            return;
+    </div>
 
-        }
 
+</section>
 
-        // ------------------------------------------
-        // GET FORM VALUES
-        // ------------------------------------------
 
-        const studentName =
-            getValue("studentName");
 
-        const studentEmis =
-            getValue("studentEmis");
+<!-- =====================================================
+     STUDENT FEE LIST
+===================================================== -->
 
-        const studentClass =
-            getValue("studentClass");
+<section class="dashboardCard">
 
-        const studentSection =
-            getValue("studentSection");
 
-        const academicYear =
-            getValue("academicYear");
+    <div class="sectionHeader">
 
-        const feeType =
-            getValue("feeType");
+        <h2>
+            📋 Student Fee List
+        </h2>
 
-        const totalAmount =
-            Number(
-                getValue("totalAmount")
-            );
+        <p>
+            View student fee details and payment status.
+        </p>
 
-        const dueDate =
-            getValue("dueDate");
+    </div>
 
 
-        // ------------------------------------------
-        // VALIDATION
-        // ------------------------------------------
 
-        if (!studentName) {
+    <!-- SEARCH + FILTER -->
 
-            showMessage(
-                "Student name is missing.",
-                "error"
-            );
+    <div class="searchArea">
 
-            return;
 
-        }
+        <input
+            type="text"
+            id="feeSearch"
+            placeholder="🔎 Search Student Name / EMIS">
 
 
-        if (
-            !totalAmount ||
-            totalAmount <= 0
-        ) {
+        <select id="feeStatusFilter">
 
-            showMessage(
-                "Please enter a valid fee amount.",
-                "error"
-            );
+            <option value="All">
+                All Status
+            </option>
 
-            return;
+            <option value="Paid">
+                Paid
+            </option>
 
-        }
+            <option value="Partial">
+                Partial
+            </option>
 
+            <option value="Pending">
+                Pending
+            </option>
 
-        if (!dueDate) {
+        </select>
 
-            showMessage(
-                "Please select due date.",
-                "error"
-            );
 
-            return;
+    </div>
 
-        }
 
 
-        // ------------------------------------------
-        // DISABLE BUTTON
-        // ------------------------------------------
+    <!-- =================================================
+         FEE TABLE
+    ================================================== -->
 
-        if (saveButton) {
+    <div class="tableWrapper">
 
-            saveButton.disabled = true;
+        <table>
 
-            saveButton.textContent =
-                editingFeeId
-                    ? "Updating..."
-                    : "Saving...";
+            <thead>
 
-        }
-
-
-        // ------------------------------------------
-        // NEW FEE
-        // ------------------------------------------
-
-        if (!editingFeeId) {
-
-            const feeData = {
-
-                studentId:
-                    selectedStudent.id || "",
-
-                studentDocId:
-                    selectedStudent.docId || "",
-
-                studentName:
-                    studentName,
-
-                studentEmis:
-                    studentEmis,
-
-                studentClass:
-                    studentClass,
-
-                studentSection:
-                    studentSection,
-
-                academicYear:
-                    academicYear,
-
-                feeType:
-                    feeType,
-
-                totalFee:
-                    totalAmount,
-
-                paidAmount:
-                    0,
-
-                pendingAmount:
-                    totalAmount,
-
-                dueDate:
-                    dueDate,
-
-                paymentMode:
-                    "",
-
-                paymentDate:
-                    null,
-
-                receiptNo:
-                    "",
-
-                remarks:
-                    "",
-
-                status:
-                    "Pending",
-
-                createdAt:
-                    serverTimestamp(),
-
-                createdBy:
-                    auth.currentUser?.uid || ""
-
-            };
-
-
-            const docRef =
-                await addDoc(
-                    collection(db, "fees"),
-                    feeData
-                );
-
-
-            console.log(
-                "Fee Saved:",
-                docRef.id
-            );
-
-
-            showMessage(
-                "Fee assigned successfully.",
-                "success"
-            );
-
-        }
-
-
-        // ------------------------------------------
-        // UPDATE EXISTING FEE
-        // ------------------------------------------
-
-        else {
-
-            const existing =
-                feeRecords.find(
-                    (fee) =>
-                        fee.id ===
-                        editingFeeId
-                );
-
-
-            if (!existing) {
-
-                throw new Error(
-                    "Fee record not found."
-                );
-
-            }
-
-
-            const paid =
-                Number(
-                    existing.paidAmount || 0
-                );
-
-
-            const pending =
-                Math.max(
-                    totalAmount - paid,
-                    0
-                );
-
-
-            let status =
-                "Pending";
-
-
-            if (paid >= totalAmount) {
-
-                status = "Paid";
-
-            } else if (paid > 0) {
-
-                status = "Partial";
-
-            }
-
-
-            await updateDoc(
-
-                doc(
-                    db,
-                    "fees",
-                    editingFeeId
-                ),
-
-                {
-
-                    studentId:
-                        selectedStudent.id || "",
-
-                    studentDocId:
-                        selectedStudent.docId || "",
-
-                    studentName:
-                        studentName,
-
-                    studentEmis:
-                        studentEmis,
-
-                    studentClass:
-                        studentClass,
-
-                    studentSection:
-                        studentSection,
-
-                    academicYear:
-                        academicYear,
-
-                    feeType:
-                        feeType,
-
-                    totalFee:
-                        totalAmount,
-
-                    pendingAmount:
-                        pending,
-
-                    dueDate:
-                        dueDate,
-
-                    status:
-                        status,
-
-                    updatedAt:
-                        serverTimestamp()
-
-                }
-
-            );
-
-
-            showMessage(
-                "Fee updated successfully.",
-                "success"
-            );
-
-        }
-
-
-        // ------------------------------------------
-        // RESET
-        // ------------------------------------------
-
-        clearFeeForm();
-
-        await loadFees();
-
-
-    } catch (error) {
-
-        console.error(
-            "Save Fee Error:",
-            error
-        );
-
-        showMessage(
-            "Unable to save fee: " +
-            error.message,
-            "error"
-        );
-
-    } finally {
-
-        const saveButton =
-            document.getElementById(
-                "saveFee"
-            );
-
-        if (saveButton) {
-
-            saveButton.disabled = false;
-
-            saveButton.textContent =
-                "💾 Save Fee";
-
-        }
-
-    }
-
-}
-
-
-// ==========================================================
-// RENDER FEE TABLE
-// ==========================================================
-
-function renderFees() {
-
-    const tbody =
-        document.getElementById(
-            "feeTableBody"
-        );
-
-    if (!tbody) return;
-
-
-    const search =
-        (
-            getValue("feeSearch") || ""
-        ).toLowerCase();
-
-
-    const filter =
-        getValue("feeStatusFilter") ||
-        "All";
-
-
-    let records =
-        [...feeRecords];
-
-
-    // Search
-    if (search) {
-
-        records =
-            records.filter(
-                (fee) => {
-
-                    const name =
-                        String(
-                            fee.studentName ||
-                            ""
-                        ).toLowerCase();
-
-                    const emis =
-                        String(
-                            fee.studentEmis ||
-                            ""
-                        ).toLowerCase();
-
-                    return (
-                        name.includes(search) ||
-                        emis.includes(search)
-                    );
-
-                }
-            );
-
-    }
-
-
-    // Status
-    if (filter !== "All") {
-
-        records =
-            records.filter(
-                (fee) =>
-                    fee.status === filter
-            );
-
-    }
-
-
-    tbody.innerHTML = "";
-
-
-    if (records.length === 0) {
-
-        tbody.innerHTML = `
-            <tr>
-                <td
-                    colspan="9"
-                    class="emptyMessage">
-
-                    No Fee Records Found
-
-                </td>
-            </tr>
-        `;
-
-        return;
-
-    }
-
-
-    records.forEach((fee) => {
-
-        const total =
-            Number(
-                fee.totalFee || 0
-            );
-
-        const paid =
-            Number(
-                fee.paidAmount || 0
-            );
-
-        const pending =
-            Math.max(
-                total - paid,
-                0
-            );
-
-
-        const row =
-            document.createElement("tr");
-
-
-        row.innerHTML = `
-
-            <td>
-                ${escapeHtml(
-                    fee.studentName || "-"
-                )}
-            </td>
-
-            <td>
-                ${escapeHtml(
-                    fee.studentEmis || "-"
-                )}
-            </td>
-
-            <td>
-                ${escapeHtml(
-                    fee.studentClass || "-"
-                )}
-            </td>
-
-            <td>
-                ${escapeHtml(
-                    fee.feeType || "-"
-                )}
-            </td>
-
-            <td>
-                ₹${formatMoney(total)}
-            </td>
-
-            <td>
-                ₹${formatMoney(paid)}
-            </td>
-
-            <td>
-                ₹${formatMoney(pending)}
-            </td>
-
-            <td>
-                <span class="statusBadge ${getStatusClass(fee.status)}">
-                    ${escapeHtml(
-                        fee.status || "Pending"
-                    )}
-                </span>
-            </td>
-
-            <td>
-
-                <div class="actionButtons">
-
-                    <button
-                        type="button"
-                        class="smallButton editButton"
-                        onclick="editFee('${fee.id}')">
-
-                        ✏️ Edit
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="smallButton paymentButton"
-                        onclick="collectPayment('${fee.id}')">
-
-                        💳 Payment
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="smallButton deleteButton"
-                        onclick="deleteFee('${fee.id}')">
-
-                        🗑 Delete
-
-                    </button>
-
-                </div>
-
-            </td>
-
-        `;
-
-
-        tbody.appendChild(row);
-
-    });
-
-}
-
-
-// ==========================================================
-// EDIT FEE
-// ==========================================================
-
-window.editFee = function (feeId) {
-
-    const fee =
-        feeRecords.find(
-            (item) =>
-                item.id === feeId
-        );
-
-
-    if (!fee) {
-
-        showMessage(
-            "Fee record not found.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const student =
-        students.find(
-            (item) =>
-                item.docId ===
-                fee.studentDocId
-        );
-
-
-    selectedStudent =
-        student || {
-
-            docId:
-                fee.studentDocId,
-
-            id:
-                fee.studentId,
-
-            name:
-                fee.studentName,
-
-            emis:
-                fee.studentEmis,
-
-            class:
-                fee.studentClass,
-
-            section:
-                fee.studentSection
-
-        };
-
-
-    setValue(
-        "studentSearch",
-        fee.studentName
-    );
-
-    setValue(
-        "studentName",
-        fee.studentName
-    );
-
-    setValue(
-        "studentEmis",
-        fee.studentEmis
-    );
-
-    setValue(
-        "studentClass",
-        fee.studentClass
-    );
-
-    setValue(
-        "studentSection",
-        fee.studentSection
-    );
-
-    setValue(
-        "academicYear",
-        fee.academicYear
-    );
-
-    setValue(
-        "feeType",
-        fee.feeType
-    );
-
-    setValue(
-        "totalAmount",
-        fee.totalFee
-    );
-
-    setValue(
-        "dueDate",
-        normalizeDate(fee.dueDate)
-    );
-
-
-    editingFeeId =
-        feeId;
-
-
-    const saveButton =
-        document.getElementById(
-            "saveFee"
-        );
-
-    if (saveButton) {
-
-        saveButton.textContent =
-            "💾 Update Fee";
-
-    }
-
-
-    window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth"
-
-    });
-
-
-    showMessage(
-        "Fee loaded for editing.",
-        "success"
-    );
-
-};
-
-
-// ==========================================================
-// COLLECT PAYMENT
-// ==========================================================
-
-window.collectPayment =
-    async function (feeId) {
-
-        const fee =
-            feeRecords.find(
-                (item) =>
-                    item.id === feeId
-            );
-
-
-        if (!fee) {
-
-            showMessage(
-                "Fee record not found.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        const total =
-            Number(
-                fee.totalFee || 0
-            );
-
-        const paid =
-            Number(
-                fee.paidAmount || 0
-            );
-
-        const pending =
-            Math.max(
-                total - paid,
-                0
-            );
-
-
-        if (pending <= 0) {
-
-            showMessage(
-                "This fee is already fully paid.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        const amountInput =
-            prompt(
-                `Student: ${fee.studentName}\n` +
-                `Pending Amount: ₹${formatMoney(pending)}\n\n` +
-                `Enter payment amount:`
-            );
-
-
-        if (
-            amountInput === null
-        ) {
-
-            return;
-
-        }
-
-
-        const amount =
-            Number(
-                amountInput
-            );
-
-
-        if (
-            !amount ||
-            amount <= 0
-        ) {
-
-            showMessage(
-                "Enter a valid payment amount.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        if (amount > pending) {
-
-            showMessage(
-                "Payment cannot be greater than pending amount.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        const paymentMode =
-            prompt(
-                "Payment Mode:\n" +
-                "Cash / UPI / Bank / Card"
-            ) || "Cash";
-
-
-        const newPaid =
-            paid + amount;
-
-
-        const newPending =
-            Math.max(
-                total - newPaid,
-                0
-            );
-
-
-        let status =
-            "Pending";
-
-
-        if (
-            newPaid >= total
-        ) {
-
-            status = "Paid";
-
-        } else if (
-            newPaid > 0
-        ) {
-
-            status = "Partial";
-
-        }
-
-
-        const receiptNo =
-            generateReceiptNo();
-
-
-        await updateDoc(
-
-            doc(
-                db,
-                "fees",
-                feeId
-            ),
-
-            {
-
-                paidAmount:
-                    newPaid,
-
-                pendingAmount:
-                    newPending,
-
-                status:
-                    status,
-
-                paymentMode:
-                    paymentMode,
-
-                paymentDate:
-                    new Date()
-                        .toISOString(),
-
-                receiptNo:
-                    receiptNo,
-
-                updatedAt:
-                    serverTimestamp()
-
-            }
-
-        );
-
-
-        // ------------------------------------------
-        // PAYMENT HISTORY
-        // ------------------------------------------
-
-        await addDoc(
-
-            collection(
-                db,
-                "fee_payments"
-            ),
-
-            {
-
-                feeId:
-                    feeId,
-
-                studentId:
-                    fee.studentId || "",
-
-                studentDocId:
-                    fee.studentDocId || "",
-
-                studentName:
-                    fee.studentName || "",
-
-                studentEmis:
-                    fee.studentEmis || "",
-
-                amount:
-                    amount,
-
-                paymentMode:
-                    paymentMode,
-
-                receiptNo:
-                    receiptNo,
-
-                paymentDate:
-                    serverTimestamp(),
-
-                createdBy:
-                    auth.currentUser?.uid || ""
-
-            }
-
-        );
-
-
-        showMessage(
-            `Payment saved successfully. Receipt: ${receiptNo}`,
-            "success"
-        );
-
-
-        await loadFees();
-
-    };
-
-
-// ==========================================================
-// DELETE FEE
-// ==========================================================
-
-window.deleteFee =
-    async function (feeId) {
-
-        const fee =
-            feeRecords.find(
-                (item) =>
-                    item.id === feeId
-            );
-
-
-        if (!fee) {
-
-            showMessage(
-                "Fee record not found.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        const confirmed =
-            confirm(
-                `Delete fee record for ${fee.studentName}?`
-            );
-
-
-        if (!confirmed) {
-
-            return;
-
-        }
-
-
-        try {
-
-            await deleteDoc(
-
-                doc(
-                    db,
-                    "fees",
-                    feeId
-                )
-
-            );
-
-
-            showMessage(
-                "Fee record deleted successfully.",
-                "success"
-            );
-
-
-            await loadFees();
-
-
-        } catch (error) {
-
-            console.error(
-                "Delete Error:",
-                error
-            );
-
-            showMessage(
-                "Unable to delete fee: " +
-                error.message,
-                "error"
-            );
-
-        }
-
-    };
-
-
-// ==========================================================
-// PAYMENT HISTORY
-// ==========================================================
-
-async function renderPaymentHistory() {
-
-    const tbody =
-        document.getElementById(
-            "paymentHistoryBody"
-        );
-
-
-    if (!tbody) return;
-
-
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "fee_payments"
-                )
-            );
-
-
-        const payments = [];
-
-
-        snapshot.forEach(
-            (docSnap) => {
-
-                const data =
-                    docSnap.data();
-
-
-                payments.push({
-
-                    id:
-                        docSnap.id,
-
-                    date:
-                        data.paymentDate,
-
-                    studentName:
-                        data.studentName ||
-                        "",
-
-                    emis:
-                        data.studentEmis ||
-                        "",
-
-                    amount:
-                        Number(
-                            data.amount || 0
-                        ),
-
-                    paymentMode:
-                        data.paymentMode ||
-                        "",
-
-                    receiptNo:
-                        data.receiptNo ||
-                        ""
-
-                });
-
-            }
-        );
-
-
-        // Latest first
-        payments.sort(
-            (a, b) =>
-                getTime(b.date) -
-                getTime(a.date)
-        );
-
-
-        tbody.innerHTML = "";
-
-
-        if (
-            payments.length === 0
-        ) {
-
-            tbody.innerHTML = `
                 <tr>
+
+                    <th>
+                        Student
+                    </th>
+
+                    <th>
+                        EMIS
+                    </th>
+
+                    <th>
+                        Class
+                    </th>
+
+                    <th>
+                        Fee Type
+                    </th>
+
+                    <th>
+                        Total
+                    </th>
+
+                    <th>
+                        Paid
+                    </th>
+
+                    <th>
+                        Pending
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="feeTableBody">
+
+                <tr>
+
+                    <td
+                        colspan="9"
+                        class="emptyMessage">
+
+                        No Fee Records Found
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     PAYMENT HISTORY
+===================================================== -->
+
+<section class="dashboardCard">
+
+
+    <div class="sectionHeader">
+
+        <h2>
+            💳 Payment History
+        </h2>
+
+        <p>
+            Recent student fee payments will appear here.
+        </p>
+
+    </div>
+
+
+
+    <div class="tableWrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Date
+                    </th>
+
+                    <th>
+                        Student
+                    </th>
+
+                    <th>
+                        EMIS
+                    </th>
+
+                    <th>
+                        Amount
+                    </th>
+
+                    <th>
+                        Payment Mode
+                    </th>
+
+                    <th>
+                        Receipt No
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="paymentHistoryBody">
+
+                <tr>
+
                     <td
                         colspan="6"
                         class="emptyMessage">
@@ -1701,789 +666,72 @@ async function renderPaymentHistory() {
                         No Payment History
 
                     </td>
+
                 </tr>
-            `;
 
-            return;
+            </tbody>
 
-        }
+        </table>
 
+    </div>
 
-        payments.forEach(
-            (payment) => {
 
-                const row =
-                    document.createElement(
-                        "tr"
-                    );
+</section>
 
 
-                row.innerHTML = `
 
-                    <td>
-                        ${formatDate(
-                            payment.date
-                        )}
-                    </td>
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
 
-                    <td>
-                        ${escapeHtml(
-                            payment.studentName ||
-                            "-"
-                        )}
-                    </td>
+<section class="navigationSection">
 
-                    <td>
-                        ${escapeHtml(
-                            payment.emis ||
-                            "-"
-                        )}
-                    </td>
+    <button
+        type="button"
+        class="backButton"
+        onclick="location.href='admin_dashboard.html'">
 
-                    <td>
-                        ₹${formatMoney(
-                            payment.amount
-                        )}
-                    </td>
+        🏠 Back to Admin Dashboard
 
-                    <td>
-                        ${escapeHtml(
-                            payment.paymentMode ||
-                            "-"
-                        )}
-                    </td>
+    </button>
 
-                    <td>
-                        ${escapeHtml(
-                            payment.receiptNo ||
-                            "-"
-                        )}
-                    </td>
+</section>
 
-                `;
 
 
-                tbody.appendChild(row);
+</main>
 
-            }
-        );
 
 
-    } catch (error) {
+<!-- =====================================================
+     FOOTER
+===================================================== -->
 
-        console.error(
-            "Payment History Error:",
-            error
-        );
+<footer class="footer">
 
+    <div>
+        © 2026 School Connect TN
+    </div>
 
-        tbody.innerHTML = `
-            <tr>
-                <td
-                    colspan="6"
-                    class="emptyMessage">
+    <div>
+        Powered by
+        <strong>VTOOS Software Solution</strong>
+    </div>
 
-                    No Payment History
+</footer>
 
-                </td>
-            </tr>
-        `;
 
-    }
 
-}
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
 
+<script
+    type="module"
+    src="js/fees_management.js">
+</script>
 
-// ==========================================================
-// SUMMARY
-// ==========================================================
 
-function updateSummary() {
+</body>
 
-    let total =
-        0;
-
-    let collected =
-        0;
-
-    let pending =
-        0;
-
-    let paidStudents =
-        0;
-
-
-    feeRecords.forEach(
-        (fee) => {
-
-            const feeTotal =
-                Number(
-                    fee.totalFee || 0
-                );
-
-            const feePaid =
-                Number(
-                    fee.paidAmount || 0
-                );
-
-            const feePending =
-                Math.max(
-                    feeTotal -
-                    feePaid,
-                    0
-                );
-
-
-            total +=
-                feeTotal;
-
-            collected +=
-                feePaid;
-
-            pending +=
-                feePending;
-
-
-            if (
-                feePaid >=
-                feeTotal &&
-                feeTotal > 0
-            ) {
-
-                paidStudents++;
-
-            }
-
-        }
-    );
-
-
-    setText(
-        "totalFee",
-        "₹" +
-        formatMoney(total)
-    );
-
-
-    setText(
-        "collectedFee",
-        "₹" +
-        formatMoney(collected)
-    );
-
-
-    setText(
-        "pendingFee",
-        "₹" +
-        formatMoney(pending)
-    );
-
-
-    setText(
-        "paidStudents",
-        paidStudents
-    );
-
-}
-
-
-// ==========================================================
-// CLEAR FORM
-// ==========================================================
-
-function clearFeeForm() {
-
-    selectedStudent =
-        null;
-
-    editingFeeId =
-        null;
-
-
-    setValue(
-        "studentSearch",
-        ""
-    );
-
-    setValue(
-        "studentName",
-        ""
-    );
-
-    setValue(
-        "studentEmis",
-        ""
-    );
-
-    setValue(
-        "studentClass",
-        ""
-    );
-
-    setValue(
-        "studentSection",
-        ""
-    );
-
-    setValue(
-        "totalAmount",
-        ""
-    );
-
-    setValue(
-        "dueDate",
-        getTodayDate()
-    );
-
-
-    const resultBox =
-        document.getElementById(
-            "studentResults"
-        );
-
-    if (resultBox) {
-
-        resultBox.innerHTML =
-            "";
-
-        resultBox.style.display =
-            "none";
-
-    }
-
-
-    const saveButton =
-        document.getElementById(
-            "saveFee"
-        );
-
-    if (saveButton) {
-
-        saveButton.textContent =
-            "💾 Save Fee";
-
-    }
-
-}
-
-
-// ==========================================================
-// DEFAULT DUE DATE
-// ==========================================================
-
-function setDefaultDueDate() {
-
-    const dueDate =
-        document.getElementById(
-            "dueDate"
-        );
-
-
-    if (
-        dueDate &&
-        !dueDate.value
-    ) {
-
-        dueDate.value =
-            getTodayDate();
-
-    }
-
-}
-
-
-// ==========================================================
-// HELPERS
-// ==========================================================
-
-function getValue(id) {
-
-    const element =
-        document.getElementById(id);
-
-    return element
-        ? element.value.trim()
-        : "";
-
-}
-
-
-function setValue(id, value) {
-
-    const element =
-        document.getElementById(id);
-
-    if (element) {
-
-        element.value =
-            value ?? "";
-
-    }
-
-}
-
-
-function setText(id, value) {
-
-    const element =
-        document.getElementById(id);
-
-    if (element) {
-
-        element.textContent =
-            value;
-
-    }
-
-}
-
-
-function getTodayDate() {
-
-    const date =
-        new Date();
-
-    const year =
-        date.getFullYear();
-
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(2, "0");
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(2, "0");
-
-
-    return (
-        `${year}-${month}-${day}`
-    );
-
-}
-
-
-function normalizeDate(value) {
-
-    if (!value) return "";
-
-    if (
-        typeof value ===
-        "string"
-    ) {
-
-        return value.substring(
-            0,
-            10
-        );
-
-    }
-
-
-    if (
-        value?.toDate
-    ) {
-
-        const date =
-            value.toDate();
-
-        return formatInputDate(
-            date
-        );
-
-    }
-
-
-    return "";
-
-}
-
-
-function formatInputDate(date) {
-
-    const year =
-        date.getFullYear();
-
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(2, "0");
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(2, "0");
-
-
-    return (
-        `${year}-${month}-${day}`
-    );
-
-}
-
-
-// ==========================================================
-// FORMAT MONEY
-// ==========================================================
-
-function formatMoney(value) {
-
-    return Number(
-        value || 0
-    ).toLocaleString(
-        "en-IN",
-        {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2
-        }
-    );
-
-}
-
-
-// ==========================================================
-// FORMAT DATE
-// ==========================================================
-
-function formatDate(value) {
-
-    if (!value) return "-";
-
-
-    let date;
-
-
-    if (
-        typeof value ===
-        "object" &&
-        typeof value.toDate ===
-        "function"
-    ) {
-
-        date =
-            value.toDate();
-
-    } else {
-
-        date =
-            new Date(value);
-
-    }
-
-
-    if (
-        isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return "-";
-
-    }
-
-
-    return date.toLocaleDateString(
-        "en-IN",
-        {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        }
-    );
-
-}
-
-
-// ==========================================================
-// GET TIME
-// ==========================================================
-
-function getTime(value) {
-
-    if (!value) return 0;
-
-
-    if (
-        typeof value ===
-        "object" &&
-        typeof value.toDate ===
-        "function"
-    ) {
-
-        return value
-            .toDate()
-            .getTime();
-
-    }
-
-
-    const date =
-        new Date(value);
-
-
-    return isNaN(
-        date.getTime()
-    )
-        ? 0
-        : date.getTime();
-
-}
-
-
-// ==========================================================
-// STATUS CLASS
-// ==========================================================
-
-function getStatusClass(status) {
-
-    switch (status) {
-
-        case "Paid":
-            return "paid";
-
-        case "Partial":
-            return "partial";
-
-        case "Pending":
-        default:
-            return "pending";
-
-    }
-
-}
-
-
-// ==========================================================
-// RECEIPT NUMBER
-// ==========================================================
-
-function generateReceiptNo() {
-
-    const now =
-        new Date();
-
-
-    const year =
-        now.getFullYear();
-
-
-    const month =
-        String(
-            now.getMonth() + 1
-        ).padStart(2, "0");
-
-
-    const day =
-        String(
-            now.getDate()
-        ).padStart(2, "0");
-
-
-    const time =
-        String(
-            now.getTime()
-        ).slice(-6);
-
-
-    return (
-        `SC-${year}${month}${day}-${time}`
-    );
-
-}
-
-
-// ==========================================================
-// HTML ESCAPE
-// ==========================================================
-
-function escapeHtml(value) {
-
-    return String(
-        value ?? ""
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
-
-}
-
-
-// ==========================================================
-// MESSAGE
-// ==========================================================
-
-function showMessage(
-    message,
-    type = "success"
-) {
-
-    let box =
-        document.getElementById(
-            "feeMessage"
-        );
-
-
-    if (!box) {
-
-        box =
-            document.createElement(
-                "div"
-            );
-
-        box.id =
-            "feeMessage";
-
-
-        box.style.position =
-            "fixed";
-
-        box.style.top =
-            "20px";
-
-        box.style.right =
-            "20px";
-
-        box.style.zIndex =
-            "99999";
-
-        box.style.padding =
-            "14px 20px";
-
-        box.style.borderRadius =
-            "10px";
-
-        box.style.fontSize =
-            "14px";
-
-        box.style.fontWeight =
-            "600";
-
-        box.style.boxShadow =
-            "0 5px 20px rgba(0,0,0,.2)";
-
-
-        document.body.appendChild(
-            box
-        );
-
-    }
-
-
-    box.textContent =
-        message;
-
-
-    if (
-        type === "error"
-    ) {
-
-        box.style.background =
-            "#dc3545";
-
-    } else {
-
-        box.style.background =
-            "#198754";
-
-    }
-
-
-    box.style.color =
-        "#ffffff";
-
-
-    box.style.display =
-        "block";
-
-
-    clearTimeout(
-        window.__feeMessageTimer
-    );
-
-
-    window.__feeMessageTimer =
-        setTimeout(
-            () => {
-
-                box.style.display =
-                    "none";
-
-            },
-            3500
-        );
-
-}
-
-
-// ==========================================================
-// PREVENT CLICK OUTSIDE SEARCH RESULTS
-// ==========================================================
-
-document.addEventListener(
-    "click",
-    (event) => {
-
-        const searchBox =
-            document.getElementById(
-                "studentSearch"
-            );
-
-        const resultBox =
-            document.getElementById(
-                "studentResults"
-            );
-
-
-        if (
-            !searchBox ||
-            !resultBox
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            !searchBox.contains(
-                event.target
-            ) &&
-            !resultBox.contains(
-                event.target
-            )
-        ) {
-
-            resultBox.style.display =
-                "none";
-
-        }
-
-    }
-);
-
-
-// ==========================================================
-// FINISH
-// ==========================================================
-
-console.log(
-    "Fees Management JS Loaded Successfully"
-);
+</html>
