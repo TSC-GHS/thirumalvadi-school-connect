@@ -1,0 +1,904 @@
+/* =====================================
+   School Connect TN
+   Transport Management
+   Professional V3 UI
+===================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #222;
+    min-height: 100vh;
+}
+
+
+/* =====================================
+   HEADER
+===================================== */
+
+.topBar {
+    width: 100%;
+    min-height: 78px;
+
+    background: linear-gradient(
+        90deg,
+        #1458b8,
+        #1976d2
+    );
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 14px 30px;
+
+    box-shadow:
+        0 3px 12px rgba(0, 0, 0, 0.16);
+
+    position: relative;
+    z-index: 10;
+}
+
+.brandArea {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.schoolTitle {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.schoolSubtitle {
+    font-size: 13px;
+    opacity: 0.95;
+}
+
+.adminBadge {
+    background: rgba(255, 255, 255, 0.16);
+
+    padding: 10px 20px;
+
+    border-radius: 25px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================
+   MAIN CONTAINER
+===================================== */
+
+.mainContainer {
+    width: 100%;
+    max-width: 1180px;
+
+    margin: 0 auto;
+
+    padding: 22px 25px 35px;
+}
+
+
+/* =====================================
+   WELCOME
+===================================== */
+
+.welcomeSection {
+    background: #ffffff;
+
+    padding: 24px 28px;
+
+    border-radius: 14px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+.welcomeSection h1 {
+    color: #6a1b9a;
+
+    font-size: 30px;
+
+    margin-bottom: 7px;
+}
+
+.welcomeSection p {
+    color: #555;
+
+    font-size: 15px;
+}
+
+
+/* =====================================
+   SUMMARY
+===================================== */
+
+.summaryGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.summaryCard {
+    background: #ffffff;
+
+    min-height: 125px;
+
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    position: relative;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.summaryCard::after {
+    content: "";
+
+    position: absolute;
+
+    width: 72px;
+    height: 72px;
+
+    right: -28px;
+    top: -28px;
+
+    background: #eaf4ff;
+
+    border-radius: 50%;
+}
+
+.summaryCard:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 7px 18px rgba(0, 0, 0, 0.12);
+}
+
+.summaryNumber {
+    position: relative;
+    z-index: 2;
+
+    color: #1976d2;
+
+    font-size: 34px;
+
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+.summaryLabel {
+    position: relative;
+    z-index: 2;
+
+    margin-top: 10px;
+
+    color: #555;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =====================================
+   DASHBOARD CARD
+===================================== */
+
+.dashboardCard {
+    background: #ffffff;
+
+    border-radius: 15px;
+
+    padding: 22px;
+
+    margin-bottom: 22px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+
+/* =====================================
+   SECTION HEADER
+===================================== */
+
+.sectionHeader {
+    margin-bottom: 17px;
+}
+
+.sectionHeader h2 {
+    color: #6a1b9a;
+
+    font-size: 20px;
+
+    margin-bottom: 5px;
+}
+
+.sectionHeader p {
+    color: #666;
+
+    font-size: 13px;
+}
+
+
+/* =====================================
+   QUICK ACTIONS
+===================================== */
+
+.quickGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+}
+
+.actionButton {
+    border: none;
+
+    background: #ffffff;
+
+    min-height: 78px;
+
+    border-radius: 11px;
+
+    padding: 12px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    color: #0757b8;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.10);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.actionButton:hover {
+    background: #6a1b9a;
+
+    color: #ffffff;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 6px 14px rgba(106, 27, 154, 0.25);
+}
+
+.actionIcon {
+    font-size: 20px;
+
+    line-height: 1;
+}
+
+
+/* =====================================
+   FORM
+===================================== */
+
+.managementForm {
+    width: 100%;
+}
+
+.formGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 17px;
+}
+
+.formGroup {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.formGroup label {
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #444;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+    width: 100%;
+
+    border: 1px solid #d6dfed;
+
+    background: #f8faff;
+
+    color: #222;
+
+    border-radius: 9px;
+
+    padding: 12px 13px;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+    border-color: #1976d2;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(25, 118, 210, 0.10);
+}
+
+.formGroup textarea {
+    resize: vertical;
+
+    min-height: 100px;
+
+    line-height: 1.5;
+}
+
+.fullWidth {
+    margin-top: 17px;
+}
+
+
+/* =====================================
+   FORM BUTTONS
+===================================== */
+
+.formActions {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.primaryButton,
+.secondaryButton {
+    border: none;
+
+    padding: 12px 22px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.primaryButton {
+    background: #1976d2;
+
+    color: #ffffff;
+}
+
+.primaryButton:hover {
+    background: #125cad;
+
+    transform: translateY(-2px);
+}
+
+.secondaryButton {
+    background: #edf2f8;
+
+    color: #333;
+}
+
+.secondaryButton:hover {
+    background: #dfe7f1;
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================
+   TABLE
+===================================== */
+
+.tableWrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border-radius: 10px;
+}
+
+table {
+    width: 100%;
+
+    min-width: 850px;
+
+    border-collapse: separate;
+
+    border-spacing: 0;
+
+    overflow: hidden;
+
+    border: 1px solid #e0e6ef;
+
+    border-radius: 10px;
+}
+
+thead {
+    background: #1761bd;
+
+    color: #ffffff;
+}
+
+th {
+    padding: 13px 12px;
+
+    text-align: left;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+td {
+    padding: 13px 12px;
+
+    border-top: 1px solid #e7ebf1;
+
+    font-size: 12px;
+
+    color: #333;
+
+    background: #ffffff;
+
+    vertical-align: middle;
+}
+
+tbody tr:hover td {
+    background: #f6f9fd;
+}
+
+.emptyMessage {
+    text-align: center;
+
+    color: #777;
+
+    padding: 25px;
+
+    font-style: italic;
+}
+
+
+/* =====================================
+   STATUS
+===================================== */
+
+.statusBadge {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+.statusActive {
+    background: #e8f5e9;
+
+    color: #2e7d32;
+}
+
+.statusInactive {
+    background: #ffebee;
+
+    color: #c62828;
+}
+
+.statusMaintenance {
+    background: #fff3e0;
+
+    color: #ef6c00;
+}
+
+
+/* =====================================
+   TRACKING
+===================================== */
+
+.trackingPlaceholder {
+    min-height: 210px;
+
+    border: 2px dashed #c9d8eb;
+
+    border-radius: 13px;
+
+    background: #f8fbff;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 25px;
+}
+
+.trackingIcon {
+    font-size: 48px;
+
+    margin-bottom: 12px;
+}
+
+.trackingPlaceholder h3 {
+    color: #1976d2;
+
+    font-size: 18px;
+
+    margin-bottom: 7px;
+}
+
+.trackingPlaceholder p {
+    max-width: 600px;
+
+    color: #666;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =====================================
+   BACK TO DASHBOARD
+===================================== */
+
+.logoutSection {
+    background: #ffffff;
+
+    padding: 20px;
+
+    border-radius: 15px;
+
+    margin-bottom: 22px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+.logoutButton {
+    width: 100%;
+
+    border: none;
+
+    background: #1554a6;
+
+    color: #ffffff;
+
+    padding: 14px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.logoutButton:hover {
+    background: #0d4388;
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================
+   FOOTER
+===================================== */
+
+.footer {
+    background: #1554a6;
+
+    color: #ffffff;
+
+    text-align: center;
+
+    padding: 18px;
+
+    font-size: 12px;
+
+    line-height: 1.8;
+}
+
+.footer strong {
+    font-weight: 700;
+}
+
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media (max-width: 900px) {
+
+    .summaryGrid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .quickGrid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .formGrid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 600px) {
+
+    .topBar {
+        padding: 13px 15px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+    .schoolTitle {
+        font-size: 19px;
+    }
+
+    .schoolSubtitle {
+        font-size: 11px;
+    }
+
+    .adminBadge {
+        align-self: flex-start;
+
+        padding: 8px 15px;
+
+        font-size: 12px;
+    }
+
+    .mainContainer {
+        padding: 15px 12px 25px;
+    }
+
+    .welcomeSection {
+        padding: 20px;
+
+        margin-bottom: 15px;
+    }
+
+    .welcomeSection h1 {
+        font-size: 25px;
+    }
+
+    .summaryGrid {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 12px;
+    }
+
+    .summaryCard {
+        min-height: 105px;
+    }
+
+    .summaryNumber {
+        font-size: 28px;
+    }
+
+    .summaryLabel {
+        font-size: 10px;
+    }
+
+    .dashboardCard {
+        padding: 17px;
+
+        margin-bottom: 15px;
+    }
+
+    .quickGrid {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 10px;
+    }
+
+    .actionButton {
+        min-height: 72px;
+
+        font-size: 11px;
+    }
+
+    .actionIcon {
+        font-size: 18px;
+    }
+
+    .formGrid {
+        grid-template-columns:
+            1fr;
+
+        gap: 13px;
+    }
+
+    .fullWidth {
+        margin-top: 13px;
+    }
+
+    .formActions {
+        flex-direction: column;
+    }
+
+    .primaryButton,
+    .secondaryButton {
+        width: 100%;
+    }
+
+    .tableWrapper {
+        margin-left: -2px;
+
+        width: calc(100% + 4px);
+    }
+
+    th,
+    td {
+        padding: 11px 9px;
+
+        font-size: 11px;
+    }
+
+    .trackingPlaceholder {
+        min-height: 180px;
+
+        padding: 20px;
+    }
+
+    .trackingIcon {
+        font-size: 40px;
+    }
+
+    .trackingPlaceholder h3 {
+        font-size: 16px;
+    }
+
+    .trackingPlaceholder p {
+        font-size: 11px;
+    }
+
+    .footer {
+        font-size: 10px;
+    }
+
+}
+
+
+/* =====================================
+   VERY SMALL MOBILE
+===================================== */
+
+@media (max-width: 380px) {
+
+    .summaryGrid {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .quickGrid {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .summaryCard {
+        min-height: 95px;
+    }
+
+    .summaryNumber {
+        font-size: 25px;
+    }
+
+    .actionButton {
+        min-height: 68px;
+
+        padding: 8px;
+    }
+
+}
