@@ -1,7 +1,7 @@
 /* =====================================
-   School Connect TN
-   Parent Transport
-   Firebase V3 - FINAL
+   SCHOOL CONNECT TN
+   PARENT TRANSPORT
+   FULL UPDATED VERSION
 ===================================== */
 
 import { db } from "../firebase.js";
@@ -20,26 +20,123 @@ import {
    COLLECTIONS
 ===================================== */
 
-const ASSIGNMENTS_COLLECTION = "transport_assignments";
-const BUSES_COLLECTION = "transport_buses";
-const ROUTES_COLLECTION = "transport_routes";
-const STUDENTS_COLLECTION = "students";
+const ASSIGNMENTS_COLLECTION =
+    "transport_assignments";
+
+const BUSES_COLLECTION =
+    "transport_buses";
+
+const ROUTES_COLLECTION =
+    "transport_routes";
+
+const STUDENTS_COLLECTION =
+    "students";
+
+
+/* =====================================
+   HTML ELEMENTS
+===================================== */
+
+/* Student */
+
+const studentNameEl =
+    document.getElementById("studentName");
+
+const studentEMISEl =
+    document.getElementById("studentEMIS");
+
+const studentClassEl =
+    document.getElementById("studentClass");
+
+const studentSectionEl =
+    document.getElementById("studentSection");
+
+
+/* Summary */
+
+const busNumberEl =
+    document.getElementById("busNumber");
+
+const routeNameEl =
+    document.getElementById("routeName");
+
+const pickupPointEl =
+    document.getElementById("pickupPoint");
+
+const pickupTimeEl =
+    document.getElementById("pickupTime");
+
+
+/* Details */
+
+const detailBusNumberEl =
+    document.getElementById("detailBusNumber");
+
+const registrationNumberEl =
+    document.getElementById("registrationNumber");
+
+const detailRouteEl =
+    document.getElementById("detailRoute");
+
+const startPointEl =
+    document.getElementById("startPoint");
+
+const endPointEl =
+    document.getElementById("endPoint");
+
+const detailPickupPointEl =
+    document.getElementById("detailPickupPoint");
+
+const detailPickupTimeEl =
+    document.getElementById("detailPickupTime");
+
+const dropTimeEl =
+    document.getElementById("dropTime");
+
+const transportStatusEl =
+    document.getElementById("transportStatus");
+
+
+/* No Transport */
+
+const noTransportEl =
+    document.getElementById(
+        "noTransportSection"
+    );
 
 
 /* =====================================
    START
 ===================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    console.log("=====================================");
-    console.log("School Connect TN");
-    console.log("Parent Transport V3");
-    console.log("=====================================");
+        console.log(
+            "====================================="
+        );
 
-    loadParentTransport();
+        console.log(
+            "School Connect TN"
+        );
 
-});
+        console.log(
+            "Parent Transport"
+        );
+
+        console.log(
+            "Firebase Transport Module Loaded"
+        );
+
+        console.log(
+            "====================================="
+        );
+
+        loadParentTransport();
+
+    }
+);
 
 
 /* =====================================
@@ -49,15 +146,23 @@ document.addEventListener("DOMContentLoaded", () => {
 function getParentEMIS() {
 
     const keys = [
+
         "parentEMIS",
+
         "parentStudentId",
+
         "studentEMIS",
+
         "emis"
+
     ];
+
 
     for (const key of keys) {
 
-        const value = localStorage.getItem(key);
+        const value =
+            localStorage.getItem(key);
+
 
         if (
             value &&
@@ -75,22 +180,30 @@ function getParentEMIS() {
 
     }
 
+
     return null;
 
 }
 
 
 /* =====================================
-   LOAD TRANSPORT
+   LOAD PARENT TRANSPORT
 ===================================== */
 
 async function loadParentTransport() {
 
     try {
 
-        showLoading();
+        hideNoTransport();
 
-        const emis = getParentEMIS();
+
+        const emis =
+            getParentEMIS();
+
+
+        /* ---------------------------------
+           CHECK EMIS
+        --------------------------------- */
 
         if (!emis) {
 
@@ -98,10 +211,12 @@ async function loadParentTransport() {
                 "Parent EMIS not found"
             );
 
+
             showNoTransport(
                 "Student Login Required",
                 "Please login again to view transport details."
             );
+
 
             return;
 
@@ -114,9 +229,9 @@ async function loadParentTransport() {
         );
 
 
-        /* =====================================
-           FIND ASSIGNMENT
-        ===================================== */
+        /* ---------------------------------
+           LOAD ASSIGNMENT
+        --------------------------------- */
 
         const assignmentsRef =
             collection(
@@ -148,6 +263,10 @@ async function loadParentTransport() {
         );
 
 
+        /* ---------------------------------
+           NO ASSIGNMENT
+        --------------------------------- */
+
         if (
             assignmentSnapshot.empty
         ) {
@@ -156,19 +275,21 @@ async function loadParentTransport() {
                 emis
             );
 
+
             showNoTransport(
                 "No Transport Assigned",
                 "School transport has not been assigned to this student yet."
             );
+
 
             return;
 
         }
 
 
-        /* =====================================
+        /* ---------------------------------
            SELECT ACTIVE ASSIGNMENT
-        ===================================== */
+        --------------------------------- */
 
         let assignment = null;
 
@@ -176,24 +297,27 @@ async function loadParentTransport() {
         assignmentSnapshot.forEach(
             (item) => {
 
-                const data = item.data();
+                const data =
+                    item.data();
 
-                console.log(
-                    "Assignment Record:",
-                    data
-                );
+
+                const status =
+                    String(
+                        data.status || ""
+                    ).toLowerCase();
 
 
                 if (
                     !assignment &&
-                    String(
-                        data.status || ""
-                    ).toLowerCase() === "active"
+                    status === "active"
                 ) {
 
                     assignment = {
+
                         id: item.id,
+
                         ...data
+
                     };
 
                 }
@@ -202,18 +326,22 @@ async function loadParentTransport() {
         );
 
 
-        /* =====================================
+        /* ---------------------------------
            FALLBACK FIRST RECORD
-        ===================================== */
+        --------------------------------- */
 
         if (!assignment) {
 
             const firstDoc =
                 assignmentSnapshot.docs[0];
 
+
             assignment = {
+
                 id: firstDoc.id,
+
                 ...firstDoc.data()
+
             };
 
         }
@@ -225,23 +353,25 @@ async function loadParentTransport() {
         );
 
 
-        /* =====================================
+        /* ---------------------------------
            LOAD STUDENT
-        ===================================== */
+        --------------------------------- */
 
         await loadStudentDetails(
             emis
         );
 
 
-        /* =====================================
+        /* ---------------------------------
            LOAD BUS
-        ===================================== */
+        --------------------------------- */
 
         let busData = {};
 
 
-        if (assignment.busId) {
+        if (
+            assignment.busId
+        ) {
 
             busData =
                 await loadDocumentById(
@@ -258,14 +388,16 @@ async function loadParentTransport() {
         );
 
 
-        /* =====================================
+        /* ---------------------------------
            LOAD ROUTE
-        ===================================== */
+        --------------------------------- */
 
         let routeData = {};
 
 
-        if (assignment.routeId) {
+        if (
+            assignment.routeId
+        ) {
 
             routeData =
                 await loadDocumentById(
@@ -282,9 +414,9 @@ async function loadParentTransport() {
         );
 
 
-        /* =====================================
+        /* ---------------------------------
            DISPLAY
-        ===================================== */
+        --------------------------------- */
 
         displayTransport(
             assignment,
@@ -300,7 +432,6 @@ async function loadParentTransport() {
             error
         );
 
-        hideLoading();
 
         showNoTransport(
             "Unable to Load Transport",
@@ -313,7 +444,7 @@ async function loadParentTransport() {
 
 
 /* =====================================
-   LOAD DOCUMENT BY ID
+   LOAD FIRESTORE DOCUMENT BY ID
 ===================================== */
 
 async function loadDocumentById(
@@ -323,8 +454,12 @@ async function loadDocumentById(
 
     try {
 
-        if (!documentId) {
+        if (
+            !documentId
+        ) {
+
             return {};
+
         }
 
 
@@ -342,13 +477,16 @@ async function loadDocumentById(
             );
 
 
-        if (!snapshot.exists()) {
+        if (
+            !snapshot.exists()
+        ) {
 
             console.warn(
                 "Document not found:",
                 collectionName,
                 documentId
             );
+
 
             return {};
 
@@ -363,8 +501,10 @@ async function loadDocumentById(
         console.error(
             "Document loading error:",
             collectionName,
+            documentId,
             error
         );
+
 
         return {};
 
@@ -390,9 +530,9 @@ async function loadStudentDetails(
             );
 
 
-        /* =====================================
+        /* ---------------------------------
            TRY emis
-        ===================================== */
+        --------------------------------- */
 
         const q1 =
             query(
@@ -409,9 +549,9 @@ async function loadStudentDetails(
             await getDocs(q1);
 
 
-        /* =====================================
+        /* ---------------------------------
            TRY studentEMIS
-        ===================================== */
+        --------------------------------- */
 
         if (
             snapshot.empty
@@ -434,6 +574,10 @@ async function loadStudentDetails(
         }
 
 
+        /* ---------------------------------
+           STUDENT NOT FOUND
+        --------------------------------- */
+
         if (
             snapshot.empty
         ) {
@@ -443,12 +587,12 @@ async function loadStudentDetails(
                 emis
             );
 
-            setElementText(
-                [
-                    "studentEMIS"
-                ],
+
+            setText(
+                studentEMISEl,
                 emis
             );
+
 
             return;
 
@@ -459,16 +603,12 @@ async function loadStudentDetails(
             snapshot.docs[0].data();
 
 
-        console.log(
-            "Student Data:",
-            student
-        );
+        /* ---------------------------------
+           STUDENT NAME
+        --------------------------------- */
 
-
-        setElementText(
-            [
-                "studentName"
-            ],
+        setText(
+            studentNameEl,
             firstValue(
                 student.studentName,
                 student.name,
@@ -477,18 +617,22 @@ async function loadStudentDetails(
         );
 
 
-        setElementText(
-            [
-                "studentEMIS"
-            ],
+        /* ---------------------------------
+           EMIS
+        --------------------------------- */
+
+        setText(
+            studentEMISEl,
             emis
         );
 
 
-        setElementText(
-            [
-                "studentClass"
-            ],
+        /* ---------------------------------
+           CLASS
+        --------------------------------- */
+
+        setText(
+            studentClassEl,
             firstValue(
                 student.class,
                 student.studentClass,
@@ -497,12 +641,15 @@ async function loadStudentDetails(
         );
 
 
-        setElementText(
-            [
-                "studentSection"
-            ],
+        /* ---------------------------------
+           SECTION
+        --------------------------------- */
+
+        setText(
+            studentSectionEl,
             firstValue(
                 student.section,
+                student.studentSection,
                 "-"
             )
         );
@@ -543,21 +690,6 @@ function displayTransport(
         "DISPLAY TRANSPORT"
     );
 
-    console.log(
-        "Assignment:",
-        assignment
-    );
-
-    console.log(
-        "Bus:",
-        bus
-    );
-
-    console.log(
-        "Route:",
-        route
-    );
-
 
     /* =====================================
        BUS NUMBER
@@ -566,18 +698,19 @@ function displayTransport(
     const busNumber =
         firstValue(
 
-            /* Bus document */
             bus.busNumber,
+
             bus.busNo,
-            bus.busNumberValue,
+
             bus.number,
 
-            /* Assignment */
+            bus.vehicleNumber,
+
             assignment.busNumber,
+
             assignment.busNo,
 
-            /* Common alternatives */
-            assignment.vehicleNumber,
+            assignment.bus,
 
             "-"
 
@@ -592,11 +725,15 @@ function displayTransport(
         firstValue(
 
             bus.registrationNumber,
+
             bus.registrationNo,
+
             bus.vehicleRegistrationNumber,
+
             bus.vehicleNumber,
 
             assignment.registrationNumber,
+
             assignment.registrationNo,
 
             "-"
@@ -605,18 +742,22 @@ function displayTransport(
 
 
     /* =====================================
-       ROUTE
+       ROUTE NAME
     ===================================== */
 
     const routeName =
         firstValue(
 
             route.routeName,
-            route.route,
+
             route.name,
+
+            route.route,
+
             route.routeTitle,
 
             assignment.routeName,
+
             assignment.route,
 
             "-"
@@ -632,13 +773,19 @@ function displayTransport(
         firstValue(
 
             route.startingPoint,
+
             route.startPoint,
+
             route.from,
+
             route.start,
+
             route.origin,
 
             assignment.startingPoint,
+
             assignment.startPoint,
+
             assignment.from,
 
             "-"
@@ -654,12 +801,17 @@ function displayTransport(
         firstValue(
 
             route.endPoint,
+
             route.endPointName,
+
             route.to,
+
             route.destination,
 
             assignment.endPoint,
+
             assignment.destination,
+
             assignment.to,
 
             "-"
@@ -675,8 +827,12 @@ function displayTransport(
         firstValue(
 
             assignment.pickupPoint,
+
             assignment.pickupLocation,
+
             assignment.pickup,
+
+            route.pickupPoint,
 
             "-"
 
@@ -689,13 +845,21 @@ function displayTransport(
 
     const pickupTime =
         formatTime(
+
             firstValue(
+
                 assignment.pickupTime,
+
                 assignment.pickup_time,
-                bus.pickupTime,
+
                 route.pickupTime,
+
+                bus.pickupTime,
+
                 ""
+
             )
+
         );
 
 
@@ -705,13 +869,21 @@ function displayTransport(
 
     const dropTime =
         formatTime(
+
             firstValue(
+
                 assignment.dropTime,
+
                 assignment.drop_time,
-                bus.dropTime,
+
                 route.dropTime,
+
+                bus.dropTime,
+
                 ""
+
             )
+
         );
 
 
@@ -721,281 +893,210 @@ function displayTransport(
 
     const status =
         firstValue(
+
             assignment.status,
+
             "Active"
+
         );
-
-
-    /* =====================================
-       DEBUG
-    ===================================== */
-
-    console.log(
-        "FINAL BUS NUMBER:",
-        busNumber
-    );
-
-    console.log(
-        "FINAL REGISTRATION:",
-        registrationNumber
-    );
-
-    console.log(
-        "FINAL ROUTE:",
-        routeName
-    );
-
-    console.log(
-        "FINAL START:",
-        startingPoint
-    );
-
-    console.log(
-        "FINAL END:",
-        endPoint
-    );
-
-    console.log(
-        "FINAL PICKUP:",
-        pickupPoint
-    );
-
-    console.log(
-        "FINAL PICKUP TIME:",
-        pickupTime
-    );
-
-    console.log(
-        "FINAL DROP TIME:",
-        dropTime
-    );
-
-    console.log(
-        "FINAL STATUS:",
-        status
-    );
 
 
     /* =====================================
        SUMMARY CARDS
     ===================================== */
 
-    setElementText(
-        [
-            "busCardValue",
-            "busValue",
-            "transportBus"
-        ],
+    setText(
+        busNumberEl,
         busNumber
     );
 
 
-    setElementText(
-        [
-            "routeCardValue",
-            "routeValue",
-            "transportRoute"
-        ],
+    setText(
+        routeNameEl,
         routeName
     );
 
 
-    setElementText(
-        [
-            "pickupCardValue",
-            "pickupValue",
-            "transportPickup"
-        ],
+    setText(
+        pickupPointEl,
         pickupPoint
     );
 
 
-    setElementText(
-        [
-            "pickupTimeCardValue",
-            "pickupTimeValue",
-            "transportPickupTime"
-        ],
+    setText(
+        pickupTimeEl,
         pickupTime
     );
 
 
     /* =====================================
-       DETAILS
+       TRANSPORT DETAILS
     ===================================== */
 
-    setElementText(
-        [
-            "busNumber",
-            "busNumberDetails",
-            "transportBusNumber"
-        ],
+    setText(
+        detailBusNumberEl,
         busNumber
     );
 
 
-    setElementText(
-        [
-            "registrationNumber",
-            "registrationNumberDetails",
-            "transportRegistrationNumber"
-        ],
+    setText(
+        registrationNumberEl,
         registrationNumber
     );
 
 
-    setElementText(
-        [
-            "routeName",
-            "routeNameDetails",
-            "transportRouteName"
-        ],
+    setText(
+        detailRouteEl,
         routeName
     );
 
 
-    setElementText(
-        [
-            "startingPoint",
-            "startingPointDetails",
-            "transportStartingPoint"
-        ],
+    setText(
+        startPointEl,
         startingPoint
     );
 
 
-    setElementText(
-        [
-            "endPoint",
-            "endPointDetails",
-            "transportEndPoint"
-        ],
+    setText(
+        endPointEl,
         endPoint
     );
 
 
-    setElementText(
-        [
-            "pickupPoint",
-            "pickupPointDetails",
-            "transportPickupPoint"
-        ],
+    setText(
+        detailPickupPointEl,
         pickupPoint
     );
 
 
-    setElementText(
-        [
-            "pickupTime",
-            "pickupTimeDetails",
-            "transportPickupTime"
-        ],
+    setText(
+        detailPickupTimeEl,
         pickupTime
     );
 
 
-    setElementText(
-        [
-            "dropTime",
-            "dropTimeDetails",
-            "transportDropTime"
-        ],
+    setText(
+        dropTimeEl,
         dropTime
     );
 
 
-    setElementText(
-        [
-            "transportStatus",
-            "transportStatusDetails"
-        ],
+    setText(
+        transportStatusEl,
         status
     );
 
 
     /* =====================================
-       STATUS CLASS
+       STATUS COLOR
     ===================================== */
 
-    const statusElements = [
-        document.getElementById(
-            "transportStatus"
-        ),
-        document.getElementById(
-            "transportStatusDetails"
-        )
-    ];
+    if (
+        transportStatusEl
+    ) {
+
+        transportStatusEl.classList.remove(
+            "active",
+            "inactive",
+            "pending"
+        );
 
 
-    statusElements.forEach(
-        (element) => {
-
-            if (!element) {
-                return;
-            }
+        const statusLower =
+            String(
+                status
+            ).toLowerCase();
 
 
-            element.classList.remove(
-                "active",
-                "inactive",
+        if (
+            statusLower === "active"
+        ) {
+
+            transportStatusEl.classList.add(
+                "active"
+            );
+
+        } else if (
+            statusLower === "inactive"
+        ) {
+
+            transportStatusEl.classList.add(
+                "inactive"
+            );
+
+        } else {
+
+            transportStatusEl.classList.add(
                 "pending"
             );
 
-
-            const lowerStatus =
-                String(
-                    status
-                ).toLowerCase();
-
-
-            if (
-                lowerStatus === "active"
-            ) {
-
-                element.classList.add(
-                    "active"
-                );
-
-            } else if (
-                lowerStatus === "inactive"
-            ) {
-
-                element.classList.add(
-                    "inactive"
-                );
-
-            } else {
-
-                element.classList.add(
-                    "pending"
-                );
-
-            }
-
         }
-    );
+
+    }
 
 
     /* =====================================
-       COMPLETE
+       HIDE NO TRANSPORT
     ===================================== */
-
-    hideLoading();
 
     hideNoTransport();
 
 
     console.log(
-        "====================================="
+        "-------------------------------------"
     );
 
     console.log(
-        "Parent Transport Loaded Successfully"
+        "FINAL TRANSPORT DATA"
     );
 
     console.log(
-        "====================================="
+        "Bus:",
+        busNumber
+    );
 
+    console.log(
+        "Registration:",
+        registrationNumber
+    );
+
+    console.log(
+        "Route:",
+        routeName
+    );
+
+    console.log(
+        "Starting Point:",
+        startingPoint
+    );
+
+    console.log(
+        "End Point:",
+        endPoint
+    );
+
+    console.log(
+        "Pickup Point:",
+        pickupPoint
+    );
+
+    console.log(
+        "Pickup Time:",
+        pickupTime
+    );
+
+    console.log(
+        "Drop Time:",
+        dropTime
+    );
+
+    console.log(
+        "Status:",
+        status
+    );
+
+    console.log(
+        "-------------------------------------"
     );
 
 }
@@ -1025,45 +1126,8 @@ function firstValue(
 
     }
 
+
     return "-";
-
-}
-
-
-/* =====================================
-   SET MULTIPLE POSSIBLE ELEMENT IDs
-===================================== */
-
-function setElementText(
-    ids,
-    value
-) {
-
-    if (!Array.isArray(ids)) {
-
-        ids = [ids];
-
-    }
-
-
-    ids.forEach(
-        (id) => {
-
-            const element =
-                document.getElementById(
-                    id
-                );
-
-
-            if (element) {
-
-                element.textContent =
-                    value ?? "-";
-
-            }
-
-        }
-    );
 
 }
 
@@ -1077,9 +1141,8 @@ function formatTime(
 ) {
 
     if (
-        value === undefined ||
-        value === null ||
-        String(value).trim() === ""
+        !value ||
+        value === "-"
     ) {
 
         return "-";
@@ -1087,9 +1150,79 @@ function formatTime(
     }
 
 
-    /* =====================================
+    /* ---------------------------------
+       STRING TIME
+       Example: 08:30
+    --------------------------------- */
+
+    if (
+        typeof value === "string" &&
+        /^\d{1,2}:\d{2}$/.test(
+            value.trim()
+        )
+    ) {
+
+        const parts =
+            value
+                .trim()
+                .split(":");
+
+
+        let hour =
+            parseInt(
+                parts[0],
+                10
+            );
+
+
+        const minute =
+            parts[1];
+
+
+        const suffix =
+            hour >= 12
+                ? "PM"
+                : "AM";
+
+
+        hour =
+            hour % 12 || 12;
+
+
+        return `${hour}:${minute} ${suffix}`;
+
+    }
+
+
+    /* ---------------------------------
+       STRING WITH AM / PM
+    --------------------------------- */
+
+    if (
+        typeof value === "string"
+    ) {
+
+        const cleaned =
+            value.trim();
+
+
+        if (
+            /\b(am|pm)\b/i.test(
+                cleaned
+            )
+        ) {
+
+            return cleaned
+                .toUpperCase();
+
+        }
+
+    }
+
+
+    /* ---------------------------------
        FIRESTORE TIMESTAMP
-    ===================================== */
+    --------------------------------- */
 
     if (
         typeof value === "object" &&
@@ -1113,137 +1246,61 @@ function formatTime(
     }
 
 
-    /* =====================================
-       HH:MM
-    ===================================== */
-
-    const text =
-        String(value).trim();
-
+    /* ---------------------------------
+       JAVASCRIPT DATE
+    --------------------------------- */
 
     if (
-        /^\d{1,2}:\d{2}$/.test(
-            text
-        )
+        value instanceof Date
     ) {
 
-        const parts =
-            text.split(":");
-
-
-        let hour =
-            parseInt(
-                parts[0],
-                10
-            );
-
-
-        const minute =
-            parts[1];
-
-
-        const suffix =
-            hour >= 12
-                ? "PM"
-                : "AM";
-
-
-        hour =
-            hour % 12 || 12;
-
-
-        return `${hour}:${minute} ${suffix}`;
+        return value.toLocaleTimeString(
+            "en-IN",
+            {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true
+            }
+        );
 
     }
 
 
-    /* =====================================
-       HH:MM:SS
-    ===================================== */
-
-    if (
-        /^\d{1,2}:\d{2}:\d{2}$/.test(
-            text
-        )
-    ) {
-
-        const parts =
-            text.split(":");
-
-
-        let hour =
-            parseInt(
-                parts[0],
-                10
-            );
-
-
-        const minute =
-            parts[1];
-
-
-        const suffix =
-            hour >= 12
-                ? "PM"
-                : "AM";
-
-
-        hour =
-            hour % 12 || 12;
-
-
-        return `${hour}:${minute} ${suffix}`;
-
-    }
-
-
-    return text;
+    return String(value);
 
 }
 
 
 /* =====================================
-   LOADING
+   SAFE TEXT
 ===================================== */
 
-function showLoading() {
+function setText(
+    element,
+    value
+) {
 
-    const element =
-        document.getElementById(
-            "loadingTransport"
-        );
+    if (
+        !element
+    ) {
 
-
-    if (element) {
-
-        element.style.display =
-            "flex";
+        return;
 
     }
 
-}
 
-
-function hideLoading() {
-
-    const element =
-        document.getElementById(
-            "loadingTransport"
-        );
-
-
-    if (element) {
-
-        element.style.display =
-            "none";
-
-    }
+    element.textContent =
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+            ? "-"
+            : value;
 
 }
 
 
 /* =====================================
-   NO TRANSPORT
+   SHOW NO TRANSPORT
 ===================================== */
 
 function showNoTransport(
@@ -1251,37 +1308,38 @@ function showNoTransport(
     message
 ) {
 
-    hideLoading();
+    if (
+        !noTransportEl
+    ) {
 
-
-    const element =
-        document.getElementById(
-            "noTransport"
+        console.warn(
+            "noTransportSection not found"
         );
 
-
-    if (!element) {
         return;
+
     }
 
 
-    element.style.display =
+    noTransportEl.style.display =
         "block";
 
 
     const titleElement =
-        element.querySelector(
+        noTransportEl.querySelector(
             "h2"
         );
 
 
     const messageElement =
-        element.querySelector(
+        noTransportEl.querySelector(
             "p"
         );
 
 
-    if (titleElement) {
+    if (
+        titleElement
+    ) {
 
         titleElement.textContent =
             title;
@@ -1289,7 +1347,9 @@ function showNoTransport(
     }
 
 
-    if (messageElement) {
+    if (
+        messageElement
+    ) {
 
         messageElement.textContent =
             message;
@@ -1299,17 +1359,17 @@ function showNoTransport(
 }
 
 
+/* =====================================
+   HIDE NO TRANSPORT
+===================================== */
+
 function hideNoTransport() {
 
-    const element =
-        document.getElementById(
-            "noTransport"
-        );
+    if (
+        noTransportEl
+    ) {
 
-
-    if (element) {
-
-        element.style.display =
+        noTransportEl.style.display =
             "none";
 
     }
@@ -1331,7 +1391,7 @@ window.goBackToDashboard =
 
 
 /* =====================================
-   REFRESH
+   REFRESH TRANSPORT
 ===================================== */
 
 window.refreshTransport =
@@ -1347,5 +1407,5 @@ window.refreshTransport =
 ===================================== */
 
 console.log(
-    "Parent Transport JS V3 Loaded Successfully"
+    "Parent Transport JS Loaded Successfully"
 );
