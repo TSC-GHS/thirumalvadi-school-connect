@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>School Connect TN - Transport</title>
+
+<link rel="stylesheet"
+href="css/parent_transport.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<header class="topBar">
+
+    <div class="brandArea">
+
+        <div class="schoolTitle">
+            🏫 School Connect TN
+        </div>
+
+        <div class="schoolSubtitle">
+            Student Transport
+        </div>
+
+    </div>
+
+
+    <div class="parentBadge">
+        👤 Parent
+    </div>
+
+</header>
+
+
+
+<!-- =====================================
+     MAIN
+===================================== -->
+
+<main class="mainContainer">
+
+
+<!-- =====================================
+     PAGE TITLE
+===================================== -->
+
+<section class="welcomeSection">
+
+    <h1>
+        🚌 Transport
+    </h1>
+
+    <p>
+        View your child's school transport details.
+    </p>
+
+</section>
+
+
+
+<!-- =====================================
+     STUDENT INFORMATION
+===================================== -->
+
+<section class="dashboardCard">
+
+    <div class="sectionHeader">
+
+        <h2>
+            👨‍🎓 Student Information
+        </h2>
+
+        <p>
+            Transport details for your child.
+        </p>
+
+    </div>
+
+
+    <div class="studentGrid">
+
+
+        <div class="infoCard">
+
+            <span>
+                Student Name
+            </span>
+
+            <strong id="studentName">
+                Loading...
+            </strong>
+
+        </div>
+
+
+        <div class="infoCard">
+
+            <span>
+                EMIS Number
+            </span>
+
+            <strong id="studentEMIS">
+                Loading...
+            </strong>
+
+        </div>
+
+
+        <div class="infoCard">
+
+            <span>
+                Class
+            </span>
+
+            <strong id="studentClass">
+                Loading...
+            </strong>
+
+        </div>
+
+
+        <div class="infoCard">
+
+            <span>
+                Section
+            </span>
+
+            <strong id="studentSection">
+                Loading...
+            </strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================
+     TRANSPORT STATUS
+===================================== -->
+
+<section class="summaryGrid">
+
+
+    <div class="summaryCard">
+
+        <div class="summaryIcon">
+            🚌
+        </div>
+
+        <div class="summaryValue"
+             id="busNumber">
+
+            -
+
+        </div>
+
+        <div class="summaryLabel">
+            BUS
+        </div>
+
+    </div>
+
+
+
+    <div class="summaryCard">
+
+        <div class="summaryIcon">
+            🛣️
+        </div>
+
+        <div class="summaryValue"
+             id="routeName">
+
+            -
+
+        </div>
+
+        <div class="summaryLabel">
+            ROUTE
+        </div>
+
+    </div>
+
+
+
+    <div class="summaryCard">
+
+        <div class="summaryIcon">
+            📍
+        </div>
+
+        <div class="summaryValue"
+             id="pickupPoint">
+
+            -
+
+        </div>
+
+        <div class="summaryLabel">
+            PICKUP POINT
+        </div>
+
+    </div>
+
+
+
+    <div class="summaryCard">
+
+        <div class="summaryIcon">
+            ⏰
+        </div>
+
+        <div class="summaryValue"
+             id="pickupTime">
+
+            -
+
+        </div>
+
+        <div class="summaryLabel">
+            PICKUP TIME
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================
+     TRANSPORT DETAILS
+===================================== -->
+
+<section class="dashboardCard">
+
+    <div class="sectionHeader">
+
+        <h2>
+            🚌 Transport Details
+        </h2>
+
+        <p>
+            Your child's assigned school transport.
+        </p>
+
+    </div>
+
+
+    <div class="detailsGrid">
+
+
+        <div class="detailRow">
+
+            <span>
+                Bus Number
+            </span>
+
+            <strong id="detailBusNumber">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <span>
+                Registration Number
+            </span>
+
+            <strong id="registrationNumber">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <span>
+                Route
+            </span>
+
+            <strong id="detailRoute">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <span>
+                Starting Point
+            </span>
+
+            <strong id="startPoint">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <span>
+                End Point
+            </span>
+
+            <strong id="endPoint">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <span>
+                Pickup Point
+            </span>
+
+            <strong id="detailPickupPoint">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <span>
+                Pickup Time
+            </span>
+
+            <strong id="detailPickupTime">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <span>
+                Drop Time
+            </span>
+
+            <strong id="dropTime">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <span>
+                Transport Status
+            </span>
+
+            <strong
+                id="transportStatus"
+                class="statusBadge">
+
+                Loading...
+
+            </strong>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================
+     LIVE TRACKING
+===================================== -->
+
+<section class="dashboardCard">
+
+    <div class="sectionHeader">
+
+        <h2>
+            📍 Live Bus Tracking
+        </h2>
+
+        <p>
+            Track your child's school bus.
+        </p>
+
+    </div>
+
+
+    <div class="trackingBox">
+
+        <div class="trackingIcon">
+            🚌
+        </div>
+
+
+        <h3>
+            Live Tracking Coming Soon
+        </h3>
+
+
+        <p>
+            Live bus location will be available
+            when the driver starts the trip.
+        </p>
+
+
+        <button
+            class="trackingButton"
+            disabled>
+
+            📍 Track Bus
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================
+     NO TRANSPORT MESSAGE
+===================================== -->
+
+<section
+    class="dashboardCard noTransport"
+    id="noTransportSection"
+    style="display:none;">
+
+    <div class="emptyIcon">
+        🚌
+    </div>
+
+    <h2>
+        No Transport Assigned
+    </h2>
+
+    <p>
+        Your child is currently not assigned
+        to school transport.
+    </p>
+
+</section>
+
+
+
+<!-- =====================================
+     BACK TO DASHBOARD
+===================================== -->
+
+<section class="backSection">
+
+    <button
+        class="backButton"
+        onclick="location.href='parent.html'">
+
+        🏠 Back to Parent Dashboard
+
+    </button>
+
+</section>
+
+
+</main>
+
+
+
+<!-- =====================================
+     FOOTER
+===================================== -->
+
+<footer class="footer">
+
+    <div>
+        © 2026 School Connect TN
+    </div>
+
+    <div>
+        Powered by
+        <strong>VTOOS Software Solution</strong>
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================
+     JAVASCRIPT
+===================================== -->
+
+<script
+    type="module"
+    src="js/parent_transport.js">
+</script>
+
+
+</body>
+
+</html>
