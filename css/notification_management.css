@@ -1,0 +1,875 @@
+/* =====================================
+   School Connect TN
+   Notification Management
+   Professional Responsive UI
+===================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #222;
+    min-height: 100vh;
+}
+
+
+/* =====================================
+   HEADER
+===================================== */
+
+.topBar {
+    width: 100%;
+    min-height: 78px;
+
+    background: linear-gradient(
+        90deg,
+        #1458b8,
+        #1976d2
+    );
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 14px 30px;
+
+    box-shadow:
+        0 3px 12px rgba(0, 0, 0, 0.16);
+
+    position: relative;
+    z-index: 10;
+}
+
+.brandArea {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.schoolTitle {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.schoolSubtitle {
+    font-size: 13px;
+    opacity: 0.95;
+}
+
+.adminBadge {
+    background: rgba(255, 255, 255, 0.16);
+
+    padding: 10px 20px;
+
+    border-radius: 25px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================
+   MAIN CONTAINER
+===================================== */
+
+.mainContainer {
+    width: 100%;
+    max-width: 1180px;
+
+    margin: 0 auto;
+
+    padding: 22px 25px 35px;
+}
+
+
+/* =====================================
+   WELCOME
+===================================== */
+
+.welcomeSection {
+    background: #ffffff;
+
+    padding: 25px 28px;
+
+    border-radius: 15px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+.welcomeSection h1 {
+    color: #6a1b9a;
+
+    font-size: 29px;
+
+    margin-bottom: 7px;
+}
+
+.welcomeSection p {
+    color: #666;
+
+    font-size: 14px;
+}
+
+
+/* =====================================
+   SUMMARY
+===================================== */
+
+.summaryGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.summaryCard {
+    background: #ffffff;
+
+    min-height: 120px;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    position: relative;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.summaryCard::after {
+    content: "";
+
+    position: absolute;
+
+    width: 75px;
+    height: 75px;
+
+    right: -30px;
+    top: -30px;
+
+    background: #eaf4ff;
+
+    border-radius: 50%;
+}
+
+.summaryCard:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 7px 18px rgba(0, 0, 0, 0.12);
+}
+
+.summaryNumber {
+    position: relative;
+
+    z-index: 2;
+
+    color: #1976d2;
+
+    font-size: 34px;
+
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+.summaryLabel {
+    position: relative;
+
+    z-index: 2;
+
+    color: #666;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.6px;
+
+    margin-top: 10px;
+}
+
+
+/* =====================================
+   DASHBOARD CARD
+===================================== */
+
+.dashboardCard {
+    background: #ffffff;
+
+    border-radius: 15px;
+
+    padding: 23px;
+
+    margin-bottom: 22px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+
+/* =====================================
+   SECTION HEADER
+===================================== */
+
+.sectionHeader {
+    margin-bottom: 18px;
+}
+
+.sectionHeader h2 {
+    color: #6a1b9a;
+
+    font-size: 20px;
+
+    margin-bottom: 5px;
+}
+
+.sectionHeader p {
+    color: #666;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================
+   FORM
+===================================== */
+
+#notificationForm {
+    width: 100%;
+}
+
+.formGroup {
+    display: flex;
+
+    flex-direction: column;
+
+    margin-bottom: 17px;
+}
+
+.formGroup label {
+    color: #333;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 7px;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+    width: 100%;
+
+    border: 1px solid #d6e0ec;
+
+    background: #fbfdff;
+
+    color: #222;
+
+    border-radius: 9px;
+
+    padding: 12px 13px;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+    border-color: #1976d2;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(
+            25,
+            118,
+            210,
+            0.10
+        );
+}
+
+.formGroup textarea {
+    resize: vertical;
+
+    min-height: 120px;
+
+    line-height: 1.5;
+}
+
+.formGroup small {
+    color: #777;
+
+    font-size: 11px;
+
+    margin-top: 5px;
+}
+
+
+/* =====================================
+   FORM ACTIONS
+===================================== */
+
+.formActions {
+    display: flex;
+
+    gap: 12px;
+
+    margin-top: 5px;
+}
+
+.primaryButton,
+.secondaryButton {
+    border: none;
+
+    padding: 13px 22px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.primaryButton {
+    background: #1976d2;
+
+    color: #ffffff;
+
+    flex: 1;
+}
+
+.primaryButton:hover {
+    background: #155db5;
+
+    transform: translateY(-2px);
+}
+
+.primaryButton:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+.secondaryButton {
+    background: #eef3f8;
+
+    color: #333;
+
+    min-width: 110px;
+}
+
+.secondaryButton:hover {
+    background: #dfe8f1;
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================
+   FILTERS
+===================================== */
+
+.filterGrid {
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+.filterGrid input,
+.filterGrid select {
+    width: 100%;
+
+    border: 1px solid #d6e0ec;
+
+    background: #fbfdff;
+
+    color: #222;
+
+    border-radius: 9px;
+
+    padding: 11px 13px;
+
+    font-size: 13px;
+
+    outline: none;
+}
+
+.filterGrid input:focus,
+.filterGrid select:focus {
+    border-color: #1976d2;
+
+    box-shadow:
+        0 0 0 3px rgba(
+            25,
+            118,
+            210,
+            0.10
+        );
+}
+
+
+/* =====================================
+   TABLE
+===================================== */
+
+.tableWrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid #e0e7ef;
+
+    border-radius: 11px;
+}
+
+table {
+    width: 100%;
+
+    min-width: 760px;
+
+    border-collapse: collapse;
+
+    background: #ffffff;
+}
+
+thead {
+    background: #f3f7fc;
+}
+
+th {
+    color: #555;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-align: left;
+
+    padding: 13px 12px;
+
+    border-bottom: 1px solid #dfe6ee;
+
+    white-space: nowrap;
+}
+
+td {
+    color: #333;
+
+    font-size: 12px;
+
+    padding: 13px 12px;
+
+    border-bottom: 1px solid #edf1f5;
+
+    vertical-align: middle;
+}
+
+tbody tr:hover {
+    background: #f8fbff;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.emptyTable {
+    text-align: center;
+
+    color: #777;
+
+    padding: 30px 15px;
+}
+
+
+/* =====================================
+   NOTIFICATION TYPE BADGES
+===================================== */
+
+.typeBadge {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 15px;
+
+    background: #eaf4ff;
+
+    color: #1565c0;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+/* =====================================
+   PRIORITY BADGES
+===================================== */
+
+.priorityBadge {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 15px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+.priority-normal {
+    background: #e8f5e9;
+
+    color: #2e7d32;
+}
+
+.priority-important {
+    background: #fff3e0;
+
+    color: #ef6c00;
+}
+
+.priority-urgent {
+    background: #ffebee;
+
+    color: #c62828;
+}
+
+
+/* =====================================
+   STATUS BADGE
+===================================== */
+
+.statusBadge {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 15px;
+
+    background: #e8f5e9;
+
+    color: #2e7d32;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+/* =====================================
+   DELETE BUTTON
+===================================== */
+
+.deleteButton {
+    border: none;
+
+    background: #ffebee;
+
+    color: #c62828;
+
+    padding: 7px 10px;
+
+    border-radius: 7px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.deleteButton:hover {
+    background: #ffcdd2;
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================
+   BACK
+===================================== */
+
+.backSection {
+    background: #ffffff;
+
+    padding: 17px;
+
+    border-radius: 15px;
+
+    margin-bottom: 22px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+.backButton {
+    width: 100%;
+
+    border: none;
+
+    background: #155db5;
+
+    color: #ffffff;
+
+    padding: 13px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.backButton:hover {
+    background: #104b93;
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================
+   FOOTER
+===================================== */
+
+.footer {
+    background: #1554a6;
+
+    color: #ffffff;
+
+    text-align: center;
+
+    padding: 18px;
+
+    font-size: 12px;
+
+    line-height: 1.8;
+}
+
+.footer strong {
+    font-weight: 700;
+}
+
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media (max-width: 900px) {
+
+    .summaryGrid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .mainContainer {
+        padding-left: 18px;
+
+        padding-right: 18px;
+    }
+
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 600px) {
+
+    .topBar {
+        padding: 13px 15px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+    .schoolTitle {
+        font-size: 19px;
+    }
+
+    .schoolSubtitle {
+        font-size: 11px;
+    }
+
+    .adminBadge {
+        align-self: flex-start;
+
+        padding: 8px 15px;
+
+        font-size: 12px;
+    }
+
+    .mainContainer {
+        padding: 15px 10px 25px;
+    }
+
+    .welcomeSection {
+        padding: 20px;
+
+        margin-bottom: 15px;
+    }
+
+    .welcomeSection h1 {
+        font-size: 24px;
+    }
+
+    .welcomeSection p {
+        font-size: 13px;
+    }
+
+    .summaryGrid {
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 10px;
+    }
+
+    .summaryCard {
+        min-height: 105px;
+    }
+
+    .summaryNumber {
+        font-size: 28px;
+    }
+
+    .summaryLabel {
+        font-size: 9px;
+    }
+
+    .dashboardCard {
+        padding: 17px;
+
+        margin-bottom: 15px;
+    }
+
+    .sectionHeader h2 {
+        font-size: 18px;
+    }
+
+    .sectionHeader p {
+        font-size: 12px;
+    }
+
+    .formGroup input,
+    .formGroup select,
+    .formGroup textarea {
+        font-size: 13px;
+
+        padding: 11px;
+    }
+
+    .formActions {
+        flex-direction: column;
+    }
+
+    .primaryButton,
+    .secondaryButton {
+        width: 100%;
+    }
+
+    .filterGrid {
+        grid-template-columns:
+            1fr;
+    }
+
+    .tableWrapper {
+        border-radius: 9px;
+    }
+
+    .footer {
+        font-size: 10px;
+    }
+
+}
+
+
+/* =====================================
+   VERY SMALL MOBILE
+===================================== */
+
+@media (max-width: 380px) {
+
+    .summaryGrid {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+}
