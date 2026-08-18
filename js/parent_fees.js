@@ -585,94 +585,101 @@ function renderFees() {
 
         `;
 
-
         if (noFeeSection) {
-
-            noFeeSection.style.display =
-                "block";
-
+            noFeeSection.style.display = "block";
         }
 
-
         return;
-
     }
-
 
     if (noFeeSection) {
-
-        noFeeSection.style.display =
-            "none";
-
+        noFeeSection.style.display = "none";
     }
-
 
     feeTableBody.innerHTML = "";
 
+    feeRecords.forEach(fee => {
 
-    feeRecords.forEach(
-        fee => {
+        const total =
+            Number(fee.totalFee) || 0;
 
-            const row =
-                document.createElement("tr");
+        const paid =
+            Number(fee.paidAmount) || 0;
 
+        // IMPORTANT:
+        // Always calculate balance
+        // instead of trusting Firebase balance field.
 
-            row.innerHTML = `
+        const balance =
+            Math.max(total - paid, 0);
 
-                <td>
-                    ${escapeHtml(
-                        fee.academicYear ||
-                        "-"
-                    )}
-                </td>
+        let status = "Pending";
 
-                <td>
-                    ${escapeHtml(
-                        fee.feeType ||
-                        "-"
-                    )}
-                </td>
+        if (balance <= 0 && total > 0) {
 
-                <td>
-                    ₹${formatMoney(
-                        fee.totalFee
-                    )}
-                </td>
-
-                <td>
-                    ₹${formatMoney(
-                        fee.paidAmount
-                    )}
-                </td>
-
-                <td>
-                    ₹${formatMoney(
-                        fee.balance
-                    )}
-                </td>
-
-                <td>
-                    ${getStatusBadge(
-                        fee.status
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHtml(
-                        fee.paymentDate ||
-                        "-"
-                    )}
-                </td>
-
-            `;
-
-
-            feeTableBody.appendChild(
-                row
-            );
+            status = "Paid";
 
         }
-    );
+        else if (paid > 0) {
+
+            status = "Partial";
+
+        }
+
+        const row =
+            document.createElement("tr");
+
+        // Prefer dueDate for Fee Details.
+        // Do NOT show raw payment timestamp here.
+
+        const displayDate =
+            fee.dueDate
+                ? formatDate(fee.dueDate)
+                : (
+                    fee.paymentDate
+                        ? formatDate(fee.paymentDate)
+                        : "-"
+                );
+
+        row.innerHTML = `
+
+            <td>
+                ${escapeHtml(
+                    fee.academicYear || "-"
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    fee.feeType || "-"
+                )}
+            </td>
+
+            <td>
+                ₹${formatMoney(total)}
+            </td>
+
+            <td>
+                ₹${formatMoney(paid)}
+            </td>
+
+            <td>
+                ₹${formatMoney(balance)}
+            </td>
+
+            <td>
+                ${getStatusBadge(status)}
+            </td>
+
+            <td>
+                ${escapeHtml(displayDate)}
+            </td>
+
+        `;
+
+        feeTableBody.appendChild(row);
+
+    });
 
 }
 
@@ -702,79 +709,88 @@ function renderPaymentHistory() {
         `;
 
         return;
-
     }
 
+    paymentHistoryBody.innerHTML = "";
 
-    paymentHistoryBody.innerHTML =
-        "";
+    feeRecords.forEach(fee => {
 
+        const paid =
+            Number(fee.paidAmount) || 0;
 
-    feeRecords.forEach(
-        fee => {
+        if (paid <= 0) {
+            return;
+        }
 
-            const paid =
-                Number(
-                    fee.paidAmount
-                ) || 0;
+        const row =
+            document.createElement("tr");
 
+        // Payment History should show
+        // actual payment date.
 
-            if (paid <= 0) return;
+        const paymentDate =
+            fee.paymentDate
+                ? formatDate(fee.paymentDate)
+                : "-";
 
+        const total =
+            Number(fee.totalFee) || 0;
 
-            const row =
-                document.createElement("tr");
-
-
-            row.innerHTML = `
-
-                <td>
-                    ${escapeHtml(
-                        fee.paymentDate ||
-                        "-"
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHtml(
-                        fee.feeType ||
-                        "-"
-                    )}
-                </td>
-
-                <td>
-                    ₹${formatMoney(
-                        paid
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHtml(
-                        fee.paymentMode ||
-                        "-"
-                    )}
-                </td>
-
-                <td>
-                    ${getStatusBadge(
-                        fee.status
-                    )}
-                </td>
-
-            `;
-
-
-            paymentHistoryBody.appendChild(
-                row
+        const balance =
+            Math.max(
+                total - paid,
+                0
             );
 
-        }
-    );
+        let status = "Pending";
 
+        if (balance <= 0 && total > 0) {
+
+            status = "Paid";
+
+        }
+        else if (paid > 0) {
+
+            status = "Partial";
+
+        }
+
+        row.innerHTML = `
+
+            <td>
+                ${escapeHtml(
+                    paymentDate
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    fee.feeType || "-"
+                )}
+            </td>
+
+            <td>
+                ₹${formatMoney(paid)}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    fee.paymentMode || "-"
+                )}
+            </td>
+
+            <td>
+                ${getStatusBadge(status)}
+            </td>
+
+        `;
+
+        paymentHistoryBody.appendChild(row);
+
+    });
 
     if (
-        paymentHistoryBody
-            .children.length === 0
+        paymentHistoryBody.children.length === 0
     ) {
 
         paymentHistoryBody.innerHTML = `
@@ -797,44 +813,38 @@ function renderPaymentHistory() {
 
 }
 
-
 // ==========================================================
 // SUMMARY
 // ==========================================================
 
 function updateSummary() {
 
-    let total =
-        0;
+    let total = 0;
 
-    let paid =
-        0;
+    let paid = 0;
 
-    let balance =
-        0;
+    let balance = 0;
 
 
-    feeRecords.forEach(
-        fee => {
+    feeRecords.forEach(fee => {
 
-            total +=
-                Number(
-                    fee.totalFee
-                ) || 0;
+        const feeTotal =
+            Number(fee.totalFee) || 0;
+
+        const feePaid =
+            Number(fee.paidAmount) || 0;
+
+        total += feeTotal;
+
+        paid += feePaid;
+
+    });
 
 
-            paid +=
-                Number(
-                    fee.paidAmount
-                ) || 0;
-
-
-            balance +=
-                Number(
-                    fee.balance
-                ) || 0;
-
-        }
+    // ALWAYS calculate balance
+    balance = Math.max(
+        total - paid,
+        0
     );
 
 
@@ -850,8 +860,7 @@ function updateSummary() {
         `₹${formatMoney(balance)}`;
 
 
-    let status =
-        "No Fees";
+    let status = "No Fees";
 
 
     if (feeRecords.length > 0) {
@@ -861,13 +870,11 @@ function updateSummary() {
             status = "Paid";
 
         }
-
         else if (paid > 0) {
 
             status = "Partial";
 
         }
-
         else {
 
             status = "Pending";
@@ -881,7 +888,6 @@ function updateSummary() {
         status;
 
 }
-
 
 // ==========================================================
 // STATUS BADGE
@@ -926,7 +932,63 @@ function getStatusBadge(status) {
     `;
 
 }
+// ==========================================================
+// DATE FORMAT
+// ==========================================================
 
+function formatDate(value) {
+
+    if (!value) {
+        return "-";
+    }
+
+    try {
+
+        let date;
+
+        // Firebase Timestamp
+        if (value && typeof value.toDate === "function") {
+            date = value.toDate();
+        }
+
+        // JS Date
+        else if (value instanceof Date) {
+            date = value;
+        }
+
+        // String / ISO date
+        else {
+            date = new Date(value);
+        }
+
+        if (isNaN(date.getTime())) {
+            return "-";
+        }
+
+        const day = String(
+            date.getDate()
+        ).padStart(2, "0");
+
+        const month = String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+        const year =
+            date.getFullYear();
+
+        return `${day}-${month}-${year}`;
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Date format error:",
+            error
+        );
+
+        return "-";
+    }
+}
 
 // ==========================================================
 // MONEY FORMAT
