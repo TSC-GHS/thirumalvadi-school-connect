@@ -1,68 +1,102 @@
 //==================================================
 // School Connect TN
-// Parent Dashboard V1
-// Part 1
+// Parent Dashboard
+// Updated with Notification Badge
 //==================================================
 
 import { db } from "../firebase.js";
 
 import {
-collection,
-query,
-where,
-getDocs,
-getDoc,
-doc,
-orderBy,
-limit
+    collection,
+    query,
+    where,
+    getDocs,
+    getDoc,
+    doc,
+    orderBy,
+    limit
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
 
 //==================================================
 // Elements
 //==================================================
 
 const studentName =
-document.getElementById("studentName");
+    document.getElementById("studentName");
 
 const studentClassName =
-document.getElementById("studentClass");
+    document.getElementById("studentClass");
 
 const studentEMIS =
-document.getElementById("studentEMIS");
+    document.getElementById("studentEMIS");
 
 const attendanceCount =
-document.getElementById("attendanceCount");
+    document.getElementById("attendanceCount");
 
 const homeworkCount =
-document.getElementById("homeworkCount");
+    document.getElementById("homeworkCount");
 
 const noticeCount =
-document.getElementById("noticeCount");
+    document.getElementById("noticeCount");
 
 const resultCount =
-document.getElementById("resultCount");
+    document.getElementById("resultCount");
 
 const latestNotices =
-document.getElementById("latestNotices");
+    document.getElementById("latestNotices");
 
 const recentHomework =
-document.getElementById("recentHomework");
+    document.getElementById("recentHomework");
+
+
+//==================================================
+// Notification Elements
+//==================================================
+
+const notificationBtn =
+    document.getElementById("notificationBtn");
+
+const notificationBadge =
+    document.getElementById("notificationBadge");
+
 
 //==================================================
 // Parent Session
 //==================================================
 
 const parentEMIS =
-localStorage.getItem("parentEMIS") ||
-sessionStorage.getItem("parentEMIS");
+    localStorage.getItem("parentEMIS") ||
+    sessionStorage.getItem("parentEMIS");
 
-if(!parentEMIS){
 
-alert("Session Expired");
+if (!parentEMIS) {
 
-location.href="index.html";
+    alert("Session Expired");
+
+    location.href = "index.html";
 
 }
+
+
+//==================================================
+// Notification Button
+//==================================================
+
+if (notificationBtn) {
+
+    notificationBtn.addEventListener(
+        "click",
+        () => {
+
+            location.href =
+                "parent_notifications.html";
+
+        }
+    );
+
+}
+
 
 //==================================================
 // Student Details
@@ -70,244 +104,405 @@ location.href="index.html";
 
 let studentData = null;
 
-async function loadStudent(){
 
-try{
+async function loadStudent() {
 
-const q = query(
-collection(db,"students"),
-where("emis","==",parentEMIS)
-);
+    try {
 
-const snap = await getDocs(q);
+        const q = query(
+            collection(db, "students"),
+            where("emis", "==", parentEMIS)
+        );
 
-if(snap.empty){
 
-alert("Student Record Not Found");
+        const snap =
+            await getDocs(q);
 
-location.href="index.html";
 
-return false;
+        if (snap.empty) {
+
+            alert(
+                "Student Record Not Found"
+            );
+
+            location.href =
+                "index.html";
+
+            return false;
+
+        }
+
+
+        studentData =
+            snap.docs[0].data();
+
+
+        if (studentName) {
+
+            studentName.textContent =
+                studentData.name || "-";
+
+        }
+
+
+        if (studentEMIS) {
+
+            studentEMIS.textContent =
+                studentData.emis || "-";
+
+        }
+
+
+        if (studentClassName) {
+
+            studentClassName.textContent =
+                `${studentData.class || "-"}-${studentData.section || "-"}`;
+
+        }
+
+
+        return true;
+
+
+    } catch (error) {
+
+        console.error(
+            "Student loading error:",
+            error
+        );
+
+
+        alert(
+            error.message
+        );
+
+
+        return false;
+
+    }
 
 }
 
-studentData = snap.docs[0].data();
 
-studentName.textContent =
-studentData.name || "-";
-
-studentEMIS.textContent =
-studentData.emis || "-";
-
-studentClassName.textContent =
-`${studentData.class || "-"}-${studentData.section || "-"}`;
-
-return true;
-
-}catch(error){
-
-console.error(error);
-
-alert(error.message);
-
-console.error(error);
-
-return false;
-
-}
-
-}
-
-console.log("Parent Dashboard Part 1 Loaded");
-//==================================================
-// Dashboard Summary
-// Part 2
-//==================================================
 //==================================================
 // Load Attendance
 //==================================================
 
-async function loadAttendance(){
+async function loadAttendance() {
 
-try{
+    try {
 
-const attendanceRef = collection(db,"attendance");
+        const attendanceRef =
+            collection(
+                db,
+                "attendance"
+            );
 
-const attendanceDays = await getDocs(attendanceRef);
 
-let totalDays = 0;
-let presentDays = 0;
+        const attendanceDays =
+            await getDocs(
+                attendanceRef
+            );
 
-for(const day of attendanceDays.docs){
 
-const studentRef = collection(
-db,
-"attendance",
-day.id,
-"students"
-);
+        let totalDays = 0;
 
-const studentSnap = await getDocs(
+        let presentDays = 0;
 
-query(
-studentRef,
-where("emis","==",parentEMIS)
-)
 
-);
+        for (
+            const day of attendanceDays.docs
+        ) {
 
-if(!studentSnap.empty){
+            const studentRef =
+                collection(
+                    db,
+                    "attendance",
+                    day.id,
+                    "students"
+                );
 
-totalDays++;
 
-const data = studentSnap.docs[0].data();
+            const studentSnap =
+                await getDocs(
+                    query(
+                        studentRef,
+                        where(
+                            "emis",
+                            "==",
+                            parentEMIS
+                        )
+                    )
+                );
 
-if(data.status=="P"){
 
-presentDays++;
+            if (
+                !studentSnap.empty
+            ) {
 
-}
+                totalDays++;
 
-}
 
-}
+                const data =
+                    studentSnap
+                        .docs[0]
+                        .data();
 
-const percentage =
-totalDays==0
-?0
-:Math.round((presentDays/totalDays)*100);
 
-attendanceCount.textContent =
-percentage+"%";
+                if (
+                    data.status === "P"
+                ) {
 
-}catch(error){
+                    presentDays++;
 
-console.error(error);
+                }
 
-attendanceCount.textContent="-";
+            }
 
-}
+        }
 
-}
-async function loadDashboard(){
 
-try{
+        const percentage =
+            totalDays === 0
+                ? 0
+                : Math.round(
+                    (
+                        presentDays /
+                        totalDays
+                    ) * 100
+                );
 
-//============================
-// Homework Count
-//============================
 
-const today = new Date().toISOString().split("T")[0];
+        if (attendanceCount) {
 
-const homeworkSnap = await getDocs(
-collection(db,"homework")
-);
+            attendanceCount.textContent =
+                percentage + "%";
 
-let count = 0;
+        }
 
-homeworkSnap.forEach((doc)=>{
 
-const hw = doc.data();
+    } catch (error) {
 
-if(
-hw.class == studentData.class &&
-hw.section == studentData.section
-){
-count++;
-}
+        console.error(
+            "Attendance error:",
+            error
+        );
 
-});
 
-homeworkCount.textContent = count;
-//============================
-// Notice Count
-//============================
+        if (attendanceCount) {
 
-const twoDaysAgo = new Date();
-twoDaysAgo.setDate(twoDaysAgo.getDate()-2);
+            attendanceCount.textContent =
+                "-";
 
-const noticeSnap = await getDocs(
-
-query(
-collection(db,"notices"),
-where("createdAt",">=",twoDaysAgo.toISOString())
-)
-
-);
-
-noticeCount.textContent =
-noticeSnap.size;
-//============================
-// Average Marks
-//============================
-
-const settingsDoc = await getDoc(
-    doc(db, "settings", "marks")
-);
-
-if (!settingsDoc.exists()) {
-
-    resultCount.textContent = "-";
-
-} else {
-
-    const latestExam = settingsDoc.data().currentExam;
-
-    const markDoc = await getDoc(
-        doc(
-            db,
-            "marks",
-            latestExam,
-            "students",
-            parentEMIS
-        )
-    );
-
-    if (!markDoc.exists()) {
-
-        resultCount.textContent = "-";
-
-    } else {
-
-        const markData = markDoc.data();
-
-        resultCount.textContent =
-            (markData.percentage || 0) + "%";
+        }
 
     }
-}
-}catch(error){
-
-    console.error(error);
-
-    homeworkCount.textContent = "-";
-    noticeCount.textContent = "-";
-    resultCount.textContent = "-";
 
 }
-}
+
+
 //==================================================
-// Initialize Dashboard
+// Dashboard Summary
 //==================================================
 
-async function initializeDashboard(){
+async function loadDashboard() {
 
-const loaded =
-await loadStudent();
+    try {
 
-if(!loaded) return;
+        //============================
+        // Homework Count
+        //============================
 
-await loadAttendance();
+        const homeworkSnap =
+            await getDocs(
+                collection(
+                    db,
+                    "homework"
+                )
+            );
 
-await loadDashboard();
 
-await loadParentData();
+        let count = 0;
+
+
+        homeworkSnap.forEach(
+            (item) => {
+
+                const hw =
+                    item.data();
+
+
+                if (
+                    hw.class ==
+                        studentData.class
+                    &&
+                    hw.section ==
+                        studentData.section
+                ) {
+
+                    count++;
+
+                }
+
+            }
+        );
+
+
+        if (homeworkCount) {
+
+            homeworkCount.textContent =
+                count;
+
+        }
+
+
+        //============================
+        // Notice Count
+        //============================
+
+        const noticeSnap =
+            await getDocs(
+                collection(
+                    db,
+                    "notices"
+                )
+            );
+
+
+        if (noticeCount) {
+
+            noticeCount.textContent =
+                noticeSnap.size;
+
+        }
+
+
+        //============================
+        // Average Marks
+        //============================
+
+        const settingsDoc =
+            await getDoc(
+                doc(
+                    db,
+                    "settings",
+                    "marks"
+                )
+            );
+
+
+        if (
+            !settingsDoc.exists()
+        ) {
+
+            if (resultCount) {
+
+                resultCount.textContent =
+                    "-";
+
+            }
+
+        } else {
+
+            const latestExam =
+                settingsDoc
+                    .data()
+                    .currentExam;
+
+
+            if (!latestExam) {
+
+                if (resultCount) {
+
+                    resultCount.textContent =
+                        "-";
+
+                }
+
+            } else {
+
+                const markDoc =
+                    await getDoc(
+                        doc(
+                            db,
+                            "marks",
+                            latestExam,
+                            "students",
+                            parentEMIS
+                        )
+                    );
+
+
+                if (
+                    !markDoc.exists()
+                ) {
+
+                    if (resultCount) {
+
+                        resultCount.textContent =
+                            "-";
+
+                    }
+
+                } else {
+
+                    const markData =
+                        markDoc.data();
+
+
+                    if (resultCount) {
+
+                        resultCount.textContent =
+                            (
+                                markData.percentage ||
+                                0
+                            ) + "%";
+
+                    }
+
+                }
+
+            }
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Dashboard error:",
+            error
+        );
+
+
+        if (homeworkCount) {
+
+            homeworkCount.textContent =
+                "-";
+
+        }
+
+
+        if (noticeCount) {
+
+            noticeCount.textContent =
+                "-";
+
+        }
+
+
+        if (resultCount) {
+
+            resultCount.textContent =
+                "-";
+
+        }
+
+    }
 
 }
 
-initializeDashboard();
 
-console.log("Parent Dashboard Part 2 Loaded");
 //==================================================
 // Latest Notices
 //==================================================
@@ -316,13 +511,23 @@ async function loadLatestNotices() {
 
     try {
 
-        const twoDaysAgo = new Date();
-        twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-        const snap = await getDocs(
-collection(db,"notices")
-);
+        if (!latestNotices) {
+            return;
+        }
 
-        latestNotices.innerHTML = "";
+
+        const snap =
+            await getDocs(
+                collection(
+                    db,
+                    "notices"
+                )
+            );
+
+
+        latestNotices.innerHTML =
+            "";
+
 
         if (snap.empty) {
 
@@ -332,374 +537,960 @@ collection(db,"notices")
                 </div>
             `;
 
-            noticeCount.textContent = "0";
+
+            if (noticeCount) {
+
+                noticeCount.textContent =
+                    "0";
+
+            }
+
+
             return;
+
         }
 
-        noticeCount.textContent = snap.docs.length;
 
-     snap.forEach((doc)=>{
+        if (noticeCount) {
 
-const notice = doc.data();
+            noticeCount.textContent =
+                snap.docs.length;
 
-latestNotices.innerHTML += `
-<div class="notice-item">
-<div class="notice-title">
-${notice.title || "-"}
-</div>
+        }
 
-<p>
-${notice.description || "-"}
-</p>
 
-</div>
-`;
+        snap.forEach(
+            (item) => {
 
-});
+                const notice =
+                    item.data();
+
+
+                latestNotices.innerHTML += `
+
+                    <div class="notice-item">
+
+                        <div class="notice-title">
+
+                            ${escapeHTML(
+                                notice.title || "-"
+                            )}
+
+                        </div>
+
+                        <p>
+
+                            ${escapeHTML(
+                                notice.description || "-"
+                            )}
+
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+        );
 
 
     } catch (error) {
 
-        console.log(error);
+        console.error(
+            "Latest notices error:",
+            error
+        );
 
-        latestNotices.innerHTML =
-"<div class='empty-card'>📢 No notices available</div>";
+
+        if (latestNotices) {
+
+            latestNotices.innerHTML =
+                "<div class='empty-card'>📢 No notices available</div>";
+
+        }
 
     }
 
 }
 
+
 //==================================================
 // Recent Homework
 //==================================================
 
-async function loadRecentHomework(){
+async function loadRecentHomework() {
 
-try{
+    try {
 
-const today = new Date().toISOString().split("T")[0];
+        if (!recentHomework) {
+            return;
+        }
 
-const snap = await getDocs(
-collection(db,"homework")
-);
 
-recentHomework.innerHTML="";
+        const snap =
+            await getDocs(
+                collection(
+                    db,
+                    "homework"
+                )
+            );
 
-if(snap.empty){
 
-recentHomework.innerHTML = `
-<div class="empty-card">
-📚 No homework available
-</div>
-`;
+        recentHomework.innerHTML =
+            "";
 
-return;
+
+        if (snap.empty) {
+
+            recentHomework.innerHTML = `
+                <div class="empty-card">
+                    📚 No homework available
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        let found =
+            false;
+
+
+        snap.forEach(
+            (item) => {
+
+                const hw =
+                    item.data();
+
+
+                if (
+                    hw.class !=
+                        studentData.class
+                    ||
+                    hw.section !=
+                        studentData.section
+                ) {
+
+                    return;
+
+                }
+
+
+                found = true;
+
+
+                recentHomework.innerHTML += `
+
+                    <div class="homework-item">
+
+                        <div class="homework-sub">
+
+                            ${escapeHTML(
+                                hw.subject || "-"
+                            )}
+
+                        </div>
+
+                        <p>
+
+                            ${escapeHTML(
+                                hw.title ||
+                                hw.description ||
+                                "-"
+                            )}
+
+                        </p>
+
+                        <small>
+
+                            Due :
+                            ${escapeHTML(
+                                hw.dueDate || "-"
+                            )}
+
+                        </small>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+
+        if (!found) {
+
+            recentHomework.innerHTML =
+                "<p>No Homework Available</p>";
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Homework error:",
+            error
+        );
+
+
+        recentHomework.innerHTML =
+            "<p>Unable to load homework</p>";
+
+    }
 
 }
 
-snap.forEach((doc)=>{
 
-const hw = doc.data();
-if(hw.class != studentData.class) return;
-if(hw.section != studentData.section) return;
-recentHomework.innerHTML += `
-
-<div class="homework-item">
-
-<div class="homework-sub">
-
-${hw.subject || "-"}
-
-</div>
-
-<p>
-
-${hw.title || hw.description || "-"}
-
-</p>
-
-<small>
-
-Due : ${hw.dueDate || "-"}
-
-</small>
-
-</div>
-
-`;
-
-});
-
-}catch(error){
-
-console.error(error);
-
-recentHomework.innerHTML=
-"<p>Unable to load homework</p>";
-
-}
-
-}
-
-//==================================================
-// Load Dashboard Data
-//==================================================
-
-async function loadParentData(){
 //==================================================
 // Upcoming Events
 //==================================================
 
-async function loadUpcomingEvents(){
+async function loadUpcomingEvents() {
 
-try{
+    try {
 
-const upcomingEvents =
-document.getElementById("upcomingEvents");
+        const upcomingEvents =
+            document.getElementById(
+                "upcomingEvents"
+            );
 
-const snap =
-await getDocs(
-collection(db,"calendar")
-);
 
-upcomingEvents.innerHTML="";
+        if (!upcomingEvents) {
+            return;
+        }
 
-if(snap.empty){
 
-upcomingEvents.innerHTML=`
-<div class="empty-card">
-📅 No Upcoming Events
-</div>
-`;
+        const snap =
+            await getDocs(
+                collection(
+                    db,
+                    "calendar"
+                )
+            );
 
-return;
 
-}
+        upcomingEvents.innerHTML =
+            "";
 
-snap.forEach((doc)=>{
 
-const event=doc.data();
+        if (snap.empty) {
 
-upcomingEvents.innerHTML+=`
+            upcomingEvents.innerHTML = `
+                <div class="empty-card">
+                    📅 No Upcoming Events
+                </div>
+            `;
 
-<div class="notice-item">
+            return;
 
-<div class="notice-title">
+        }
 
-${event.title || "-"}
 
-</div>
+        snap.forEach(
+            (item) => {
 
-<p>
+                const event =
+                    item.data();
 
-${event.description || "-"}
 
-</p>
+                upcomingEvents.innerHTML += `
 
-<small>
+                    <div class="notice-item">
 
-📅 ${event.date || "-"}
+                        <div class="notice-title">
 
-</small>
+                            ${escapeHTML(
+                                event.title || "-"
+                            )}
 
-</div>
+                        </div>
 
-`;
+                        <p>
 
-});
+                            ${escapeHTML(
+                                event.description || "-"
+                            )}
 
-}catch(error){
+                        </p>
 
-console.log(error);
+                        <small>
 
-document.getElementById("upcomingEvents").innerHTML=
+                            📅
+                            ${escapeHTML(
+                                event.date || "-"
+                            )}
 
-"<div class='empty-card'>No Events Available</div>";
+                        </small>
 
-}
+                    </div>
 
-}
-await loadLatestNotices();
+                `;
 
-await loadRecentHomework();
+            }
+        );
 
-await loadUpcomingEvents();
 
-}
+    } catch (error) {
 
-console.log("Parent Dashboard Part 3 Loaded");
-// ========================================
-// PART 4 - Homework
-// ========================================
+        console.error(
+            "Upcoming events error:",
+            error
+        );
 
-async function loadHomework(){
 
-try{
+        const element =
+            document.getElementById(
+                "upcomingEvents"
+            );
 
-const today = new Date().toISOString().split("T")[0];
 
-const q = query(
-    collection(db,"homework"),
-    where("class","==",studentData.class),
-    where("section","==",studentData.section),
-    where("status","==","Active"),
-    where("dueDate",">=",today),
-    orderBy("dueDate")
-);
+        if (element) {
 
-const snap = await getDocs(q);
+            element.innerHTML =
+                "<div class='empty-card'>No Events Available</div>";
 
-let html="";
+        }
 
-snap.forEach((doc)=>{
-
-const hw=doc.data();
-
-html += `
-<div class="homework-item">
-<div class="homework-sub">${hw.subject}</div>
-<div>${hw.title}</div>
-<small>Due : ${hw.dueDate}</small>
-</div>
-`;
-
-});
-
-if(html===""){
-
-html="<p>No Homework Available</p>";
+    }
 
 }
 
-document.getElementById("homeworkList").innerHTML=html;
 
-}catch(error){
+//==================================================
+// Notification Unread Count
+//==================================================
 
-console.log(error);
+async function loadNotificationBadge() {
+
+    try {
+
+        if (!parentEMIS) {
+
+            hideNotificationBadge();
+
+            return;
+
+        }
+
+
+        const notificationsRef =
+            collection(
+                db,
+                "notifications"
+            );
+
+
+        //========================================
+        // ALL PARENTS
+        //========================================
+
+        const allParentsQuery =
+            query(
+                notificationsRef,
+                where(
+                    "target",
+                    "==",
+                    "all_parents"
+                )
+            );
+
+
+        //========================================
+        // SPECIFIC PARENT
+        //========================================
+
+        const specificParentQuery =
+            query(
+                notificationsRef,
+                where(
+                    "target",
+                    "==",
+                    "parent"
+                ),
+                where(
+                    "targetEMIS",
+                    "==",
+                    String(parentEMIS)
+                )
+            );
+
+
+        const [
+            allParentsSnapshot,
+            specificParentSnapshot
+        ] =
+            await Promise.all([
+
+                getDocs(
+                    allParentsQuery
+                ),
+
+                getDocs(
+                    specificParentQuery
+                )
+
+            ]);
+
+
+        const notificationMap =
+            new Map();
+
+
+        //========================================
+        // ALL PARENTS NOTIFICATIONS
+        //========================================
+
+        allParentsSnapshot.forEach(
+            (item) => {
+
+                notificationMap.set(
+                    item.id,
+                    item.data()
+                );
+
+            }
+        );
+
+
+        //========================================
+        // SPECIFIC PARENT NOTIFICATIONS
+        //========================================
+
+        specificParentSnapshot.forEach(
+            (item) => {
+
+                notificationMap.set(
+                    item.id,
+                    item.data()
+                );
+
+            }
+        );
+
+
+        //========================================
+        // COUNT UNREAD
+        //========================================
+
+        let unreadCount =
+            0;
+
+
+        notificationMap.forEach(
+            (notification) => {
+
+                if (
+                    notification.isRead !== true
+                ) {
+
+                    unreadCount++;
+
+                }
+
+            }
+        );
+
+
+        console.log(
+            "Unread notifications:",
+            unreadCount
+        );
+
+
+        updateNotificationBadge(
+            unreadCount
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Notification badge error:",
+            error
+        );
+
+
+        hideNotificationBadge();
+
+    }
 
 }
 
+
+//==================================================
+// Update Notification Badge
+//==================================================
+
+function updateNotificationBadge(
+    count
+) {
+
+    if (!notificationBadge) {
+
+        return;
+
+    }
+
+
+    if (
+        count <= 0
+    ) {
+
+        hideNotificationBadge();
+
+        return;
+
+    }
+
+
+    notificationBadge.style.display =
+        "flex";
+
+
+    if (
+        count > 99
+    ) {
+
+        notificationBadge.textContent =
+            "99+";
+
+    } else {
+
+        notificationBadge.textContent =
+            count;
+
+    }
+
 }
 
-// ========================================
+
+//==================================================
+// Hide Badge
+//==================================================
+
+function hideNotificationBadge() {
+
+    if (!notificationBadge) {
+
+        return;
+
+    }
+
+
+    notificationBadge.style.display =
+        "none";
+
+}
+
+
+//==================================================
+// Initialize Dashboard
+//==================================================
+
+async function initializeDashboard() {
+
+    const loaded =
+        await loadStudent();
+
+
+    if (!loaded) {
+
+        return;
+
+    }
+
+
+    await Promise.all([
+
+        loadAttendance(),
+
+        loadDashboard(),
+
+        loadLatestNotices(),
+
+        loadRecentHomework(),
+
+        loadUpcomingEvents(),
+
+        loadNotificationBadge()
+
+    ]);
+
+}
+
+
+initializeDashboard();
+
+
+//==================================================
 // Bottom Menu
-// ========================================
+//==================================================
 
-window.goHome=()=>{
-location.href="parent_dashboard.html";
+window.goHome = () => {
+
+    location.href =
+        "parent.html";
+
 };
 
-window.goAttendance=()=>{
-location.href="parent_attendance.html";
+
+window.goAttendance = () => {
+
+    location.href =
+        "parent_attendance.html";
+
 };
 
-window.goReport=()=>{
-location.href="parent_report_card.html";
+
+window.goReport = () => {
+
+    location.href =
+        "parent_report_card.html";
+
 };
 
-window.goProfile=()=>{
-location.href="parent_profile.html";
+
+window.goProfile = () => {
+
+    location.href =
+        "student_profile.html";
+
 };
 
-// ========================================
+
+//==================================================
 // Logout
-// ========================================
+//==================================================
 
-window.logout=()=>{
+window.logout = () => {
 
-localStorage.removeItem("parentEMIS");
-sessionStorage.removeItem("parentEMIS");
+    localStorage.removeItem(
+        "parentEMIS"
+    );
 
-location.href="index.html";
+    sessionStorage.removeItem(
+        "parentEMIS"
+    );
+
+
+    location.href =
+        "index.html";
 
 };
 
-// ========================================
-// Initialize
-// ========================================
 
-console.log("================================");
-console.log("School Connect TN");
-console.log("Parent Dashboard V1");
-console.log("================================");
-//==================================
+//==================================================
 // Language Selector
-//==================================
-//==================================
-// Parent Language
-//==================================
+//==================================================
 
 const language = {
 
-ta:{
-dashboard:"முகப்பு",
-welcome:"👋 வரவேற்கிறோம்",
-attendance:"வருகை",
-average:"சராசரி",
-homework:"வீட்டுப்பாடம்",
-notice:"அறிவிப்புகள்",
-quick:"⚡ விரைவு செயல்கள்",
-latest:"📢 சமீபத்திய அறிவிப்புகள்",
-today:"📚 இன்றைய வீட்டுப்பாடம்",
-events:"📅 வரவிருக்கும் நிகழ்வுகள்"
-},
+    ta: {
 
-en:{
-dashboard:"Parent Dashboard",
-welcome:"👋 Welcome Parent",
-attendance:"Attendance",
-average:"Average",
-homework:"Homework",
-notice:"Notices",
-quick:"⚡ Quick Actions",
-latest:"📢 Latest Notice",
-today:"📚 Today's Homework",
-events:"📅 Upcoming Events"
-},
+        dashboard:
+            "முகப்பு",
 
-hi:{
-dashboard:"अभिभावक डैशबोर्ड",
-welcome:"👋 स्वागत है",
-attendance:"उपस्थिति",
-average:"औसत",
-homework:"गृहकार्य",
-notice:"सूचनाएँ",
-quick:"⚡ त्वरित कार्य",
-latest:"📢 नवीनतम सूचनाएँ",
-today:"📚 आज का गृहकार्य",
-events:"📅 आगामी कार्यक्रम"
-}
+        welcome:
+            "👋 வரவேற்கிறோம்",
+
+        attendance:
+            "வருகை",
+
+        average:
+            "சராசரி",
+
+        homework:
+            "வீட்டுப்பாடம்",
+
+        notice:
+            "அறிவிப்புகள்",
+
+        quick:
+            "⚡ விரைவு செயல்கள்",
+
+        latest:
+            "📢 சமீபத்திய அறிவிப்புகள்",
+
+        today:
+            "📚 இன்றைய வீட்டுப்பாடம்",
+
+        events:
+            "📅 வரவிருக்கும் நிகழ்வுகள்"
+
+    },
+
+
+    en: {
+
+        dashboard:
+            "Parent Dashboard",
+
+        welcome:
+            "👋 Welcome Parent",
+
+        attendance:
+            "Attendance",
+
+        average:
+            "Average",
+
+        homework:
+            "Homework",
+
+        notice:
+            "Notices",
+
+        quick:
+            "⚡ Quick Actions",
+
+        latest:
+            "📢 Latest Notice",
+
+        today:
+            "📚 Today's Homework",
+
+        events:
+            "📅 Upcoming Events"
+
+    },
+
+
+    hi: {
+
+        dashboard:
+            "अभिभावक डैशबोर्ड",
+
+        welcome:
+            "👋 स्वागत है",
+
+        attendance:
+            "उपस्थिति",
+
+        average:
+            "औसत",
+
+        homework:
+            "गृहकार्य",
+
+        notice:
+            "सूचनाएँ",
+
+        quick:
+            "⚡ त्वरित कार्य",
+
+        latest:
+            "📢 नवीनतम सूचनाएँ",
+
+        today:
+            "📚 आज का गृहकार्य",
+
+        events:
+            "📅 आगामी कार्यक्रम"
+
+    }
 
 };
+
+
 const languageSelect =
-document.getElementById("languageSelect");
+    document.getElementById(
+        "languageSelect"
+    );
 
-if(languageSelect){
 
-const savedLanguage =
-localStorage.getItem("language") || "ta";
-    const t = language[savedLanguage];
+if (languageSelect) {
 
-document.getElementById("dashboardTitle").textContent = t.dashboard;
-document.getElementById("welcomeTitle").textContent = t.welcome;
-document.getElementById("attendanceLabel").textContent = t.attendance;
-document.getElementById("averageLabel").textContent = t.average;
-document.getElementById("homeworkLabel").textContent = t.homework;
-document.getElementById("noticeLabel").textContent = t.notice;
-document.getElementById("quickActionsTitle").textContent = t.quick;
-document.getElementById("latestNoticeTitle").textContent = t.latest;
-document.getElementById("todayHomeworkTitle").textContent = t.today;
-document.getElementById("upcomingEventsTitle").textContent = t.events;
+    const savedLanguage =
+        localStorage.getItem(
+            "language"
+        ) || "ta";
 
-languageSelect.value = savedLanguage;
 
-languageSelect.addEventListener("change",(e)=>{
+    const t =
+        language[
+            savedLanguage
+        ];
 
-localStorage.setItem("language",e.target.value);
 
-// Later we'll translate the page
-location.reload();
+    if (t) {
 
-});
+        const dashboardTitle =
+            document.getElementById(
+                "dashboardTitle"
+            );
+
+        const welcomeTitle =
+            document.getElementById(
+                "welcomeTitle"
+            );
+
+        const attendanceLabel =
+            document.getElementById(
+                "attendanceLabel"
+            );
+
+        const averageLabel =
+            document.getElementById(
+                "averageLabel"
+            );
+
+        const homeworkLabel =
+            document.getElementById(
+                "homeworkLabel"
+            );
+
+        const noticeLabel =
+            document.getElementById(
+                "noticeLabel"
+            );
+
+        const quickActionsTitle =
+            document.getElementById(
+                "quickActionsTitle"
+            );
+
+        const latestNoticeTitle =
+            document.getElementById(
+                "latestNoticeTitle"
+            );
+
+        const todayHomeworkTitle =
+            document.getElementById(
+                "todayHomeworkTitle"
+            );
+
+        const upcomingEventsTitle =
+            document.getElementById(
+                "upcomingEventsTitle"
+            );
+
+
+        if (dashboardTitle)
+            dashboardTitle.textContent =
+                t.dashboard;
+
+        if (welcomeTitle)
+            welcomeTitle.textContent =
+                t.welcome;
+
+        if (attendanceLabel)
+            attendanceLabel.textContent =
+                t.attendance;
+
+        if (averageLabel)
+            averageLabel.textContent =
+                t.average;
+
+        if (homeworkLabel)
+            homeworkLabel.textContent =
+                t.homework;
+
+        if (noticeLabel)
+            noticeLabel.textContent =
+                t.notice;
+
+        if (quickActionsTitle)
+            quickActionsTitle.textContent =
+                t.quick;
+
+        if (latestNoticeTitle)
+            latestNoticeTitle.textContent =
+                t.latest;
+
+        if (todayHomeworkTitle)
+            todayHomeworkTitle.textContent =
+                t.today;
+
+        if (upcomingEventsTitle)
+            upcomingEventsTitle.textContent =
+                t.events;
+
+
+        languageSelect.value =
+            savedLanguage;
+
+
+        languageSelect.addEventListener(
+            "change",
+            (e) => {
+
+                localStorage.setItem(
+                    "language",
+                    e.target.value
+                );
+
+                location.reload();
+
+            }
+        );
+
+    }
 
 }
+
+
+//==================================================
+// HTML Escape
+//==================================================
+
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+//==================================================
+// FINAL LOG
+//==================================================
+
+console.log(
+    "================================"
+);
+
+console.log(
+    "School Connect TN"
+);
+
+console.log(
+    "Parent Dashboard"
+);
+
+console.log(
+    "Notification Badge Enabled"
+);
+
+console.log(
+    "================================"
+);
