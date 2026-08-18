@@ -1,4 +1,9 @@
-import { db } from "./firebase.js";
+// =====================================
+// School Connect TN
+// Transport Management
+// =====================================
+
+import { db } from "../firebase.js";
 
 import {
     collection,
@@ -6,399 +11,583 @@ import {
     getDocs,
     deleteDoc,
     doc,
-    serverTimestamp,
-    query,
-    orderBy
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-console.log("=================================");
-console.log("School Connect TN");
-console.log("Transport Management");
-console.log("=================================");
+// =====================================
+// COLLECTIONS
+// =====================================
 
+const busesRef = collection(db, "transport_buses");
+const driversRef = collection(db, "transport_drivers");
+const routesRef = collection(db, "transport_routes");
+const assignmentsRef = collection(db, "transport_assignments");
 
-/* =====================================
-   ELEMENTS
-===================================== */
 
-const busNumberInput =
-    document.getElementById("busNumber");
+// =====================================
+// DOM READY
+// =====================================
 
-const registrationNumberInput =
-    document.getElementById("registrationNumber");
+document.addEventListener("DOMContentLoaded", () => {
 
-const busCapacityInput =
-    document.getElementById("busCapacity");
+    console.log("=================================");
+    console.log("School Connect TN");
+    console.log("Transport Management Loaded");
+    console.log("=================================");
 
-const busStatusInput =
-    document.getElementById("busStatus");
+    loadTransportData();
 
-const busCount =
-    document.getElementById("busCount");
+    setupForms();
 
+});
 
-/* =====================================
-   SAVE BUS
-===================================== */
 
-async function saveBus() {
+// =====================================
+// QUICK ACTION NAVIGATION
+// =====================================
 
-    try {
+window.openSection = function(section) {
 
-        const busNumber =
-            busNumberInput.value.trim();
+    const sectionMap = {
 
-        const registrationNumber =
-            registrationNumberInput.value.trim();
+        bus: "busSection",
 
-        const capacity =
-            Number(busCapacityInput.value);
+        driver: "driverSection",
 
-        const status =
-            busStatusInput.value || "Active";
+        route: "routeSection",
 
+        assignment: "assignmentSection"
 
-        if (!busNumber) {
+    };
 
-            alert("Please enter Bus Number.");
+    const targetId = sectionMap[section];
 
-            busNumberInput.focus();
-
-            return;
-        }
-
-
-        if (!registrationNumber) {
-
-            alert(
-                "Please enter Registration Number."
-            );
-
-            registrationNumberInput.focus();
-
-            return;
-        }
-
-
-        if (!capacity || capacity <= 0) {
-
-            alert(
-                "Please enter valid Bus Capacity."
-            );
-
-            busCapacityInput.focus();
-
-            return;
-        }
-
-
-        /* =====================================
-           CHECK DUPLICATE REGISTRATION
-        ===================================== */
-
-        const existingSnapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "transport_buses"
-                )
-            );
-
-
-        const duplicate =
-            existingSnapshot.docs.some(
-                item => {
-
-                    const data =
-                        item.data();
-
-                    return String(
-                        data.registrationNumber || ""
-                    )
-                        .trim()
-                        .toLowerCase()
-                        ===
-                        registrationNumber
-                            .trim()
-                            .toLowerCase();
-
-                }
-            );
-
-
-        if (duplicate) {
-
-            alert(
-                "This Registration Number already exists."
-            );
-
-            return;
-        }
-
-
-        /* =====================================
-           SAVE TO FIRESTORE
-        ===================================== */
-
-        const docRef =
-            await addDoc(
-                collection(
-                    db,
-                    "transport_buses"
-                ),
-                {
-
-                    busNumber:
-                        busNumber,
-
-                    registrationNumber:
-                        registrationNumber,
-
-                    capacity:
-                        capacity,
-
-                    status:
-                        status,
-
-                    createdAt:
-                        serverTimestamp(),
-
-                    updatedAt:
-                        serverTimestamp()
-
-                }
-            );
-
-
-        console.log(
-            "Bus Saved:",
-            docRef.id
-        );
-
-
-        alert(
-            "✅ Bus saved successfully."
-        );
-
-
-        clearBusForm();
-
-        await loadBusCount();
-
-        await loadBusList();
-
-
-    } catch (error) {
-
-        console.error(
-            "Save Bus Error:",
-            error
-        );
-
-        alert(
-            "❌ Failed to save bus.\n\n" +
-            error.message
-        );
-
-    }
-
-}
-
-
-/* =====================================
-   LOAD BUS COUNT
-===================================== */
-
-async function loadBusCount() {
-
-    try {
-
-        const snapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "transport_buses"
-                )
-            );
-
-
-        if (busCount) {
-
-            busCount.textContent =
-                snapshot.size;
-
-        }
-
-
-        console.log(
-            "Buses Loaded:",
-            snapshot.size
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Bus Count Error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =====================================
-   LOAD BUS LIST
-===================================== */
-
-async function loadBusList() {
-
-    const busList =
-        document.getElementById("busList");
-
-
-    if (!busList) {
-
-        console.log(
-            "Bus list element not found."
-        );
-
+    if (!targetId) {
+        console.warn("Unknown section:", section);
         return;
     }
 
+    const target = document.getElementById(targetId);
+
+    if (!target) {
+        console.warn("Section not found:", targetId);
+        return;
+    }
+
+    target.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+};
+
+
+// =====================================
+// FORM SETUP
+// =====================================
+
+function setupForms() {
+
+    const busForm =
+        document.getElementById("busForm");
+
+    const driverForm =
+        document.getElementById("driverForm");
+
+    const routeForm =
+        document.getElementById("routeForm");
+
+    const assignmentForm =
+        document.getElementById("assignmentForm");
+
+
+    // BUS
+    if (busForm) {
+
+        busForm.addEventListener(
+            "submit",
+            saveBus
+        );
+
+    }
+
+
+    // DRIVER
+    if (driverForm) {
+
+        driverForm.addEventListener(
+            "submit",
+            saveDriver
+        );
+
+    }
+
+
+    // ROUTE
+    if (routeForm) {
+
+        routeForm.addEventListener(
+            "submit",
+            saveRoute
+        );
+
+    }
+
+
+    // ASSIGNMENT
+    if (assignmentForm) {
+
+        assignmentForm.addEventListener(
+            "submit",
+            saveAssignment
+        );
+
+    }
+
+}
+
+
+// =====================================
+// SAVE BUS
+// =====================================
+
+async function saveBus(event) {
+
+    event.preventDefault();
+
+    const busNumber =
+        document.getElementById("busNumber").value.trim();
+
+    const registrationNumber =
+        document.getElementById("registrationNumber").value.trim();
+
+    const busCapacity =
+        Number(
+            document.getElementById("busCapacity").value
+        );
+
+    const busStatus =
+        document.getElementById("busStatus").value;
+
+
+    if (!busNumber ||
+        !registrationNumber ||
+        !busCapacity) {
+
+        alert("Please enter all required bus details.");
+
+        return;
+
+    }
+
 
     try {
 
-        const q =
-            query(
-                collection(
-                    db,
-                    "transport_buses"
-                ),
-                orderBy(
-                    "createdAt",
-                    "desc"
-                )
-            );
+        await addDoc(busesRef, {
+
+            busNumber: busNumber,
+
+            registrationNumber:
+                registrationNumber,
+
+            capacity: busCapacity,
+
+            status: busStatus,
+
+            createdAt:
+                serverTimestamp()
+
+        });
 
 
-        const snapshot =
-            await getDocs(q);
+        alert("Bus saved successfully.");
+
+        document.getElementById("busForm").reset();
+
+        await loadTransportData();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Bus Save Error:",
+            error
+        );
+
+        alert(
+            "Unable to save bus. Please check Firebase."
+        );
+
+    }
+
+}
 
 
-        busList.innerHTML = "";
+// =====================================
+// SAVE DRIVER
+// =====================================
+
+async function saveDriver(event) {
+
+    event.preventDefault();
+
+    const driverName =
+        document.getElementById("driverName").value.trim();
+
+    const driverPhone =
+        document.getElementById("driverPhone").value.trim();
+
+    const licenseNumber =
+        document.getElementById("licenseNumber").value.trim();
+
+    const driverStatus =
+        document.getElementById("driverStatus").value;
 
 
-        if (snapshot.empty) {
+    if (!driverName || !driverPhone) {
 
-            busList.innerHTML = `
-                <tr>
-                    <td colspan="6"
-                        style="text-align:center;">
-                        No buses added yet.
-                    </td>
-                </tr>
-            `;
+        alert("Please enter driver name and mobile number.");
 
-            return;
-        }
+        return;
+
+    }
 
 
-        snapshot.forEach(
-            item => {
+    try {
 
-                const data =
-                    item.data();
+        await addDoc(driversRef, {
 
+            driverName: driverName,
 
-                const row =
-                    document.createElement(
-                        "tr"
-                    );
+            phone: driverPhone,
 
+            licenseNumber: licenseNumber,
 
-                row.innerHTML = `
+            status: driverStatus,
 
-                    <td>
-                        ${escapeHTML(
-                            data.busNumber || "-"
-                        )}
-                    </td>
+            createdAt:
+                serverTimestamp()
 
-                    <td>
-                        ${escapeHTML(
-                            data.registrationNumber || "-"
-                        )}
-                    </td>
-
-                    <td>
-                        ${data.capacity || 0}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            data.status || "Active"
-                        )}
-                    </td>
-
-                    <td>
-                        ${formatDate(
-                            data.createdAt
-                        )}
-                    </td>
-
-                    <td>
-
-                        <button
-                            type="button"
-                            class="deleteBusBtn"
-                            data-id="${item.id}">
-
-                            🗑️ Delete
-
-                        </button>
-
-                    </td>
-
-                `;
+        });
 
 
-                busList.appendChild(row);
+        alert("Driver saved successfully.");
 
+        document.getElementById("driverForm").reset();
+
+        await loadTransportData();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Driver Save Error:",
+            error
+        );
+
+        alert(
+            "Unable to save driver."
+        );
+
+    }
+
+}
+
+
+// =====================================
+// SAVE ROUTE
+// =====================================
+
+async function saveRoute(event) {
+
+    event.preventDefault();
+
+    const routeName =
+        document.getElementById("routeName").value.trim();
+
+    const startPoint =
+        document.getElementById("startPoint").value.trim();
+
+    const endPoint =
+        document.getElementById("endPoint").value.trim();
+
+    const routeStatus =
+        document.getElementById("routeStatus").value;
+
+    const pickupPoints =
+        document.getElementById("pickupPoints").value.trim();
+
+
+    if (!routeName ||
+        !startPoint ||
+        !endPoint) {
+
+        alert("Please enter route details.");
+
+        return;
+
+    }
+
+
+    try {
+
+        await addDoc(routesRef, {
+
+            routeName: routeName,
+
+            startPoint: startPoint,
+
+            endPoint: endPoint,
+
+            pickupPoints: pickupPoints,
+
+            status: routeStatus,
+
+            createdAt:
+                serverTimestamp()
+
+        });
+
+
+        alert("Route saved successfully.");
+
+        document.getElementById("routeForm").reset();
+
+        await loadTransportData();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Route Save Error:",
+            error
+        );
+
+        alert(
+            "Unable to save route."
+        );
+
+    }
+
+}
+
+
+// =====================================
+// SAVE STUDENT ASSIGNMENT
+// =====================================
+
+async function saveAssignment(event) {
+
+    event.preventDefault();
+
+
+    const studentSearch =
+        document.getElementById("studentSearch").value.trim();
+
+    const busId =
+        document.getElementById("assignmentBus").value;
+
+    const routeId =
+        document.getElementById("assignmentRoute").value;
+
+    const pickupPoint =
+        document.getElementById("pickupPoint").value.trim();
+
+    const pickupTime =
+        document.getElementById("pickupTime").value;
+
+    const dropTime =
+        document.getElementById("dropTime").value;
+
+
+    if (!studentSearch ||
+        !busId ||
+        !routeId ||
+        !pickupPoint) {
+
+        alert(
+            "Please complete all required assignment details."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        await addDoc(assignmentsRef, {
+
+            studentSearch: studentSearch,
+
+            busId: busId,
+
+            routeId: routeId,
+
+            pickupPoint: pickupPoint,
+
+            pickupTime: pickupTime,
+
+            dropTime: dropTime,
+
+            status: "Active",
+
+            createdAt:
+                serverTimestamp()
+
+        });
+
+
+        alert(
+            "Student transport assigned successfully."
+        );
+
+
+        document
+            .getElementById("assignmentForm")
+            .reset();
+
+
+        await loadTransportData();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Assignment Save Error:",
+            error
+        );
+
+        alert(
+            "Unable to save student assignment."
+        );
+
+    }
+
+}
+
+
+// =====================================
+// LOAD ALL TRANSPORT DATA
+// =====================================
+
+async function loadTransportData() {
+
+    try {
+
+        const [
+            busSnapshot,
+            driverSnapshot,
+            routeSnapshot,
+            assignmentSnapshot
+        ] = await Promise.all([
+
+            getDocs(busesRef),
+
+            getDocs(driversRef),
+
+            getDocs(routesRef),
+
+            getDocs(assignmentsRef)
+
+        ]);
+
+
+        const buses =
+            busSnapshot.docs.map(item => ({
+
+                id: item.id,
+                ...item.data()
+
+            }));
+
+
+        const drivers =
+            driverSnapshot.docs.map(item => ({
+
+                id: item.id,
+                ...item.data()
+
+            }));
+
+
+        const routes =
+            routeSnapshot.docs.map(item => ({
+
+                id: item.id,
+                ...item.data()
+
+            }));
+
+
+        const assignments =
+            assignmentSnapshot.docs.map(item => ({
+
+                id: item.id,
+                ...item.data()
+
+            }));
+
+
+        // SUMMARY
+
+        document.getElementById(
+            "totalBuses"
+        ).textContent = buses.length;
+
+
+        document.getElementById(
+            "totalDrivers"
+        ).textContent = drivers.length;
+
+
+        document.getElementById(
+            "totalRoutes"
+        ).textContent = routes.length;
+
+
+        document.getElementById(
+            "assignedStudents"
+        ).textContent = assignments.length;
+
+
+        // DROPDOWNS
+
+        populateBusDropdown(buses);
+
+        populateRouteDropdown(routes);
+
+
+        // TABLE
+
+        renderTransportTable(
+            assignments,
+            buses,
+            routes
+        );
+
+
+        console.log(
+            "Transport Data Loaded",
+            {
+                buses: buses.length,
+                drivers: drivers.length,
+                routes: routes.length,
+                assignments: assignments.length
             }
         );
 
+    }
 
-        /* =====================================
-           DELETE BUTTON EVENTS
-        ===================================== */
-
-        document
-            .querySelectorAll(
-                ".deleteBusBtn"
-            )
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        deleteBus(
-                            button.dataset.id
-                        );
-
-                    }
-                );
-
-            });
-
-
-    } catch (error) {
+    catch (error) {
 
         console.error(
-            "Bus List Error:",
+            "Transport Load Error:",
             error
         );
 
@@ -407,21 +596,237 @@ async function loadBusList() {
 }
 
 
-/* =====================================
-   DELETE BUS
-===================================== */
+// =====================================
+// BUS DROPDOWN
+// =====================================
 
-async function deleteBus(id) {
+function populateBusDropdown(buses) {
 
-    if (
-        !confirm(
-            "Are you sure you want to delete this bus?"
-        )
-    ) {
+    const select =
+        document.getElementById("assignmentBus");
+
+    if (!select) return;
+
+
+    select.innerHTML = `
+        <option value="">
+            Select Bus
+        </option>
+    `;
+
+
+    buses.forEach(bus => {
+
+        const option =
+            document.createElement("option");
+
+
+        option.value = bus.id;
+
+
+        option.textContent =
+            `${bus.busNumber} - ${bus.registrationNumber}`;
+
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+// =====================================
+// ROUTE DROPDOWN
+// =====================================
+
+function populateRouteDropdown(routes) {
+
+    const select =
+        document.getElementById("assignmentRoute");
+
+    if (!select) return;
+
+
+    select.innerHTML = `
+        <option value="">
+            Select Route
+        </option>
+    `;
+
+
+    routes.forEach(route => {
+
+        const option =
+            document.createElement("option");
+
+
+        option.value = route.id;
+
+
+        option.textContent =
+            route.routeName;
+
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+// =====================================
+// TRANSPORT TABLE
+// =====================================
+
+function renderTransportTable(
+    assignments,
+    buses,
+    routes
+) {
+
+    const tbody =
+        document.getElementById(
+            "transportTableBody"
+        );
+
+
+    if (!tbody) return;
+
+
+    tbody.innerHTML = "";
+
+
+    if (assignments.length === 0) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="emptyMessage">
+
+                    No transport assignments found.
+
+                </td>
+
+            </tr>
+
+        `;
 
         return;
 
     }
+
+
+    assignments.forEach(assignment => {
+
+
+        const bus =
+            buses.find(
+                item =>
+                    item.id === assignment.busId
+            );
+
+
+        const route =
+            routes.find(
+                item =>
+                    item.id === assignment.routeId
+            );
+
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>
+                ${escapeHtml(
+                    assignment.studentSearch || "-"
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    bus?.busNumber || "-"
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    route?.routeName || "-"
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    assignment.pickupPoint || "-"
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    assignment.pickupTime || "-"
+                )}
+            </td>
+
+            <td>
+                <span class="statusBadge">
+                    ${escapeHtml(
+                        assignment.status || "Active"
+                    )}
+                </span>
+            </td>
+
+            <td>
+
+                <button
+                    class="deleteButton"
+                    data-id="${assignment.id}">
+
+                    🗑️ Delete
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        const deleteButton =
+            row.querySelector(".deleteButton");
+
+
+        deleteButton.addEventListener(
+            "click",
+            () => deleteAssignment(
+                assignment.id
+            )
+        );
+
+
+        tbody.appendChild(row);
+
+    });
+
+}
+
+
+// =====================================
+// DELETE ASSIGNMENT
+// =====================================
+
+async function deleteAssignment(id) {
+
+    const confirmDelete =
+        confirm(
+            "Are you sure you want to delete this transport assignment?"
+        );
+
+
+    if (!confirmDelete) return;
 
 
     try {
@@ -429,32 +834,30 @@ async function deleteBus(id) {
         await deleteDoc(
             doc(
                 db,
-                "transport_buses",
+                "transport_assignments",
                 id
             )
         );
 
 
         alert(
-            "✅ Bus deleted successfully."
+            "Transport assignment deleted."
         );
 
 
-        await loadBusCount();
+        await loadTransportData();
 
-        await loadBusList();
+    }
 
-
-    } catch (error) {
+    catch (error) {
 
         console.error(
-            "Delete Bus Error:",
+            "Delete Error:",
             error
         );
 
         alert(
-            "❌ Failed to delete bus.\n\n" +
-            error.message
+            "Unable to delete assignment."
         );
 
     }
@@ -462,62 +865,11 @@ async function deleteBus(id) {
 }
 
 
-/* =====================================
-   CLEAR FORM
-===================================== */
+// =====================================
+// HTML SECURITY
+// =====================================
 
-function clearBusForm() {
-
-    if (busNumberInput)
-        busNumberInput.value = "";
-
-
-    if (registrationNumberInput)
-        registrationNumberInput.value = "";
-
-
-    if (busCapacityInput)
-        busCapacityInput.value = "";
-
-
-    if (busStatusInput)
-        busStatusInput.value = "Active";
-
-}
-
-
-/* =====================================
-   FORMAT DATE
-===================================== */
-
-function formatDate(timestamp) {
-
-    if (!timestamp)
-        return "-";
-
-
-    try {
-
-        return timestamp
-            .toDate()
-            .toLocaleDateString(
-                "en-IN"
-            );
-
-    } catch {
-
-        return "-";
-
-    }
-
-}
-
-
-/* =====================================
-   ESCAPE HTML
-===================================== */
-
-function escapeHTML(value) {
+function escapeHtml(value) {
 
     return String(value)
         .replaceAll("&", "&amp;")
@@ -529,36 +881,23 @@ function escapeHTML(value) {
 }
 
 
-/* =====================================
-   GLOBAL FUNCTIONS
-===================================== */
+// =====================================
+// GLOBAL ERROR LOG
+// =====================================
 
-window.saveBus =
-    saveBus;
+window.addEventListener(
+    "error",
+    event => {
 
-window.clearBusForm =
-    clearBusForm;
-
-window.deleteBus =
-    deleteBus;
-
-
-/* =====================================
-   PAGE LOAD
-===================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    async () => {
-
-        console.log(
-            "Transport Management Ready"
+        console.error(
+            "Transport Page Error:",
+            event.error || event.message
         );
 
-
-        await loadBusCount();
-
-        await loadBusList();
-
     }
+);
+
+
+console.log(
+    "Transport Management JS Loaded Successfully"
 );
