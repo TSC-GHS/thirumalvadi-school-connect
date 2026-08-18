@@ -581,15 +581,17 @@ function displayTransport(
     route
 ) {
 
-    /*
-     * BUS
-     */
+    /* =====================================
+       BUS DATA
+    ===================================== */
 
     const busNumber =
         bus.busNumber ||
         bus.busNo ||
         bus.number ||
-        bus.registrationNumber ||
+        assignment.busNumber ||
+        assignment.busNo ||
+        assignment.bus ||
         "-";
 
 
@@ -597,17 +599,20 @@ function displayTransport(
         bus.registrationNumber ||
         bus.registrationNo ||
         bus.vehicleNumber ||
+        assignment.registrationNumber ||
         "-";
 
 
-    /*
-     * ROUTE
-     */
+    /* =====================================
+       ROUTE DATA
+    ===================================== */
 
     const routeName =
         route.routeName ||
         route.name ||
         route.route ||
+        assignment.routeName ||
+        assignment.route ||
         "-";
 
 
@@ -615,6 +620,9 @@ function displayTransport(
         route.startingPoint ||
         route.startPoint ||
         route.from ||
+        route.start ||
+        assignment.startingPoint ||
+        assignment.startPoint ||
         "-";
 
 
@@ -622,12 +630,15 @@ function displayTransport(
         route.endPoint ||
         route.endPointName ||
         route.to ||
+        route.destination ||
+        assignment.endPoint ||
+        assignment.destination ||
         "-";
 
 
-    /*
-     * ASSIGNMENT
-     */
+    /* =====================================
+       ASSIGNMENT DATA
+    ===================================== */
 
     const pickupPoint =
         assignment.pickupPoint ||
@@ -652,7 +663,35 @@ function displayTransport(
 
 
     /* =====================================
-       SET UI
+       SUMMARY CARDS
+    ===================================== */
+
+    setText(
+        document.getElementById("busCardValue"),
+        busNumber
+    );
+
+
+    setText(
+        document.getElementById("routeCardValue"),
+        routeName
+    );
+
+
+    setText(
+        document.getElementById("pickupCardValue"),
+        pickupPoint
+    );
+
+
+    setText(
+        document.getElementById("pickupTimeCardValue"),
+        pickupTime
+    );
+
+
+    /* =====================================
+       TRANSPORT DETAILS
     ===================================== */
 
     setText(
@@ -710,12 +749,10 @@ function displayTransport(
 
 
     /* =====================================
-       STATUS CLASS
+       STATUS
     ===================================== */
 
-    if (
-        transportStatusEl
-    ) {
+    if (transportStatusEl) {
 
         transportStatusEl.classList.remove(
             "active",
@@ -723,23 +760,16 @@ function displayTransport(
             "pending"
         );
 
-
         const statusLower =
-            String(status)
-                .toLowerCase();
+            String(status).toLowerCase();
 
-
-        if (
-            statusLower === "active"
-        ) {
+        if (statusLower === "active") {
 
             transportStatusEl.classList.add(
                 "active"
             );
 
-        } else if (
-            statusLower === "inactive"
-        ) {
+        } else if (statusLower === "inactive") {
 
             transportStatusEl.classList.add(
                 "inactive"
@@ -757,13 +787,8 @@ function displayTransport(
 
 
     hideLoading();
-
     hideNoTransport();
 
-
-    console.log(
-        "====================================="
-    );
 
     console.log(
         "Parent Transport Loaded Successfully"
@@ -775,12 +800,27 @@ function displayTransport(
     );
 
     console.log(
+        "Registration:",
+        registrationNumber
+    );
+
+    console.log(
         "Route:",
         routeName
     );
 
     console.log(
-        "Pickup:",
+        "Starting Point:",
+        startingPoint
+    );
+
+    console.log(
+        "End Point:",
+        endPoint
+    );
+
+    console.log(
+        "Pickup Point:",
         pickupPoint
     );
 
@@ -790,17 +830,16 @@ function displayTransport(
     );
 
     console.log(
+        "Drop Time:",
+        dropTime
+    );
+
+    console.log(
         "Status:",
         status
     );
 
-    console.log(
-        "====================================="
-
-    );
-
 }
-
 
 /* =====================================
    FORMAT TIME
